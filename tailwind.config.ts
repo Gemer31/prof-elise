@@ -1,5 +1,9 @@
 import type { Config } from 'tailwindcss'
 
+const customColors = {
+  'custom-gray-50': '#E6E5E0',
+}
+
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,6 +12,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: customColors,
+      backgroundColor: customColors,
+      screens: {
+        'xs': '320px',
+        '2xs': '400px',
+        '3xs': '480px',
+//    sm	640px	@media (min-width: 640px) { ... }
+        '2sm': '704px',
+//    md	768px	@media (min-width: 768px) { ... }
+        '2md': '896px',
+//    lg	1024px	@media (min-width: 1024px) { ... }
+//    xl	1280px	@media (min-width: 1280px) { ... }
+//    2xl	1536px	@media (min-width: 1536px) { ... }
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

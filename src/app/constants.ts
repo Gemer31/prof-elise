@@ -1,0 +1,1 @@
+export const CONTACT_PHONE: string = "+375 29 299 29 29"
