@@ -1,7 +1,9 @@
+import { LOCALE, TRANSLATES } from '@/app/constants';
+
 export function Search() {
   return (
-    <div>
-      Search
-    </div>
+    <form>
+      <input className="field-input" placeholder={TRANSLATES[LOCALE].search}/>
+    </form>
   )
 }

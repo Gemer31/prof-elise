@@ -1,9 +1,5 @@
 import type { Config } from 'tailwindcss'
 
-const customColors = {
-  'custom-gray-50': '#E6E5E0',
-}
-
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -12,8 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: customColors,
-      backgroundColor: customColors,
+      backgroundColor: {
+        'black-1/2': 'rgba(0, 0, 0, 0.5)',
+      },
       screens: {
         'xs': '320px',
         '2xs': '400px',

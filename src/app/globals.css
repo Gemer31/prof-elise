@@ -25,3 +25,47 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+
+.field {
+  display: flex;
+  flex-direction: column;
+  /*color: var(--custom-black-100);*/
+}
+
+.field-label::after {
+  content: '*';
+  margin-left: 2px;
+  font-size: 1rem;
+  font-weight: normal;
+  /*color: var(--custom-red-50);*/
+}
+
+.field-input {
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.field-input::placeholder {
+  font-size: 10px;
+}
+
+.field-input:active {
+  /*border: 2px solid var(--custom-yellow-100);*/
+}
+
+.field-textarea {
+  height: 200px;
+  padding: 10px;
+  letter-spacing: 1px;
+  border-radius: 20px;
+  resize: none;
+}
+
+.field-textarea::placeholder {
+  padding-top: 6px;
+  font-size: 10px;
+  font-family: inherit;
+  letter-spacing: inherit;
+}
