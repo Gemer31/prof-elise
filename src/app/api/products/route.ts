@@ -12,9 +12,9 @@ export async function POST(request: Request) {
         return new Response(`{ message: 'error'}`, {status: 500});
     }
 }
-
-const STUB_PRODUCTS: Product[] = [
-    {
-        id: '1'
-    }
-]
+//
+// const STUB_PRODUCTS: Product[] = [
+//     {
+//         id: '1'
+//     }
+// ]

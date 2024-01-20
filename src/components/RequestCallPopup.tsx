@@ -4,21 +4,22 @@ import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { convertToClass } from '@/utils/convert-to-class.util';
+import { useAppDispatch } from '@/store/store';
+import { setNotificationMessage, setRequestCallPopupVisible } from '@/store/dataSlice';
+import { useForm } from 'react-hook-form';
 import path from 'path';
+import { useState } from 'react';
+import { Loader } from '@/components/loader/loader';
 
 export const validationSchema = yup.object().shape({
   name: yup.string().required().matches(/^[A-Za-zА-Яа-я ]+$/),
-  phone: yup.string().matches(/^(80|375|\+375)\d{9}$/)
+  phone: yup.string().required().matches(/^(80|375|\+375)\d{9}$/)
 });
 
-
-export interface RequestCallPopupProps {
-  closeCallback: () => void;
-}
-
-export function RequestCallPopup({closeCallback}: RequestCallPopupProps) {
+export function RequestCallPopup() {
+  const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -32,29 +33,33 @@ export function RequestCallPopup({closeCallback}: RequestCallPopupProps) {
     'border-2',
     'bg-custom-gray-100',
     'mt-1',
-    'field-input'
-    // error?.message ? ' border-custom-red-50' : 'border-custom-yellow-100',
+    'field-input',
   ]);
 
-  // const submitForm = async (formData: FormDataFields) => {
-  //   setIsLoading(true);
-  //
-  //   const message: string = `Имя: ${formData.name};\nТелефон: ${formData.phone};\nПроблема: ${formData.description}`
-  //   const result = await fetch(path.join(process.cwd(), 'api', 'form'), {
-  //     method: 'POST',
-  //     body: JSON.stringify({ message: encodeURI(message) })
-  //   });
-  //
-  //   setNotificationVisibleClass(FADE_IN_RIGHT_CLASS);
-  //   setIsLoading(false);
-  //
-  //   setTimeout(() => setNotificationVisibleClass(FADE_OUT_RIGHT_CLASS), 3000);
-  // }
+  const submitForm = async (formData: { name: string; phone: string }) => {
+    setIsLoading(true);
+
+    const message: string = `Имя: ${formData.name};\nТелефон: ${formData.phone}`;
+    const result = await fetch(path.join(process.cwd(), 'api', 'form'), {
+      method: 'POST',
+      body: JSON.stringify({message: encodeURI(message)})
+    });
+
+    dispatch(setNotificationMessage(TRANSLATES[LOCALE].requestCallSended));
+    dispatch(setRequestCallPopupVisible(false));
+
+    setIsLoading(false);
+  };
 
   return (
-    <Popup title={TRANSLATES[LOCALE].requestCall} closeCallback={() => closeCallback()}>
-      <form className="flex flex-col items-center" onSubmit={() => {
-      }}>
+    <Popup
+      title={TRANSLATES[LOCALE].requestCall}
+      closeCallback={() => dispatch(setRequestCallPopupVisible(false))}
+    >
+      <form
+        className="flex flex-col items-center"
+        onSubmit={handleSubmit(submitForm)}
+      >
         <label className="mb-4">
           <span className="mr-2">{TRANSLATES[LOCALE].yourName}</span>
           <input
@@ -63,12 +68,16 @@ export function RequestCallPopup({closeCallback}: RequestCallPopupProps) {
             {...register('name')}
           />
         </label>
+
         <Button
-          styleClass="text-amber-50"
+          styleClass="text-amber-50 w-full"
+          disabled={isLoading}
           type={ButtonType.SUBMIT}
-          callback={() => {
-          }}
-        >{TRANSLATES[LOCALE].send}</Button>
+        >{
+          isLoading
+            ? <Loader styleClass="w-[24px] h-[24px]"/>
+            : TRANSLATES[LOCALE].send
+        }</Button>
       </form>
     </Popup>
   );
