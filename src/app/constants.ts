@@ -14,15 +14,19 @@ export const LOCALE: string = 'ru';
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
     сonsumables: 'Расходные материалы',
+    сonsumablesWholesaleRetail: 'Расходные материалы оптом и в розницу',
+    aboutUsDescription: 'Наша компания работает более 4 лет, чтобы обеспечить предприятия красоты, парикмахерские, медучреждения и предприятия здоровья качественными, отечественными расходными материалами. Мы стали партнерами для лучших и успешных компаний.',
     main: 'Главная',
     delivery: 'Доставка',
     contacts: 'Контакты',
     requestCall: 'Заказать звонок',
     send: 'Отправить',
     yourName: 'Ваше имя',
-    phoneNumber: 'Номер телефона',
+    phone: 'Телефона',
     search: 'Поиск',
     requestCallSended: 'Наши операторы свяжутся с вами',
+    advantages: 'Преимущества',
+    deliveryAdvantage: 'Бесплатная доставка по Могилеву при заказе от 80р'
   }
 }
 

@@ -1,7 +1,7 @@
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useEffect, useState } from 'react';
-import { FADE_IN_LEFT_CLASS, FADE_IN_RIGHT_CLASS } from '@/app/constants';
+import { FADE_IN_LEFT_CLASS, FADE_IN_RIGHT_CLASS, FADE_OUT_RIGHT_CLASS } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
 
 export function Notification() {
@@ -13,9 +13,11 @@ export function Notification() {
         if (message) {
             setAnimationClass(FADE_IN_RIGHT_CLASS);
             setTimeout(() => {
+                setAnimationClass(FADE_OUT_RIGHT_CLASS);
+            }, 4000);
+            setTimeout(() => {
                 dispatch(setNotificationMessage(null));
-                setAnimationClass(FADE_IN_LEFT_CLASS);
-            }, 5000);
+            }, 4700);
         }
     }, [message]);
 
@@ -24,15 +26,16 @@ export function Notification() {
         'px-3',
         'py-1',
         'border-2',
-        'border-custom-yellow-200',
-        'rounded-2xl',
+        'border-amber-50',
+        'rounded-lg',
         'top-3',
         'right-4',
-        'bg-custom-gray-100',
+        'bg-pink-500',
+        'text-amber-50',
         'z-20',
     ]);
 
     return (
-        <div className={styleClasses + animationClass}>{message}</div>
+        <div className={styleClasses + (animationClass ? ` ${animationClass}` : ' invisible') }>{message}</div>
     )
 }

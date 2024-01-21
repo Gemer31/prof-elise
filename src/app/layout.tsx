@@ -6,6 +6,7 @@ import './globals.css';
 import { CommonProps } from '@/app/models';
 import StoreProvider from '@/store/StoreProvider';
 import { Layout } from '@/components/Layout';
+import 'animate.css';
 
 const openSans = Open_Sans({subsets: ['latin']});
 
@@ -19,7 +20,7 @@ export default function RootLayout({children}: CommonProps) {
     <html lang="en" className="h-full scroll-smooth">
     <body className={'flex flex-col items-center h-full overflow-x-hidden bg-gray-200 ' + openSans.className}>
     <StoreProvider>
-      <Layout>
+      <Layout isAboutUs={true}>
         {children}
       </Layout>
     </StoreProvider>

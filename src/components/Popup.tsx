@@ -8,7 +8,7 @@ export interface PopupProps extends CommonProps {
 
 export function Popup({ children, title, closeCallback }: PopupProps) {
   return (
-    <div className="flex justify-center items-center fixed w-full h-full bg-black-1/2">
+    <div className="flex justify-center items-center fixed w-full h-full bg-black-1/2 z-20">
       <div className="flex flex-col justify-center bg-gray-200 rounded-2xl">
         <div className="flex justify-between items-center p-4">
           <span className="text-xl">{title}</span>

@@ -9,9 +9,7 @@ import { Search } from '@/components/Search';
 import { CONTACT_PHONE, LOCALE, TRANSLATES } from '@/app/constants';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/Button';
-import { useState } from 'react';
 import { ButtonType } from '@/app/enums';
-import { RequestCallPopup } from '@/components/RequestCallPopup';
 import { useAppDispatch } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
 

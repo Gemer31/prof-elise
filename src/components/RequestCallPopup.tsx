@@ -33,22 +33,23 @@ export function RequestCallPopup() {
     'border-2',
     'bg-custom-gray-100',
     'mt-1',
-    'field-input',
+    'field-input'
   ]);
 
   const submitForm = async (formData: { name: string; phone: string }) => {
     setIsLoading(true);
 
-    const message: string = `Имя: ${formData.name};\nТелефон: ${formData.phone}`;
-    const result = await fetch(path.join(process.cwd(), 'api', 'form'), {
+    console.log(path.join(process.cwd(), 'api', 'form'));
+    const message: string = `Заказать звонок\n\nИмя: ${formData.name};\nТелефон: ${formData.phone}`;
+    const result = await fetch(path.join(process.cwd(), 'api', 'bot'), {
       method: 'POST',
       body: JSON.stringify({message: encodeURI(message)})
     });
 
+    setIsLoading(false);
+
     dispatch(setNotificationMessage(TRANSLATES[LOCALE].requestCallSended));
     dispatch(setRequestCallPopupVisible(false));
-
-    setIsLoading(false);
   };
 
   return (
@@ -66,6 +67,14 @@ export function RequestCallPopup() {
             className={inputClass}
             type="text"
             {...register('name')}
+          />
+        </label>
+        <label className="mb-4">
+          <span className="mr-2">{TRANSLATES[LOCALE].phone}</span>
+          <input
+            className={inputClass}
+            type="text"
+            {...register('phone')}
           />
         </label>
 
