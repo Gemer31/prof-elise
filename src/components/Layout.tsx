@@ -11,7 +11,7 @@ import { ContentContainer } from '@/components/ContentContainer';
 import { AboutUs } from '@/components/AboutUs';
 
 export interface LayoutProps extends CommonProps{
-  isAboutUs: boolean;
+  isAboutUs?: boolean;
 }
 
 export function Layout({ children, isAboutUs }: LayoutProps) {
@@ -25,14 +25,8 @@ export function Layout({ children, isAboutUs }: LayoutProps) {
       <Notification/>
       <Header/>
       <ContentContainer styleClass="w-full flex justify-start">
-        <Advantages/>
         {children}
       </ContentContainer>
-      {
-        isAboutUs
-          ? <AboutUs/>
-          : <></>
-      }
       <Footer/>
     </>
   )

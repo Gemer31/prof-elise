@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { LOCALE, TRANSLATES } from '@/app/constants';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export function Advantages() {
   return (

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { ContentContainer } from '@/components/ContentContainer';
-import { LOCALE, TRANSLATES } from '@/app/constants';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export function AboutUs() {
   return (

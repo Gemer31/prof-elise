@@ -1,10 +1,9 @@
 export interface Product {
     id: string;
     name: string;
-    price: string;
+    price: number;
     image: string;
-    navigationPage: string;
-    category: Category;
+    categoryId: string;
 }
 
 export interface CommonProps {
@@ -16,6 +15,5 @@ export interface Category {
     id: string;
     name: string;
     image: string;
-    navigationPage: string;
     categories?: Category[];
 }

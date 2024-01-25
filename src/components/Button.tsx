@@ -1,11 +1,10 @@
 import { CommonProps } from '@/app/models';
 import { Simulate } from 'react-dom/test-utils';
-import click = Simulate.click;
 import { ButtonType } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 export interface ButtonProps extends CommonProps {
-  type: 'button' | 'submit';
+  type: ButtonType;
   disabled?: boolean;
   styleClass?: string;
   callback?: () => void;

@@ -1,4 +1,4 @@
-import { LOCALE, TRANSLATES } from '@/app/constants';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export function Search() {
   return (

@@ -3,10 +3,11 @@ import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
-import { CONTACT_PHONE, LOCALE, TRANSLATES } from '@/app/constants';
 import { useAppDispatch } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import Link from 'next/link';
+import { LOCALE, TRANSLATES } from '@/app/translates';
+import { CONTACT_PHONE } from '@/app/constants';
 
 export function Footer() {
   const dispatch = useAppDispatch();

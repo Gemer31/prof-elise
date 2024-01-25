@@ -14,13 +14,9 @@ export function EntityCard({ category, product }: EntityCardProps) {
 
   }
 
-  const getNavLink = () => {
-    return `/${category?.navigationPage || product?.category.navigationPage}`
-  }
-
   return (
     <Link
-      href={category?.navigationPage || '/'}
+      href={category?.id ? `/${category.id}` : `/products/${product?.id}`}
       className="p-4 rounded-md hover:bg-pink-100"
     >
       <Image width={200} height={200} src={category?.image || product?.image || ''} alt={category?.name || product?.name || ''}/>
@@ -30,9 +26,9 @@ export function EntityCard({ category, product }: EntityCardProps) {
           ? (
             <>
               <div>{product.price}</div>
-              <Button type={ButtonType.BUTTON} callback={addToCart}>
-                В корзину
-              </Button>
+              {/*<Button type={ButtonType.BUTTON} callback={() => addToCart()}>*/}
+              {/*  В корзину*/}
+              {/*</Button>*/}
             </>
           )
           : <></>

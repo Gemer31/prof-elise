@@ -1,5 +1,4 @@
 import { Popup } from '@/components/Popup';
-import { LOCALE, TRANSLATES } from '@/app/constants';
 import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import * as yup from 'yup';
@@ -11,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import path from 'path';
 import { useState } from 'react';
 import { Loader } from '@/components/loader/loader';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export const validationSchema = yup.object().shape({
   name: yup.string().required().matches(/^[A-Za-zА-Яа-я ]+$/),

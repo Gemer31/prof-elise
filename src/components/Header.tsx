@@ -6,12 +6,13 @@ import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Search } from '@/components/Search';
-import { CONTACT_PHONE, LOCALE, TRANSLATES } from '@/app/constants';
+import { CONTACT_PHONE, WORKING_TIME } from '@/app/constants';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import { useAppDispatch } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -74,7 +75,10 @@ export function Header() {
           </Link>
           <div className="uppercase text-center w-20">{TRANSLATES[LOCALE].сonsumables}</div>
           <Search/>
-          <a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE}</a>
+          <div className="text-center">
+            <a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE}</a>
+            <div>{WORKING_TIME}</div>
+          </div>
           <Button
             styleClass="uppercase text-amber-50"
             type={ButtonType.BUTTON}

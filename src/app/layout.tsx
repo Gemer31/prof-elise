@@ -1,6 +1,6 @@
 // 'use client'
 
-import type { Metadata } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType, Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import { CommonProps } from '@/app/models';
@@ -17,10 +17,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: CommonProps) {
   return (
-    <html lang="en" className="h-full scroll-smooth">
+    <html lang="en" className="scroll-smooth">
     <body className={'flex flex-col items-center h-full overflow-x-hidden bg-gray-200 ' + openSans.className}>
     <StoreProvider>
-      <Layout isAboutUs={true}>
+      <Layout>
         {children}
       </Layout>
     </StoreProvider>
