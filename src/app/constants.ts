@@ -10,6 +10,7 @@ export const FADE_OUT_CLASS = 'animate__animated animate__fadeOut';
 
 export const CONTACT_PHONE: string = "+375 44 532 54 20"
 export const WORKING_TIME: string = "пн-сб 9:00-19:00";
+export const CURRENCY: string = "бел.руб";
 
 export const PRODUCTS_BY_CATEGORY_ID: Record<string, Product[]> = {
   '1': [
@@ -28,7 +29,7 @@ export const PRODUCTS: Product[] = [
     id: 'p-1',
     name: 'ВОРОТНИЧКИ БУМАЖНЫЕ НА ЛИПУЧКЕ "ЧИСТОВЬЕ" (5*100 ШТ)',
     price: 14,
-    image: 'icons/instagram.svg',
+    image: '/images/vorotnichki.png',
     categoryId: '1',
   }
 ]
@@ -37,22 +38,22 @@ export const CATEGORIES: Category[] = [
   {
     id: '1',
     name: 'Масло для массажа',
-    image: 'icons/instagram.svg',
+    image: '/icons/instagram.svg',
   },
   {
     id: '2',
     name: 'Для парикмахерских',
-    image: 'icons/instagram.svg',
+    image: '/icons/instagram.svg',
     categories: [
       {
         id: '3',
         name: 'Воротнички',
-        image: 'icons/instagram.svg',
+        image: '/icons/instagram.svg',
       },
       {
         id: '4',
         name: 'Пеньюары',
-        image: 'icons/instagram.svg',
+        image: '/icons/instagram.svg',
       }
     ]
   }

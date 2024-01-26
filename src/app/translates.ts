@@ -15,6 +15,8 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     search: 'Поиск',
     requestCallSended: 'Наши операторы свяжутся с вами',
     advantages: 'Преимущества',
-    deliveryAdvantage: 'Бесплатная доставка по Могилеву при заказе от 80р'
+    deliveryAdvantage: 'Бесплатная доставка по Могилеву при заказе от 80р',
+    intoCart: 'В корзину',
+    amount: 'Количество',
   }
 }

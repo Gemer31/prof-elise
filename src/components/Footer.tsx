@@ -42,7 +42,7 @@ export function Footer() {
           </div>
           <div className="flex flex-col items-center">
             <Button
-              styleClass="uppercase text-amber-50"
+              styleClass="uppercase text-amber-50 px-4 py-2"
               type={ButtonType.BUTTON}
               callback={() => dispatch(setRequestCallPopupVisible(true))}
             >{TRANSLATES[LOCALE].requestCall}</Button>

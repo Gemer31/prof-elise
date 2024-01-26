@@ -48,7 +48,7 @@ export function Header() {
 
   return (
     <>
-      <header className="w-full flex flex-col items-center">
+      <header className="w-full mb-4 flex flex-col items-center">
         <div className="w-full flex justify-center bg-pink-300">
           <ContentContainer styleClass="flex justify-between">
             <nav className="flex">
@@ -80,7 +80,7 @@ export function Header() {
             <div>{WORKING_TIME}</div>
           </div>
           <Button
-            styleClass="uppercase text-amber-50"
+            styleClass="uppercase text-amber-50 px-4 py-2"
             type={ButtonType.BUTTON}
             callback={() => dispatch(setRequestCallPopupVisible(true))}
           >{TRANSLATES[LOCALE].requestCall}</Button>

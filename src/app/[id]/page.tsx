@@ -34,7 +34,7 @@ export default async function CategoriesOrProducts({params: {id}}: CategoriesOrP
         {
           categories?.length
             ? categories.map((category) => (<EntityCard key={category.id} category={category}/>))
-            : products?.map((product) => (<EntityCard key={product.id} category={product}/>))
+            : products?.map((product) => (<EntityCard key={product.id} product={product}/>))
         }
       </div>
     </div>

@@ -1,3 +1,5 @@
+'use client'
+
 import { CommonProps } from '@/app/models';
 import { Simulate } from 'react-dom/test-utils';
 import { ButtonType } from '@/app/enums';
@@ -15,11 +17,12 @@ export function Button({ children, callback, type, disabled, styleClass }: Butto
     'flex',
     'justify-center',
     'items-center',
-    'px-4',
-    'py-2',
     'bg-pink-500',
+    'hover:bg-pink-400',
+    'active:bg-pink-600',
     'rounded-md',
     'h-fit',
+    'duration-500',
     disabled ? 'pointer-events-none' : '',
   ]);
 

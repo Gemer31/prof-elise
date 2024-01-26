@@ -1,8 +1,12 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import { Category, Product } from '@/app/models';
+import { convertToClass } from '@/utils/convert-to-class.util';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface EntityCardProps {
   category?: Category;
@@ -10,25 +14,39 @@ export interface EntityCardProps {
 }
 export function EntityCard({ category, product }: EntityCardProps) {
 
+  const cardClass = convertToClass([
+    'flex',
+    'flex-col',
+    'items-center',
+    'items-center',
+    'rounded-lg',
+    'p-4',
+    'hover:bg-pink-100',
+    'duration-500',
+    'transition-colors',
+  ]);
+
   const addToCart = () => {
 
   }
 
   return (
     <Link
+      className={cardClass}
       href={category?.id ? `/${category.id}` : `/products/${product?.id}`}
-      className="p-4 rounded-md hover:bg-pink-100"
     >
       <Image width={200} height={200} src={category?.image || product?.image || ''} alt={category?.name || product?.name || ''}/>
-      <div>{category?.name || product?.name}</div>
+      <div className={product ? 'text-base' : 'text-lg'}>{category?.name || product?.name}</div>
       {
         product
           ? (
             <>
-              <div>{product.price}</div>
-              {/*<Button type={ButtonType.BUTTON} callback={() => addToCart()}>*/}
-              {/*  В корзину*/}
-              {/*</Button>*/}
+              <div className="text-pink-500 bold py-2">{product.price} бел.руб.</div>
+              <Button
+                styleClass="text-amber-50 w-full"
+                type={ButtonType.BUTTON}
+                callback={() => addToCart()}
+              >{TRANSLATES[LOCALE].intoCart}</Button>
             </>
           )
           : <></>
