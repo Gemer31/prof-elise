@@ -43,7 +43,7 @@ export function EntityCard({ category, product }: EntityCardProps) {
             <>
               <div className="text-pink-500 bold py-2">{product.price} бел.руб.</div>
               <Button
-                styleClass="text-amber-50 w-full"
+                styleClass="text-amber-50 w-full px-4 py-2"
                 type={ButtonType.BUTTON}
                 callback={() => addToCart()}
               >{TRANSLATES[LOCALE].intoCart}</Button>

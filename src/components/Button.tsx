@@ -1,20 +1,22 @@
-'use client'
+'use client';
 
 import { CommonProps } from '@/app/models';
-import { Simulate } from 'react-dom/test-utils';
 import { ButtonType } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
+import { Loader } from '@/components/loader/loader';
 
 export interface ButtonProps extends CommonProps {
   type: ButtonType;
   disabled?: boolean;
+  loading?: boolean;
   styleClass?: string;
   callback?: () => void;
 }
 
-export function Button({ children, callback, type, disabled, styleClass }: ButtonProps) {
+export function Button({children, callback, type, disabled, loading, styleClass}: ButtonProps) {
   const buttonClass: string = convertToClass([
     'flex',
+    'relative',
     'justify-center',
     'items-center',
     'bg-pink-500',
@@ -22,15 +24,22 @@ export function Button({ children, callback, type, disabled, styleClass }: Butto
     'active:bg-pink-600',
     'rounded-md',
     'h-fit',
-    'duration-500',
-    disabled ? 'pointer-events-none' : '',
+    'duration-200',
+    'active:scale-100',
+    'hover:scale-105',
+    disabled ? 'pointer-events-none opacity-75' : ''
   ]);
 
   return (
     <button
       type={type || ButtonType.BUTTON}
-      className={buttonClass + styleClass}
+      className={buttonClass + ' ' + styleClass}
       onClick={() => callback?.()}
-    >{children}</button>
-  )
+    >
+      <span className={loading ? 'invisible' : ''}>{children}</span>
+      <div className={styleClass + (loading ? ' w-full h-full absolute top-0' : ' hidden')}>
+        <Loader/>
+      </div>
+    </button>
+  );
 }

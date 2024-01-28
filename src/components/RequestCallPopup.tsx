@@ -12,12 +12,19 @@ import { useState } from 'react';
 import { Loader } from '@/components/loader/loader';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
-export const validationSchema = yup.object().shape({
+const validationSchema = yup.object().shape({
   name: yup.string().required().matches(/^[A-Za-zА-Яа-я ]+$/),
   phone: yup.string().required().matches(/^(80|375|\+375)\d{9}$/)
 });
 
 export function RequestCallPopup() {
+  const inputClass: string = convertToClass([
+    'border-2',
+    'bg-custom-gray-100',
+    'mt-1',
+    'field-input'
+  ]);
+
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -28,13 +35,6 @@ export function RequestCallPopup() {
     mode: 'onSubmit',
     resolver: yupResolver(validationSchema)
   });
-
-  const inputClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input'
-  ]);
 
   const submitForm = async (formData: { name: string; phone: string }) => {
     setIsLoading(true);
@@ -79,14 +79,11 @@ export function RequestCallPopup() {
         </label>
 
         <Button
-          styleClass="text-amber-50 w-full"
+          styleClass="text-amber-50 w-full py-2"
           disabled={isLoading}
+          loading={isLoading}
           type={ButtonType.SUBMIT}
-        >{
-          isLoading
-            ? <Loader styleClass="w-[24px] h-[24px]"/>
-            : TRANSLATES[LOCALE].send
-        }</Button>
+        >{TRANSLATES[LOCALE].send}</Button>
       </form>
     </Popup>
   );

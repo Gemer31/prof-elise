@@ -18,5 +18,10 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     deliveryAdvantage: 'Бесплатная доставка по Могилеву при заказе от 80р',
     intoCart: 'В корзину',
     amount: 'Количество',
+    enter: 'Войти',
+    password: 'Пароль',
+    invalidLoginOrPassword: 'Неправильный логин или пароль',
+    fieldRequired: 'Обязательное поле',
+    fieldInvalid: 'Неверное значение'
   }
 }

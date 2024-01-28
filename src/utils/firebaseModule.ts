@@ -11,14 +11,24 @@ import { getFirestore } from '@firebase/firestore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: process.env.FIREBASE_API_KEY,
+//   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+//   projectId: process.env.FIREBASE_PROJECT_ID,
+//   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+//   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+//   appId: process.env.FIREBASE_APP_ID,
+//   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+// };
+
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyBgznHXUqUi3ehk_ZjOMtzZGO6E77Azo84",
+  authDomain: "prof-elise.firebaseapp.com",
+  projectId: "prof-elise",
+  storageBucket: "prof-elise.appspot.com",
+  messagingSenderId: "582836420623",
+  appId: "1:582836420623:web:e91e74bd6e0358d807237a",
+  measurementId: "G-TYFTE3WSC9"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -26,7 +36,6 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const analytics = getAnalytics(app);
 
-// signOut(auth);
 //
 //
 // const onSubmitForm = async (formData: AppFields) => {
@@ -54,16 +63,3 @@ export const analytics = getAnalytics(app);
 //   }
 // };
 //
-// const onSubmitForm = async (formData: AppFields) => {
-//   setCredentialErrorVisible(false);
-//   setLoading(true);
-//
-//   try {
-//     await signInWithEmailAndPassword(auth, formData.email, formData.password);
-//     navigate(RouterPage.GQL);
-//   } catch (err) {
-//     setCredentialErrorVisible(true);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
