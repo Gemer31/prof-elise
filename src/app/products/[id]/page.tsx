@@ -1,5 +1,3 @@
-'use client';
-
 import { Product } from '@/app/models';
 import { CURRENCY, PRODUCTS } from '@/app/constants';
 import { Categories } from '@/components/categories/Categories';
@@ -23,8 +21,6 @@ async function getProductDetails(id: string): Promise<Product | undefined> {
 
 export default async function ProductDetails({ params: { id } }: ProductDetailsProps) {
   const product: Product | undefined = await getProductDetails(id);
-
-
 
   // todo: redirect if not found
   return (

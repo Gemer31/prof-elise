@@ -1,16 +1,30 @@
+'use client';
+
 import { ContentContainer } from '@/components/ContentContainer';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Button } from '@/components/Button';
-import { ButtonType, RouterPath } from '@/app/enums';
+import { ButtonType, FirebaseCollections, RouterPath } from '@/app/enums';
 import { useAppDispatch } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import Link from 'next/link';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { CONTACT_PHONE } from '@/app/constants';
 import { usePathname } from 'next/navigation';
+import { getDocData } from '@/utils/firebase-collections.util';
+import { QueryDocumentSnapshot } from '@firebase/firestore';
+import { useEffect } from 'react';
 
-export function Footer() {
+export interface FooterProps {
+  firestoreData?: Array<QueryDocumentSnapshot>;
+}
+
+export function Footer({ firestoreData }: FooterProps) {
+  const contactPhone: string = getDocData(firestoreData, FirebaseCollections.CONFIG)?.['contactPhone'].stringValue;
+
+  useEffect(() => {
+    console.log(firestoreData);
+  }, [contactPhone]);
+
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const instagramClass: string = convertToClass([
@@ -43,10 +57,11 @@ export function Footer() {
               </div>
               <div>
                 <h2 className="text-xl mb-4">Контакты</h2>
-                <a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE}</a>
+                {/*<a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE}</a>*/}
+                <a>{contactPhone}</a>
               </div>
               <div className="flex flex-col items-center">
-                <Button
+              <Button
                   styleClass="uppercase text-amber-50 px-4 py-2"
                   type={ButtonType.BUTTON}
                   callback={() => dispatch(setRequestCallPopupVisible(true))}

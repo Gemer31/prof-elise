@@ -1,9 +1,13 @@
-import { AboutUs } from '@/components/AboutUs';
 import { Advantages } from '@/components/Advantages';
 import { Categories } from '@/components/categories/Categories';
 import { EntityCard } from '@/components/EntityCard';
-import { Category } from '@/app/models';
-import { CATEGORIES } from '@/app/constants';
+import { Category, IFirebaseDocumentModel } from '@/app/models';
+import { CATEGORIES, FIREBASE_DATABASE_NAME } from '@/app/constants';
+import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
+import { db } from '@/utils/firebaseModule';
+import { AboutUs } from '@/components/AboutUs';
+import { FirebaseCollections } from '@/app/enums';
+import { getDocData } from '@/utils/firebase-collections.util';
 
 async function getCategories(): Promise<Category[] | undefined> {
   // TODO: request
@@ -11,7 +15,11 @@ async function getCategories(): Promise<Category[] | undefined> {
 }
 
 export default async function HomePage() {
+  const firestoreData: QuerySnapshot = await getDocs(collection(db, FIREBASE_DATABASE_NAME));
   const categories: Category[] | undefined = await getCategories();
+
+  const aboutText: string = getDocData(firestoreData.docs as unknown as IFirebaseDocumentModel[], FirebaseCollections.CONFIG)
+    ?.['shopDescription']?.stringValue as string;
 
   return (
     <main className="w-full max-w-screen-lg flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
@@ -26,7 +34,7 @@ export default async function HomePage() {
           }
         </div>
       </div>
-      <AboutUs/>
+      <AboutUs text={aboutText}/>
     </main>
   );
 }

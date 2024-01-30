@@ -2,8 +2,7 @@
 // import { getAuth, signOut } from 'firebase/auth';
 // import { getFirestore } from 'firebase/firestore';
 //
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
 import { getAuth } from '@firebase/auth';
 import { getFirestore } from '@firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -34,32 +33,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
+// export const analytics = getAnalytics(app);
 
-//
-//
-// const onSubmitForm = async (formData: AppFields) => {
-//   setSomethingWentWrongVisible(false);
-//   setLoading(true);
-//
-//   try {
-//     const result: UserCredential = await createUserWithEmailAndPassword(
-//       auth,
-//       formData.email,
-//       formData.password
-//     );
-//     const user = result.user;
-//     await addDoc(collection(db, 'users'), {
-//       uid: user.uid,
-//       name: `${formData.firstName} ${formData.lastName}`,
-//       authProvider: 'local',
-//       email: formData.email,
-//     });
-//     navigate(RouterPage.GQL);
-//   } catch (e) {
-//     setSomethingWentWrongVisible(true);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-//

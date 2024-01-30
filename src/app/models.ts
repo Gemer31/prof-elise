@@ -17,3 +17,24 @@ export interface Category {
     image: string;
     categories?: Category[];
 }
+
+export interface IFirebaseDocumentModel {
+    _document: {
+        data: {
+            value: {
+                mapValue: {
+                    fields: {
+                        [key: string]: FirebaseCollectionFieldModel;
+                    }
+                }
+            }
+        };
+        key: {
+            path: {
+                segments: string[];
+            }
+        }
+    }
+}
+
+export type FirebaseCollectionFieldModel = { stringValue: string };

@@ -10,3 +10,15 @@ export enum RouterPath {
   LOGIN = '/login',
   EDITOR = '/editor',
 }
+
+export enum EditGroup {
+  GENERAL,
+  CATEGORY,
+  PRODUCT,
+}
+
+export enum FirebaseCollections {
+  CATEGORIES = 'categories',
+  CONFIG = 'config',
+  PRODUCTS = 'products'
+}
