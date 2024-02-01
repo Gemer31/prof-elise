@@ -36,6 +36,11 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     imageDeleted: 'Картинка удалена',
     somethingWentWrong: 'Что-то пошло не так =(',
     imagesUploaded: 'Картинки загружены',
-    noImages: 'Картинок нет'
+    noImages: 'Картинок нет',
+    chooseFiles: 'Выберите файлы',
+    subcategories: 'Подкатегории',
+    add: 'Добавить',
+    newCategory: 'Новая категория',
+    update: 'Обновить'
   }
 }

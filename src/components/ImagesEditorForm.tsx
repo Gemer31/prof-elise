@@ -70,7 +70,7 @@ export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormPro
         {
           files
             ? Object.values(files).map((file) => (<div key={file.name}>{file.name}</div>))
-            : <span>Выберите файлы</span>
+            : <span>{TRANSLATES[LOCALE].chooseFiles}</span>
         }
       </label>
 

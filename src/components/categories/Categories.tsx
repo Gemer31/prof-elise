@@ -14,8 +14,8 @@ export function Categories() {
               key={category.id}
               href={'/' + category.id}
             >
-              <Image className="mr-4" width={25} height={25} src={category.image} alt={category.name}/>
-              <span>{category.name}</span>
+              <Image className="mr-4" width={25} height={25} src={category.imageUrl} alt={category.title}/>
+              <span>{category.title}</span>
               {/*{*/}
               {/*  category.categories?.length*/}
               {/*    ? (<div>*/}

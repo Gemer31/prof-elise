@@ -12,9 +12,10 @@ import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
 import { Loader } from '@/components/loader/loader';
 import { FIREBASE_DATABASE_NAME } from '@/app/constants';
-import { getDocData } from '@/utils/firebase.util';
+import { convertCategoriesDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { ImagesEditorForm } from '@/components/ImagesEditorForm';
 import { listAll, ref, StorageReference } from '@firebase/storage';
+import { IFirestoreFields } from '@/app/models';
 
 export default function EditorPage() {
   const groupButtonClass = convertToClass([
@@ -83,7 +84,10 @@ export default function EditorPage() {
               selectedGroup === EditGroup.CATEGORY
                 ? <CategoryEditorForm
                   storageData={storageData}
-                  firebaseData={getDocData<IFirebaseGeneralEditorInfo>(firestoreData?.docs, FirebaseCollections.CATEGORIES)}
+                  firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
+                    firestoreData?.docs,
+                    FirebaseCollections.CATEGORIES,
+                  ))}
                   refreshData={loadData}
                 />
                 : <></>

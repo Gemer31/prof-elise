@@ -35,8 +35,8 @@ export function EntityCard({ category, product }: EntityCardProps) {
       className={cardClass}
       href={category?.id ? `/${category.id}` : `/products/${product?.id}`}
     >
-      <Image width={200} height={200} src={category?.image || product?.image || ''} alt={category?.name || product?.name || ''}/>
-      <div className={product ? 'text-base' : 'text-lg'}>{category?.name || product?.name}</div>
+      <Image width={200} height={200} src={category?.imageUrl || product?.image || ''} alt={category?.title || product?.name || ''}/>
+      <div className={product ? 'text-base' : 'text-lg'}>{category?.title || product?.name}</div>
       {
         product
           ? (

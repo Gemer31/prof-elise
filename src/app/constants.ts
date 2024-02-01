@@ -8,6 +8,7 @@ export const FADE_OUT_LEFT_CLASS = 'animate__animated animate__fadeOutLeft';
 export const FADE_IN_CLASS = 'animate__animated animate__fadeIn';
 export const FADE_OUT_CLASS = 'animate__animated animate__fadeOut';
 
+export const CTRL_CODE = 17;
 export const CONTACT_PHONE: string = '+375 44 532 54 20';
 export const WORKING_TIME: string = 'пн-сб 9:00-19:00';
 export const CURRENCY: string = 'бел.руб';
@@ -38,23 +39,23 @@ export const PRODUCTS: Product[] = [
 export const CATEGORIES: Category[] = [
   {
     id: '1',
-    name: 'Масло для массажа',
-    image: '/icons/instagram.svg'
+    title: 'Масло для массажа',
+    imageUrl: '/icons/instagram.svg'
   },
   {
     id: '2',
-    name: 'Для парикмахерских',
-    image: '/icons/instagram.svg',
+    title: 'Для парикмахерских',
+    imageUrl: '/icons/instagram.svg',
     categories: [
       {
         id: '3',
-        name: 'Воротнички',
-        image: '/icons/instagram.svg'
+        title: 'Воротнички',
+        imageUrl: '/icons/instagram.svg'
       },
       {
         id: '4',
-        name: 'Пеньюары',
-        image: '/icons/instagram.svg'
+        title: 'Пеньюары',
+        imageUrl: '/icons/instagram.svg'
       }
     ]
   }
