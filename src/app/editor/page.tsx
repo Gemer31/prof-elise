@@ -4,7 +4,6 @@ import { ButtonType, EditGroup, FirebaseCollections } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { useEffect, useState } from 'react';
-import { convertToClass } from '@/utils/convert-to-class.util';
 import { GeneralEditorForm, IFirebaseGeneralEditorInfo } from '@/components/GeneralEditorForm';
 import { CategoryEditorForm } from '@/components/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/ProductEditorForm';
@@ -12,22 +11,15 @@ import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
 import { Loader } from '@/components/loader/loader';
 import { FIREBASE_DATABASE_NAME } from '@/app/constants';
-import { convertCategoriesDataToModelArray, getDocData } from '@/utils/firebase.util';
+import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { ImagesEditorForm } from '@/components/ImagesEditorForm';
 import { listAll, ref, StorageReference } from '@firebase/storage';
 import { IFirestoreFields } from '@/app/models';
 
 export default function EditorPage() {
-  const groupButtonClass = convertToClass([
-    'w-full',
-    'text-amber-50',
-    'px-4',
-    'py-2'
-  ]);
-
   const [storageData, setStorageData] = useState<StorageReference[]>();
   const [firestoreData, setFirestoreData] = useState<QuerySnapshot>();
-  const [selectedGroup, setSelectedGroup] = useState(EditGroup.GENERAL);
+  const [selectedGroup, setSelectedGroup] = useState<EditGroup | string>(EditGroup.GENERAL);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,26 +42,15 @@ export default function EditorPage() {
         ? <Loader styleClass="min-h-[30%]"/>
         : <>
           <div className="w-full m-2 flex gap-x-3">
-            <Button
-              styleClass={selectedGroup === EditGroup.GENERAL ? `${groupButtonClass} underline` : groupButtonClass}
-              type={ButtonType.BUTTON}
-              callback={() => setSelectedGroup(EditGroup.GENERAL)}
-            >{TRANSLATES[LOCALE].general}</Button>
-            <Button
-              styleClass={selectedGroup === EditGroup.CATEGORY ? `${groupButtonClass} underline` : groupButtonClass}
-              type={ButtonType.BUTTON}
-              callback={() => setSelectedGroup(EditGroup.CATEGORY)}
-            >{TRANSLATES[LOCALE].category}</Button>
-            <Button
-              styleClass={selectedGroup === EditGroup.PRODUCT ? `${groupButtonClass} underline` : groupButtonClass}
-              type={ButtonType.BUTTON}
-              callback={() => setSelectedGroup(EditGroup.PRODUCT)}
-            >{TRANSLATES[LOCALE].product}</Button>
-            <Button
-              styleClass={selectedGroup === EditGroup.IMAGES ? `${groupButtonClass} underline` : groupButtonClass}
-              type={ButtonType.BUTTON}
-              callback={() => setSelectedGroup(EditGroup.IMAGES)}
-            >{TRANSLATES[LOCALE].images}</Button>
+            {
+              Object.values(EditGroup).map((v) => {
+                return <Button
+                  styleClass={`w-full text-amber-50 px-4 py-2 ${selectedGroup === v ? 'underline' : ''}`}
+                  type={ButtonType.BUTTON}
+                  callback={() => setSelectedGroup(v)}
+                >{TRANSLATES[LOCALE][v]}</Button>
+              })
+            }
           </div>
           <div className="w-full">
             {
@@ -81,7 +62,7 @@ export default function EditorPage() {
                 : <></>
             }
             {
-              selectedGroup === EditGroup.CATEGORY
+              selectedGroup === EditGroup.CATEGORIES
                 ? <CategoryEditorForm
                   storageData={storageData}
                   firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
@@ -93,8 +74,18 @@ export default function EditorPage() {
                 : <></>
             }
             {
-              selectedGroup === EditGroup.PRODUCT
-                ? <ProductEditorForm/>
+              selectedGroup === EditGroup.PRODUCTS
+                ? <ProductEditorForm
+                  firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
+                    firestoreData?.docs,
+                    FirebaseCollections.CATEGORIES,
+                  ))}
+                  firestoreProducts={convertProductsDataToModelArray(getDocData<IFirestoreFields>(
+                    firestoreData?.docs,
+                    FirebaseCollections.PRODUCTS,
+                  ))}
+                  storageData={storageData}
+                />
                 : <></>
             }
             {

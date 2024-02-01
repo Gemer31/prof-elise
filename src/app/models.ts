@@ -1,9 +1,9 @@
 export interface Product {
   id: string;
-  name: string;
+  title: string;
   price: number;
-  image: string;
-  categoryId: string;
+  imageUrls?: string[];
+  categoryId?: string;
 }
 
 export interface CommonProps {
@@ -37,6 +37,7 @@ export interface IFirebaseDocumentModel {
 
 export interface IFirestoreFields {
   stringValue?: string;
+  numberValue?: number;
   data?: {
     arrayValue?: {
       values?: {
@@ -59,6 +60,21 @@ export interface IFirestoreCategoriesEditorInfo {
     stringValue: string;
   };
   shopDescription: {
+    stringValue: string;
+  };
+}
+
+export interface IFirestoreProductsEditorInfo {
+  id: {
+    stringValue: string;
+  };
+  title: {
+    stringValue: string;
+  };
+  price: {
+    numberValue: string;
+  };
+  categoryId: {
     stringValue: string;
   };
 }

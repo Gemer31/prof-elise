@@ -9,6 +9,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     general: 'Основное',
     category: 'Категория',
     product: 'Продукт',
+    products: 'Продукты',
     delivery: 'Доставка',
     contacts: 'Контакты',
     requestCall: 'Заказать звонок',
@@ -38,9 +39,12 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     imagesUploaded: 'Картинки загружены',
     noImages: 'Картинок нет',
     chooseFiles: 'Выберите файлы',
+    categories: 'Категории',
     subcategories: 'Подкатегории',
     add: 'Добавить',
     newCategory: 'Новая категория',
-    update: 'Обновить'
+    newProduct: 'Новый продукт',
+    update: 'Обновить',
+    price: 'Цена'
   }
 }

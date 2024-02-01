@@ -12,10 +12,10 @@ export enum RouterPath {
 }
 
 export enum EditGroup {
-  GENERAL,
-  CATEGORY,
-  PRODUCT,
-  IMAGES,
+  GENERAL = 'general',
+  CATEGORIES = 'categories',
+  PRODUCTS = 'products',
+  IMAGES = 'images',
 }
 
 export enum FirebaseCollections {
