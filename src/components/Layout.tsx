@@ -8,9 +8,11 @@ import { useAppSelector } from '@/store/store';
 import { Notification } from '@/components/Notification';
 import { ContentContainer } from '@/components/ContentContainer';
 import { QueryDocumentSnapshot, QuerySnapshot } from '@firebase/firestore';
+import { StorageReference } from '@firebase/storage';
 
 export interface LayoutProps extends CommonProps{
   firestoreData?: Array<QueryDocumentSnapshot>;
+  storageData?: StorageReference[];
 }
 
 export function Layout({ children, firestoreData }: LayoutProps) {

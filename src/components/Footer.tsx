@@ -10,7 +10,7 @@ import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import Link from 'next/link';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { usePathname } from 'next/navigation';
-import { getDocData } from '@/utils/firebase-collections.util';
+import { getDocData } from '@/utils/firebase.util';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { useEffect } from 'react';
 

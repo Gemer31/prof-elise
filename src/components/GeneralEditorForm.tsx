@@ -10,6 +10,8 @@ import { InputMask } from '@react-input/mask';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { db } from '@/utils/firebaseModule';
 import { FIREBASE_DATABASE_NAME } from '@/app/constants';
+import { setNotificationMessage } from '@/store/dataSlice';
+import { useAppDispatch } from '@/store/store';
 
 const validationSchema = yup.object().shape({
   phone: yup.string().required(),
@@ -38,6 +40,7 @@ export function GeneralEditorForm({ firebaseData }: GeneralEditorFormProps) {
     'w-full'
   ]);
 
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -64,6 +67,7 @@ export function GeneralEditorForm({ firebaseData }: GeneralEditorFormProps) {
     }
     try {
       await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CONFIG), data);
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
     } catch {
     } finally {
       setIsLoading(false);
@@ -72,9 +76,10 @@ export function GeneralEditorForm({ firebaseData }: GeneralEditorFormProps) {
 
   return (
     <form
+      className="flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
-      <label className="w-full pb-6 relative mt-4">
+      <label className="w-full mb-2 relative mt-4">
         <span className="mr-2">{TRANSLATES[LOCALE].phone}</span>
         <InputMask
           placeholder="+375 (99) 999-99-99"
@@ -91,7 +96,7 @@ export function GeneralEditorForm({ firebaseData }: GeneralEditorFormProps) {
             : <></>
         }
       </label>
-      <label className="mb-4 mt-4">
+      <label className="mb-4">
         <span className="mr-2">{TRANSLATES[LOCALE].mainShopInfo}</span>
         <input
           className={inputClass}

@@ -28,6 +28,14 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     fieldInvalid: 'Неверное значение',
     editor: 'Редактор',
     save: 'Сохранить',
-    mainShopInfo: 'Основная информация о магазине'
+    mainShopInfo: 'Основная информация о магазине',
+    infoSaved: 'Информация сохранена',
+    title: 'Название',
+    images: 'Картинки',
+    selectImage: 'Выберите картинку',
+    imageDeleted: 'Картинка удалена',
+    somethingWentWrong: 'Что-то пошло не так =(',
+    imagesUploaded: 'Картинки загружены',
+    noImages: 'Картинок нет'
   }
 }

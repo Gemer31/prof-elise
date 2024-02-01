@@ -7,7 +7,7 @@ import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { db } from '@/utils/firebaseModule';
 import { AboutUs } from '@/components/AboutUs';
 import { FirebaseCollections } from '@/app/enums';
-import { getDocData } from '@/utils/firebase-collections.util';
+import { getDocData } from '@/utils/firebase.util';
 
 async function getCategories(): Promise<Category[] | undefined> {
   // TODO: request

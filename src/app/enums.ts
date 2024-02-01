@@ -15,6 +15,7 @@ export enum EditGroup {
   GENERAL,
   CATEGORY,
   PRODUCT,
+  IMAGES,
 }
 
 export enum FirebaseCollections {
