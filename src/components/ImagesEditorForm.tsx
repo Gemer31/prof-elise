@@ -9,27 +9,14 @@ import { getStorageImageSrc } from '@/utils/firebase.util';
 import { storage } from '@/utils/firebaseModule';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
+import { ImagesViewer } from '@/components/ImagesViewer';
 
 interface ImagesEditorFormProps {
   storageData?: StorageReference[];
+  refreshData?: () => void;
 }
 
-export function ImagesEditorForm({storageData}: ImagesEditorFormProps) {
-  const inputClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input',
-    'w-full'
-  ]);
-  const imgItemClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input',
-    'w-full'
-  ]);
-
+export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<StorageReference | null>();
@@ -38,7 +25,6 @@ export function ImagesEditorForm({storageData}: ImagesEditorFormProps) {
 
   const uploadFiles = async () => {
     setIsLoading(true);
-
     try {
       if (files) {
         Object.values(files).forEach(async (file) => {
@@ -46,6 +32,7 @@ export function ImagesEditorForm({storageData}: ImagesEditorFormProps) {
           await uploadBytes(ref(storage, file.name), new Blob([arrBuffer]));
         });
         dispatch(setNotificationMessage(TRANSLATES[LOCALE].imagesUploaded));
+        refreshData?.();
       }
     } catch {
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
@@ -62,6 +49,7 @@ export function ImagesEditorForm({storageData}: ImagesEditorFormProps) {
       if (image.name === selectedImage?.name) {
         setSelectedImage(null);
       }
+      refreshData?.();
     } catch {
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
     }
@@ -69,35 +57,7 @@ export function ImagesEditorForm({storageData}: ImagesEditorFormProps) {
 
   return (
     <>
-      <div className="flex justify-between gap-4 mt-4">
-        {
-          storageData?.length
-            ? <>
-              <div className="overflow-y-hidden max-h-52 w-7/12 rounded-md border-pink-500 border-2 px-2 py-1">
-                {
-                  storageData?.map((item) => (
-                    <div
-                      key={item.fullPath}
-                      className={`cursor-pointer flex justify-between items-center px-2 py-1 ${selectedImage?.name === item.name ? 'rounded-md bg-pink-300' : ''}`}
-                    >
-                      <span onClick={() => setSelectedImage(item)}>{item.fullPath}</span>
-                      <Image onClick={() => deleteImg(item)} width={30} height={30} src="/icons/cross.svg" alt="Close"/>
-                    </div>
-                  ))
-                }
-              </div>
-              <div className="w-6/12 flex items-center justify-center text-center rounded-md border-pink-500 border-2">
-                {selectedImage
-                  ? <Image width={200} height={200} src={getStorageImageSrc(selectedImage)} alt={selectedImage.name}/>
-                  : <>{TRANSLATES[LOCALE].selectImage}</>
-                }
-              </div>
-            </>
-            : <div
-              className="w-full text-center rounded-md border-pink-500 border-2 px-2 py-1">{TRANSLATES[LOCALE].noImages}</div>
-        }
-      </div>
-
+      <ImagesViewer storageData={storageData} editAvailable={true} deleteImageClick={deleteImg}/>
 
       <label className="flex flex-col justify-center items-center border-dashed w-full rounded-md border-pink-500 border-2 mt-6 mb-2 p-6 cursor-pointer">
         <input

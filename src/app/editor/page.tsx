@@ -8,8 +8,7 @@ import { convertToClass } from '@/utils/convert-to-class.util';
 import { GeneralEditorForm, IFirebaseGeneralEditorInfo } from '@/components/GeneralEditorForm';
 import { CategoryEditorForm } from '@/components/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/ProductEditorForm';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { collection } from '@firebase/firestore';
+import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
 import { Loader } from '@/components/loader/loader';
 import { FIREBASE_DATABASE_NAME } from '@/app/constants';
@@ -25,25 +24,23 @@ export default function EditorPage() {
     'py-2'
   ]);
 
-  const [value, loading, error] = useCollection(
-    collection(db, FIREBASE_DATABASE_NAME),
-    {
-      snapshotListenOptions: {includeMetadataChanges: true}
-    }
-  );
   const [storageData, setStorageData] = useState<StorageReference[]>();
-
+  const [firestoreData, setFirestoreData] = useState<QuerySnapshot>();
   const [selectedGroup, setSelectedGroup] = useState(EditGroup.GENERAL);
-  const listRef = ref(storage);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    listAll(listRef)
-      .then((res) => {
-        setStorageData(res.items);
-      }).catch((error) => {
-      // Uh-oh, an error occurred!
-    });
+    setLoading(true);
+    loadData().then(() => setLoading(false));
   }, []);
+
+  const loadData = async () => {
+    const docs = await getDocs(collection(db, FIREBASE_DATABASE_NAME));
+    const images = await listAll( ref(storage));
+
+    setFirestoreData(docs);
+    setStorageData(images.items);
+  }
 
   return (
     <main className="w-full max-w-screen-lg flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
@@ -76,12 +73,30 @@ export default function EditorPage() {
           <div className="w-full">
             {
               selectedGroup === EditGroup.GENERAL
-                ? <GeneralEditorForm firebaseData={getDocData<IFirebaseGeneralEditorInfo>(value?.docs, FirebaseCollections.CONFIG)}/>
-                : selectedGroup === EditGroup.CATEGORY
-                  ? <CategoryEditorForm/>
-                  : selectedGroup === EditGroup.PRODUCT
-                    ? <ProductEditorForm/>
-                    : <ImagesEditorForm storageData={storageData}/>
+                ? <GeneralEditorForm
+                  firebaseData={getDocData<IFirebaseGeneralEditorInfo>(firestoreData?.docs, FirebaseCollections.CONFIG)}
+                  refreshData={loadData}
+                />
+                : <></>
+            }
+            {
+              selectedGroup === EditGroup.CATEGORY
+                ? <CategoryEditorForm
+                  storageData={storageData}
+                  firebaseData={getDocData<IFirebaseGeneralEditorInfo>(firestoreData?.docs, FirebaseCollections.CATEGORIES)}
+                  refreshData={loadData}
+                />
+                : <></>
+            }
+            {
+              selectedGroup === EditGroup.PRODUCT
+                ? <ProductEditorForm/>
+                : <></>
+            }
+            {
+              selectedGroup === EditGroup.IMAGES
+                ? <ImagesEditorForm storageData={storageData} refreshData={loadData}/>
+                : <></>
             }
           </div>
         </>

@@ -29,9 +29,10 @@ export interface IFirebaseGeneralEditorInfo {
 
 interface GeneralEditorFormProps {
   firebaseData: IFirebaseGeneralEditorInfo;
+  refreshData?: () => void;
 }
 
-export function GeneralEditorForm({ firebaseData }: GeneralEditorFormProps) {
+export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFormProps) {
   const inputClass: string = convertToClass([
     'border-2',
     'bg-custom-gray-100',
@@ -68,6 +69,7 @@ export function GeneralEditorForm({ firebaseData }: GeneralEditorFormProps) {
     try {
       await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CONFIG), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
+      refreshData?.();
     } catch {
     } finally {
       setIsLoading(false);

@@ -6,13 +6,22 @@ import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import { useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
+import { ImagesViewer } from '@/components/ImagesViewer';
+import { StorageReference } from '@firebase/storage';
+import { IFirebaseGeneralEditorInfo } from '@/components/GeneralEditorForm';
 
 const validationSchema = yup.object().shape({
   // image: yup.string().required(),
   title: yup.string().required(),
 });
 
-export function CategoryEditorForm() {
+interface CategoryEditorFormProps {
+  firebaseData: IFirebaseGeneralEditorInfo;
+  storageData?: StorageReference[];
+  refreshData?: () => void;
+}
+
+export function CategoryEditorForm({ storageData, refreshData }: CategoryEditorFormProps) {
   const inputClass: string = convertToClass([
     'border-2',
     'bg-custom-gray-100',
@@ -52,8 +61,7 @@ export function CategoryEditorForm() {
         />
       </label>
 
-
-
+      <ImagesViewer storageData={storageData} selectImageClick={() => {}}/>
 
       <Button
         styleClass="text-amber-50 w-full py-2"
