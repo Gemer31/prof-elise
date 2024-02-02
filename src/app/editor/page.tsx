@@ -40,9 +40,6 @@ export default function EditorPage() {
   return (
     <main className="w-full max-w-screen-lg flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
       <h1 className="text-2xl ">{TRANSLATES[LOCALE].editor}</h1>
-
-
-
       {loading
         ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader styleClass="min-h-[250px] border-pink-500"/></div>
         : <>

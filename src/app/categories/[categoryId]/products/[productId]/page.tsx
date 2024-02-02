@@ -11,6 +11,8 @@ import { collection, getDocs } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
 import { listAll, ref } from '@firebase/storage';
 import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
+import { useAppDispatch } from '@/store/store';
+import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 
 export interface ProductDetailsProps {
   params: {
@@ -32,6 +34,7 @@ export default async function ProductDetails({ params: { productId } }: ProductD
     FirebaseCollections.PRODUCTS,
   )).find((item) => item.id === productId);
 
+
   // todo: redirect if not found
   return (
     <main className="w-full max-w-screen-lg flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
@@ -48,13 +51,7 @@ export default async function ProductDetails({ params: { productId } }: ProductD
             <div className="w-full ml-4">
               <div className="mb-4 text-2xl bold text-center">{product?.title}</div>
               <div className="w-full text-2xl text-pink-500 font-bold text-center">{product?.price} {CURRENCY}</div>
-              <div className="flex justify-between items-center my-4">
-                <Counter/>
-                <Button
-                  styleClass="uppercase text-amber-50 px-4 py-2"
-                  type={ButtonType.BUTTON}
-                >{TRANSLATES[LOCALE].intoCart}</Button>
-              </div>
+              <ProductDetailsActionsBlock product={product}/>
             </div>
           </div>
           <div>{product?.description}</div>

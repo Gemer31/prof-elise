@@ -51,5 +51,6 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     productDeleted: 'Продукт удален',
     description: 'Описание',
     workingHours: 'Время работы',
+    emptyCart: 'Корзина пуста',
   }
 }
