@@ -2,6 +2,7 @@ export interface Product {
   id: string;
   title: string;
   price: number;
+  description: string;
   categoryId: string;
   imageUrls?: string[];
 }
@@ -15,7 +16,7 @@ export interface Category {
   id: string;
   title: string;
   imageUrl: string;
-  categories?: Category[];
+  relatedCategories?: string[];
 }
 
 export interface IFirebaseDocumentModel {
@@ -73,6 +74,9 @@ export interface IFirestoreProductsEditorInfo {
   };
   price: {
     integerValue: string;
+  };
+  description: {
+    stringValue: string;
   };
   categoryId: {
     stringValue: string;

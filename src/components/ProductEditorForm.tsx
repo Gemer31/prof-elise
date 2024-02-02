@@ -22,6 +22,7 @@ import { useAppDispatch } from '@/store/store';
 const validationSchema = yup.object().shape({
   title: yup.string().required(),
   price: yup.number().required(),
+  description: yup.string().required(),
   categoryId: yup.string().required(),
   images: yup.array().required(),
 });
@@ -63,7 +64,7 @@ export function ProductEditorForm({
     resolver: yupResolver(validationSchema)
   });
 
-  const submitForm = async (formData: { title: string, price: number, categoryId: string, images: StorageReference[] }) => {
+  const submitForm = async (formData: { title: string, price: number, description: string, categoryId: string, images: StorageReference[] }) => {
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData>;
@@ -77,6 +78,7 @@ export function ProductEditorForm({
             id: uuidv4(),
             title: formData.title,
             price: formData.price,
+            description: formData.description,
             categoryId: formData.categoryId,
             imageUrls: imageUrls
           } : product;
@@ -90,6 +92,7 @@ export function ProductEditorForm({
             id: uuidv4(),
             title: formData.title,
             price: formData.price,
+            description: formData.description,
             categoryId: formData.categoryId,
             imageUrls: imageUrls,
           }
@@ -102,6 +105,27 @@ export function ProductEditorForm({
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImages(undefined);
       setSelectedCategory(undefined);
+      reset();
+      refreshData?.();
+    } catch {
+    } finally {
+      setIsLoading(false);
+    }
+
+    setIsLoading(false);
+  };
+
+  const deleteProduct = async (deletedProduct: Product) => {
+    setIsLoading(true);
+
+    let data: WithFieldValue<DocumentData> = {
+      data: firestoreProducts.filter((product) => product.id !== deletedProduct.id)
+    };
+
+    try {
+      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.PRODUCTS), data);
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
+      changeProduct(undefined);
       reset();
       refreshData?.();
     } catch {
@@ -131,17 +155,18 @@ export function ProductEditorForm({
 
       setValue('title', newProduct.title);
       setValue('price', newProduct.price);
+      setValue('description', newProduct.description);
       setValue('categoryId', newProduct.categoryId);
       setValue('images', productImages);
 
       setSelectedCategory(productCategory);
       setSelectedImages(productImages);
-      // setValue('imageUrls', newProduct.imageUrl);
     } else {
       setValue('title', '');
       setValue('price', 0);
-      setValue('images', []);
+      setValue('description', '');
       setValue('categoryId', '');
+      setValue('images', []);
 
       setSelectedCategory(undefined);
       setSelectedImages(undefined);
@@ -155,9 +180,11 @@ export function ProductEditorForm({
       onSubmit={handleSubmit(submitForm)}
     >
       <ProductsViewer
+        editAvailable={true}
         selectedProduct={selectedProduct}
         firestoreProducts={firestoreProducts}
         selectProductClick={changeProduct}
+        deleteProductClick={deleteProduct}
       />
 
       <label className="mt-2">
@@ -174,6 +201,14 @@ export function ProductEditorForm({
           className={inputClass}
           type="text"
           {...register('price')}
+        />
+      </label>
+      <label className="mt-2">
+        <span className="mr-2">{TRANSLATES[LOCALE].description}</span>
+        <input
+          className={inputClass}
+          type="text"
+          {...register('description')}
         />
       </label>
       <div className="mt-2">

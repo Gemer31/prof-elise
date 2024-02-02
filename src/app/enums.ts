@@ -9,6 +9,8 @@ export enum RouterPath {
   CONTACTS = '/contacts',
   LOGIN = '/login',
   EDITOR = '/editor',
+  CATEGORIES = '/categories',
+  PRODUCTS = '/products',
 }
 
 export enum EditGroup {

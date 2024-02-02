@@ -46,7 +46,7 @@ export const CATEGORIES: Category[] = [
     id: '2',
     title: 'Для парикмахерских',
     imageUrl: '/icons/instagram.svg',
-    categories: [
+    relatedCategories: [
       {
         id: '3',
         title: 'Воротнички',

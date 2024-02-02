@@ -28,8 +28,10 @@ export default function EditorPage() {
   }, []);
 
   const loadData = async () => {
-    const docs = await getDocs(collection(db, FIREBASE_DATABASE_NAME));
-    const images = await listAll(ref(storage));
+    const [docs, images] = await Promise.all([
+        getDocs(collection(db, FIREBASE_DATABASE_NAME)),
+        listAll(ref(storage)),
+    ]);
 
     setFirestoreData(docs);
     setStorageData(images.items);

@@ -4,11 +4,11 @@ import { IFirebaseDocumentModel } from '@/app/models';
 import StoreProvider from '@/store/StoreProvider';
 import { Layout } from '@/components/Layout';
 import 'animate.css';
-import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
+import { collection, getDocs } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
 import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { Metadata } from 'next';
-import { listAll, ListResult, ref } from '@firebase/storage';
+import { listAll, ref } from '@firebase/storage';
 
 const openSans = Open_Sans({subsets: ['latin']});
 
@@ -23,10 +23,13 @@ export default async function RootLayout({children, params}: {
     docs: IFirebaseDocumentModel[]
   };
 }) {
-  const firestoreData: QuerySnapshot = await getDocs(collection(db, FIREBASE_DATABASE_NAME));
-  const storageData: ListResult = await listAll(ref(storage));
+  const [firestoreData, storageData] = await Promise.all([
+    getDocs(collection(db, FIREBASE_DATABASE_NAME)),
+    listAll(ref(storage))
+  ]);
 
   params.docs = firestoreData?.docs as unknown as IFirebaseDocumentModel[];
+  // console.log('Layout params: ', params);
 
   return (
     <html lang="en" className="scroll-smooth">

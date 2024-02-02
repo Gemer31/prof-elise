@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/Button';
-import { ButtonType } from '@/app/enums';
+import { ButtonType, RouterPath } from '@/app/enums';
 import { Category, Product } from '@/app/models';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -12,7 +12,8 @@ export interface EntityCardProps {
   category?: Category;
   product?: Product;
 }
-export function EntityCard({ category, product }: EntityCardProps) {
+
+export function EntityCard({category, product}: EntityCardProps) {
 
   const cardClass = convertToClass([
     'flex',
@@ -23,20 +24,31 @@ export function EntityCard({ category, product }: EntityCardProps) {
     'p-4',
     'hover:bg-pink-100',
     'duration-500',
-    'transition-colors',
+    'transition-colors'
   ]);
 
   const addToCart = () => {
 
-  }
+  };
+
+  const getPageLink = (): string => {
+    return category?.id
+      ? `${RouterPath.CATEGORIES}/${category.id}`
+      : `${RouterPath.CATEGORIES}/${product?.categoryId}${RouterPath.PRODUCTS}/${product?.id}`;
+  };
 
   return (
     <Link
       className={cardClass}
-      href={category?.id ? `/${category.id}` : `/products/${product?.id}`}
+      href={getPageLink()}
     >
-      <Image width={200} height={200} src={category?.imageUrl || product?.image || ''} alt={category?.title || product?.name || ''}/>
-      <div className={product ? 'text-base' : 'text-lg'}>{category?.title || product?.name}</div>
+      <Image
+        width={200}
+        height={200}
+        src={category?.imageUrl || product?.imageUrls?.[0] || ''}
+        alt={category?.title || product?.title || ''}
+      />
+      <div className={product ? 'text-base' : 'text-lg'}>{category?.title || product?.title}</div>
       {
         product
           ? (
@@ -52,5 +64,5 @@ export function EntityCard({ category, product }: EntityCardProps) {
           : <></>
       }
     </Link>
-  )
+  );
 }
