@@ -14,11 +14,11 @@ interface CategoriesViewerProps {
 
 export function ProductsViewer({
                                  firestoreProducts,
-                                   editAvailable,
-                                   selectProductClick,
-                                   deleteProductClick,
+                                 editAvailable,
+                                 selectProductClick,
+                                 deleteProductClick,
                                  selectedProduct
-                                 }: CategoriesViewerProps) {
+                               }: CategoriesViewerProps) {
   const itemClass = convertToClass([
     'cursor-pointer',
     'flex',

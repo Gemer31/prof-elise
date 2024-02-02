@@ -2,8 +2,8 @@ export interface Product {
   id: string;
   title: string;
   price: number;
+  categoryId: string;
   imageUrls?: string[];
-  categoryId?: string;
 }
 
 export interface CommonProps {
@@ -72,9 +72,16 @@ export interface IFirestoreProductsEditorInfo {
     stringValue: string;
   };
   price: {
-    numberValue: string;
+    integerValue: string;
   };
   categoryId: {
     stringValue: string;
+  };
+  imageUrls: {
+    arrayValue: {
+      values: {
+        stringValue: string;
+      }[];
+    };
   };
 }

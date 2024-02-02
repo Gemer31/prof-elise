@@ -57,9 +57,9 @@ export function convertProductsDataToModelArray(data: IFirestoreFields): Product
     return {
       id: product.mapValue.fields.id.stringValue,
       title: product.mapValue.fields.title.stringValue,
-      price: product.mapValue.fields.price.numberValue,
-      imageUrls: [],
-      // subcategories:
+      price: product.mapValue.fields.price.integerValue,
+      categoryId: product.mapValue.fields.categoryId.stringValue,
+      imageUrls: product.mapValue.fields.imageUrls.arrayValue.values.map((v) => (v.stringValue)),
     };
   }) || [];
 }

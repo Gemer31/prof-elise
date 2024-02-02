@@ -23,7 +23,7 @@ const validationSchema = yup.object().shape({
   title: yup.string().required(),
   price: yup.number().required(),
   categoryId: yup.string().required(),
-  imageUrls: yup.array().required()
+  images: yup.array().required(),
 });
 
 export interface ProductEditorFormProps {
@@ -51,7 +51,7 @@ export function ProductEditorForm({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
   const [selectedCategory, setSelectedCategory] = useState<Category>();
-  const [selectedImages, setSelectedImages] = useState<StorageReference[] | null>();
+  const [selectedImages, setSelectedImages] = useState<StorageReference[] | undefined>();
   const {
     register,
     setValue,
@@ -63,10 +63,12 @@ export function ProductEditorForm({
     resolver: yupResolver(validationSchema)
   });
 
-  const submitForm = async (formData: { title: string, price: number, categoryId: string, imageUrls: string[] }) => {
+  const submitForm = async (formData: { title: string, price: number, categoryId: string, images: StorageReference[] }) => {
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData>;
+
+    const imageUrls: string[] = formData.images.map((img) => (getStorageImageSrc(img)));
 
     if (selectedProduct) {
       data = {
@@ -75,7 +77,8 @@ export function ProductEditorForm({
             id: uuidv4(),
             title: formData.title,
             price: formData.price,
-            imageUrls: formData.imageUrls
+            categoryId: formData.categoryId,
+            imageUrls: imageUrls
           } : product;
         })
       };
@@ -87,7 +90,8 @@ export function ProductEditorForm({
             id: uuidv4(),
             title: formData.title,
             price: formData.price,
-            imageUrl: formData.imageUrls,
+            categoryId: formData.categoryId,
+            imageUrls: imageUrls,
           }
         ]
       };
@@ -96,7 +100,7 @@ export function ProductEditorForm({
     try {
       await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.PRODUCTS), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
-      setSelectedImages(null);
+      setSelectedImages(undefined);
       setSelectedCategory(undefined);
       reset();
       refreshData?.();
@@ -110,11 +114,7 @@ export function ProductEditorForm({
 
   const changeImage = (newImages: StorageReference[]) => {
     setSelectedImages(newImages);
-    setValue(
-      'imageUrls',
-      newImages
-        ? newImages.map((img) => getStorageImageSrc(img))
-        : []);
+    setValue(`images`, newImages);
   };
 
   const changeCategory = (newCategory: Category | undefined) => {
@@ -124,11 +124,27 @@ export function ProductEditorForm({
 
   const changeProduct = (newProduct: Product | undefined) => {
     if (newProduct) {
+      const productCategory = firestoreCategories.find((category) => category.id === newProduct.categoryId);
+      const productImages: StorageReference[] = storageData?.filter((img) => {
+        return newProduct.imageUrls?.find((productImg) => productImg.includes(img.name));
+      }) || [];
+
       setValue('title', newProduct.title);
+      setValue('price', newProduct.price);
+      setValue('categoryId', newProduct.categoryId);
+      setValue('images', productImages);
+
+      setSelectedCategory(productCategory);
+      setSelectedImages(productImages);
       // setValue('imageUrls', newProduct.imageUrl);
     } else {
       setValue('title', '');
-      setValue('imageUrls', []);
+      setValue('price', 0);
+      setValue('images', []);
+      setValue('categoryId', '');
+
+      setSelectedCategory(undefined);
+      setSelectedImages(undefined);
     }
     setSelectedProduct(newProduct);
   };
@@ -160,12 +176,20 @@ export function ProductEditorForm({
           {...register('price')}
         />
       </label>
-
       <div className="mt-2">
-        <CategoriesViewer firestoreCategories={firestoreCategories} selectCategoryClick={changeCategory}/>
+        <CategoriesViewer
+          firestoreCategories={firestoreCategories}
+          selectedCategory={selectedCategory}
+          selectCategoryClick={changeCategory}
+        />
       </div>
       <div className="mt-2">
-        <ImagesViewer multiple={true} storageData={storageData} selectImageClick={changeImage}/>
+        <ImagesViewer
+          multiple={true}
+          storageData={storageData}
+          selectedImages={selectedImages}
+          selectImageClick={changeImage}
+        />
       </div>
 
       <Button

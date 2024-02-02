@@ -89,6 +89,7 @@ export default function EditorPage() {
                     FirebaseCollections.PRODUCTS
                   ))}
                   storageData={storageData}
+                  refreshData={loadData}
                 />
                 : <></>
             }
