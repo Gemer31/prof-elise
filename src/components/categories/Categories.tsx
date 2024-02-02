@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import './categories.css';
-import { Category } from '@/app/models';
+import { ICategory } from '@/app/models';
 import { RouterPath } from '@/app/enums';
 
 interface CategoriesProps {
-  categories: Category[];
+  categories: ICategory[];
 }
 
 export function Categories({ categories }: CategoriesProps) {

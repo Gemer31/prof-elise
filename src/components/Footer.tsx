@@ -4,27 +4,20 @@ import { ContentContainer } from '@/components/ContentContainer';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections, RouterPath } from '@/app/enums';
+import { ButtonType, RouterPath } from '@/app/enums';
 import { useAppDispatch } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import Link from 'next/link';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { usePathname } from 'next/navigation';
-import { getDocData } from '@/utils/firebase.util';
-import { QueryDocumentSnapshot } from '@firebase/firestore';
-import { useEffect } from 'react';
+import { IConfig } from '@/app/models';
+import { transformPhoneUtil } from '@/utils/transform-phone.util';
 
 export interface FooterProps {
-  firestoreData?: Array<QueryDocumentSnapshot>;
+  firestoreConfigData?: IConfig;
 }
 
-export function Footer({ firestoreData }: FooterProps) {
-  const contactPhone: string = getDocData(firestoreData, FirebaseCollections.CONFIG)?.['contactPhone'].stringValue;
-
-  useEffect(() => {
-    console.log(firestoreData);
-  }, [contactPhone]);
-
+export function Footer({ firestoreConfigData }: FooterProps) {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const instagramClass: string = convertToClass([
@@ -57,11 +50,11 @@ export function Footer({ firestoreData }: FooterProps) {
               </div>
               <div>
                 <h2 className="text-xl mb-4">Контакты</h2>
-                {/*<a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE}</a>*/}
-                <a>{contactPhone}</a>
+                <a href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}
+                >{firestoreConfigData?.contactPhone}</a>
               </div>
               <div className="flex flex-col items-center">
-              <Button
+                <Button
                   styleClass="uppercase text-amber-50 px-4 py-2"
                   type={ButtonType.BUTTON}
                   callback={() => dispatch(setRequestCallPopupVisible(true))}

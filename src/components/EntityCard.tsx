@@ -4,12 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
-import { Category, Product } from '@/app/models';
+import { ICategory, Product } from '@/app/models';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface EntityCardProps {
-  category?: Category;
+  category?: ICategory;
   product?: Product;
 }
 

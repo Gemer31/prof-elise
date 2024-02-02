@@ -1,5 +1,5 @@
-import { Category, IFirestoreFields, Product } from '@/app/models';
-import { CATEGORIES, FIREBASE_DATABASE_NAME, PRODUCTS_BY_CATEGORY_ID } from '@/app/constants';
+import { ICategory, IFirestoreFields, Product } from '@/app/models';
+import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { EntityCard } from '@/components/EntityCard';
 import { Categories } from '@/components/categories/Categories';
 import { Advantages } from '@/components/Advantages';
@@ -20,12 +20,12 @@ export default async function CategoriesOrProductsPage({params: {categoryId}}: C
     getDocs(collection(db, FIREBASE_DATABASE_NAME)),
     listAll(ref(storage))
   ]);
-  const categories: Category[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
+  const categories: ICategory[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
     firestoreData?.docs,
     FirebaseCollections.CATEGORIES,
   ));
-  const currentCategory: Category | undefined = categories.find((item) => item.id === categoryId);
-  const relatedCategories: Category[] = categories.filter((item) => currentCategory?.relatedCategories?.includes(item.id));
+  const currentCategory: ICategory | undefined = categories.find((item) => item.id === categoryId);
+  const relatedCategories: ICategory[] = categories.filter((item) => currentCategory?.relatedCategories?.includes(item.id));
   const products: Product[] | undefined = convertProductsDataToModelArray(getDocData<IFirestoreFields>(
     firestoreData?.docs,
     FirebaseCollections.PRODUCTS,

@@ -15,7 +15,7 @@ import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { uuidv4 } from '@firebase/util';
 import { useAppDispatch } from '@/store/store';
-import { Category } from '@/app/models';
+import { ICategory } from '@/app/models';
 import { CategoriesViewer } from '@/components/CategoriesViewer';
 
 const validationSchema = yup.object().shape({
@@ -25,7 +25,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface CategoryEditorFormProps {
-  firestoreCategories: Category[];
+  firestoreCategories: ICategory[];
   storageData?: StorageReference[];
   refreshData?: () => void;
 }
@@ -41,7 +41,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
 
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category>();
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>();
   const [selectedImage, setSelectedImage] = useState<StorageReference | null>();
   const {
     register,
@@ -97,7 +97,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     setIsLoading(false);
   };
 
-  const deleteCategory = async (deleteCategory: Category) => {
+  const deleteCategory = async (deleteCategory: ICategory) => {
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData> = {
@@ -119,7 +119,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     setIsLoading(false);
   };
 
-  const changeCategory = (newCategory: Category | undefined) => {
+  const changeCategory = (newCategory: ICategory | undefined) => {
     if (newCategory) {
       const existingImage: StorageReference | undefined = storageData?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
       setSelectedImage(existingImage);

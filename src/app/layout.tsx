@@ -28,15 +28,12 @@ export default async function RootLayout({children, params}: {
     listAll(ref(storage))
   ]);
 
-  params.docs = firestoreData?.docs as unknown as IFirebaseDocumentModel[];
-  // console.log('Layout params: ', params);
-
   return (
     <html lang="en" className="scroll-smooth">
     <body className={'flex flex-col items-center h-full overflow-x-hidden bg-gray-200 ' + openSans.className}>
     <StoreProvider>
       <Layout
-        firestoreData={JSON.parse(JSON.stringify(firestoreData?.docs))}
+        firestoreDocsData={JSON.parse(JSON.stringify(firestoreData?.docs))}
         storageData={JSON.parse(JSON.stringify(storageData.items))}
       >
         {children}

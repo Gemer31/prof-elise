@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Search } from '@/components/Search';
-import { CONTACT_PHONE, WORKING_TIME } from '@/app/constants';
+import { WORKING_TIME } from '@/app/constants';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
@@ -16,8 +16,14 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { auth } from '@/utils/firebaseModule';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
+import { IConfig } from '@/app/models';
+import { transformPhoneUtil } from '@/utils/transform-phone.util';
 
-export function Header() {
+export interface HeaderProps {
+  firestoreConfigData?: IConfig;
+}
+
+export function Header({ firestoreConfigData }: HeaderProps) {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const [user, loading] = useAuthState(auth);
@@ -57,12 +63,15 @@ export function Header() {
         <div className="w-full flex justify-center bg-pink-300">
           <ContentContainer styleClass="flex justify-between">
             <nav className="flex">
-              <Link className={getNavigationLinkClass(RouterPath.MAIN)}
-                    href={RouterPath.MAIN}>{TRANSLATES[LOCALE].main}</Link>
-              <Link className={getNavigationLinkClass(RouterPath.DELIVERY)}
-                    href={RouterPath.DELIVERY}>{TRANSLATES[LOCALE].delivery}</Link>
-              <Link className={getNavigationLinkClass(RouterPath.CONTACTS)}
-                    href={RouterPath.CONTACTS}>{TRANSLATES[LOCALE].contacts}</Link>
+              {
+                [
+                  [RouterPath.MAIN, 'main'],
+                  [RouterPath.DELIVERY, 'delivery'],
+                  [RouterPath.CONTACTS, 'contacts'],
+                ].map(([path, translateCode]) => (
+                  <Link className={getNavigationLinkClass(path)} href={path}>{TRANSLATES[LOCALE][translateCode]}</Link>
+                ))
+              }
             </nav>
             <div className="flex">
               <a className={instagramClass}
@@ -97,8 +106,8 @@ export function Header() {
               <div className="uppercase text-center w-20">{TRANSLATES[LOCALE].сonsumables}</div>
               <Search/>
               <div className="text-center">
-                <a href={`tel:${CONTACT_PHONE}`}>{CONTACT_PHONE}</a>
-                <div>{WORKING_TIME}</div>
+                <a href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
+                <div>{firestoreConfigData?.workingHours}</div>
               </div>
               <Button
                 styleClass="uppercase text-amber-50 px-4 py-2"

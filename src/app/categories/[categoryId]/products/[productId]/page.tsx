@@ -1,5 +1,5 @@
-import { Category, IFirestoreFields, Product } from '@/app/models';
-import { CURRENCY, FIREBASE_DATABASE_NAME, PRODUCTS } from '@/app/constants';
+import { ICategory, IFirestoreFields, Product } from '@/app/models';
+import { CURRENCY, FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { Categories } from '@/components/categories/Categories';
 import { Advantages } from '@/components/Advantages';
 import Image from 'next/image';
@@ -23,7 +23,7 @@ export default async function ProductDetails({ params: { productId } }: ProductD
     getDocs(collection(db, FIREBASE_DATABASE_NAME)),
     listAll(ref(storage))
   ]);
-  const categories: Category[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
+  const categories: ICategory[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
     firestoreData?.docs,
     FirebaseCollections.CATEGORIES,
   ));
@@ -41,12 +41,12 @@ export default async function ProductDetails({ params: { productId } }: ProductD
           <Advantages/>
         </div>
         <div className="w-full">
-          <div className="mb-4 text-2xl bold">{product?.title}</div>
           <div className="w-full flex">
             <div>
               <Image width={500} height={500} src={product?.imageUrls?.[0] || ''} alt={product?.title || ''}/>
             </div>
             <div className="w-full ml-4">
+              <div className="mb-4 text-2xl bold text-center">{product?.title}</div>
               <div className="w-full text-2xl text-pink-500 font-bold text-center">{product?.price} {CURRENCY}</div>
               <div className="flex justify-between items-center my-4">
                 <Counter/>
@@ -57,6 +57,7 @@ export default async function ProductDetails({ params: { productId } }: ProductD
               </div>
             </div>
           </div>
+          <div>{product?.description}</div>
         </div>
       </div>
     </main>

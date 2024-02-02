@@ -1,15 +1,15 @@
 import Image from 'next/image';
-import { Category } from '@/app/models';
+import { ICategory } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 interface CategoriesViewerProps {
-  selectedCategory?: Category | undefined;
-  firestoreCategories: Category[];
+  selectedCategory?: ICategory | undefined;
+  firestoreCategories: ICategory[];
   editAvailable?: boolean;
-  deleteCategoryClick?: (category: Category) => void;
-  selectCategoryClick?: (category: Category | undefined) => void;
+  deleteCategoryClick?: (category: ICategory) => void;
+  selectCategoryClick?: (category: ICategory | undefined) => void;
 }
 
 export function CategoriesViewer({
@@ -28,13 +28,13 @@ export function CategoriesViewer({
     'py-1'
   ]);
 
-  const [chosenCategory, setChosenCategory] = useState<Category | undefined>();
+  const [chosenCategory, setChosenCategory] = useState<ICategory | undefined>();
 
   useEffect(() => {
     setChosenCategory(selectedCategory);
   }, [selectedCategory]);
 
-  const selectCategory = (category: Category | undefined) => {
+  const selectCategory = (category: ICategory | undefined) => {
     setChosenCategory(category);
     selectCategoryClick?.(category);
   };

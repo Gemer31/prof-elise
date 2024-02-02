@@ -4,7 +4,7 @@ import { ButtonType, EditGroup, FirebaseCollections } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { useEffect, useState } from 'react';
-import { GeneralEditorForm, IFirebaseGeneralEditorInfo } from '@/components/GeneralEditorForm';
+import { GeneralEditorForm } from '@/components/GeneralEditorForm';
 import { CategoryEditorForm } from '@/components/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/ProductEditorForm';
 import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
@@ -14,7 +14,7 @@ import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { ImagesEditorForm } from '@/components/ImagesEditorForm';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { IFirestoreFields } from '@/app/models';
+import { IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
 
 export default function EditorPage() {
   const [storageData, setStorageData] = useState<StorageReference[]>();
@@ -62,7 +62,7 @@ export default function EditorPage() {
             {
               selectedGroup === EditGroup.GENERAL
                 ? <GeneralEditorForm
-                  firebaseData={getDocData<IFirebaseGeneralEditorInfo>(firestoreData?.docs, FirebaseCollections.CONFIG)}
+                  firebaseData={getDocData<IFirestoreConfigEditorInfo>(firestoreData?.docs, FirebaseCollections.CONFIG)}
                   refreshData={loadData}
                 />
                 : <></>

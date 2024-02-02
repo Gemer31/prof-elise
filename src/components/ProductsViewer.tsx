@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Category, Product } from '@/app/models';
+import { ICategory, Product } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';

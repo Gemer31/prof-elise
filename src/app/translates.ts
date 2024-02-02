@@ -50,5 +50,6 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     noCategories: 'Категорий нет',
     productDeleted: 'Продукт удален',
     description: 'Описание',
+    workingHours: 'Время работы',
   }
 }

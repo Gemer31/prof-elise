@@ -7,7 +7,7 @@ import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { CategoriesViewer } from '@/components/CategoriesViewer';
-import { Category, Product } from '@/app/models';
+import { ICategory, Product } from '@/app/models';
 import { StorageReference } from '@firebase/storage';
 import { ImagesViewer } from '@/components/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
@@ -28,7 +28,7 @@ const validationSchema = yup.object().shape({
 });
 
 export interface ProductEditorFormProps {
-  firestoreCategories: Category[];
+  firestoreCategories: ICategory[];
   firestoreProducts: Product[];
   storageData?: StorageReference[];
   refreshData?: () => void;
@@ -51,7 +51,7 @@ export function ProductEditorForm({
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
-  const [selectedCategory, setSelectedCategory] = useState<Category>();
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>();
   const [selectedImages, setSelectedImages] = useState<StorageReference[] | undefined>();
   const {
     register,
@@ -141,7 +141,7 @@ export function ProductEditorForm({
     setValue(`images`, newImages);
   };
 
-  const changeCategory = (newCategory: Category | undefined) => {
+  const changeCategory = (newCategory: ICategory | undefined) => {
     setValue('categoryId', newCategory?.id || '');
     setSelectedCategory(newCategory);
   };

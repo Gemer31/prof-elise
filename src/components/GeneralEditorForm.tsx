@@ -12,23 +12,16 @@ import { db } from '@/utils/firebaseModule';
 import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
+import { IFirestoreConfigEditorInfo } from '@/app/models';
 
 const validationSchema = yup.object().shape({
   phone: yup.string().required(),
+  workingHours: yup.string().required(),
   shopDescription: yup.string().required(),
 });
 
-export interface IFirebaseGeneralEditorInfo {
-  contactPhone: {
-    stringValue: string;
-  };
-  shopDescription: {
-    stringValue: string;
-  }
-}
-
 interface GeneralEditorFormProps {
-  firebaseData: IFirebaseGeneralEditorInfo;
+  firebaseData: IFirestoreConfigEditorInfo;
   refreshData?: () => void;
 }
 
@@ -55,17 +48,19 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
 
   useEffect(() => {
     if (firebaseData) {
-      setValue('phone', firebaseData.contactPhone.stringValue);
-      setValue('shopDescription', firebaseData.shopDescription.stringValue);
+      setValue('phone', firebaseData.contactPhone?.stringValue);
+      setValue('workingHours', firebaseData.workingHours?.stringValue);
+      setValue('shopDescription', firebaseData.shopDescription?.stringValue);
     }
   }, [firebaseData]);
 
-  const submitForm = async (formData: { phone: string, shopDescription: string }) => {
+  const submitForm = async (formData: { phone: string, workingHours: string, shopDescription: string }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
-      shopDescription: formData.shopDescription,
       contactPhone: formData.phone,
-    }
+      workingHours: formData.workingHours,
+      shopDescription: formData.shopDescription,
+    };
     try {
       await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CONFIG), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
@@ -97,6 +92,14 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
               className="absolute text-red-500 text-xs bottom-2">{TRANSLATES[LOCALE][errors.phone.message as string]}</div>
             : <></>
         }
+      </label>
+      <label className="mb-4">
+        <span className="mr-2">{TRANSLATES[LOCALE].workingHours}</span>
+        <input
+          className={inputClass}
+          type="text"
+          {...register('workingHours')}
+        />
       </label>
       <label className="mb-4">
         <span className="mr-2">{TRANSLATES[LOCALE].mainShopInfo}</span>

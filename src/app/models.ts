@@ -12,7 +12,13 @@ export interface CommonProps {
   styleClass?: string;
 }
 
-export interface Category {
+export interface IConfig {
+  contactPhone: string;
+  workingHours: string;
+  shopDescription: string;
+}
+
+export interface ICategory {
   id: string;
   title: string;
   imageUrl: string;
@@ -50,6 +56,18 @@ export interface IFirestoreFields {
   };
 }
 
+export interface IFirestoreConfigEditorInfo {
+  contactPhone: {
+    stringValue: string;
+  };
+  workingHours: {
+    stringValue: string;
+  };
+  shopDescription: {
+    stringValue: string;
+  };
+}
+
 export interface IFirestoreCategoriesEditorInfo {
   id: {
     stringValue: string;
@@ -58,9 +76,6 @@ export interface IFirestoreCategoriesEditorInfo {
     stringValue: string;
   };
   imageUrl: {
-    stringValue: string;
-  };
-  shopDescription: {
     stringValue: string;
   };
 }
