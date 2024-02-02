@@ -35,7 +35,7 @@ export function ImagesViewer({
     });
     setChosenImages(newData);
     setLastSelectedImage(selectedImages?.at(-1));
-  }, [chosenImages]);
+  }, [selectedImages]);
 
   useEffect(() => {
     document.body.addEventListener('keydown', (event) => {
@@ -76,7 +76,7 @@ export function ImagesViewer({
   };
 
   return (
-    <div className="flex justify-between gap-4 mt-4">
+    <div className="flex justify-between gap-4">
       {
         storageData?.length
           ? <>

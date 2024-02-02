@@ -29,26 +29,30 @@ export default function EditorPage() {
 
   const loadData = async () => {
     const docs = await getDocs(collection(db, FIREBASE_DATABASE_NAME));
-    const images = await listAll( ref(storage));
+    const images = await listAll(ref(storage));
 
     setFirestoreData(docs);
     setStorageData(images.items);
-  }
+  };
 
   return (
     <main className="w-full max-w-screen-lg flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
-      <h1 className="text-2xl">{TRANSLATES[LOCALE].editor}</h1>
+      <h1 className="text-2xl ">{TRANSLATES[LOCALE].editor}</h1>
+
+
+
       {loading
-        ? <Loader styleClass="min-h-[30%]"/>
+        ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader styleClass="min-h-[250px] border-pink-500"/></div>
         : <>
-          <div className="w-full m-2 flex gap-x-3">
+          <div className="w-full mt-2 mb-4 flex gap-x-3">
             {
               Object.values(EditGroup).map((v) => {
                 return <Button
+                  key={v}
                   styleClass={`w-full text-amber-50 px-4 py-2 ${selectedGroup === v ? 'underline' : ''}`}
                   type={ButtonType.BUTTON}
                   callback={() => setSelectedGroup(v)}
-                >{TRANSLATES[LOCALE][v]}</Button>
+                >{TRANSLATES[LOCALE][v]}</Button>;
               })
             }
           </div>
@@ -67,7 +71,7 @@ export default function EditorPage() {
                   storageData={storageData}
                   firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
                     firestoreData?.docs,
-                    FirebaseCollections.CATEGORIES,
+                    FirebaseCollections.CATEGORIES
                   ))}
                   refreshData={loadData}
                 />
@@ -78,11 +82,11 @@ export default function EditorPage() {
                 ? <ProductEditorForm
                   firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
                     firestoreData?.docs,
-                    FirebaseCollections.CATEGORIES,
+                    FirebaseCollections.CATEGORIES
                   ))}
                   firestoreProducts={convertProductsDataToModelArray(getDocData<IFirestoreFields>(
                     firestoreData?.docs,
-                    FirebaseCollections.PRODUCTS,
+                    FirebaseCollections.PRODUCTS
                   ))}
                   storageData={storageData}
                 />

@@ -35,6 +35,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     images: 'Картинки',
     selectImage: 'Выберите картинку',
     imageDeleted: 'Картинка удалена',
+    categoryDeleted: 'Категория удалена',
     somethingWentWrong: 'Что-то пошло не так =(',
     imagesUploaded: 'Картинки загружены',
     noImages: 'Картинок нет',
@@ -45,6 +46,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     newCategory: 'Новая категория',
     newProduct: 'Новый продукт',
     update: 'Обновить',
-    price: 'Цена'
+    price: 'Цена',
+    noCategories: 'Категорий нет',
   }
 }

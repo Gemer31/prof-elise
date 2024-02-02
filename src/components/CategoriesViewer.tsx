@@ -40,32 +40,44 @@ export function CategoriesViewer({
   };
 
   return (
-    <div className="overflow-y-hidden max-h-52 w-full rounded-md border-pink-500 border-2 px-2 py-1">
-      <div
-        onClick={() => selectCategory(undefined)}
-        key="new"
-        className={`cursor-pointer flex justify-between items-center px-2 py-1 ${!chosenCategory ? 'rounded-md bg-pink-300' : ''}`}
-      >
-        <span>{TRANSLATES[LOCALE].newCategory}</span>
-      </div>
-      {
-        firestoreCategories?.map((item) => (
-          <div
-            onClick={() => selectCategory(item)}
-            key={item.id}
-            className={`${itemClass} ${chosenCategory?.id === item.id ? 'rounded-md bg-pink-300' : ''}`}
-          >
-            <span>{item.title}</span>
+    <>
+    {
+      !firestoreCategories?.length && !editAvailable
+        ? <div
+          className="w-full text-center rounded-md border-pink-500 border-2 px-2 py-1">{TRANSLATES[LOCALE].noCategories}</div>
+        : (
+          <div className="overflow-y-hidden max-h-52 w-full rounded-md border-pink-500 border-2 px-2 py-1">
             {
               editAvailable
-                ?
-                <Image onClick={() => deleteCategoryClick?.(item)} width={30} height={30} src="/icons/cross.svg"
-                       alt="Close"/>
+                ? <div
+                  onClick={() => selectCategory(undefined)}
+                  key="new"
+                  className={`cursor-pointer flex justify-between items-center px-2 py-1 ${!chosenCategory ? 'rounded-md bg-pink-300' : ''}`}
+                >
+                  <span>{TRANSLATES[LOCALE].newCategory}</span>
+                </div>
                 : <></>
             }
-          </div>
-        ))
-      }
-    </div>
+            {
+              firestoreCategories?.map((item) => (
+                <div
+                  onClick={() => selectCategory(item)}
+                  key={item.id}
+                  className={`${itemClass} ${chosenCategory?.id === item.id ? 'rounded-md bg-pink-300' : ''}`}
+                >
+                  <span>{item.title}</span>
+                  {
+                    editAvailable
+                      ?
+                      <Image onClick={() => deleteCategoryClick?.(item)} width={30} height={30} src="/icons/cross.svg"
+                             alt="Close"/>
+                      : <></>
+                  }
+                </div>
+              ))
+            }
+          </div>)
+    }
+    </>
   );
 }

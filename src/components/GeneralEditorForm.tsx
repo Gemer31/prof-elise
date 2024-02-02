@@ -81,7 +81,7 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
       className="flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
-      <label className="w-full mb-2 relative mt-4">
+      <label className="w-full mb-2 relative">
         <span className="mr-2">{TRANSLATES[LOCALE].phone}</span>
         <InputMask
           placeholder="+375 (99) 999-99-99"

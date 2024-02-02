@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType } from '@/app/enums';
+import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { CategoriesViewer } from '@/components/CategoriesViewer';
@@ -12,6 +12,12 @@ import { StorageReference } from '@firebase/storage';
 import { ImagesViewer } from '@/components/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
 import { ProductsViewer } from '@/components/ProductsViewer';
+import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
+import { uuidv4 } from '@firebase/util';
+import { db } from '@/utils/firebaseModule';
+import { FIREBASE_DATABASE_NAME } from '@/app/constants';
+import { setNotificationMessage } from '@/store/dataSlice';
+import { useAppDispatch } from '@/store/store';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required(),
@@ -31,7 +37,7 @@ export function ProductEditorForm({
                                     firestoreCategories,
                                     firestoreProducts,
                                     storageData,
-                                    refreshData,
+                                    refreshData
                                   }: ProductEditorFormProps) {
   const inputClass: string = convertToClass([
     'border-2',
@@ -41,6 +47,7 @@ export function ProductEditorForm({
     'w-full'
   ]);
 
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
   const [selectedCategory, setSelectedCategory] = useState<Category>();
@@ -48,6 +55,7 @@ export function ProductEditorForm({
   const {
     register,
     setValue,
+    reset,
     handleSubmit,
     formState: {errors, isValid}
   } = useForm({
@@ -57,6 +65,46 @@ export function ProductEditorForm({
 
   const submitForm = async (formData: { title: string, price: number, categoryId: string, imageUrls: string[] }) => {
     setIsLoading(true);
+
+    let data: WithFieldValue<DocumentData>;
+
+    if (selectedProduct) {
+      data = {
+        data: firestoreProducts.map((product: Product) => {
+          return product.id === selectedProduct.id ? {
+            id: uuidv4(),
+            title: formData.title,
+            price: formData.price,
+            imageUrls: formData.imageUrls
+          } : product;
+        })
+      };
+    } else {
+      data = {
+        data: [
+          ...firestoreProducts,
+          {
+            id: uuidv4(),
+            title: formData.title,
+            price: formData.price,
+            imageUrl: formData.imageUrls,
+          }
+        ]
+      };
+    }
+
+    try {
+      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.PRODUCTS), data);
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
+      setSelectedImages(null);
+      setSelectedCategory(undefined);
+      reset();
+      refreshData?.();
+    } catch {
+    } finally {
+      setIsLoading(false);
+    }
+
     setIsLoading(false);
   };
 
@@ -87,6 +135,7 @@ export function ProductEditorForm({
 
   return (
     <form
+      className="flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
       <ProductsViewer
@@ -95,7 +144,7 @@ export function ProductEditorForm({
         selectProductClick={changeProduct}
       />
 
-      <label className="mb-4">
+      <label className="mt-2">
         <span className="mr-2">{TRANSLATES[LOCALE].title}</span>
         <input
           className={inputClass}
@@ -103,7 +152,7 @@ export function ProductEditorForm({
           {...register('title')}
         />
       </label>
-      <label className="mb-4">
+      <label className="mt-2">
         <span className="mr-2">{TRANSLATES[LOCALE].price}</span>
         <input
           className={inputClass}
@@ -112,11 +161,15 @@ export function ProductEditorForm({
         />
       </label>
 
-      <CategoriesViewer firestoreCategories={firestoreCategories} selectCategoryClick={changeCategory}/>
-      <ImagesViewer multiple={true} storageData={storageData} selectImageClick={changeImage}/>
+      <div className="mt-2">
+        <CategoriesViewer firestoreCategories={firestoreCategories} selectCategoryClick={changeCategory}/>
+      </div>
+      <div className="mt-2">
+        <ImagesViewer multiple={true} storageData={storageData} selectImageClick={changeImage}/>
+      </div>
 
       <Button
-        styleClass="text-amber-50 w-full py-2"
+        styleClass="text-amber-50 w-full py-2 mt-2"
         disabled={isLoading}
         loading={isLoading}
         type={ButtonType.SUBMIT}

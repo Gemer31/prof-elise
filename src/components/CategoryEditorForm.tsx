@@ -55,7 +55,6 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
   });
 
   const submitForm = async (formData: { title: string; imageUrl: string, subcategories?: any[] | unknown }) => {
-    console.log(formData);
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData>;
@@ -98,9 +97,31 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     setIsLoading(false);
   };
 
+  const deleteCategory = async (deleteCategory: Category) => {
+    setIsLoading(true);
+
+    let data: WithFieldValue<DocumentData> = {
+      data: firestoreCategories.filter((category) => category.id !== deleteCategory.id)
+    };
+
+    try {
+      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CATEGORIES), data);
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
+      setSelectedImage(null);
+      setSelectedCategory(undefined);
+      reset();
+      refreshData?.();
+    } catch {
+    } finally {
+      setIsLoading(false);
+    }
+
+    setIsLoading(false);
+  };
+
   const changeCategory = (newCategory: Category | undefined) => {
     if (newCategory) {
-      const existingImage: StorageReference | undefined = storageData?.find((img) => newCategory.imageUrl.includes(img.fullPath));
+      const existingImage: StorageReference | undefined = storageData?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
       setSelectedImage(existingImage);
       setValue('title', newCategory.title);
       setValue('imageUrl', newCategory.imageUrl);
@@ -124,17 +145,20 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
       onSubmit={handleSubmit(submitForm)}
     >
       <CategoriesViewer
+        editAvailable={true}
         selectedCategory={selectedCategory}
         firestoreCategories={firestoreCategories}
+        deleteCategoryClick={deleteCategory}
         selectCategoryClick={changeCategory}
       />
-      <ImagesViewer
-        storageData={storageData}
-        selectImageClick={changeImage}
-        selectedImages={selectedImage ? [selectedImage] : []}
-      />
-
-      <label className="mb-4">
+      <div className="mt-2">
+        <ImagesViewer
+          storageData={storageData}
+          selectImageClick={changeImage}
+          selectedImages={selectedImage ? [selectedImage] : []}
+        />
+      </div>
+      <label className="my-2">
         <span className="mr-2">{TRANSLATES[LOCALE].title}</span>
         <input
           className={inputClass}
@@ -142,22 +166,28 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
           {...register('title')}
         />
       </label>
-
-      <span>{TRANSLATES[LOCALE].subcategories}</span>
       {
-        firestoreCategories?.map((category, index) => {
-          return <label>
-            <input
-              type="checkbox"
-              onChange={() => setValue(`subcategories.${index}`, category.id)}
-            />
-            <span>{category.title}</span>
-          </label>;
-        })
+        firestoreCategories?.length
+          ? <>
+            <span className="my-2">{TRANSLATES[LOCALE].subcategories}</span>
+            {
+              firestoreCategories?.map((category, index) => {
+                return category.id !== selectedCategory?.id
+                  ? <label className="flex items-center" key={category.id}>
+                    <input
+                      type="checkbox"
+                      onChange={() => setValue(`subcategories.${index}`, category.id)}
+                    />
+                    <span>{category.title}</span>
+                  </label>
+                  : <></>;
+              })
+            }
+          </>
+          : <></>
       }
-
       <Button
-        styleClass="text-amber-50 w-full py-2"
+        styleClass="text-amber-50 w-full py-2 mt-2"
         disabled={isLoading}
         loading={isLoading}
         type={ButtonType.SUBMIT}

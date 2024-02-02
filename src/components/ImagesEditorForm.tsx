@@ -55,7 +55,7 @@ export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormPro
     <>
       <ImagesViewer storageData={storageData} editAvailable={true} deleteImageClick={deleteImg}/>
 
-      <label className="flex flex-col justify-center items-center border-dashed w-full rounded-md border-pink-500 border-2 mt-6 mb-2 p-6 cursor-pointer">
+      <label className="flex flex-col justify-center items-center border-dashed w-full rounded-md border-pink-500 border-2 mt-2 mb-2 p-6 cursor-pointer">
         <input
           className="invisible h-0"
           type="file"
