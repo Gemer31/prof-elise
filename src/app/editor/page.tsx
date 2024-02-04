@@ -9,7 +9,7 @@ import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
-import { Loader } from '@/components/loader/loader';
+import { Loader } from '@/components/Loader';
 import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
 import { listAll, ref, StorageReference } from '@firebase/storage';

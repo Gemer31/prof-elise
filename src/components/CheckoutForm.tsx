@@ -13,10 +13,10 @@ import { FormField } from '@/components/form-fields/FormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 
 const validationSchema = yup.object().shape({
-  name: yup.string().required().matches(/^[A-Za-zА-Яа-я ]+$/),
-  phone: yup.string().required(),
-  email: yup.string().email(),
-  address: yup.string().required()
+  name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
+  phone: yup.string().required('fieldRequired'),
+  email: yup.string().email('fieldInvalid').required('fieldRequired'),
+  address: yup.string().required('fieldRequired'),
 });
 
 interface ICheckoutFormProps {
@@ -35,11 +35,17 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
     resolver: yupResolver(validationSchema)
   });
 
+  const submitForm = () => {
+
+  }
+
   return (
     <form
-      onSubmit={handleSubmit}
+      className="flex flex-col"
+      onSubmit={handleSubmit(submitForm)}
     >
       <FormField
+        required={true}
         label={TRANSLATES[LOCALE].name}
         name="name"
         type="text"
@@ -47,6 +53,7 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <FormField
+        required={true}
         label="E-mail"
         name="email"
         type="text"
@@ -54,6 +61,7 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <PhoneFormField
+        required={true}
         label={TRANSLATES[LOCALE].phone}
         type="text"
         name="phone"
@@ -61,6 +69,7 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <FormField
+        required={true}
         label={TRANSLATES[LOCALE].address}
         name="address"
         type="text"
@@ -68,7 +77,10 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
 
-      <CartTable firestoreConfigData={firestoreConfigData}/>
+      <div className="mt-4">
+        <CartTable firestoreConfigData={firestoreConfigData}/>
+      </div>
+
       <div className="w-full flex justify-end mt-4">
         <Button
           styleClass="uppercase text-amber-50 px-4 py-2"

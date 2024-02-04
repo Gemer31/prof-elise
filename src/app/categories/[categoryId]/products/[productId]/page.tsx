@@ -1,5 +1,5 @@
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
-import { Categories } from '@/components/categories/Categories';
+import { Categories } from '@/components/Categories';
 import { Advantages } from '@/components/Advantages';
 import Image from 'next/image';
 import { FirebaseCollections } from '@/app/enums';

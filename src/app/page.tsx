@@ -1,5 +1,5 @@
 import { Advantages } from '@/components/Advantages';
-import { Categories } from '@/components/categories/Categories';
+import { Categories } from '@/components/Categories';
 import { EntityCard } from '@/components/EntityCard';
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
 import { collection, getDocs } from '@firebase/firestore';

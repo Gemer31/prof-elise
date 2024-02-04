@@ -1,6 +1,6 @@
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
 import { EntityCard } from '@/components/EntityCard';
-import { Categories } from '@/components/categories/Categories';
+import { Categories } from '@/components/Categories';
 import { Advantages } from '@/components/Advantages';
 import { collection, getDocs } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';

@@ -1,5 +1,3 @@
-import './loader.css';
-
 export interface ILoaderProps {
     styleClass?: string;
 }

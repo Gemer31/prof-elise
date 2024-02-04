@@ -6,6 +6,7 @@ import { UseFormRegister } from 'react-hook-form';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
 interface IFormField {
+  required?: boolean;
   label: string;
   type: string
   name: string;
@@ -13,7 +14,7 @@ interface IFormField {
   register: UseFormRegister<Record<string, unknown>>;
 }
 
-export function FormField({label, name, register, type, error}: IFormField) {
+export function FormField({label, name, register, type, error, required}: IFormField) {
   const inputClass: string = useMemo(() => convertToClass([
     'border-2',
     'bg-custom-gray-100',
@@ -28,7 +29,7 @@ export function FormField({label, name, register, type, error}: IFormField) {
 
   return (
     <label className="w-full pb-4 relative">
-      <span className="mr-2">{label}</span>
+      <span className={`mr-2 ${required ? 'field-label' : ''}`}>{label}</span>
       <input
         className={inputClass}
         type={type}

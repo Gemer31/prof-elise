@@ -3,7 +3,7 @@
 import { CommonProps } from '@/app/models';
 import { ButtonType } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { Loader } from '@/components/loader/loader';
+import { Loader } from '@/components/Loader';
 import { MouseEvent } from 'react';
 
 export interface ButtonProps extends CommonProps {

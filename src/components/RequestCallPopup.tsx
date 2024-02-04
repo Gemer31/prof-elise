@@ -13,8 +13,8 @@ import { FormField } from '@/components/form-fields/FormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 
 const validationSchema = yup.object().shape({
-  name: yup.string().required().matches(/^[A-Za-zА-Яа-я ]+$/),
-  phone: yup.string().required().matches(/^(80|375|\+375)\d{9}$/)
+  name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
+  phone: yup.string().required('fieldRequired'),
 });
 
 export function RequestCallPopup() {
@@ -69,7 +69,7 @@ export function RequestCallPopup() {
           register={register}
         />
         <Button
-          styleClass="text-amber-50 w-full py-2"
+          styleClass="text-amber-50 w-full py-2 mt-4"
           disabled={isLoading}
           loading={isLoading}
           type={ButtonType.SUBMIT}

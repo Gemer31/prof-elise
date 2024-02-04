@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import './categories.css';
 import { ICategory } from '@/app/models';
 import { RouterPath } from '@/app/enums';
 
@@ -15,7 +14,7 @@ export function Categories({ categories }: CategoriesProps) {
         categories.map((category) => {
           return (
             <Link
-              className="flex items-center relative w-full h-10 categories-item duration-500 transition-colors hover:bg-pink-100"
+              className="flex items-center relative w-full h-10 categories-item duration-500 transition-colors hover:bg-pink-100 px-4"
               key={category.id}
               href={RouterPath.CATEGORIES + '/' + category.id}
             >
