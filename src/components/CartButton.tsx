@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { setCartData } from '@/store/dataSlice';
 import { ICart, IProduct } from '@/app/models';
 import { RouterPath } from '@/app/enums';
@@ -39,8 +39,7 @@ export function CartButton({firestoreProductsData}: ICartProps) {
     }
   }, []);
 
-
-  const linkClass: string = convertToClass([
+  const linkClass: string = useMemo(() => convertToClass([
     'relative',
     'flex',
     'justify-center',
@@ -50,18 +49,33 @@ export function CartButton({firestoreProductsData}: ICartProps) {
     'border-pink-500',
     'bg-amber-50',
     'm-1',
-    'size-12',
+    'size-14',
     'hover:bg-pink-100',
     'duration-500',
     'transition-colors'
-  ]);
+  ]), []);
+
+  const counterClass: string = useMemo(() => convertToClass([
+    'absolute',
+    'text-white',
+    'text-xs',
+    'text-center',
+    'bg-pink-500 ',
+    'rounded-full',
+    'top-[4px]',
+    'right-[6px]',
+    'flex',
+    'items-center',
+    'justify-center',
+    'size-6',
+  ]), [cartData.totalProductsAmount]);
 
   return (
     <Link href={RouterPath.CART} className={linkClass}>
-      <Image className="p-2" width={40} height={40} src="/icons/cart.svg" alt="CartButton"/>
+      <Image className="p-2" width={45} height={45} src="/icons/cart.svg" alt="CartButton"/>
       {
         cartData.totalProductsAmount
-          ? <div className="absolute text-white text-xs bg-pink-500 rounded-full top-[4px] right-[4px] p-1">
+          ? <div className={counterClass}>
             {cartData.totalProductsAmount}
           </div>
           : <></>

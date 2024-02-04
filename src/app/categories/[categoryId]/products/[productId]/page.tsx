@@ -23,7 +23,7 @@ export interface ProductDetailsProps {
 
 export default async function ProductDetailsPage({ params: { productId } }: ProductDetailsProps) {
   const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
+    getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
     listAll(ref(storage))
   ]);
   const categories: ICategory[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
@@ -60,7 +60,7 @@ export default async function ProductDetailsPage({ params: { productId } }: Prod
                 <ProductDetailsActionsBlock product={product}/>
               </div>
             </div>
-            <div>{product?.description}</div>
+            <div className="mt-4">{product?.description}</div>
           </div>
         </div>
       </ContentContainer>

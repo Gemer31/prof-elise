@@ -21,7 +21,7 @@ export interface CategoriesOrProductsProps {
 
 export default async function CategoriesOrProductsPage({params: {categoryId}}: CategoriesOrProductsProps) {
   const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
+    getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
     listAll(ref(storage))
   ]);
   const config: IConfig = convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(

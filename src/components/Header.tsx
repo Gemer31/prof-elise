@@ -17,6 +17,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { IConfig, IProduct } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
+import { useMemo } from 'react';
 
 export interface HeaderProps {
   firestoreConfigData?: IConfig;
@@ -28,16 +29,18 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
   const pathname = usePathname();
   const [user, loading] = useAuthState(auth);
 
-  const navigationLinkClass: string = convertToClass([
+  const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',
     'px-4',
     'py-2',
     'hover:bg-pink-200',
     'duration-500',
-    'transition-colors'
-  ]);
-  const instagramClass: string = convertToClass([
+    'transition-colors',
+    'text-lg',
+  ]), []);
+
+  const circleNavLinkClass: string = useMemo(() => convertToClass([
     'cursor-pointer',
     'flex',
     'justify-center',
@@ -47,66 +50,70 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
     'border-pink-500',
     'bg-amber-50',
     'm-1',
-    'size-12',
+    'size-14',
     'hover:bg-pink-100',
     'duration-500',
     'transition-colors'
-  ]);
+  ]), []);
 
   const getNavigationLinkClass = (path: string) => {
-    return navigationLinkClass + (path === pathname ? ' bg-gray-200' : '');
+    return navLinkClass + (path === pathname ? ' bg-gray-200' : '');
   };
 
   return (
     <>
       <header className="w-full mb-4 flex flex-col items-center">
         <div className="w-full flex justify-center bg-pink-300">
-          <ContentContainer styleClass="flex justify-between">
-            <nav className="flex">
-              {
-                [
-                  [RouterPath.MAIN, 'main'],
-                  [RouterPath.DELIVERY, 'delivery'],
-                  [RouterPath.CONTACTS, 'contacts'],
-                ].map(([path, translateCode]) => (
-                  <Link key={path} className={getNavigationLinkClass(path)} href={path}>{TRANSLATES[LOCALE][translateCode]}</Link>
-                ))
-              }
+          <ContentContainer styleClass="px-2">
+            <nav className="flex justify-between">
+              <div className="flex">
+                {
+                  [
+                    [RouterPath.MAIN, 'main'],
+                    [RouterPath.DELIVERY, 'delivery'],
+                    [RouterPath.CONTACTS, 'contacts']
+                  ].map(([path, translateCode]) => (
+                    <Link key={path} className={getNavigationLinkClass(path)}
+                          href={path}>{TRANSLATES[LOCALE][translateCode]}</Link>
+                  ))
+                }
+              </div>
+              <div className="flex">
+                <a className={circleNavLinkClass}
+                   href="https://www.instagram.com/prof_vik.elise/"
+                   target="_blank"
+                >
+                  <Image className="p-2" width={45} height={45} src="/icons/instagram.svg" alt="Instagram"/>
+                </a>
+                <CartButton firestoreProductsData={firestoreProductsData}/>
+                {
+                  user
+                    ? <>
+                      <Link href={RouterPath.EDITOR} className={circleNavLinkClass}>
+                        <Image className="p-2" width={45} height={45} src="/icons/edit.svg" alt="Home"/>
+                      </Link>
+                      <div className={circleNavLinkClass} onClick={() => signOut(auth)}>
+                        <Image className="p-2" width={45} height={45} src="/icons/logout.svg" alt="Home"/>
+                      </div>
+                    </>
+                    : <></>
+                }
+              </div>
             </nav>
-            <div className="flex">
-              <a className={instagramClass}
-                 href="https://www.instagram.com/prof_vik.elise/"
-                 target="_blank"
-              >
-                <Image className="p-2" width={40} height={40} src="/icons/instagram.svg" alt="Instagram"/>
-              </a>
-              <CartButton firestoreProductsData={firestoreProductsData}/>
-              {
-                user
-                  ? <>
-                    <Link href={RouterPath.EDITOR} className={instagramClass}>
-                      <Image className="p-2" width={40} height={40} src="/icons/edit.svg" alt="Home"/>
-                    </Link>
-                    <div className={instagramClass} onClick={() => signOut(auth)}>
-                      <Image className="p-2" width={40} height={40} src="/icons/logout.svg" alt="Home"/>
-                    </div>
-                  </>
-                  : <></>
-              }
-            </div>
           </ContentContainer>
         </div>
         {
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>
-            : <ContentContainer styleClass="flex justify-between items-center pt-4">
+            : <ContentContainer styleClass="flex justify-between items-center pt-4 px-2">
               <Link href="/">
                 <Image className="rounded-full" width={100} height={100} src="/images/logo.jpg" alt="Instagram"/>
               </Link>
               <div className="uppercase text-center w-20">{TRANSLATES[LOCALE].сonsumables}</div>
               <Search/>
               <div className="text-center">
-                <a href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
+                <a
+                  href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
                 <div>{firestoreConfigData?.workingHours}</div>
               </div>
               <Button

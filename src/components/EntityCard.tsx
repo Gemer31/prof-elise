@@ -22,7 +22,8 @@ export function EntityCard({category, product, config}: EntityCardProps) {
     'flex',
     'flex-col',
     'items-center',
-    'items-center',
+    'justify-between',
+    'h-96',
     'rounded-lg',
     'p-4',
     'hover:bg-pink-100',
@@ -57,17 +58,18 @@ export function EntityCard({category, product, config}: EntityCardProps) {
       href={getPageLink()}
     >
       <Image
+        className="rounded-md"
         width={200}
         height={200}
         src={category?.imageUrl || product?.imageUrls?.[0] || ''}
         alt={category?.title || product?.title || ''}
       />
-      <div className={product ? 'text-base' : 'text-lg'}>{category?.title || product?.title}</div>
+      <div className={`text-center mt-2 ${product ? 'text-base' : 'text-lg'}`}>{category?.title || product?.title}</div>
       {
         product
           ? (
             <>
-              <div className="text-pink-500 bold py-2">{product.price} {config.currency}</div>
+              <div className="text-pink-500 bold my-2">{product.price} {config.currency}</div>
               <Button
                 styleClass="text-amber-50 w-full px-4 py-2"
                 type={ButtonType.BUTTON}

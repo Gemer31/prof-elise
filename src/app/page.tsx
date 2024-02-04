@@ -12,7 +12,7 @@ import { ContentContainer } from '@/components/ContentContainer';
 
 export default async function HomePage() {
   const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
+    getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
     listAll(ref(storage))
   ]);
   const categories: ICategory[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(

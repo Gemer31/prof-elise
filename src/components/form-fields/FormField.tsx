@@ -20,8 +20,6 @@ export function FormField({label, name, register, type, error}: IFormField) {
     'mt-1',
     'field-input',
     'w-full',
-    // 'pb-4',
-    // 'relative',
   ]), []);
 
   useEffect(() => {

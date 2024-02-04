@@ -2,7 +2,7 @@ export async function POST(request: Request) {
     const body: { message: string } = await request.json();
     try {
         const result = await fetch(
-            `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_API_TOKEN}/sendMessage?chat_id=${process.env.TELEGRAM_GROUP_CHAT_ID}&text=${body.message}`,
+            `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_API_TOKEN}/sendMessage?chat_id=${process.env.NEXT_PUBLIC_TELEGRAM_GROUP_CHAT_ID}&text=${body.message}`,
             {method: 'POST'}
         )
         return new Response(`{ message: 'success'}`, {status: 200});

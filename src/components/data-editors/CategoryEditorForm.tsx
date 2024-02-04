@@ -74,7 +74,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     }
 
     try {
-      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -96,7 +96,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     };
 
     try {
-      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       setSelectedImage(null);
       setSelectedCategory(undefined);

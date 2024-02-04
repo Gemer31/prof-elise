@@ -92,7 +92,7 @@ export function ProductEditorForm({
     }
 
     try {
-      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImages(undefined);
       setSelectedCategory(undefined);
@@ -114,7 +114,7 @@ export function ProductEditorForm({
     };
 
     try {
-      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       changeProduct(undefined);
       reset();

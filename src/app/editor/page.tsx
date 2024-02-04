@@ -29,7 +29,7 @@ export default function EditorPage() {
 
   const loadData = async () => {
     const [docs, images] = await Promise.all([
-        getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
+        getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
         listAll(ref(storage)),
     ]);
 

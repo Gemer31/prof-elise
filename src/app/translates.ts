@@ -15,6 +15,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     requestCall: 'Заказать звонок',
     send: 'Отправить',
     yourName: 'Ваше имя',
+    name: 'Имя',
     phone: 'Телефона',
     search: 'Поиск',
     requestCallSended: 'Наши операторы свяжутся с вами',
@@ -60,6 +61,8 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     result: 'Итого',
     delete: 'Удалить',
     currency: 'Валюта',
-    createOrder: 'Оформить заказ'
+    createOrder: 'Оформить заказ',
+    confirmOrder: 'Подтвердить заказ',
+    address: 'Адрес',
   }
 }

@@ -37,7 +37,7 @@ export function Footer({ firestoreConfigData }: FooterProps) {
 
   return (
     <footer className="w-full mt-4 flex justify-center bg-pink-300">
-      <ContentContainer>
+      <ContentContainer styleClass="px-2">
         {
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>

@@ -7,15 +7,17 @@ import { convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
 import { CartTable } from '@/components/CartTable';
 
 export default async function CartPage() {
-  const firestoreData = await getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME)));
+  const firestoreData = await getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME)));
   const config: IConfig = convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
     firestoreData.docs,
     FirebaseCollections.CONFIG
   ));
 
   return (
-    <ContentContainer>
-      <CartTable firestoreConfigData={config}/>
-    </ContentContainer>
+    <main className="w-full">
+      <ContentContainer>
+        <CartTable editable={true} firestoreConfigData={config}/>
+      </ContentContainer>
+    </main>
   );
 }

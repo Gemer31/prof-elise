@@ -61,7 +61,7 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
       shopDescription: formData.shopDescription
     };
     try {
-      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       refreshData?.();
     } catch {

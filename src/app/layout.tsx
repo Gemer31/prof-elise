@@ -23,7 +23,7 @@ export default async function RootLayout({children, params}: {
   };
 }) {
   const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
+    getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
     listAll(ref(storage))
   ]);
 
