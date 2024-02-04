@@ -18,7 +18,7 @@ export function CartButton({firestoreProductsData}: ICartProps) {
   useEffect(() => {
     const localStorageCartData = localStorage.getItem('cart');
     if (localStorageCartData) {
-      const oldCart: ICart = localStorageCartData as unknown as ICart;
+      const oldCart: ICart = JSON.parse(localStorageCartData as string) as ICart;
       const updatedCart: ICart = {
         totalProductsPrice: 0,
         totalProductsAmount: 0,

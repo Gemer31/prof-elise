@@ -5,20 +5,19 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useEffect, useState } from 'react';
-import { convertToClass } from '@/utils/convert-to-class.util';
-import { InputMask } from '@react-input/mask';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { db } from '@/utils/firebaseModule';
-import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { IFirestoreConfigEditorInfo } from '@/app/models';
+import { FormField } from '@/components/form-fields/FormField';
+import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 
 const validationSchema = yup.object().shape({
-  phone: yup.string().required(),
-  workingHours: yup.string().required(),
-  currency: yup.string().required(),
-  shopDescription: yup.string().required(),
+  phone: yup.string().required('fieldRequired'),
+  workingHours: yup.string().required('fieldRequired'),
+  currency: yup.string().required('fieldRequired'),
+  shopDescription: yup.string().required('fieldRequired')
 });
 
 interface GeneralEditorFormProps {
@@ -26,15 +25,7 @@ interface GeneralEditorFormProps {
   refreshData?: () => void;
 }
 
-export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFormProps) {
-  const inputClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input',
-    'w-full'
-  ]);
-
+export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -56,16 +47,21 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
     }
   }, [firebaseData]);
 
-  const submitForm = async (formData: { phone: string, workingHours: string, currency: string, shopDescription: string }) => {
+  const submitForm = async (formData: {
+    phone: string,
+    workingHours: string,
+    currency: string,
+    shopDescription: string
+  }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
       contactPhone: formData.phone,
       workingHours: formData.workingHours,
       currency: formData.currency,
-      shopDescription: formData.shopDescription,
+      shopDescription: formData.shopDescription
     };
     try {
-      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CONFIG), data);
+      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       refreshData?.();
     } catch {
@@ -80,47 +76,34 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
       className="flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
-      <label className="w-full mb-2 relative">
-        <span className="mr-2">{TRANSLATES[LOCALE].phone}</span>
-        <InputMask
-          placeholder="+375 (99) 999-99-99"
-          mask="+375 (__) ___-__-__"
-          replacement={{_: /\d/}}
-          className={inputClass}
-          type="text"
-          {...register('phone')}
-        />
-        {
-          errors?.phone
-            ? <div
-              className="absolute text-red-500 text-xs bottom-2">{TRANSLATES[LOCALE][errors.phone.message as string]}</div>
-            : <></>
-        }
-      </label>
-      <label className="mb-4">
-        <span className="mr-2">{TRANSLATES[LOCALE].currency}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('currency')}
-        />
-      </label>
-      <label className="mb-4">
-        <span className="mr-2">{TRANSLATES[LOCALE].workingHours}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('workingHours')}
-        />
-      </label>
-      <label className="mb-4">
-        <span className="mr-2">{TRANSLATES[LOCALE].mainShopInfo}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('shopDescription')}
-        />
-      </label>
+      <PhoneFormField
+        label={TRANSLATES[LOCALE].phone}
+        name="phone"
+        type="text"
+        error={errors.phone?.message}
+        register={register}
+      />
+      <FormField
+        label={TRANSLATES[LOCALE].currency}
+        name="currency"
+        type="text"
+        error={errors.currency?.message}
+        register={register}
+      />
+      <FormField
+        label={TRANSLATES[LOCALE].workingHours}
+        name="workingHours"
+        type="text"
+        error={errors.workingHours?.message}
+        register={register}
+      />
+      <FormField
+        label={TRANSLATES[LOCALE].mainShopInfo}
+        name="shopDescription"
+        type="text"
+        error={errors.shopDescription?.message}
+        register={register}
+      />
       <Button
         styleClass="text-amber-50 w-full py-2"
         disabled={isLoading}
@@ -128,5 +111,5 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
         type={ButtonType.SUBMIT}
       >{TRANSLATES[LOCALE].save}</Button>
     </form>
-  )
+  );
 }

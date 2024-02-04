@@ -9,12 +9,15 @@ import { Counter } from '@/components/Counter';
 import { Button } from '@/components/Button';
 import { addProductToCart, removeProductFromCart } from '@/store/dataSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useRouter } from 'next/navigation';
 
 interface ICartTableProps {
+  editable?: boolean;
   firestoreConfigData: IConfig;
 }
 
-export function CartTable({firestoreConfigData}: ICartTableProps) {
+export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.dataReducer.cart);
 
@@ -83,11 +86,10 @@ export function CartTable({firestoreConfigData}: ICartTableProps) {
                 :
                 <span className="ml-4">{cart.totalProductsPrice} {firestoreConfigData.currency}</span>
               </div>
-
               <Button
                 styleClass="w-full text-base uppercase text-amber-50 px-4 py-2 mt-2 w-fit"
                 type={ButtonType.BUTTON}
-                callback={() => {}}
+                callback={() => router.push(RouterPath.CHECKOUT)}
               >{TRANSLATES[LOCALE].createOrder}</Button>
             </div>
           </div>

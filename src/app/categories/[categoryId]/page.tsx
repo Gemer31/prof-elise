@@ -1,5 +1,4 @@
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
-import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { EntityCard } from '@/components/EntityCard';
 import { Categories } from '@/components/categories/Categories';
 import { Advantages } from '@/components/Advantages';
@@ -22,7 +21,7 @@ export interface CategoriesOrProductsProps {
 
 export default async function CategoriesOrProductsPage({params: {categoryId}}: CategoriesOrProductsProps) {
   const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, FIREBASE_DATABASE_NAME)),
+    getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
     listAll(ref(storage))
   ]);
   const config: IConfig = convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(

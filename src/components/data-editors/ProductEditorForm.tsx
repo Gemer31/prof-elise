@@ -5,26 +5,25 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useState } from 'react';
-import { convertToClass } from '@/utils/convert-to-class.util';
-import { CategoriesViewer } from '@/components/CategoriesViewer';
+import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
 import { ICategory, IProduct } from '@/app/models';
 import { StorageReference } from '@firebase/storage';
-import { ImagesViewer } from '@/components/ImagesViewer';
+import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
-import { ProductsViewer } from '@/components/ProductsViewer';
+import { ProductsViewer } from '@/components/data-editors/ProductsViewer';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { uuidv4 } from '@firebase/util';
 import { db } from '@/utils/firebaseModule';
-import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
+import { FormField } from '@/components/form-fields/FormField';
 
 const validationSchema = yup.object().shape({
-  title: yup.string().required(),
-  price: yup.number().required(),
-  description: yup.string().required(),
-  categoryId: yup.string().required(),
-  images: yup.array().required(),
+  title: yup.string().required('fieldRequired'),
+  price: yup.number().required('fieldRequired'),
+  description: yup.string().required('fieldRequired'),
+  categoryId: yup.string().required('fieldRequired'),
+  images: yup.array().required('fieldRequired'),
 });
 
 export interface ProductEditorFormProps {
@@ -40,14 +39,6 @@ export function ProductEditorForm({
                                     storageData,
                                     refreshData
                                   }: ProductEditorFormProps) {
-  const inputClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input',
-    'w-full'
-  ]);
-
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct>();
@@ -101,7 +92,7 @@ export function ProductEditorForm({
     }
 
     try {
-      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.PRODUCTS), data);
+      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImages(undefined);
       setSelectedCategory(undefined);
@@ -123,7 +114,7 @@ export function ProductEditorForm({
     };
 
     try {
-      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.PRODUCTS), data);
+      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       changeProduct(undefined);
       reset();
@@ -186,31 +177,27 @@ export function ProductEditorForm({
         selectProductClick={changeProduct}
         deleteProductClick={deleteProduct}
       />
-
-      <label className="mt-2">
-        <span className="mr-2">{TRANSLATES[LOCALE].title}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('title')}
-        />
-      </label>
-      <label className="mt-2">
-        <span className="mr-2">{TRANSLATES[LOCALE].price}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('price')}
-        />
-      </label>
-      <label className="mt-2">
-        <span className="mr-2">{TRANSLATES[LOCALE].description}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('description')}
-        />
-      </label>
+      <FormField
+        label={TRANSLATES[LOCALE].title}
+        name="title"
+        type="text"
+        error={errors.title?.message}
+        register={register}
+      />
+      <FormField
+        label={TRANSLATES[LOCALE].price}
+        name="price"
+        type="text"
+        error={errors.price?.message}
+        register={register}
+      />
+      <FormField
+        label={TRANSLATES[LOCALE].description}
+        name="description"
+        type="text"
+        error={errors.description?.message}
+        register={register}
+      />
       <div className="mt-2">
         <CategoriesViewer
           firestoreCategories={firestoreCategories}

@@ -5,22 +5,21 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useState } from 'react';
-import { convertToClass } from '@/utils/convert-to-class.util';
-import { ImagesViewer } from '@/components/ImagesViewer';
+import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { StorageReference } from '@firebase/storage';
 import { getStorageImageSrc } from '@/utils/firebase.util';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { db } from '@/utils/firebaseModule';
-import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { uuidv4 } from '@firebase/util';
 import { useAppDispatch } from '@/store/store';
 import { ICategory } from '@/app/models';
-import { CategoriesViewer } from '@/components/CategoriesViewer';
+import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
+import { FormField } from '@/components/form-fields/FormField';
 
 const validationSchema = yup.object().shape({
-  imageUrl: yup.string().required(),
-  title: yup.string().required(),
+  imageUrl: yup.string().required('fieldRequired'),
+  title: yup.string().required('fieldRequired'),
   subcategories: yup.array()
 });
 
@@ -31,14 +30,6 @@ interface CategoryEditorFormProps {
 }
 
 export function CategoryEditorForm({firestoreCategories, storageData, refreshData}: CategoryEditorFormProps) {
-  const inputClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input',
-    'w-full'
-  ]);
-
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
@@ -83,7 +74,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     }
 
     try {
-      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CATEGORIES), data);
+      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -105,7 +96,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     };
 
     try {
-      await setDoc(doc(db, FIREBASE_DATABASE_NAME, FirebaseCollections.CATEGORIES), data);
+      await setDoc(doc(db, String(process.env.FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -158,14 +149,13 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
           selectedImages={selectedImage ? [selectedImage] : []}
         />
       </div>
-      <label className="my-2">
-        <span className="mr-2">{TRANSLATES[LOCALE].title}</span>
-        <input
-          className={inputClass}
-          type="text"
-          {...register('title')}
-        />
-      </label>
+      <FormField
+        label={TRANSLATES[LOCALE].title}
+        name="title"
+        type="text"
+        error={errors.title?.message}
+        register={register}
+      />
       {
         firestoreCategories?.length
           ? <>

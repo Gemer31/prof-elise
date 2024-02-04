@@ -12,6 +12,7 @@ export enum RouterPath {
   CATEGORIES = '/categories',
   PRODUCTS = '/products',
   CART = '/cart',
+  CHECKOUT = '/checkout',
 }
 
 export enum EditGroup {

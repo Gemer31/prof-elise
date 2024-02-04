@@ -6,7 +6,6 @@ import { Layout } from '@/components/Layout';
 import 'animate.css';
 import { collection, getDocs } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
-import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { Metadata } from 'next';
 import { listAll, ref } from '@firebase/storage';
 
@@ -24,7 +23,7 @@ export default async function RootLayout({children, params}: {
   };
 }) {
   const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, FIREBASE_DATABASE_NAME)),
+    getDocs(collection(db, String(process.env.FIREBASE_DATABASE_NAME))),
     listAll(ref(storage))
   ]);
 

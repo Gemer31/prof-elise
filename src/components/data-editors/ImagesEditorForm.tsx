@@ -6,7 +6,7 @@ import { deleteObject, ref, StorageReference, uploadBytes } from '@firebase/stor
 import { storage } from '@/utils/firebaseModule';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
-import { ImagesViewer } from '@/components/ImagesViewer';
+import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 
 interface ImagesEditorFormProps {
   storageData?: StorageReference[];

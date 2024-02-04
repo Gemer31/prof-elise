@@ -6,11 +6,12 @@ import { ButtonType, RouterPath } from '@/app/enums';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
-import { convertToClass } from '@/utils/convert-to-class.util';
 import * as yup from 'yup';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { auth } from '@/utils/firebaseModule';
 import { useRouter } from 'next/navigation';
+import { ContentContainer } from '@/components/ContentContainer';
+import { FormField } from '@/components/form-fields/FormField';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('fieldRequired').email('fieldInvalid'),
@@ -18,14 +19,6 @@ const validationSchema = yup.object().shape({
 });
 
 export default function ProductDetails() {
-  const inputClass: string = convertToClass([
-    'border-2',
-    'bg-custom-gray-100',
-    'mt-1',
-    'field-input',
-    'w-full'
-  ]);
-
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginError, setIsLoginError] = useState(false);
@@ -34,7 +27,7 @@ export default function ProductDetails() {
     handleSubmit,
     formState: {
       errors,
-      isValid,
+      isValid
     }
   } = useForm({
     mode: 'onSubmit',
@@ -57,49 +50,37 @@ export default function ProductDetails() {
 
   // todo: redirect if not found
   return (
-    <main className="w-full max-w-screen-lg flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
-      <form
-        className="flex flex-col items-center w-6/12"
-        onSubmit={handleSubmit(submitForm)}
-      >
-        <label className="w-full pb-6 relative">
-          <span className="mr-2">E-mail</span>
-          <input
-            className={inputClass}
+    <main className="w-full">
+      <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
+        <form
+          className="flex flex-col items-center w-6/12"
+          onSubmit={handleSubmit(submitForm)}
+        >
+          <FormField
+            label="E-mail"
+            name="email"
             type="text"
-            {...register('email')}
+            error={errors.email?.message}
+            register={register}
           />
-          {
-            errors?.email
-              ? <div className="absolute text-red-500 text-xs bottom-2">{TRANSLATES[LOCALE][errors.email.message as string]}</div>
-              : <></>
-          }
-        </label>
-        <label className="w-full pb-6 relative">
-          <span className="mr-2">{TRANSLATES[LOCALE].password}</span>
-          <input
-            className={inputClass}
+          <FormField
+            label={TRANSLATES[LOCALE].password}
+            name="password"
             type="text"
-            {...register('password')}
+            error={errors.password?.message}
+            register={register}
           />
-          {
-            errors?.password
-              ? <div className="absolute text-red-500 text-xs bottom-2">{TRANSLATES[LOCALE][errors.password.message as string]}</div>
-              : <></>
-          }
-        </label>
-
-        <div className={isLoginError ? 'text-red-500 text-xs text-center mb-2' : 'invisible'}>
-          {TRANSLATES[LOCALE].invalidLoginOrPassword}
-        </div>
-
-        <Button
-          styleClass="text-amber-50 w-full px-4 py-2"
-          disabled={isLoading}
-          loading={isLoading}
-          type={ButtonType.SUBMIT}
-        >{TRANSLATES[LOCALE].enter}</Button>
-      </form>
+          <div className={isLoginError ? 'text-red-500 text-xs text-center mb-2' : 'invisible'}>
+            {TRANSLATES[LOCALE].invalidLoginOrPassword}
+          </div>
+          <Button
+            styleClass="text-amber-50 w-full px-4 py-2"
+            disabled={isLoading}
+            loading={isLoading}
+            type={ButtonType.SUBMIT}
+          >{TRANSLATES[LOCALE].enter}</Button>
+        </form>
+      </ContentContainer>
     </main>
-  )
+  );
 }

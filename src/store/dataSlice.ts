@@ -31,6 +31,7 @@ export const dataSlice = createSlice({
       addToExist?: boolean
     }>) => {
       const cartProductData = state.cart.products[action.payload.data.id];
+      let totalProductsPrice: number = 0;
 
       state.cart.products[action.payload.data.id] = cartProductData
         ? {
@@ -38,8 +39,11 @@ export const dataSlice = createSlice({
           amount: action.payload.addToExist ? (cartProductData.amount + action.payload.amount) : action.payload.amount
         }
         : action.payload;
-      state.cart.totalProductsPrice += (action.payload.amount * action.payload.data.price);
-      state.cart.totalProductsAmount = Object.keys(state.cart.products).length;
+
+      const products = Object.values(state.cart.products);
+      products.forEach(({data, amount}) => totalProductsPrice += (amount * data.price));
+      state.cart.totalProductsPrice = totalProductsPrice;
+      state.cart.totalProductsAmount = products.length;
 
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },
