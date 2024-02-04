@@ -33,6 +33,17 @@ body {
 }
 
 
+td {
+  padding: .5rem;
+}
+
+tr > td:not(:last-child) {
+  border-right: 2px solid rgba(229, 231, 235, 1);
+}
+
+tbody > tr {
+  border-top: 2px solid rgba(229, 231, 235, 1);
+}
 
 .field {
   display: flex;

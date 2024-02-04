@@ -1,4 +1,4 @@
-export interface Product {
+export interface IProduct {
   id: string;
   title: string;
   price: number;
@@ -14,6 +14,7 @@ export interface CommonProps {
 
 export interface IConfig {
   contactPhone: string;
+  currency: string;
   workingHours: string;
   shopDescription: string;
 }
@@ -23,6 +24,17 @@ export interface ICategory {
   title: string;
   imageUrl: string;
   relatedCategories?: string[];
+}
+
+export interface ICart {
+  totalProductsPrice: number;
+  totalProductsAmount: number;
+  products: Record<string, ICartProductData>;
+}
+
+export interface ICartProductData {
+  data: IProduct;
+  amount: number;
 }
 
 export interface IFirebaseDocumentModel {
@@ -61,6 +73,9 @@ export interface IFirestoreConfigEditorInfo {
     stringValue: string;
   };
   workingHours: {
+    stringValue: string;
+  };
+  currency: {
     stringValue: string;
   };
   shopDescription: {

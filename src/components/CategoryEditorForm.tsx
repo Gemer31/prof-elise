@@ -63,7 +63,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
       data = {
         data: firestoreCategories.map((category) => {
           return category.id === selectedCategory.id ? {
-            id: uuidv4(),
+            ...selectedCategory,
             title: formData.title,
             imageUrl: formData.imageUrl
           } : category;

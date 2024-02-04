@@ -32,6 +32,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     mainShopInfo: 'Основная информация о магазине',
     infoSaved: 'Информация сохранена',
     title: 'Название',
+    picture: 'Изображение',
     images: 'Картинки',
     selectImage: 'Выберите картинку',
     imageDeleted: 'Картинка удалена',
@@ -52,5 +53,13 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     description: 'Описание',
     workingHours: 'Время работы',
     emptyCart: 'Корзина пуста',
+    productName: 'Наименование товара',
+    shortAmountText: 'Кол-во',
+    priceForOneProduct: 'Цена за шт.',
+    all: 'Всего',
+    result: 'Итого',
+    delete: 'Удалить',
+    currency: 'Валюта',
+    createOrder: 'Оформить заказ'
   }
 }

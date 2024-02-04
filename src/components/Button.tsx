@@ -4,13 +4,14 @@ import { CommonProps } from '@/app/models';
 import { ButtonType } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Loader } from '@/components/loader/loader';
+import { MouseEvent } from 'react';
 
 export interface ButtonProps extends CommonProps {
   type: ButtonType;
   disabled?: boolean;
   loading?: boolean;
   styleClass?: string;
-  callback?: () => void;
+  callback?: (event: MouseEvent) => void
 }
 
 export function Button({children, callback, type, disabled, loading, styleClass}: ButtonProps) {
@@ -34,7 +35,7 @@ export function Button({children, callback, type, disabled, loading, styleClass}
     <button
       type={type || ButtonType.BUTTON}
       className={buttonClass + ' ' + styleClass}
-      onClick={() => callback?.()}
+      onClick={(event: MouseEvent) => callback?.(event)}
     >
       <span className={loading ? 'invisible' : ''}>{children}</span>
       <div className={styleClass + (loading ? ' w-full h-full absolute top-0' : ' hidden')}>

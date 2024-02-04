@@ -3,13 +3,13 @@
 import { RequestCallPopup } from '@/components/RequestCallPopup';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { CommonProps, IConfig, IFirestoreConfigEditorInfo } from '@/app/models';
+import { CommonProps, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
 import { useAppSelector } from '@/store/store';
 import { Notification } from '@/components/Notification';
 import { ContentContainer } from '@/components/ContentContainer';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import { convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
+import { convertConfigDataToModel, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { FirebaseCollections } from '@/app/enums';
 
 export interface LayoutProps extends CommonProps{
@@ -25,12 +25,16 @@ export function Layout({ children, firestoreDocsData }: LayoutProps) {
     firestoreDocsData,
     FirebaseCollections.CONFIG,
   ));
+  const products: IProduct[] = convertProductsDataToModelArray(getDocData<IFirestoreFields>(
+    firestoreDocsData,
+    FirebaseCollections.PRODUCTS,
+  ));
 
   return (
     <>
       {requestCallPopupVisible ? <RequestCallPopup/> : <></>}
       <Notification/>
-      <Header firestoreConfigData={config}/>
+      <Header firestoreConfigData={config} firestoreProductsData={products}/>
       <ContentContainer styleClass="w-full flex justify-start">
         {children}
       </ContentContainer>

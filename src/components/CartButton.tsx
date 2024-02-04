@@ -4,17 +4,38 @@ import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useEffect } from 'react';
 import { setCartData } from '@/store/dataSlice';
+import { ICart, IProduct } from '@/app/models';
+import { RouterPath } from '@/app/enums';
 
-export function Cart() {
+interface ICartProps {
+  firestoreProductsData?: IProduct[];
+}
+
+export function CartButton({firestoreProductsData}: ICartProps) {
   const dispatch = useAppDispatch();
   const cartData = useAppSelector(state => state.dataReducer.cart);
 
   useEffect(() => {
     const localStorageCartData = localStorage.getItem('cart');
     if (localStorageCartData) {
-      dispatch(setCartData(
-        JSON.parse(localStorageCartData),
-      ));
+      const oldCart: ICart = localStorageCartData as unknown as ICart;
+      const updatedCart: ICart = {
+        totalProductsPrice: 0,
+        totalProductsAmount: 0,
+        products: {}
+      };
+
+      firestoreProductsData?.forEach((product: IProduct) => {
+        if (oldCart.products?.[product.id]) {
+          updatedCart.products[product.id] = {
+            data: product,
+            amount: oldCart.products[product.id].amount
+          };
+          updatedCart.totalProductsPrice += (oldCart.products[product.id].amount * product.price);
+          updatedCart.totalProductsAmount += 1;
+        }
+      });
+      dispatch(setCartData(updatedCart));
     }
   }, []);
 
@@ -36,8 +57,8 @@ export function Cart() {
   ]);
 
   return (
-    <Link href="/cart" className={linkClass}>
-      <Image className="p-2" width={40} height={40} src="/icons/cart.svg" alt="Cart"/>
+    <Link href={RouterPath.CART} className={linkClass}>
+      <Image className="p-2" width={40} height={40} src="/icons/cart.svg" alt="CartButton"/>
       {
         cartData.totalProductsAmount
           ? <div className="absolute text-white text-xs bg-pink-500 rounded-full top-[4px] right-[4px] p-1">

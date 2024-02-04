@@ -4,17 +4,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
-import { ICategory, Product } from '@/app/models';
+import { ICategory, IConfig, IProduct } from '@/app/models';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { LOCALE, TRANSLATES } from '@/app/translates';
+import { useAppDispatch } from '@/store/store';
+import { MouseEvent } from 'react';
+import { addProductToCart } from '@/store/dataSlice';
 
 export interface EntityCardProps {
+  config: IConfig;
   category?: ICategory;
-  product?: Product;
+  product?: IProduct;
 }
 
-export function EntityCard({category, product}: EntityCardProps) {
-
+export function EntityCard({category, product, config}: EntityCardProps) {
   const cardClass = convertToClass([
     'flex',
     'flex-col',
@@ -27,9 +30,20 @@ export function EntityCard({category, product}: EntityCardProps) {
     'transition-colors'
   ]);
 
-  const addToCart = () => {
+  const dispatch = useAppDispatch();
 
-  };
+  const addToCart = (event: MouseEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (product) {
+      dispatch(addProductToCart({
+        data: product,
+        amount: 1,
+        addToExist: true,
+      }));
+    }
+  }
 
   const getPageLink = (): string => {
     return category?.id
@@ -53,11 +67,11 @@ export function EntityCard({category, product}: EntityCardProps) {
         product
           ? (
             <>
-              <div className="text-pink-500 bold py-2">{product.price} бел.руб.</div>
+              <div className="text-pink-500 bold py-2">{product.price} {config.currency}</div>
               <Button
                 styleClass="text-amber-50 w-full px-4 py-2"
                 type={ButtonType.BUTTON}
-                callback={() => addToCart()}
+                callback={addToCart}
               >{TRANSLATES[LOCALE].intoCart}</Button>
             </>
           )

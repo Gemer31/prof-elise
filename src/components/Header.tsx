@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Cart } from '@/components/Cart';
+import { CartButton } from '@/components/CartButton';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
@@ -15,14 +15,15 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { auth } from '@/utils/firebaseModule';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
-import { IConfig } from '@/app/models';
+import { IConfig, IProduct } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
 
 export interface HeaderProps {
   firestoreConfigData?: IConfig;
+  firestoreProductsData?: IProduct[];
 }
 
-export function Header({ firestoreConfigData }: HeaderProps) {
+export function Header({ firestoreConfigData, firestoreProductsData }: HeaderProps) {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const [user, loading] = useAuthState(auth);
@@ -68,7 +69,7 @@ export function Header({ firestoreConfigData }: HeaderProps) {
                   [RouterPath.DELIVERY, 'delivery'],
                   [RouterPath.CONTACTS, 'contacts'],
                 ].map(([path, translateCode]) => (
-                  <Link className={getNavigationLinkClass(path)} href={path}>{TRANSLATES[LOCALE][translateCode]}</Link>
+                  <Link key={path} className={getNavigationLinkClass(path)} href={path}>{TRANSLATES[LOCALE][translateCode]}</Link>
                 ))
               }
             </nav>
@@ -79,7 +80,7 @@ export function Header({ firestoreConfigData }: HeaderProps) {
               >
                 <Image className="p-2" width={40} height={40} src="/icons/instagram.svg" alt="Instagram"/>
               </a>
-              <Cart/>
+              <CartButton firestoreProductsData={firestoreProductsData}/>
               {
                 user
                   ? <>

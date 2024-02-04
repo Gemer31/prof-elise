@@ -17,6 +17,7 @@ import { IFirestoreConfigEditorInfo } from '@/app/models';
 const validationSchema = yup.object().shape({
   phone: yup.string().required(),
   workingHours: yup.string().required(),
+  currency: yup.string().required(),
   shopDescription: yup.string().required(),
 });
 
@@ -50,15 +51,17 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
     if (firebaseData) {
       setValue('phone', firebaseData.contactPhone?.stringValue);
       setValue('workingHours', firebaseData.workingHours?.stringValue);
+      setValue('currency', firebaseData.currency?.stringValue);
       setValue('shopDescription', firebaseData.shopDescription?.stringValue);
     }
   }, [firebaseData]);
 
-  const submitForm = async (formData: { phone: string, workingHours: string, shopDescription: string }) => {
+  const submitForm = async (formData: { phone: string, workingHours: string, currency: string, shopDescription: string }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
       contactPhone: formData.phone,
       workingHours: formData.workingHours,
+      currency: formData.currency,
       shopDescription: formData.shopDescription,
     };
     try {
@@ -66,6 +69,7 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       refreshData?.();
     } catch {
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
     } finally {
       setIsLoading(false);
     }
@@ -92,6 +96,14 @@ export function GeneralEditorForm({ firebaseData, refreshData }: GeneralEditorFo
               className="absolute text-red-500 text-xs bottom-2">{TRANSLATES[LOCALE][errors.phone.message as string]}</div>
             : <></>
         }
+      </label>
+      <label className="mb-4">
+        <span className="mr-2">{TRANSLATES[LOCALE].currency}</span>
+        <input
+          className={inputClass}
+          type="text"
+          {...register('currency')}
+        />
       </label>
       <label className="mb-4">
         <span className="mr-2">{TRANSLATES[LOCALE].workingHours}</span>

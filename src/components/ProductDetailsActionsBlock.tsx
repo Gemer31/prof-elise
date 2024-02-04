@@ -5,12 +5,12 @@ import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAppDispatch } from '@/store/store';
-import { Product } from '@/app/models';
+import { IProduct } from '@/app/models';
 import { addProductToCart } from '@/store/dataSlice';
 import { useState } from 'react';
 
 interface ProductDetailsActionsBlockProps {
-  product: Product | undefined;
+  product: IProduct | undefined;
 }
 
 export function ProductDetailsActionsBlock({ product }: ProductDetailsActionsBlockProps) {

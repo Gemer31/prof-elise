@@ -7,7 +7,7 @@ import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { CategoriesViewer } from '@/components/CategoriesViewer';
-import { ICategory, Product } from '@/app/models';
+import { ICategory, IProduct } from '@/app/models';
 import { StorageReference } from '@firebase/storage';
 import { ImagesViewer } from '@/components/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
 
 export interface ProductEditorFormProps {
   firestoreCategories: ICategory[];
-  firestoreProducts: Product[];
+  firestoreProducts: IProduct[];
   storageData?: StorageReference[];
   refreshData?: () => void;
 }
@@ -50,7 +50,7 @@ export function ProductEditorForm({
 
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product>();
+  const [selectedProduct, setSelectedProduct] = useState<IProduct>();
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
   const [selectedImages, setSelectedImages] = useState<StorageReference[] | undefined>();
   const {
@@ -73,9 +73,9 @@ export function ProductEditorForm({
 
     if (selectedProduct) {
       data = {
-        data: firestoreProducts.map((product: Product) => {
+        data: firestoreProducts.map((product: IProduct) => {
           return product.id === selectedProduct.id ? {
-            id: uuidv4(),
+            ...selectedProduct,
             title: formData.title,
             price: formData.price,
             description: formData.description,
@@ -115,7 +115,7 @@ export function ProductEditorForm({
     setIsLoading(false);
   };
 
-  const deleteProduct = async (deletedProduct: Product) => {
+  const deleteProduct = async (deletedProduct: IProduct) => {
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData> = {
@@ -146,7 +146,7 @@ export function ProductEditorForm({
     setSelectedCategory(newCategory);
   };
 
-  const changeProduct = (newProduct: Product | undefined) => {
+  const changeProduct = (newProduct: IProduct | undefined) => {
     if (newProduct) {
       const productCategory = firestoreCategories.find((category) => category.id === newProduct.categoryId);
       const productImages: StorageReference[] = storageData?.filter((img) => {

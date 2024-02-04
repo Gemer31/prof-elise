@@ -1,14 +1,15 @@
 import {
-  ICategory, IConfig,
+  ICategory,
+  IConfig,
   IFirebaseDocumentModel,
-  IFirestoreCategoriesEditorInfo, IFirestoreConfigEditorInfo,
+  IFirestoreCategoriesEditorInfo,
+  IFirestoreConfigEditorInfo,
   IFirestoreFields,
   IFirestoreProductsEditorInfo,
-  Product
+  IProduct
 } from '@/app/models';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import { FirebaseCollections } from '@/app/enums';
 
 export function getDocData<T>(docs: Array<QueryDocumentSnapshot> | undefined, docName: string): T {
   const typedDocs: IFirebaseDocumentModel[] = docs as unknown as IFirebaseDocumentModel[];
@@ -25,6 +26,7 @@ export function getStorageImageSrc(image: StorageReference | undefined): string 
 export function convertConfigDataToModel(data: IFirestoreConfigEditorInfo): IConfig {
   return {
     contactPhone: data.contactPhone?.stringValue,
+    currency: data.currency?.stringValue,
     workingHours: data.workingHours?.stringValue,
     shopDescription: data.shopDescription?.stringValue
   };
@@ -51,7 +53,7 @@ export function convertCategoriesDataToModelArray(data: IFirestoreFields): ICate
   }) || [];
 }
 
-export function convertProductsDataToModelArray(data: IFirestoreFields): Product[] {
+export function convertProductsDataToModelArray(data: IFirestoreFields): IProduct[] {
   return data?.data?.arrayValue?.values?.map((item) => {
     const product: {
       mapValue: {
@@ -66,7 +68,7 @@ export function convertProductsDataToModelArray(data: IFirestoreFields): Product
     return {
       id: product.mapValue.fields.id.stringValue,
       title: product.mapValue.fields.title.stringValue,
-      price: product.mapValue.fields.price.integerValue,
+      price: Number(product.mapValue.fields.price.integerValue),
       description: product.mapValue.fields.description.stringValue,
       categoryId: product.mapValue.fields.categoryId.stringValue,
       imageUrls: product.mapValue.fields.imageUrls.arrayValue.values.map((v) => (v.stringValue))

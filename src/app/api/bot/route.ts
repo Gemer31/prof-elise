@@ -1,5 +1,3 @@
-import { Product } from "@/app/models";
-
 export async function POST(request: Request) {
     const body: { message: string } = await request.json();
     try {
@@ -12,9 +10,3 @@ export async function POST(request: Request) {
         return new Response(`{ message: 'error'}`, {status: 500});
     }
 }
-//
-// const STUB_PRODUCTS: Product[] = [
-//     {
-//         id: '1'
-//     }
-// ]

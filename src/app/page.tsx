@@ -33,7 +33,7 @@ export default async function HomePage() {
         </div>
         <div className="w-full grid grid-cols-3 gap-4">
           {
-            categories?.map((category) => (<EntityCard key={category.id} category={category}/>))
+            categories?.map((category) => (<EntityCard key={category.id} category={category} config={config}/>))
           }
         </div>
       </div>

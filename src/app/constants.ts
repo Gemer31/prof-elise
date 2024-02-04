@@ -7,6 +7,4 @@ export const FADE_IN_CLASS = 'animate__animated animate__fadeIn';
 export const FADE_OUT_CLASS = 'animate__animated animate__fadeOut';
 
 export const CTRL_CODE = 17;
-export const WORKING_TIME: string = 'пн-сб 9:00-19:00';
-export const CURRENCY: string = 'бел.руб';
 export const FIREBASE_DATABASE_NAME = 'app';

@@ -1,15 +1,15 @@
 import Image from 'next/image';
-import { ICategory, Product } from '@/app/models';
+import { ICategory, IProduct } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 interface CategoriesViewerProps {
-  selectedProduct?: Product | undefined;
-  firestoreProducts: Product[];
+  selectedProduct?: IProduct | undefined;
+  firestoreProducts: IProduct[];
   editAvailable?: boolean;
-  deleteProductClick?: (product: Product) => void;
-  selectProductClick?: (product: Product | undefined) => void;
+  deleteProductClick?: (product: IProduct) => void;
+  selectProductClick?: (product: IProduct | undefined) => void;
 }
 
 export function ProductsViewer({
@@ -28,13 +28,13 @@ export function ProductsViewer({
     'py-1'
   ]);
 
-  const [chosenCategory, setChosenCategory] = useState<Product | undefined>();
+  const [chosenCategory, setChosenCategory] = useState<IProduct | undefined>();
 
   useEffect(() => {
     setChosenCategory(selectedProduct);
   }, [selectedProduct]);
 
-  const selectCategory = (product: Product | undefined) => {
+  const selectCategory = (product: IProduct | undefined) => {
     setChosenCategory(product);
     selectProductClick?.(product);
   };

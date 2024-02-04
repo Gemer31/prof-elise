@@ -1,17 +1,18 @@
-import { ICategory, IFirestoreFields, Product } from '@/app/models';
-import { CURRENCY, FIREBASE_DATABASE_NAME } from '@/app/constants';
+import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
+import { FIREBASE_DATABASE_NAME } from '@/app/constants';
 import { Categories } from '@/components/categories/Categories';
 import { Advantages } from '@/components/Advantages';
 import Image from 'next/image';
-import { LOCALE, TRANSLATES } from '@/app/translates';
-import { Counter } from '@/components/Counter';
-import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections } from '@/app/enums';
+import { FirebaseCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
 import { db, storage } from '@/utils/firebaseModule';
 import { listAll, ref } from '@firebase/storage';
-import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
-import { useAppDispatch } from '@/store/store';
+import {
+  convertCategoriesDataToModelArray,
+  convertConfigDataToModel,
+  convertProductsDataToModelArray,
+  getDocData
+} from '@/utils/firebase.util';
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 
 export interface ProductDetailsProps {
@@ -20,7 +21,7 @@ export interface ProductDetailsProps {
   }
 }
 
-export default async function ProductDetails({ params: { productId } }: ProductDetailsProps) {
+export default async function ProductDetailsPage({ params: { productId } }: ProductDetailsProps) {
   const [firestoreData, storageData] = await Promise.all([
     getDocs(collection(db, FIREBASE_DATABASE_NAME)),
     listAll(ref(storage))
@@ -29,11 +30,14 @@ export default async function ProductDetails({ params: { productId } }: ProductD
     firestoreData?.docs,
     FirebaseCollections.CATEGORIES,
   ));
-  const product: Product | undefined = convertProductsDataToModelArray(getDocData<IFirestoreFields>(
+  const product: IProduct | undefined = convertProductsDataToModelArray(getDocData<IFirestoreFields>(
     firestoreData?.docs,
     FirebaseCollections.PRODUCTS,
   )).find((item) => item.id === productId);
-
+  const config: IConfig = convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
+    firestoreData.docs,
+    FirebaseCollections.CONFIG
+  ));
 
   // todo: redirect if not found
   return (
@@ -50,7 +54,7 @@ export default async function ProductDetails({ params: { productId } }: ProductD
             </div>
             <div className="w-full ml-4">
               <div className="mb-4 text-2xl bold text-center">{product?.title}</div>
-              <div className="w-full text-2xl text-pink-500 font-bold text-center">{product?.price} {CURRENCY}</div>
+              <div className="w-full text-2xl text-pink-500 font-bold text-center">{product?.price} {config.currency}</div>
               <ProductDetailsActionsBlock product={product}/>
             </div>
           </div>

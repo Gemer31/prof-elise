@@ -1,21 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Product } from '@/app/models';
+import { ICart, ICartProductData, IProduct } from '@/app/models';
 
 interface IDataSlice {
   requestCallPopupVisible: boolean;
   notificationMessage: string | null;
   cart: ICart;
-}
-
-interface ICart {
-  totalProductsPrice: number;
-  totalProductsAmount: number;
-  products: Record<string, ICartProductData>;
-}
-
-export interface ICartProductData {
-  data: Product;
-  amount: number;
 }
 
 export const dataSlice = createSlice({
@@ -37,7 +26,7 @@ export const dataSlice = createSlice({
       state.notificationMessage = action.payload;
     },
     addProductToCart: (state: IDataSlice, action: PayloadAction<{
-      data: Product;
+      data: IProduct;
       amount: number;
       addToExist?: boolean
     }>) => {
@@ -65,6 +54,7 @@ export const dataSlice = createSlice({
     },
     setCartData: (state: IDataSlice, action: PayloadAction<ICart>) => {
       state.cart = action.payload;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
     }
   }
 });
