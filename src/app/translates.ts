@@ -64,5 +64,6 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     createOrder: 'Оформить заказ',
     confirmOrder: 'Подтвердить заказ',
     address: 'Адрес',
+    comment: 'Комментарий',
   }
 }

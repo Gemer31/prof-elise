@@ -11,10 +11,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormField } from '@/components/form-fields/FormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
+import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
   phone: yup.string().required('fieldRequired'),
+  comment: yup.string(),
   email: yup.string().email('fieldInvalid').required('fieldRequired'),
   address: yup.string().required('fieldRequired'),
 });
@@ -76,11 +78,14 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         error={errors.address?.message}
         register={register}
       />
-
+      <TextareaFormField
+        label={TRANSLATES[LOCALE].comment}
+        name="comment"
+        register={register}
+      />
       <div className="mt-4">
         <CartTable firestoreConfigData={firestoreConfigData}/>
       </div>
-
       <div className="w-full flex justify-end mt-4">
         <Button
           styleClass="uppercase text-amber-50 px-4 py-2"

@@ -15,7 +15,7 @@ export default async function CartPage() {
 
   return (
     <main className="w-full">
-      <ContentContainer>
+      <ContentContainer styleClass="px-2">
         <CartTable editable={true} firestoreConfigData={config}/>
       </ContentContainer>
     </main>

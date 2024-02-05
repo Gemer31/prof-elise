@@ -96,7 +96,7 @@ export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
           {
             editable
               ? <Button
-                styleClass="w-full text-base uppercase text-amber-50 px-4 py-2 mt-2 w-fit"
+                styleClass="w-fit text-base uppercase text-amber-50 px-4 py-2 mt-2 w-fit"
                 type={ButtonType.BUTTON}
                 callback={() => router.push(RouterPath.CHECKOUT)}
               >{TRANSLATES[LOCALE].createOrder}</Button>

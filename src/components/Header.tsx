@@ -6,18 +6,19 @@ import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Search } from '@/components/Search';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { setRequestCallPopupVisible } from '@/store/dataSlice';
+import { useAppDispatch } from '@/store/store';
+import { setAuth, setRequestCallPopupVisible } from '@/store/dataSlice';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { auth } from '@/utils/firebaseModule';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { IConfig, IProduct } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import path from 'path';
 
 export interface HeaderProps {
   firestoreConfigData?: IConfig;
@@ -25,10 +26,6 @@ export interface HeaderProps {
 }
 
 export function Header({ firestoreConfigData, firestoreProductsData }: HeaderProps) {
-  const dispatch = useAppDispatch();
-  const pathname = usePathname();
-  const [user, loading] = useAuthState(auth);
-
   const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',
@@ -39,7 +36,6 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
     'transition-colors',
     'text-lg',
   ]), []);
-
   const circleNavLinkClass: string = useMemo(() => convertToClass([
     'cursor-pointer',
     'flex',
@@ -56,9 +52,29 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
     'transition-colors'
   ]), []);
 
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  const [user, loading] = useAuthState(auth);
+
+  useEffect(() => {
+    !loading && dispatch(setAuth(!!user));
+  }, [user]);
+
   const getNavigationLinkClass = (path: string) => {
     return navLinkClass + (path === pathname ? ' bg-gray-200' : '');
   };
+
+  const logout = async () => {
+    await signOut(auth);
+    const response = await fetch(path.join(process.cwd(), 'api', 'logout'), {
+      method: "POST",
+    });
+
+    if (response.status === 200) {
+      router.push("/");
+    }
+  }
 
   return (
     <>
@@ -92,7 +108,7 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
                       <Link href={RouterPath.EDITOR} className={circleNavLinkClass}>
                         <Image className="p-2" width={45} height={45} src="/icons/edit.svg" alt="Home"/>
                       </Link>
-                      <div className={circleNavLinkClass} onClick={() => signOut(auth)}>
+                      <div className={circleNavLinkClass} onClick={logout}>
                         <Image className="p-2" width={45} height={45} src="/icons/logout.svg" alt="Home"/>
                       </div>
                     </>

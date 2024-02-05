@@ -5,13 +5,14 @@ import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import * as yup from 'yup';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { auth } from '@/utils/firebaseModule';
 import { useRouter } from 'next/navigation';
 import { ContentContainer } from '@/components/ContentContainer';
 import { FormField } from '@/components/form-fields/FormField';
+import path from 'path';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('fieldRequired').email('fieldInvalid'),
@@ -34,21 +35,29 @@ export default function ProductDetails() {
     resolver: yupResolver(validationSchema)
   });
 
-  const submitForm = async (formData: { email: string; password: string }) => {
+  const submitForm = useCallback(async (formData: { email: string; password: string }) => {
     setIsLoginError(false);
     setIsLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      router.push(RouterPath.EDITOR);
+      const userCred = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      fetch(path.join(process.cwd(), 'api', 'login'), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${await userCred.user.getIdToken()}`
+        }
+      }).then((response) => {
+        if (response.status === 200) {
+          router.push(RouterPath.EDITOR);
+        }
+      });
     } catch (err) {
       setIsLoginError(true);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  // todo: redirect if not found
   return (
     <main className="w-full">
       <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">

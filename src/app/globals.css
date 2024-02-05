@@ -45,26 +45,12 @@ tbody > tr {
   border-top: 2px solid rgba(229, 231, 235, 1);
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
 .field-label::after {
   content: '*';
   margin-left: 2px;
   font-size: 1rem;
   font-weight: normal;
   color: rgba(239, 68, 68, 1);
-}
-
-.field-input {
-  border-radius: 8px;
-  padding: 5px 10px;
-}
-
-.field-input::placeholder {
-  font-size: 10px;
 }
 
 .field-textarea {
