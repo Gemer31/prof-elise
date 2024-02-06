@@ -8,11 +8,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useState } from 'react';
 import * as yup from 'yup';
 import { signInWithEmailAndPassword } from '@firebase/auth';
-import { auth } from '@/utils/firebaseModule';
 import { useRouter } from 'next/navigation';
 import { ContentContainer } from '@/components/ContentContainer';
 import { FormField } from '@/components/form-fields/FormField';
 import path from 'path';
+import { auth } from '@/app/lib/firebase-config';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('fieldRequired').email('fieldInvalid'),
@@ -41,16 +41,15 @@ export default function ProductDetails() {
 
     try {
       const userCred = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      fetch(path.join(process.cwd(), 'api', 'login'), {
+      const serverLoginResponse = await fetch(path.join(process.cwd(), 'api', 'login'), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${await userCred.user.getIdToken()}`
         }
-      }).then((response) => {
-        if (response.status === 200) {
-          router.push(RouterPath.EDITOR);
-        }
-      });
+      })
+      if (serverLoginResponse.status === 200) {
+        router.push(RouterPath.EDITOR);
+      }
     } catch (err) {
       setIsLoginError(true);
     } finally {

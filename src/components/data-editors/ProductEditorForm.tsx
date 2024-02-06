@@ -13,10 +13,10 @@ import { getStorageImageSrc } from '@/utils/firebase.util';
 import { ProductsViewer } from '@/components/data-editors/ProductsViewer';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { uuidv4 } from '@firebase/util';
-import { db } from '@/utils/firebaseModule';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { FormField } from '@/components/form-fields/FormField';
+import { db } from '@/app/lib/firebase-config';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),

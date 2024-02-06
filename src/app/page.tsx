@@ -3,12 +3,12 @@ import { Categories } from '@/components/Categories';
 import { EntityCard } from '@/components/EntityCard';
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
 import { collection, getDocs } from '@firebase/firestore';
-import { db, storage } from '@/utils/firebaseModule';
 import { AboutUs } from '@/components/AboutUs';
 import { FirebaseCollections } from '@/app/enums';
 import { convertCategoriesDataToModelArray, convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
 import { listAll, ref } from '@firebase/storage';
 import { ContentContainer } from '@/components/ContentContainer';
+import { db, storage } from '@/app/lib/firebase-config';
 
 export default async function HomePage() {
   const [firestoreData, storageData] = await Promise.all([

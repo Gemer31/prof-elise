@@ -6,12 +6,12 @@ import { Button } from '@/components/Button';
 import { ButtonType, FirebaseCollections } from '@/app/enums';
 import { useEffect, useState } from 'react';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
-import { db } from '@/utils/firebaseModule';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { IFirestoreConfigEditorInfo } from '@/app/models';
 import { FormField } from '@/components/form-fields/FormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
+import { db } from '@/app/lib/firebase-config';
 
 const validationSchema = yup.object().shape({
   phone: yup.string().required('fieldRequired'),

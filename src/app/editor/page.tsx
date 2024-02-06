@@ -8,13 +8,13 @@ import { GeneralEditorForm } from '@/components/data-editors/GeneralEditorForm';
 import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
-import { db, storage } from '@/utils/firebaseModule';
 import { Loader } from '@/components/Loader';
 import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
 import { listAll, ref, StorageReference } from '@firebase/storage';
 import { IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
 import { ContentContainer } from '@/components/ContentContainer';
+import { db, storage } from '@/app/lib/firebase-config';
 
 export default function EditorPage() {
   const [storageData, setStorageData] = useState<StorageReference[]>();

@@ -5,9 +5,9 @@ import StoreProvider from '@/store/StoreProvider';
 import { Layout } from '@/components/Layout';
 import 'animate.css';
 import { collection, getDocs } from '@firebase/firestore';
-import { db, storage } from '@/utils/firebaseModule';
 import { Metadata } from 'next';
 import { listAll, ref } from '@firebase/storage';
+import { db, storage } from '@/app/lib/firebase-config';
 
 const openSans = Open_Sans({subsets: ['latin']});
 

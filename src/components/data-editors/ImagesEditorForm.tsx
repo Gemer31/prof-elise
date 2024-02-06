@@ -3,10 +3,10 @@ import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import { useState } from 'react';
 import { deleteObject, ref, StorageReference, uploadBytes } from '@firebase/storage';
-import { storage } from '@/utils/firebaseModule';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
+import { storage } from '@/app/lib/firebase-config';
 
 interface ImagesEditorFormProps {
   storageData?: StorageReference[];

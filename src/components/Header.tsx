@@ -10,22 +10,22 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
 import { useAppDispatch } from '@/store/store';
-import { setAuth, setRequestCallPopupVisible } from '@/store/dataSlice';
+import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { auth } from '@/utils/firebaseModule';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { IConfig, IProduct } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import path from 'path';
+import { auth } from '@/app/lib/firebase-config';
 
 export interface HeaderProps {
   firestoreConfigData?: IConfig;
   firestoreProductsData?: IProduct[];
 }
 
-export function Header({ firestoreConfigData, firestoreProductsData }: HeaderProps) {
+export function Header({firestoreConfigData, firestoreProductsData}: HeaderProps) {
   const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',
@@ -34,7 +34,7 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
     'hover:bg-pink-200',
     'duration-500',
     'transition-colors',
-    'text-lg',
+    'text-lg'
   ]), []);
   const circleNavLinkClass: string = useMemo(() => convertToClass([
     'cursor-pointer',
@@ -57,10 +57,6 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
   const pathname = usePathname();
   const [user, loading] = useAuthState(auth);
 
-  useEffect(() => {
-    !loading && dispatch(setAuth(!!user));
-  }, [user]);
-
   const getNavigationLinkClass = (path: string) => {
     return navLinkClass + (path === pathname ? ' bg-gray-200' : '');
   };
@@ -68,13 +64,12 @@ export function Header({ firestoreConfigData, firestoreProductsData }: HeaderPro
   const logout = async () => {
     await signOut(auth);
     const response = await fetch(path.join(process.cwd(), 'api', 'logout'), {
-      method: "POST",
+      method: 'POST'
     });
-
-    if (response.status === 200) {
-      router.push("/");
+    if (response.status === 200 && pathname === RouterPath.EDITOR) {
+      router.push(RouterPath.MAIN);
     }
-  }
+  };
 
   return (
     <>

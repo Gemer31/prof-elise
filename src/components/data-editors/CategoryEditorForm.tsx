@@ -9,13 +9,13 @@ import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { StorageReference } from '@firebase/storage';
 import { getStorageImageSrc } from '@/utils/firebase.util';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
-import { db } from '@/utils/firebaseModule';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { uuidv4 } from '@firebase/util';
 import { useAppDispatch } from '@/store/store';
 import { ICategory } from '@/app/models';
 import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
 import { FormField } from '@/components/form-fields/FormField';
+import { db } from '@/app/lib/firebase-config';
 
 const validationSchema = yup.object().shape({
   imageUrl: yup.string().required('fieldRequired'),

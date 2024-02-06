@@ -4,7 +4,6 @@ import { Advantages } from '@/components/Advantages';
 import Image from 'next/image';
 import { FirebaseCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
-import { db, storage } from '@/utils/firebaseModule';
 import { listAll, ref } from '@firebase/storage';
 import {
   convertCategoriesDataToModelArray,
@@ -14,6 +13,7 @@ import {
 } from '@/utils/firebase.util';
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
+import { db, storage } from '@/app/lib/firebase-config';
 
 export interface ProductDetailsProps {
   params: {

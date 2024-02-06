@@ -1,8 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector, useStore } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
-import { store } from 'next/dist/build/output/store';
-import { Provider, useRef } from 'react';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { dataSlice } from '@/store/dataSlice';
 
 const rootReducer = combineReducers({});

@@ -3,7 +3,6 @@ import { EntityCard } from '@/components/EntityCard';
 import { Categories } from '@/components/Categories';
 import { Advantages } from '@/components/Advantages';
 import { collection, getDocs } from '@firebase/firestore';
-import { db, storage } from '@/utils/firebaseModule';
 import { listAll, ref } from '@firebase/storage';
 import {
   convertCategoriesDataToModelArray,
@@ -12,6 +11,7 @@ import {
   getDocData
 } from '@/utils/firebase.util';
 import { FirebaseCollections } from '@/app/enums';
+import { db, storage } from '@/app/lib/firebase-config';
 
 export interface CategoriesOrProductsProps {
   params: {
