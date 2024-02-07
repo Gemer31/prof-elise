@@ -3,7 +3,7 @@
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useMemo } from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import { LOCALE, TRANSLATES } from '@/app/translates';
+import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 
 interface IFormFieldProps {
   required?: boolean;
@@ -27,18 +27,12 @@ export function FormField({label, name, register, type, error, required}: IFormF
   ]), []);
 
   return (
-    <label className="w-full pb-4 relative">
-      <span className={`mr-2 ${required ? 'field-label' : ''}`}>{label}</span>
+    <FormFieldWrapper label={label} error={error} required={required}>
       <input
         className={inputClass}
         type={type}
         {...register(name)}
       />
-      {
-        error
-          ? <div className="absolute text-red-500 text-xs bottom-0">{TRANSLATES[LOCALE][error]}</div>
-          : <></>
-      }
-    </label>
+    </FormFieldWrapper>
   );
 }

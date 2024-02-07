@@ -58,7 +58,8 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
       contactPhone: formData.phone,
       workingHours: formData.workingHours,
       currency: formData.currency,
-      shopDescription: formData.shopDescription
+      shopDescription: formData.shopDescription,
+      nextOrderNumber: firebaseData.nextOrderNumber || 1,
     };
     try {
       await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);

@@ -45,7 +45,7 @@ export default async function ProductDetailsPage({ params: { productId } }: Prod
       <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
         <div className="w-full flex justify-between">
           <div className="w-4/12 mr-4">
-            <Categories categories={categories}/>
+            <Categories currentCategoryId={product?.categoryId} categories={categories}/>
             <Advantages/>
           </div>
           <div className="w-full">

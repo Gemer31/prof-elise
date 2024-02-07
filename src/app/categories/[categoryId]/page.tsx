@@ -43,7 +43,7 @@ export default async function CategoriesOrProductsPage({params: {categoryId}}: C
   return (
     <div className="w-full flex justify-between">
       <div className="w-4/12">
-        <Categories categories={categories}/>
+        <Categories categories={categories} currentCategoryId={categoryId}/>
         <Advantages/>
       </div>
       <div className="w-full grid grid-cols-3 gap-4">

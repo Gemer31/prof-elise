@@ -17,6 +17,7 @@ import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { FormField } from '@/components/form-fields/FormField';
 import { db } from '@/app/lib/firebase-config';
+import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),
@@ -93,7 +94,7 @@ export function ProductEditorForm({
 
     try {
       await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
-      dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].productAdded));
       setSelectedImages(undefined);
       setSelectedCategory(undefined);
       reset();
@@ -115,7 +116,7 @@ export function ProductEditorForm({
 
     try {
       await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
-      dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].productDeleted));
       changeProduct(undefined);
       reset();
       refreshData?.();
@@ -170,14 +171,17 @@ export function ProductEditorForm({
       className="flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
-      <ProductsViewer
-        editAvailable={true}
-        selectedProduct={selectedProduct}
-        firestoreProducts={firestoreProducts}
-        selectProductClick={changeProduct}
-        deleteProductClick={deleteProduct}
-      />
+      <div className="pb-4">
+        <ProductsViewer
+          editAvailable={true}
+          selectedProduct={selectedProduct}
+          firestoreProducts={firestoreProducts}
+          selectProductClick={changeProduct}
+          deleteProductClick={deleteProduct}
+        />
+      </div>
       <FormField
+        required={true}
         label={TRANSLATES[LOCALE].title}
         name="title"
         type="text"
@@ -185,6 +189,7 @@ export function ProductEditorForm({
         register={register}
       />
       <FormField
+        required={true}
         label={TRANSLATES[LOCALE].price}
         name="price"
         type="text"
@@ -192,28 +197,36 @@ export function ProductEditorForm({
         register={register}
       />
       <FormField
+        required={true}
         label={TRANSLATES[LOCALE].description}
         name="description"
         type="text"
         error={errors.description?.message}
         register={register}
       />
-      <div className="mt-2">
+      <FormFieldWrapper
+        required={true}
+        label={TRANSLATES[LOCALE].category}
+        error={errors.categoryId?.message}
+      >
         <CategoriesViewer
           firestoreCategories={firestoreCategories}
           selectedCategory={selectedCategory}
           selectCategoryClick={changeCategory}
         />
-      </div>
-      <div className="mt-2">
+      </FormFieldWrapper>
+      <FormFieldWrapper
+        required={true}
+        label={`${TRANSLATES[LOCALE].images} (${TRANSLATES[LOCALE].clickCtrlForMultipleSelect})`}
+        error={errors.images?.message}
+      >
         <ImagesViewer
           multiple={true}
           storageData={storageData}
           selectedImages={selectedImages}
           selectImageClick={changeImage}
         />
-      </div>
-
+      </FormFieldWrapper>
       <Button
         styleClass="text-amber-50 w-full py-2 mt-2"
         disabled={isLoading}

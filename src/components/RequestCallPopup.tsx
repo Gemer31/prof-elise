@@ -32,7 +32,6 @@ export function RequestCallPopup() {
   const submitForm = async (formData: { name: string; phone: string }) => {
     setIsLoading(true);
 
-    console.log(path.join(process.cwd(), 'api', 'form'));
     const message: string = `Заказать звонок\n\nИмя: ${formData.name};\nТелефон: ${formData.phone}`;
     const result = await fetch(path.join(process.cwd(), 'api', 'bot'), {
       method: 'POST',

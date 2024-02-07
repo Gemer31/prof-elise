@@ -25,6 +25,7 @@ export function getStorageImageSrc(image: StorageReference | undefined): string 
 
 export function convertConfigDataToModel(data: IFirestoreConfigEditorInfo): IConfig {
   return {
+    nextOrderNumber: Number(data.nextOrderNumber?.integerValue),
     contactPhone: data.contactPhone?.stringValue,
     currency: data.currency?.stringValue,
     workingHours: data.workingHours?.stringValue,

@@ -36,6 +36,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     picture: 'Изображение',
     images: 'Картинки',
     selectImage: 'Выберите картинку',
+    image: 'Картинка',
     imageDeleted: 'Картинка удалена',
     categoryDeleted: 'Категория удалена',
     somethingWentWrong: 'Что-то пошло не так =(',
@@ -55,6 +56,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     workingHours: 'Время работы',
     emptyCart: 'Корзина пуста',
     productName: 'Наименование товара',
+    productAdded: 'Продукт добавлен',
     shortAmountText: 'Кол-во',
     priceForOneProduct: 'Цена за шт.',
     all: 'Всего',
@@ -63,7 +65,10 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     currency: 'Валюта',
     createOrder: 'Оформить заказ',
     confirmOrder: 'Подтвердить заказ',
+    order: 'Заказ',
     address: 'Адрес',
     comment: 'Комментарий',
+    clickCtrlForMultipleSelect: 'Нажмите ctrl для выбора нескольких',
+    orderCreatedSuccessfully: 'Ваш заказ принят. Наши операторы свяжутся с вами'
   }
 }

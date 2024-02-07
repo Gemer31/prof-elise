@@ -8,6 +8,7 @@ import { collection, getDocs } from '@firebase/firestore';
 import { Metadata } from 'next';
 import { listAll, ref } from '@firebase/storage';
 import { db, storage } from '@/app/lib/firebase-config';
+import { cookies } from 'next/headers';
 
 const openSans = Open_Sans({subsets: ['latin']});
 
@@ -22,9 +23,14 @@ export default async function RootLayout({children, params}: {
     docs: IFirebaseDocumentModel[]
   };
 }) {
-  const [firestoreData, storageData] = await Promise.all([
+  const [firestoreData, storageData, loginCheckResponse] = await Promise.all([
     getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
-    listAll(ref(storage))
+    listAll(ref(storage)),
+    fetch('http://localhost:3000/api/login', {
+      headers: {
+        Cookie: `session=${cookies().get("session")?.value}`,
+      },
+    }),
   ]);
 
   return (

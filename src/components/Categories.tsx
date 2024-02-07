@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { ICategory } from '@/app/models';
@@ -5,9 +7,10 @@ import { RouterPath } from '@/app/enums';
 
 interface CategoriesProps {
   categories: ICategory[];
+  currentCategoryId: string | undefined;
 }
 
-export function Categories({ categories }: CategoriesProps) {
+export function Categories({ categories, currentCategoryId }: CategoriesProps) {
   return (
     <div>
       {
@@ -19,7 +22,7 @@ export function Categories({ categories }: CategoriesProps) {
               href={RouterPath.CATEGORIES + '/' + category.id}
             >
               <Image className="mr-4" width={25} height={25} src={category.imageUrl} alt={category.title}/>
-              <span>{category.title}</span>
+              <span className={currentCategoryId === category.id ? 'font-bold' : ''}>{category.title}</span>
               {/*{*/}
               {/*  category.categories?.length*/}
               {/*    ? (<div>*/}

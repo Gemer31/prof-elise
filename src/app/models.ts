@@ -13,6 +13,7 @@ export interface CommonProps {
 }
 
 export interface IConfig {
+  nextOrderNumber: number;
   contactPhone: string;
   currency: string;
   workingHours: string;
@@ -69,6 +70,9 @@ export interface IFirestoreFields {
 }
 
 export interface IFirestoreConfigEditorInfo {
+  nextOrderNumber: {
+    integerValue: string;
+  };
   contactPhone: {
     stringValue: string;
   };

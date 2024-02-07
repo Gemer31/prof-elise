@@ -9,21 +9,21 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     return NextResponse.redirect(new URL(RouterPath.MAIN, request.url));
   }
 
-  // path.join(process.cwd(), 'app', 'api', 'login')
   const responseAPI = await fetch('http://localhost:3000/api/login', {
     headers: {
       Cookie: `session=${session?.value}`,
     },
   });
 
-  if (responseAPI.status !== 200) {
+  if (responseAPI.status !== 200 && request.nextUrl.pathname === RouterPath.EDITOR) {
     return NextResponse.redirect(new URL(RouterPath.MAIN, request.url));
   }
-
+  if (responseAPI.status === 200 && request.nextUrl.pathname === RouterPath.LOGIN) {
+    return NextResponse.redirect(new URL(RouterPath.EDITOR, request.url));
+  }
   return NextResponse.next();
 }
 
-//Add your protected routes
 export const config = {
-  matcher: ["/editor"],
+  matcher: ["/editor", "/login"],
 };

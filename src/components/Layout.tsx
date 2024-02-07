@@ -35,7 +35,7 @@ export function Layout({ children, firestoreDocsData }: LayoutProps) {
       {requestCallPopupVisible ? <RequestCallPopup/> : <></>}
       <Notification/>
       <Header firestoreConfigData={config} firestoreProductsData={products}/>
-      <ContentContainer styleClass="w-full flex justify-start">
+      <ContentContainer styleClass="w-full flex justify-start px-2">
         {children}
       </ContentContainer>
       <Footer firestoreConfigData={config}/>

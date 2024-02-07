@@ -26,7 +26,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
+      <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible px-2">
         <div className="w-full flex justify-between">
           <div className="w-4/12 mr-4">
             <Categories categories={categories}/>

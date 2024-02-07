@@ -80,7 +80,7 @@ export function ImagesViewer({
       {
         storageData?.length
           ? <>
-            <div className="overflow-y-hidden max-h-52 w-6/12 rounded-md border-pink-500 border-2 px-2 py-1">
+            <div className="overflow-auto max-h-72 w-6/12 rounded-md border-pink-500 border-2 px-2 py-1">
               {
                 storageData?.map((item, index) => (
                   <>

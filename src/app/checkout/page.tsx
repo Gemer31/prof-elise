@@ -15,9 +15,7 @@ export default async function CheckoutPage() {
 
   return (
     <main className="w-full">
-      <ContentContainer styleClass="px-2">
-        <CheckoutForm firestoreConfigData={config}/>
-      </ContentContainer>
+      <CheckoutForm firestoreConfigData={config}/>
     </main>
-  )
+  );
 }
