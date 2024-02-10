@@ -5,6 +5,12 @@ import { IConfig, IFirestoreConfigEditorInfo } from '@/app/models';
 import { convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
 import { CartTable } from '@/components/CartTable';
 import { db } from '@/app/lib/firebase-config';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Корзина покупок',
+  description: 'Расходные материалы в Могилеве'
+};
 
 export default async function CartPage() {
   const firestoreData = await getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME)));

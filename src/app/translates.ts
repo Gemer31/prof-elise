@@ -4,7 +4,6 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
     сonsumables: 'Расходные материалы',
     сonsumablesWholesaleRetail: 'Расходные материалы оптом и в розницу',
-    aboutUsDescription: 'Наша компания на рынке более 5 лет и за это время мы сумели себя хорошо зарекомендовать. Мы работаем, чтобы обеспечить специалистов с сфере красоты и здоровья всем необходимым для качественной и безопасной работы. Прямые поставки от заводов- производителей позволяют нам предлагать своим клиентам только самые выгодные предложения и лучшие цены.',
     main: 'Главная',
     general: 'Основное',
     category: 'Категория',
@@ -80,5 +79,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     clickCtrlForMultipleSelect: 'Нажмите ctrl для выбора нескольких',
     orderCreatedSuccessfully: 'Ваш заказ принят. Наши операторы свяжутся с вами',
     infoUpdated: 'Информация обновлена',
+    deliveryDescription: 'Описание по доставке',
+    addDeliveryDescription: 'Введите описание по доставке'
   }
 }

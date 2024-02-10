@@ -29,7 +29,10 @@ export function AboutUs({text}: IAboutUsProps) {
           ref={ref1}
           className="uppercase text-2xl mb-4"
         >{TRANSLATES[LOCALE].сonsumablesWholesaleRetail}</div>
-        <div dangerouslySetInnerHTML={{__html: text}}/>
+        <div
+          className="whitespace-pre-line"
+          dangerouslySetInnerHTML={{__html: text}}
+        />
       </div>
       <Image
         ref={ref2}

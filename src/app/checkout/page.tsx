@@ -1,10 +1,15 @@
-import { ContentContainer } from '@/components/ContentContainer';
 import { collection, getDocs } from '@firebase/firestore';
 import { IConfig, IFirestoreConfigEditorInfo } from '@/app/models';
 import { convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
 import { FirebaseCollections } from '@/app/enums';
 import { CheckoutForm } from '@/components/CheckoutForm';
 import { db } from '@/app/lib/firebase-config';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Оформление заказа',
+  description: 'Расходные материалы в Могилеве'
+};
 
 export default async function CheckoutPage() {
   const firestoreData = await getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME)));

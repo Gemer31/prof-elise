@@ -9,7 +9,12 @@ import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { Loader } from '@/components/Loader';
-import { convertCategoriesDataToModelArray, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
+import {
+  convertCategoriesDataToModelArray,
+  convertConfigDataToModel,
+  convertProductsDataToModelArray,
+  getDocData
+} from '@/utils/firebase.util';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
 import { listAll, ref, StorageReference } from '@firebase/storage';
 import { IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
@@ -60,7 +65,7 @@ export default function EditorPage() {
               {
                 selectedGroup === EditGroup.GENERAL
                   ? <GeneralEditorForm
-                    firebaseData={getDocData<IFirestoreConfigEditorInfo>(firestoreData?.docs, FirebaseCollections.CONFIG)}
+                    firebaseData={convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(firestoreData?.docs, FirebaseCollections.CONFIG)) }
                     refreshData={loadData}
                   />
                   : <></>

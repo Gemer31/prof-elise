@@ -29,7 +29,8 @@ export function convertConfigDataToModel(data: IFirestoreConfigEditorInfo): ICon
     contactPhone: data.contactPhone?.stringValue,
     currency: data.currency?.stringValue,
     workingHours: data.workingHours?.stringValue,
-    shopDescription: data.shopDescription?.stringValue
+    shopDescription: data.shopDescription?.stringValue,
+    deliveryDescription: data.deliveryDescription?.stringValue,
   };
 }
 

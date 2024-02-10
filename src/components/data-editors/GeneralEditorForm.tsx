@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
-import { IFirestoreConfigEditorInfo } from '@/app/models';
+import { IConfig } from '@/app/models';
 import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { db } from '@/app/lib/firebase-config';
@@ -18,11 +18,12 @@ const validationSchema = yup.object().shape({
   phone: yup.string().required('fieldRequired'),
   workingHours: yup.string().required('fieldRequired'),
   currency: yup.string().required('fieldRequired'),
-  shopDescription: yup.string().required('fieldRequired')
+  shopDescription: yup.string().required('fieldRequired'),
+  deliveryDescription: yup.string().required('fieldRequired')
 });
 
 interface GeneralEditorFormProps {
-  firebaseData: IFirestoreConfigEditorInfo;
+  firebaseData: IConfig;
   refreshData?: () => void;
 }
 
@@ -41,10 +42,11 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
 
   useEffect(() => {
     if (firebaseData) {
-      setValue('phone', firebaseData.contactPhone?.stringValue);
-      setValue('workingHours', firebaseData.workingHours?.stringValue);
-      setValue('currency', firebaseData.currency?.stringValue);
-      setValue('shopDescription', firebaseData.shopDescription?.stringValue);
+      setValue('phone', firebaseData.contactPhone);
+      setValue('workingHours', firebaseData.workingHours);
+      setValue('currency', firebaseData.currency);
+      setValue('shopDescription', firebaseData.shopDescription);
+      setValue('deliveryDescription', firebaseData.deliveryDescription);
     }
   }, [firebaseData]);
 
@@ -52,7 +54,8 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
     phone: string,
     workingHours: string,
     currency: string,
-    shopDescription: string
+    shopDescription: string,
+    deliveryDescription: string,
   }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
@@ -60,7 +63,8 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
       workingHours: formData.workingHours,
       currency: formData.currency,
       shopDescription: formData.shopDescription,
-      nextOrderNumber: firebaseData.nextOrderNumber || 1,
+      deliveryDescription: formData.deliveryDescription,
+      nextOrderNumber: firebaseData.nextOrderNumber || 1
     };
     try {
       await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);
@@ -107,6 +111,14 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
         name="shopDescription"
         type="text"
         error={errors.shopDescription?.message}
+        register={register}
+      />
+      <TextareaFormField
+        placeholder={TRANSLATES[LOCALE].addDeliveryDescription}
+        label={TRANSLATES[LOCALE].deliveryDescription}
+        name="deliveryDescription"
+        type="text"
+        error={errors.deliveryDescription?.message}
         register={register}
       />
       <Button

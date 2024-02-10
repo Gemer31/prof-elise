@@ -18,6 +18,7 @@ export interface IConfig {
   currency: string;
   workingHours: string;
   shopDescription: string;
+  deliveryDescription: string;
 }
 
 export interface ICategory {
@@ -83,6 +84,9 @@ export interface IFirestoreConfigEditorInfo {
     stringValue: string;
   };
   shopDescription: {
+    stringValue: string;
+  };
+  deliveryDescription: {
     stringValue: string;
   };
 }

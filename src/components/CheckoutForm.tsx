@@ -76,6 +76,7 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
       workingHours: firestoreConfigData.workingHours,
       currency: firestoreConfigData.currency,
       shopDescription: firestoreConfigData.shopDescription,
+      deliveryDescription: firestoreConfigData.deliveryDescription,
       nextOrderNumber: firestoreConfigData.nextOrderNumber + 1
     });
     dispatch(setCartData({

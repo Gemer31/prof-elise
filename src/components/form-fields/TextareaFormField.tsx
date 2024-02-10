@@ -7,6 +7,7 @@ import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 
 interface ITextareaFormFieldProps {
   required?: boolean;
+  rows?: number;
   placeholder: string;
   error: string | undefined;
   label: string;
@@ -14,7 +15,7 @@ interface ITextareaFormFieldProps {
   register: UseFormRegister<Record<string, unknown>>;
 }
 
-export function TextareaFormField({label, name, register, required, error, placeholder}: ITextareaFormFieldProps) {
+export function TextareaFormField({label, name, register, required, error, placeholder, rows}: ITextareaFormFieldProps) {
   const textareaClass: string = useMemo(() => convertToClass([
     'border-2',
     'bg-custom-gray-100',
@@ -32,7 +33,7 @@ export function TextareaFormField({label, name, register, required, error, place
   return (
     <FormFieldWrapper label={label} error={error} required={required}>
       <textarea
-        rows={5}
+        rows={rows || 5}
         placeholder={placeholder}
         className={textareaClass}
         {...register(name)}
