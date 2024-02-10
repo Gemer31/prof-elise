@@ -25,7 +25,7 @@ const validationSchema = yup.object().shape({
   price: yup.number().required('fieldRequired'),
   description: yup.string().required('fieldRequired'),
   categoryId: yup.string().required('fieldRequired'),
-  images: yup.array().required('fieldRequired'),
+  images: yup.array().required('fieldRequired')
 });
 
 export interface ProductEditorFormProps {
@@ -57,7 +57,13 @@ export function ProductEditorForm({
     resolver: yupResolver(validationSchema)
   });
 
-  const submitForm = async (formData: { title: string, price: number, description: string, categoryId: string, images: StorageReference[] }) => {
+  const submitForm = async (formData: {
+    title: string,
+    price: number,
+    description: string,
+    categoryId: string,
+    images: StorageReference[]
+  }) => {
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData>;
@@ -87,7 +93,7 @@ export function ProductEditorForm({
             price: formData.price,
             description: formData.description,
             categoryId: formData.categoryId,
-            imageUrls: imageUrls,
+            imageUrls: imageUrls
           }
         ]
       };
@@ -95,7 +101,11 @@ export function ProductEditorForm({
 
     try {
       await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
-      dispatch(setNotificationMessage(TRANSLATES[LOCALE].productAdded));
+      dispatch(setNotificationMessage(
+        selectedProduct
+          ? TRANSLATES[LOCALE].infoUpdated
+          : TRANSLATES[LOCALE].productAdded
+      ));
       setSelectedImages(undefined);
       setSelectedCategory(undefined);
       reset();

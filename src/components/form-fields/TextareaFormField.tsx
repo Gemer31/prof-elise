@@ -24,12 +24,15 @@ export function TextareaFormField({label, name, register, required, error, place
     'w-full',
     'px-2.5',
     'py-1',
-    'resize-none'
+    'resize-none',
+    // 'whitespace-pre-wrap',
+    // 'break-words'
   ]), []);
 
   return (
     <FormFieldWrapper label={label} error={error} required={required}>
       <textarea
+        rows={5}
         placeholder={placeholder}
         className={textareaClass}
         {...register(name)}

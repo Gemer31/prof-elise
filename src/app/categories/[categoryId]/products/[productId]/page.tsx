@@ -60,7 +60,7 @@ export default async function ProductDetailsPage({ params: { productId } }: Prod
                 <ProductDetailsActionsBlock product={product}/>
               </div>
             </div>
-            <div className="mt-4">{product?.description}</div>
+            <div className="mt-4" dangerouslySetInnerHTML={{__html: product?.description || ''}}/>
           </div>
         </div>
       </ContentContainer>

@@ -19,11 +19,11 @@ export interface EntityCardProps {
 
 export function EntityCard({category, product, config}: EntityCardProps) {
   const cardClass = convertToClass([
+    product ? 'h-96' : 'h-72',
     'flex',
     'flex-col',
     'items-center',
     'justify-between',
-    'h-96',
     'rounded-lg',
     'p-4',
     'hover:bg-pink-100',

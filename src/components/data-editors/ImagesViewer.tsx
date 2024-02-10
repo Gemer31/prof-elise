@@ -80,29 +80,23 @@ export function ImagesViewer({
       {
         storageData?.length
           ? <>
-            <div className="overflow-auto max-h-72 w-6/12 rounded-md border-pink-500 border-2 px-2 py-1">
+            <div className="overflow-auto max-h-52 w-6/12 rounded-md border-pink-500 border-2 px-2 py-1">
               {
-                storageData?.map((item, index) => (
-                  <>
-                    {index !== 0
-                      ? <div className="border-t-2 rounded-md border-pink-500"/>
-                      : <></>
+                storageData?.map((item) => (
+                  <div
+                    onClick={() => selectImage(item)}
+                    key={item.fullPath}
+                    className={`cursor-pointer flex justify-between items-center px-2 py-1 ${chosenImages[item.name] ? 'rounded-md bg-pink-300' : ''}`}
+                  >
+                    <span>{item.fullPath}</span>
+                    {
+                      editAvailable
+                        ?
+                        <Image onClick={() => deleteImageClick?.(item)} width={30} height={30} src="/icons/cross.svg"
+                               alt="Close"/>
+                        : <></>
                     }
-                    <div
-                      onClick={() => selectImage(item)}
-                      key={item.fullPath}
-                      className={`cursor-pointer flex justify-between items-center px-2 py-1 my-2 ${chosenImages[item.name] ? 'rounded-md bg-pink-300' : ''}`}
-                    >
-                      <span>{item.fullPath}</span>
-                      {
-                        editAvailable
-                          ?
-                          <Image onClick={() => deleteImageClick?.(item)} width={30} height={30} src="/icons/cross.svg"
-                                 alt="Close"/>
-                          : <></>
-                      }
-                    </div>
-                  </>
+                  </div>
                 ))
               }
             </div>

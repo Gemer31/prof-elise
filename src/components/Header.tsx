@@ -119,10 +119,10 @@ export function Header({firestoreConfigData, firestoreProductsData}: HeaderProps
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>
             : <ContentContainer styleClass="flex justify-between items-center pt-4 px-2">
-              <Link className="w-4/12 flex justify-center items-center" href={RouterPath.MAIN}>
+              <Link className="w-3/12 flex justify-center items-center" href={RouterPath.MAIN}>
                 <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>
               </Link>
-              <div className="w-full flex justify-around items-center">
+              <div className="w-8/12 flex justify-between items-center">
                 <div className="uppercase text-center w-20 font-bold">{TRANSLATES[LOCALE].сonsumables}</div>
                 {/*<Search/>*/}
                 <div className="text-center font-bold">

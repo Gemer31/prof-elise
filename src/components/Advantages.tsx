@@ -4,7 +4,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 export function Advantages() {
   return (
     <div className="py-4">
-      <div className="text-xl bold">
+      <div className="text-xl bold text-center mb-1">
         {TRANSLATES[LOCALE].advantages}
       </div>
       <div className="flex items-center">

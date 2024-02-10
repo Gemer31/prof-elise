@@ -29,10 +29,11 @@ export function AboutUs({text}: IAboutUsProps) {
           ref={ref1}
           className="uppercase text-2xl mb-4"
         >{TRANSLATES[LOCALE].сonsumablesWholesaleRetail}</div>
-        <p>{text}</p>
+        <div dangerouslySetInnerHTML={{__html: text}}/>
       </div>
       <Image
         ref={ref2}
+        style={{position: 'relative', top: '1rem'}}
         className={handleInView(inView2, FADE_IN_RIGHT_CLASS)}
         width={400}
         height={400}

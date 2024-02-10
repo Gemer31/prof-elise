@@ -78,6 +78,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     enterAddress: 'Введите адрес',
     comment: 'Комментарий',
     clickCtrlForMultipleSelect: 'Нажмите ctrl для выбора нескольких',
-    orderCreatedSuccessfully: 'Ваш заказ принят. Наши операторы свяжутся с вами'
+    orderCreatedSuccessfully: 'Ваш заказ принят. Наши операторы свяжутся с вами',
+    infoUpdated: 'Информация обновлена',
   }
 }

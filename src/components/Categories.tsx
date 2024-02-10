@@ -7,7 +7,7 @@ import { RouterPath } from '@/app/enums';
 
 interface CategoriesProps {
   categories: ICategory[];
-  currentCategoryId: string | undefined;
+  currentCategoryId?: string | undefined;
 }
 
 export function Categories({ categories, currentCategoryId }: CategoriesProps) {
