@@ -7,13 +7,14 @@ import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 
 interface ITextareaFormFieldProps {
   required?: boolean;
+  placeholder: string;
   error: string | undefined;
   label: string;
   name: string;
   register: UseFormRegister<Record<string, unknown>>;
 }
 
-export function TextareaFormField({label, name, register, required, error}: ITextareaFormFieldProps) {
+export function TextareaFormField({label, name, register, required, error, placeholder}: ITextareaFormFieldProps) {
   const textareaClass: string = useMemo(() => convertToClass([
     'border-2',
     'bg-custom-gray-100',
@@ -29,6 +30,7 @@ export function TextareaFormField({label, name, register, required, error}: ITex
   return (
     <FormFieldWrapper label={label} error={error} required={required}>
       <textarea
+        placeholder={placeholder}
         className={textareaClass}
         {...register(name)}
       />

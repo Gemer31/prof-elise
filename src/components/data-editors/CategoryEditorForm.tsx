@@ -14,7 +14,7 @@ import { uuidv4 } from '@firebase/util';
 import { useAppDispatch } from '@/store/store';
 import { ICategory } from '@/app/models';
 import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
-import { FormField } from '@/components/form-fields/FormField';
+import { InputFormField } from '@/components/form-fields/InputFormField';
 import { db } from '@/app/lib/firebase-config';
 
 const validationSchema = yup.object().shape({
@@ -149,7 +149,9 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
           selectedImages={selectedImage ? [selectedImage] : []}
         />
       </div>
-      <FormField
+      <InputFormField
+        required={true}
+        placeholder={TRANSLATES[LOCALE].enterTitle}
         label={TRANSLATES[LOCALE].title}
         name="title"
         type="text"

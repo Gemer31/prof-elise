@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { useRouter } from 'next/navigation';
 import { ContentContainer } from '@/components/ContentContainer';
-import { FormField } from '@/components/form-fields/FormField';
+import { InputFormField } from '@/components/form-fields/InputFormField';
 import path from 'path';
 import { auth } from '@/app/lib/firebase-config';
 
@@ -64,14 +64,16 @@ export default function ProductDetails() {
           className="flex flex-col items-center w-6/12"
           onSubmit={handleSubmit(submitForm)}
         >
-          <FormField
+          <InputFormField
+            placeholder="E-mail"
             label="E-mail"
             name="email"
             type="text"
             error={errors.email?.message}
             register={register}
           />
-          <FormField
+          <InputFormField
+            placeholder={TRANSLATES[LOCALE].password}
             label={TRANSLATES[LOCALE].password}
             name="password"
             type="text"

@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import path from 'path';
 import { useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { FormField } from '@/components/form-fields/FormField';
+import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 
 const validationSchema = yup.object().shape({
@@ -53,7 +53,8 @@ export function RequestCallPopup() {
         className="flex flex-col items-center"
         onSubmit={handleSubmit(submitForm)}
       >
-        <FormField
+        <InputFormField
+          placeholder={TRANSLATES[LOCALE].enterName}
           label={TRANSLATES[LOCALE].yourName}
           name="name"
           type="text"
@@ -61,6 +62,7 @@ export function RequestCallPopup() {
           register={register}
         />
         <PhoneFormField
+          placeholder={TRANSLATES[LOCALE].enterPhone}
           label={TRANSLATES[LOCALE].phone}
           name="phone"
           type="text"

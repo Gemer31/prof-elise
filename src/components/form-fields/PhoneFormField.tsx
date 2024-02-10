@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useMemo } from 'react';
@@ -9,7 +9,7 @@ import { InputMask } from '@react-input/mask';
 interface IFormField {
   required?: boolean;
   label: string;
-  type: string
+  type: string;
   name: string;
   error: string | undefined;
   register: UseFormRegister<Record<string, unknown>>;
@@ -44,5 +44,5 @@ export function PhoneFormField({label, name, register, type, error, required}: I
           : <></>
       }
     </label>
-  )
+  );
 }

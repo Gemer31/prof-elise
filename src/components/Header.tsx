@@ -5,7 +5,6 @@ import { CartButton } from '@/components/CartButton';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
-import { Search } from '@/components/Search';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { ButtonType, RouterPath } from '@/app/enums';
@@ -75,7 +74,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: HeaderProps
     <>
       <header className="w-full mb-4 flex flex-col items-center">
         <div className="w-full flex justify-center bg-pink-300">
-          <ContentContainer styleClass="px-2">
+          <ContentContainer>
             <nav className="flex justify-between">
               <div className="flex">
                 {
@@ -84,8 +83,11 @@ export function Header({firestoreConfigData, firestoreProductsData}: HeaderProps
                     [RouterPath.DELIVERY, 'delivery'],
                     [RouterPath.CONTACTS, 'contacts']
                   ].map(([path, translateCode]) => (
-                    <Link key={path} className={getNavigationLinkClass(path)}
-                          href={path}>{TRANSLATES[LOCALE][translateCode]}</Link>
+                    <Link
+                      key={path}
+                      className={getNavigationLinkClass(path)}
+                      href={path}
+                    >{TRANSLATES[LOCALE][translateCode]}</Link>
                   ))
                 }
               </div>
@@ -117,21 +119,23 @@ export function Header({firestoreConfigData, firestoreProductsData}: HeaderProps
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>
             : <ContentContainer styleClass="flex justify-between items-center pt-4 px-2">
-              <Link href="/">
-                <Image className="rounded-full" width={100} height={100} src="/images/logo.jpg" alt="Instagram"/>
+              <Link className="w-4/12 flex justify-center items-center" href={RouterPath.MAIN}>
+                <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>
               </Link>
-              <div className="uppercase text-center w-20">{TRANSLATES[LOCALE].сonsumables}</div>
-              <Search/>
-              <div className="text-center">
-                <a
-                  href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
-                <div>{firestoreConfigData?.workingHours}</div>
+              <div className="w-full flex justify-around items-center">
+                <div className="uppercase text-center w-20 font-bold">{TRANSLATES[LOCALE].сonsumables}</div>
+                {/*<Search/>*/}
+                <div className="text-center font-bold">
+                  <a
+                    href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
+                  <div>{firestoreConfigData?.workingHours}</div>
+                </div>
+                <Button
+                  styleClass="uppercase text-amber-50 px-4 py-2"
+                  type={ButtonType.BUTTON}
+                  callback={() => dispatch(setRequestCallPopupVisible(true))}
+                >{TRANSLATES[LOCALE].requestCall}</Button>
               </div>
-              <Button
-                styleClass="uppercase text-amber-50 px-4 py-2"
-                type={ButtonType.BUTTON}
-                callback={() => dispatch(setRequestCallPopupVisible(true))}
-              >{TRANSLATES[LOCALE].requestCall}</Button>
             </ContentContainer>
         }
       </header>

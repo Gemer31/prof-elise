@@ -15,9 +15,10 @@ import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { uuidv4 } from '@firebase/util';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
-import { FormField } from '@/components/form-fields/FormField';
+import { InputFormField } from '@/components/form-fields/InputFormField';
 import { db } from '@/app/lib/firebase-config';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
+import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),
@@ -180,24 +181,27 @@ export function ProductEditorForm({
           deleteProductClick={deleteProduct}
         />
       </div>
-      <FormField
+      <InputFormField
         required={true}
+        placeholder={TRANSLATES[LOCALE].enterTitle}
         label={TRANSLATES[LOCALE].title}
         name="title"
         type="text"
         error={errors.title?.message}
         register={register}
       />
-      <FormField
+      <InputFormField
         required={true}
+        placeholder={TRANSLATES[LOCALE].enterPrice}
         label={TRANSLATES[LOCALE].price}
         name="price"
         type="text"
         error={errors.price?.message}
         register={register}
       />
-      <FormField
+      <TextareaFormField
         required={true}
+        placeholder={TRANSLATES[LOCALE].enterDescription}
         label={TRANSLATES[LOCALE].description}
         name="description"
         type="text"

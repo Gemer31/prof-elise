@@ -17,7 +17,7 @@ export function Categories({ categories, currentCategoryId }: CategoriesProps) {
         categories.map((category) => {
           return (
             <Link
-              className="flex items-center relative w-full h-10 categories-item duration-500 transition-colors hover:bg-pink-100 px-4"
+              className="flex items-center relative w-full categories-item duration-500 transition-colors hover:bg-pink-100 px-4 py-3"
               key={category.id}
               href={RouterPath.CATEGORIES + '/' + category.id}
             >

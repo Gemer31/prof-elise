@@ -5,8 +5,9 @@ import { useMemo } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 
-interface IFormFieldProps {
+interface IInputFormFieldProps {
   required?: boolean;
+  placeholder: string;
   label: string;
   type: string;
   name: string;
@@ -14,7 +15,7 @@ interface IFormFieldProps {
   register: UseFormRegister<Record<string, unknown>>;
 }
 
-export function FormField({label, name, register, type, error, required}: IFormFieldProps) {
+export function InputFormField({label, name, register, type, error, required, placeholder}: IInputFormFieldProps) {
   const inputClass: string = useMemo(() => convertToClass([
     'border-2',
     'bg-custom-gray-100',
@@ -30,6 +31,7 @@ export function FormField({label, name, register, type, error, required}: IFormF
     <FormFieldWrapper label={label} error={error} required={required}>
       <input
         className={inputClass}
+        placeholder={placeholder}
         type={type}
         {...register(name)}
       />

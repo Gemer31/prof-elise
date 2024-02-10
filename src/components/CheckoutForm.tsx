@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { FormField } from '@/components/form-fields/FormField';
+import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 import path from 'path';
@@ -99,16 +99,18 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
       className="flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
-      <FormField
+      <InputFormField
         required={true}
+        placeholder={TRANSLATES[LOCALE].enterName}
         label={TRANSLATES[LOCALE].name}
         name="name"
         type="text"
         error={errors.name?.message}
         register={register}
       />
-      <FormField
+      <InputFormField
         required={true}
+        placeholder="E-mail"
         label="E-mail"
         name="email"
         type="text"
@@ -117,14 +119,16 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
       />
       <PhoneFormField
         required={true}
+        placeholder={TRANSLATES[LOCALE].enterPhone}
         label={TRANSLATES[LOCALE].phone}
         type="text"
         name="phone"
         error={errors.phone?.message}
         register={register}
       />
-      <FormField
+      <InputFormField
         required={true}
+        placeholder={TRANSLATES[LOCALE].enterAddress}
         label={TRANSLATES[LOCALE].address}
         name="address"
         type="text"
@@ -132,6 +136,7 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <TextareaFormField
+        placeholder={TRANSLATES[LOCALE].enterAddress}
         label={TRANSLATES[LOCALE].comment}
         name="comment"
         register={register}

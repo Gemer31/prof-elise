@@ -9,9 +9,10 @@ import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { IFirestoreConfigEditorInfo } from '@/app/models';
-import { FormField } from '@/components/form-fields/FormField';
+import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { db } from '@/app/lib/firebase-config';
+import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 
 const validationSchema = yup.object().shape({
   phone: yup.string().required('fieldRequired'),
@@ -84,21 +85,24 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
         error={errors.phone?.message}
         register={register}
       />
-      <FormField
+      <InputFormField
+        placeholder={TRANSLATES[LOCALE].enterCurrency}
         label={TRANSLATES[LOCALE].currency}
         name="currency"
         type="text"
         error={errors.currency?.message}
         register={register}
       />
-      <FormField
+      <InputFormField
+        placeholder={TRANSLATES[LOCALE].enterWorkingHours}
         label={TRANSLATES[LOCALE].workingHours}
         name="workingHours"
         type="text"
         error={errors.workingHours?.message}
         register={register}
       />
-      <FormField
+      <TextareaFormField
+        placeholder={TRANSLATES[LOCALE].enterMainShopInfo}
         label={TRANSLATES[LOCALE].mainShopInfo}
         name="shopDescription"
         type="text"
