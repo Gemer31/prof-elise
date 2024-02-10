@@ -12,7 +12,7 @@ interface IInputFormFieldProps {
   type: string;
   name: string;
   error: string | undefined;
-  register: UseFormRegister<Record<string, unknown>>;
+  register: unknown;
 }
 
 export function InputFormField({label, name, register, type, error, required, placeholder}: IInputFormFieldProps) {
@@ -33,7 +33,7 @@ export function InputFormField({label, name, register, type, error, required, pl
         className={inputClass}
         placeholder={placeholder}
         type={type}
-        {...register(name)}
+        {...(register as UseFormRegister<Record<string, unknown>>)(name)}
       />
     </FormFieldWrapper>
   );

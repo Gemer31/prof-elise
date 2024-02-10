@@ -12,7 +12,7 @@ interface ITextareaFormFieldProps {
   error: string | undefined;
   label: string;
   name: string;
-  register: UseFormRegister<Record<string, unknown>>;
+  register: unknown;
 }
 
 export function TextareaFormField({label, name, register, required, error, placeholder, rows}: ITextareaFormFieldProps) {
@@ -26,8 +26,6 @@ export function TextareaFormField({label, name, register, required, error, place
     'px-2.5',
     'py-1',
     'resize-none',
-    // 'whitespace-pre-wrap',
-    // 'break-words'
   ]), []);
 
   return (
@@ -36,7 +34,7 @@ export function TextareaFormField({label, name, register, required, error, place
         rows={rows || 5}
         placeholder={placeholder}
         className={textareaClass}
-        {...register(name)}
+        {...(register as UseFormRegister<Record<string, unknown>>)(name)}
       />
     </FormFieldWrapper>
   );

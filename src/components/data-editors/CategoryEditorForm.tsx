@@ -156,7 +156,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
         name="title"
         type="text"
         error={errors.title?.message}
-        register={register}
+        register={register as unknown}
       />
       {
         firestoreCategories?.length

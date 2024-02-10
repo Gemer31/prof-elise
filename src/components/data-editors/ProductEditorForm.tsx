@@ -214,7 +214,6 @@ export function ProductEditorForm({
         placeholder={TRANSLATES[LOCALE].enterDescription}
         label={TRANSLATES[LOCALE].description}
         name="description"
-        type="text"
         error={errors.description?.message}
         register={register}
       />

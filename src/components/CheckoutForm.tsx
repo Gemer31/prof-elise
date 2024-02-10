@@ -120,7 +120,6 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
       />
       <PhoneFormField
         required={true}
-        placeholder={TRANSLATES[LOCALE].enterPhone}
         label={TRANSLATES[LOCALE].phone}
         type="text"
         name="phone"
@@ -137,9 +136,11 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <TextareaFormField
-        placeholder={TRANSLATES[LOCALE].enterAddress}
+        required={true}
+        placeholder={TRANSLATES[LOCALE].comment}
         label={TRANSLATES[LOCALE].comment}
         name="comment"
+        error={errors.comment?.message}
         register={register}
       />
       <FormFieldWrapper label={TRANSLATES[LOCALE].order}>

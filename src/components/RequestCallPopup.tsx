@@ -62,7 +62,6 @@ export function RequestCallPopup() {
           register={register}
         />
         <PhoneFormField
-          placeholder={TRANSLATES[LOCALE].enterPhone}
           label={TRANSLATES[LOCALE].phone}
           name="phone"
           type="text"

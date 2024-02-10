@@ -109,7 +109,6 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
         placeholder={TRANSLATES[LOCALE].enterMainShopInfo}
         label={TRANSLATES[LOCALE].mainShopInfo}
         name="shopDescription"
-        type="text"
         error={errors.shopDescription?.message}
         register={register}
       />
@@ -117,7 +116,6 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
         placeholder={TRANSLATES[LOCALE].addDeliveryDescription}
         label={TRANSLATES[LOCALE].deliveryDescription}
         name="deliveryDescription"
-        type="text"
         error={errors.deliveryDescription?.message}
         register={register}
       />

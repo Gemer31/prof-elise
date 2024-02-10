@@ -12,7 +12,7 @@ interface IFormField {
   type: string;
   name: string;
   error: string | undefined;
-  register: UseFormRegister<Record<string, unknown>>;
+  register: unknown;
 }
 
 export function PhoneFormField({label, name, register, type, error, required}: IFormField) {
@@ -36,7 +36,7 @@ export function PhoneFormField({label, name, register, type, error, required}: I
         replacement={{_: /\d/}}
         className={inputClass}
         type={type}
-        {...register(name)}
+        {...(register as UseFormRegister<Record<string, unknown>>)(name)}
       />
       {
         error
