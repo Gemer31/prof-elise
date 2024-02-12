@@ -76,6 +76,9 @@ input::-webkit-inner-spin-button {
     border-bottom: solid 1px rgb(209 213 219);
 }
 
+.no-paddings {
+    padding: 0 !important;
+}
 /*cart table*/
 td {
     padding: .5rem;

@@ -32,7 +32,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
 }
 
 export async function GET(request: NextRequest) {
-    const session = cookies().get("session")?.value || "";
+    let session = cookies().get("session")?.value || "";
+
+    if (session === 'undefined') {
+        session = "";
+    }
 
     if (!session) {
         return NextResponse.json({ isLogged: false }, { status: 401 });

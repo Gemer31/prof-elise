@@ -15,7 +15,7 @@ export default async function DeliveryPage() {
   ));
 
   return (
-    <main className="w-full ql-editor">
+    <main className="w-full ql-editor no-paddings">
       <ContentContainer>
         <div
           className="whitespace-pre-line"

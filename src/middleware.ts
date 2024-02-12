@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     return NextResponse.redirect(new URL(RouterPath.MAIN, request.url));
   }
 
-  const responseAPI = await fetch('http://localhost:3000/api/login', {
+  const responseAPI = await fetch(`${process.env.APP_SERVER_ENDPOINT}/api/login`, {
     headers: {
       Cookie: `session=${session?.value}`,
     },
