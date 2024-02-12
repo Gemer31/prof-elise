@@ -77,3 +77,9 @@ export function convertProductsDataToModelArray(data: IFirestoreFields): IProduc
     };
   }) || [];
 }
+
+export function converImageUrlsToGallery(imgs: string[]): { original: string }[] {
+  return imgs.map((imgUrl) => ({
+    original: imgUrl,
+  }));
+}

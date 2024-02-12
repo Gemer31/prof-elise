@@ -1,11 +1,11 @@
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
 import { Categories } from '@/components/Categories';
 import { Advantages } from '@/components/Advantages';
-import Image from 'next/image';
 import { FirebaseCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
 import { listAll, ref } from '@firebase/storage';
 import {
+  converImageUrlsToGallery,
   convertCategoriesDataToModelArray,
   convertConfigDataToModel,
   convertProductsDataToModelArray,
@@ -14,6 +14,8 @@ import {
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
 import { db, storage } from '@/app/lib/firebase-config';
+import ImageGallery from 'react-image-gallery';
+import { ImgGallery } from '@/components/ImgGallery';
 
 export interface ProductDetailsProps {
   params: {
@@ -38,6 +40,7 @@ export default async function ProductDetailsPage({ params: { productId } }: Prod
     firestoreData.docs,
     FirebaseCollections.CONFIG
   ));
+  const galleryImages = converImageUrlsToGallery(product?.imageUrls || []);
 
   // todo: redirect if not found
   return (
@@ -50,9 +53,7 @@ export default async function ProductDetailsPage({ params: { productId } }: Prod
           </div>
           <div className="w-full">
             <div className="w-full flex">
-              <div>
-                <Image width={500} height={500} src={product?.imageUrls?.[0] || ''} alt={product?.title || ''}/>
-              </div>
+              <ImgGallery imageUrls={product?.imageUrls}/>
               <div className="w-full ml-4">
                 <div className="mb-4 text-2xl bold text-center">{product?.title}</div>
                 <div

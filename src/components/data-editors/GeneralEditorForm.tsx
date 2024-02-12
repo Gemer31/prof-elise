@@ -12,7 +12,6 @@ import { IConfig } from '@/app/models';
 import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { db } from '@/app/lib/firebase-config';
-import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import 'react-quill/dist/quill.snow.css';
 import { TextEditor } from '@/components/data-editors/TextEditor';

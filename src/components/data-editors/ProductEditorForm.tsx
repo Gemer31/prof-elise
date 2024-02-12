@@ -81,9 +81,9 @@ export function ProductEditorForm({
             price: formData.price,
             description: formData.description,
             categoryId: formData.categoryId,
-            imageUrls: imageUrls
+            imageUrls: imageUrls,
           } : product;
-        })
+        }),
       };
     } else {
       data = {
@@ -95,9 +95,9 @@ export function ProductEditorForm({
             price: formData.price,
             description: formData.description,
             categoryId: formData.categoryId,
-            imageUrls: imageUrls
-          }
-        ]
+            imageUrls: imageUrls,
+          },
+        ],
       };
     }
 
