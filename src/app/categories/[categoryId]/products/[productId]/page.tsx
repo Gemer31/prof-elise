@@ -14,7 +14,6 @@ import {
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
 import { db, storage } from '@/app/lib/firebase-config';
-import ImageGallery from 'react-image-gallery';
 import { ImgGallery } from '@/components/ImgGallery';
 
 export interface ProductDetailsProps {

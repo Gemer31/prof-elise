@@ -26,7 +26,7 @@ export default async function RootLayout({children, params}: {
   const [firestoreData, storageData, loginCheckResponse] = await Promise.all([
     getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
     listAll(ref(storage)),
-    fetch('http://localhost:3000/api/login', {
+    fetch(`${process.env.APP_SERVER_ENDPOINT}/api/login`, {
       headers: {
         Cookie: `session=${cookies().get('session')?.value}`
       }
