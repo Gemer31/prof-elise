@@ -16,7 +16,7 @@ export function getDocData<T>(docs: Array<QueryDocumentSnapshot> | undefined, do
   const doc: IFirebaseDocumentModel | undefined = typedDocs
     ?.find((doc) => doc._document.key.path.segments.at(-1) === docName);
 
-  return doc?._document.data.value.mapValue.fields as T;
+  return doc?._document.data?.value.mapValue.fields as T;
 }
 
 export function getStorageImageSrc(image: StorageReference | undefined): string {
@@ -25,12 +25,12 @@ export function getStorageImageSrc(image: StorageReference | undefined): string 
 
 export function convertConfigDataToModel(data: IFirestoreConfigEditorInfo): IConfig {
   return {
-    nextOrderNumber: Number(data.nextOrderNumber?.integerValue),
-    contactPhone: data.contactPhone?.stringValue,
-    currency: data.currency?.stringValue,
-    workingHours: data.workingHours?.stringValue,
-    shopDescription: data.shopDescription?.stringValue,
-    deliveryDescription: data.deliveryDescription?.stringValue,
+    nextOrderNumber: Number(data?.nextOrderNumber?.integerValue),
+    contactPhone: data?.contactPhone?.stringValue,
+    currency: data?.currency?.stringValue,
+    workingHours: data?.workingHours?.stringValue,
+    shopDescription: data?.shopDescription?.stringValue,
+    deliveryDescription: data?.deliveryDescription?.stringValue,
   };
 }
 

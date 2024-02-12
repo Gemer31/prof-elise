@@ -19,6 +19,7 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { db } from '@/app/lib/firebase-config';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
+import { TextEditor } from '@/components/data-editors/TextEditor';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),
@@ -43,6 +44,7 @@ export function ProductEditorForm({
                                   }: ProductEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [description, setDescription] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<IProduct>();
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
   const [selectedImages, setSelectedImages] = useState<StorageReference[] | undefined>();
@@ -162,6 +164,7 @@ export function ProductEditorForm({
       setValue('categoryId', newProduct.categoryId);
       setValue('images', productImages);
 
+      setDescription(newProduct.description);
       setSelectedCategory(productCategory);
       setSelectedImages(productImages);
     } else {
@@ -171,11 +174,17 @@ export function ProductEditorForm({
       setValue('categoryId', '');
       setValue('images', []);
 
+      setDescription('');
       setSelectedCategory(undefined);
       setSelectedImages(undefined);
     }
     setSelectedProduct(newProduct);
   };
+
+  const descriptionChange = (newValue: string) => {
+    setValue('description', newValue);
+    setDescription(newValue);
+  }
 
   return (
     <form
@@ -184,7 +193,6 @@ export function ProductEditorForm({
     >
       <div className="pb-4">
         <ProductsViewer
-          editAvailable={true}
           selectedProduct={selectedProduct}
           firestoreProducts={firestoreProducts}
           selectProductClick={changeProduct}
@@ -209,14 +217,17 @@ export function ProductEditorForm({
         error={errors.price?.message}
         register={register}
       />
-      <TextareaFormField
-        required={true}
-        placeholder={TRANSLATES[LOCALE].enterDescription}
+      <FormFieldWrapper
         label={TRANSLATES[LOCALE].description}
-        name="description"
+        required={true}
         error={errors.description?.message}
-        register={register}
-      />
+      >
+        <TextEditor
+          placeholder={TRANSLATES[LOCALE].enterDescription}
+          value={description}
+          onChange={descriptionChange}
+        />
+      </FormFieldWrapper>
       <FormFieldWrapper
         required={true}
         label={TRANSLATES[LOCALE].category}

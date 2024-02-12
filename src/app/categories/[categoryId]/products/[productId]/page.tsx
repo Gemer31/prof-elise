@@ -60,7 +60,7 @@ export default async function ProductDetailsPage({ params: { productId } }: Prod
                 <ProductDetailsActionsBlock product={product}/>
               </div>
             </div>
-            <div className="mt-4 whitespace-pre-line" dangerouslySetInnerHTML={{__html: product?.description || ''}}/>
+            <div className="mt-4 ql-editor whitespace-pre-line" dangerouslySetInnerHTML={{__html: product?.description || ''}}/>
           </div>
         </div>
       </ContentContainer>

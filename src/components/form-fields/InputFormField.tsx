@@ -18,10 +18,8 @@ interface IInputFormFieldProps {
 export function InputFormField({label, name, register, type, error, required, placeholder}: IInputFormFieldProps) {
   const inputClass: string = useMemo(() => convertToClass([
     'border-2',
-    'bg-custom-gray-100',
     'rounded-md',
     'mt-1',
-    'field-input',
     'w-full',
     'px-2.5',
     'py-1'

@@ -18,10 +18,8 @@ interface ITextareaFormFieldProps {
 export function TextareaFormField({label, name, register, required, error, placeholder, rows}: ITextareaFormFieldProps) {
   const textareaClass: string = useMemo(() => convertToClass([
     'border-2',
-    'bg-custom-gray-100',
     'rounded-md',
     'mt-1',
-    'field-input',
     'w-full',
     'px-2.5',
     'py-1',

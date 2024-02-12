@@ -13,6 +13,9 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { db } from '@/app/lib/firebase-config';
 import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
+import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
+import 'react-quill/dist/quill.snow.css';
+import { TextEditor } from '@/components/data-editors/TextEditor';
 
 const validationSchema = yup.object().shape({
   phone: yup.string().required('fieldRequired'),
@@ -29,6 +32,8 @@ interface GeneralEditorFormProps {
 
 export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorFormProps) {
   const dispatch = useAppDispatch();
+  const [shopDescription, setShopDescription] = useState('');
+  const [deliveryDescription, setDeliveryDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -47,6 +52,8 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
       setValue('currency', firebaseData.currency);
       setValue('shopDescription', firebaseData.shopDescription);
       setValue('deliveryDescription', firebaseData.deliveryDescription);
+      setShopDescription(firebaseData.shopDescription);
+      setDeliveryDescription(firebaseData.deliveryDescription);
     }
   }, [firebaseData]);
 
@@ -77,6 +84,16 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
     }
   };
 
+  const deliveryDescriptionChange = (newValue: string) => {
+    setValue('deliveryDescription', newValue);
+    setDeliveryDescription(newValue);
+  }
+
+  const shopDescriptionChange = (newValue: string) => {
+    setValue('shopDescription', newValue);
+    setShopDescription(newValue);
+  }
+
   return (
     <form
       className="flex flex-col"
@@ -105,20 +122,28 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
         error={errors.workingHours?.message}
         register={register}
       />
-      <TextareaFormField
-        placeholder={TRANSLATES[LOCALE].enterMainShopInfo}
+      <FormFieldWrapper
         label={TRANSLATES[LOCALE].mainShopInfo}
-        name="shopDescription"
+        required={true}
         error={errors.shopDescription?.message}
-        register={register}
-      />
-      <TextareaFormField
-        placeholder={TRANSLATES[LOCALE].addDeliveryDescription}
+      >
+        <TextEditor
+          placeholder={TRANSLATES[LOCALE].enterMainShopInfo}
+          value={shopDescription}
+          onChange={shopDescriptionChange}
+        />
+      </FormFieldWrapper>
+      <FormFieldWrapper
         label={TRANSLATES[LOCALE].deliveryDescription}
-        name="deliveryDescription"
+        required={true}
         error={errors.deliveryDescription?.message}
-        register={register}
-      />
+      >
+        <TextEditor
+          placeholder={TRANSLATES[LOCALE].addDeliveryDescription}
+          value={deliveryDescription}
+          onChange={deliveryDescriptionChange}
+        />
+      </FormFieldWrapper>
       <Button
         styleClass="text-amber-50 w-full py-2"
         disabled={isLoading}

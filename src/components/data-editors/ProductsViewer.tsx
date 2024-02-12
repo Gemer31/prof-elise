@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ICategory, IProduct } from '@/app/models';
+import { IProduct } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
@@ -7,14 +7,12 @@ import { convertToClass } from '@/utils/convert-to-class.util';
 interface CategoriesViewerProps {
   selectedProduct?: IProduct | undefined;
   firestoreProducts: IProduct[];
-  editAvailable?: boolean;
   deleteProductClick?: (product: IProduct) => void;
   selectProductClick?: (product: IProduct | undefined) => void;
 }
 
 export function ProductsViewer({
                                  firestoreProducts,
-                                 editAvailable,
                                  selectProductClick,
                                  deleteProductClick,
                                  selectedProduct
@@ -56,13 +54,8 @@ export function ProductsViewer({
             className={`${itemClass} ${chosenCategory?.id === item.id ? 'rounded-md bg-pink-300' : ''}`}
           >
             <span>{item.title}</span>
-            {
-              editAvailable
-                ?
-                <Image onClick={() => deleteProductClick?.(item)} width={30} height={30} src="/icons/cross.svg"
-                       alt="Close"/>
-                : <></>
-            }
+            <Image onClick={() => deleteProductClick?.(item)} width={30} height={30} src="/icons/cross.svg"
+                   alt="Close"/>
           </div>
         ))
       }
