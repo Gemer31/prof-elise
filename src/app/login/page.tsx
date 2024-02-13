@@ -51,6 +51,7 @@ export default function ProductDetails() {
         router.push(RouterPath.EDITOR);
       }
     } catch (err) {
+      console.error("Login failed: ", err);
       setIsLoginError(true);
     } finally {
       setIsLoading(false);
