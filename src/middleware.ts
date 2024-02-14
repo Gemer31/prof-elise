@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   const session = request.cookies.get("session");
 
   if (!session && request.nextUrl.pathname === RouterPath.EDITOR) {
-    return NextResponse.redirect(new URL(RouterPath.MAIN, request.url));
+    return NextResponse.redirect(new URL(RouterPath.HOME, request.url));
   }
 
   const responseAPI = await fetch(`${process.env.APP_SERVER_ENDPOINT}/api/login`, {
@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   });
 
   if (responseAPI.status !== 200 && request.nextUrl.pathname === RouterPath.EDITOR) {
-    return NextResponse.redirect(new URL(RouterPath.MAIN, request.url));
+    return NextResponse.redirect(new URL(RouterPath.HOME, request.url));
   }
   if (responseAPI.status === 200 && request.nextUrl.pathname === RouterPath.LOGIN) {
     return NextResponse.redirect(new URL(RouterPath.EDITOR, request.url));

@@ -4,7 +4,7 @@ export enum ButtonType {
 }
 
 export enum RouterPath {
-  MAIN = '/',
+  HOME = '/',
   DELIVERY = '/delivery',
   CONTACTS = '/contacts',
   LOGIN = '/login',

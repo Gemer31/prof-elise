@@ -21,7 +21,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     enterPhone: 'Введите телефон',
     search: 'Поиск',
     requestCallSended: 'Наши операторы свяжутся с вами',
-    advantages: 'Преимущества',
+    ourAdvantages: 'Наши преимущества',
     deliveryAdvantage: 'Бесплатная доставка по Могилеву при заказе от 80р',
     intoCart: 'В корзину',
     amount: 'Количество',

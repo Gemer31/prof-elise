@@ -12,7 +12,7 @@ interface CategoriesProps {
 
 export function Categories({ categories, currentCategoryId }: CategoriesProps) {
   return (
-    <div>
+    <div className="hidden md:block">
       {
         categories.map((category) => {
           return (

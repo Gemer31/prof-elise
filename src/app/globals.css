@@ -64,6 +64,19 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.animate__animated.animate__delay-500ms {
+    animation-delay: .5s;
+}
+.animate__animated.animate__delay-1000ms {
+    animation-delay: 1s;
+}
+.animate__animated.animate__delay-1500ms {
+    animation-delay: 1.5s;
+}
+.animate__animated.animate__delay-2000ms {
+    animation-delay: 2s;
+}
+
 .important-hidden {
     display: none !important;
 }

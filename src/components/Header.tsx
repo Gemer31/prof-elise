@@ -59,7 +59,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProp
     'transition-colors',
   ]), []);
   const siteLinks: string[][] = useMemo(() => ([
-    [RouterPath.MAIN, 'main'],
+    [RouterPath.HOME, 'main'],
     [RouterPath.DELIVERY, 'delivery'],
     [RouterPath.CONTACTS, 'contacts']
   ]), []);
@@ -81,7 +81,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProp
       method: 'POST'
     });
     if (response.status === 200 && pathname === RouterPath.EDITOR) {
-      router.push(RouterPath.MAIN);
+      router.push(RouterPath.HOME);
     }
   };
 
