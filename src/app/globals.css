@@ -125,3 +125,90 @@ tbody > tr {
 .gallery-small .image-gallery-right-nav{
     transform: translateY(-50%) scale(.4)
 }
+
+
+/*burger button*/
+.burger-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.burger-container .burger-checkbox {
+    display: block;
+    height: 30px;
+    width: 32px;
+    z-index: 30;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.burger-container .burger-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 26px;
+    width: 32px;
+    position: absolute;
+    z-index: 20;
+}
+
+.burger-container .burger-lines div {
+    height: 4px;
+    width: 100%;
+    background: black;
+}
+
+.burger-container .burger-lines .line1 {
+    transform-origin: 0 0;
+    transition: all 0.4s ease-in-out;
+}
+
+.burger-container .burger-lines .line2 {
+    transition: all 0.2s ease-in-out;
+}
+
+.burger-container .burger-lines .line3 {
+    transform-origin: 0 100%;
+    transition: all 0.4s ease-in-out;
+}
+
+.burger-container input[type="checkbox"]:checked ~ .aside-nav-items {
+    transform: translateX(0);
+}
+
+.burger-container input[type="checkbox"]:checked ~ .burger-lines div {
+    background: white;
+}
+
+.burger-container input[type="checkbox"]:checked ~ .burger-lines .line1 {
+    transform: rotate(45deg);
+}
+
+.burger-container input[type="checkbox"]:checked ~ .burger-lines .line2 {
+    transform: scaleY(0);
+}
+
+.burger-container input[type="checkbox"]:checked ~ .burger-lines .line3 {
+    transform: rotate(-45deg);
+}
+
+.burger-container input[type="checkbox"]:checked ~ .aside-nav-items {
+    transform: translateX(0);
+}
+
+.aside-nav-items {
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(0, 0, 0, .7);
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transform: translate(-150%);
+    transition: transform 0.5s ease-in-out;
+}

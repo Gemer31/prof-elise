@@ -12,6 +12,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { usePathname } from 'next/navigation';
 import { IConfig } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
+import { useMemo } from 'react';
 
 export interface FooterProps {
   firestoreConfigData?: IConfig;
@@ -20,7 +21,7 @@ export interface FooterProps {
 export function Footer({ firestoreConfigData }: FooterProps) {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-  const instagramClass: string = convertToClass([
+  const instagramClass: string = useMemo(() => convertToClass([
     'flex',
     'justify-center',
     'items-center',
@@ -33,7 +34,19 @@ export function Footer({ firestoreConfigData }: FooterProps) {
     'hover:bg-pink-100',
     'duration-500',
     'transition-colors'
-  ]);
+  ]), []);
+  const infoClass: string = useMemo(() => convertToClass([
+    'flex',
+    'flex-col sm:flex-row',
+    'justify-between',
+    'pt-4',
+  ]), []);
+  const buttonsClass: string = useMemo(() => convertToClass([
+    'flex',
+    'flex-row-reverse sm:flex-col',
+    'justify-around',
+    'items-center',
+  ]), []);
 
   return (
     <footer className="w-full mt-4 flex justify-center bg-pink-300">
@@ -41,19 +54,19 @@ export function Footer({ firestoreConfigData }: FooterProps) {
         {
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>
-            : <div className="flex justify-between pt-4">
-              <div>
-                <h2 className="text-xl mb-4">Информация</h2>
+            : <div className={infoClass}>
+              <div className="mb-4 sm:mb-0">
+                <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].information}</h2>
                 <div>
                   <Link className="" href="/delivery">{TRANSLATES[LOCALE].delivery}</Link>
                 </div>
               </div>
-              <div>
-                <h2 className="text-xl mb-4">Контакты</h2>
+              <div className="mb-4 sm:mb-0">
+                <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].contacts}</h2>
                 <a href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}
                 >{firestoreConfigData?.contactPhone}</a>
               </div>
-              <div className="flex flex-col items-center">
+              <div className={buttonsClass}>
                 <Button
                   styleClass="uppercase text-amber-50 px-4 py-2"
                   type={ButtonType.BUTTON}

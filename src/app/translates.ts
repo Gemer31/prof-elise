@@ -3,6 +3,7 @@ export const LOCALE: string = 'ru';
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
     сonsumables: 'Расходные материалы',
+    disposableConsumables: 'Одноразовые расходные материалы',
     сonsumablesWholesaleRetail: 'Расходные материалы оптом и в розницу',
     main: 'Главная',
     general: 'Основное',
@@ -31,6 +32,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     fieldInvalid: 'Неверное значение',
     editor: 'Редактор',
     save: 'Сохранить',
+    information: 'Информация',
     mainShopInfo: 'Основная информация о магазине',
     enterMainShopInfo: 'Введите информацию о магазине',
     infoSaved: 'Информация сохранена',

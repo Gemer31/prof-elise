@@ -64,7 +64,7 @@ export function EntityCard({category, product, config}: EntityCardProps) {
         src={category?.imageUrl || product?.imageUrls?.[0] || ''}
         alt={category?.title || product?.title || ''}
       />
-      <div className={`text-center mt-2 ${product ? 'text-base' : 'text-lg'}`}>{category?.title || product?.title}</div>
+      <h3 className={`text-center mt-2 min-h-16 ${product ? 'text-base' : 'text-lg'}`}>{category?.title || product?.title}</h3>
       {
         product
           ? (

@@ -11,6 +11,7 @@ import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
 import { convertConfigDataToModel, convertProductsDataToModelArray, getDocData } from '@/utils/firebase.util';
 import { FirebaseCollections } from '@/app/enums';
+import { SubHeader } from '@/components/SubHeader';
 
 export interface LayoutProps extends CommonProps{
   firestoreDocsData?: Array<QueryDocumentSnapshot>;
@@ -35,6 +36,7 @@ export function Layout({ children, firestoreDocsData }: LayoutProps) {
       {requestCallPopupVisible ? <RequestCallPopup/> : <></>}
       <Notification/>
       <Header firestoreConfigData={config} firestoreProductsData={products}/>
+      <SubHeader firestoreConfigData={config}/>
       <ContentContainer styleClass="w-full flex justify-start px-2">
         {children}
       </ContentContainer>
