@@ -45,7 +45,8 @@ export default async function CategoriesOrProductsPage({params: {categoryId}}: C
     <div className="">
       <Breadcrumbs category={currentCategory}/>
       <div className="w-full flex justify-between">
-        <div className="w-full hidden md:block md:w-4/12 mr-4">
+        {/*<div className="w-full  md:w-4/12 mr-4">*/}
+          <div className="w-full md:w-4/12 mr-4">
           <Categories categories={categories} currentCategoryId={categoryId}/>
           <Advantages/>
         </div>

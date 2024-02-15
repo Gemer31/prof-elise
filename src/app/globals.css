@@ -233,3 +233,74 @@ tbody > tr {
     transform: translate(-150%);
     transition: transform 0.5s ease-in-out;
 }
+
+.aside-nav-categories {
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(0, 0, 0, .7);
+    transform: translate(-300px);
+    transition: transform 0.5s ease-in-out;
+}
+
+.aside-nav-categories-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    cursor: pointer;
+    background: rgba(0, 0, 0, .7);
+    top: 40vh;
+    right: -56px;
+    /*padding: 0.25rem;*/
+}
+
+.aside-nav-categories-button-icon {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 40vh;
+    left: 0;
+    max-width: 42px;
+    height: 42px;
+    width: 42px;
+    border-radius: 0 0.375rem 0.375rem 0;
+    background: rgba(0, 0, 0, .7);
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.categories-checkbox {
+    position: absolute;
+    top: 40vh;
+    display: block;
+    height: 42px;
+    width: 42px;
+    z-index: 30;
+    opacity: 0;
+    cursor: pointer;
+    transition: transform 0.5s ease-in-out;
+}
+
+.aside-categories-wrapper {
+    z-index: 30;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.aside-categories-wrapper input[type="checkbox"]:checked {
+    transform: translateX(300px);
+}
+
+.aside-categories-wrapper input[type="checkbox"]:checked ~ .aside-nav-categories-button-icon {
+    transform: translateX(300px);
+}
+
+.aside-categories-wrapper input[type="checkbox"]:checked ~ .aside-nav-categories {
+    transform: translateX(0);
+}

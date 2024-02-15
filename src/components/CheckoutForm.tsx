@@ -13,7 +13,7 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 import path from 'path';
-import { setCartData, setNotificationMessage, setRequestCallPopupVisible } from '@/store/dataSlice';
+import { setCartData } from '@/store/dataSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { getOrderMessage } from '@/utils/telegram.util';

@@ -27,7 +27,7 @@ export function Advantages() {
   });
 
   return (
-    <div className=" py-4">
+    <div className="hidden md:block py-4">
       <h2 className="text-center uppercase mb-4 text-xl md:bold md:mb-2">{TRANSLATES[LOCALE].ourAdvantages}</h2>
       <div className="flex justify-between md:block">
         {
@@ -35,6 +35,7 @@ export function Advantages() {
             return (
               <div
                 ref={ref1}
+                key={index}
                 className={'mb-2 flex items-center ' + handleInView(inView1, FADE_IN_UP_CLASS, 500 * index)}
               >
                 <Image width={35} height={35} src={item.icon} alt="Car"/>

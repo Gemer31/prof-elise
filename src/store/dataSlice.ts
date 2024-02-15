@@ -5,6 +5,7 @@ interface IDataSlice {
   requestCallPopupVisible: boolean;
   notificationMessage: string | null;
   cart: ICart;
+  cartLoading: boolean;
 }
 
 export const dataSlice = createSlice({
@@ -12,6 +13,7 @@ export const dataSlice = createSlice({
   initialState: {
     requestCallPopupVisible: false,
     notificationMessage: null,
+    cartLoading: true,
     cart: {
       totalProductsPrice: 0,
       totalProductsAmount: 0,
@@ -58,6 +60,7 @@ export const dataSlice = createSlice({
     },
     setCartData: (state: IDataSlice, action: PayloadAction<ICart>) => {
       state.cart = action.payload;
+      state.cartLoading = false;
       localStorage.setItem('cart', JSON.stringify(state.cart));
     }
   }
