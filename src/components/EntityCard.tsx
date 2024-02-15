@@ -8,7 +8,7 @@ import { ICategory, IConfig, IProduct } from '@/app/models';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAppDispatch } from '@/store/store';
-import { MouseEvent } from 'react';
+import { MouseEvent, useMemo } from 'react';
 import { addProductToCart } from '@/store/dataSlice';
 
 export interface EntityCardProps {
@@ -18,7 +18,7 @@ export interface EntityCardProps {
 }
 
 export function EntityCard({category, product, config}: EntityCardProps) {
-  const cardClass = convertToClass([
+  const cardClass = useMemo(() => convertToClass([
     product ? 'h-96' : 'h-72',
     'flex',
     'flex-col',
@@ -26,10 +26,12 @@ export function EntityCard({category, product, config}: EntityCardProps) {
     'justify-between',
     'rounded-lg',
     'p-4',
+    'border-2 border-gray-200',
     'hover:bg-pink-100',
+    'hover:border-pink-200',
     'duration-500',
-    'transition-colors'
-  ]);
+    'transition-colors',
+  ]), []);
 
   const dispatch = useAppDispatch();
 

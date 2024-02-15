@@ -2,7 +2,8 @@
 
 import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useCounter } from "@uidotdev/usehooks";
 
 interface Counter {
   selectedAmount?: number;
@@ -10,39 +11,39 @@ interface Counter {
 }
 
 export function Counter({ counterChangedCallback, selectedAmount }: Counter) {
-  const [amount, setAmount] = useState(1);
+  const [count, { increment, decrement, set }] = useCounter(5, {
+    min: 1,
+  });
 
   useEffect(() => {
     if (selectedAmount) {
-      setAmount(selectedAmount);
+      set(selectedAmount);
     }
   }, [selectedAmount]);
-
-  const changeCounter = (operator: '+' | '-') => {
-    const newAmount: number = operator === '-'
-      ? (amount === 1 ? 1 : amount - 1)
-      : amount + 1
-    setAmount(newAmount);
-    counterChangedCallback(newAmount);
-  }
 
   return (
     <div className="flex">
       <Button
         styleClass="text-amber-50 px-4 py-4 leading-3"
         type={ButtonType.BUTTON}
-        callback={() => changeCounter('-')}
+        callback={() => {
+          decrement();
+          counterChangedCallback(count);
+        }}
       >-</Button>
       <input
         className="w-[40px] mx-2 rounded-md text-center pointer-events-none"
         type="number"
         min={1}
-        value={amount}
+        value={count}
       />
       <Button
         styleClass="text-amber-50 px-4 py-4 leading-3"
         type={ButtonType.BUTTON}
-        callback={() => changeCounter('+')}
+        callback={() => {
+          increment();
+          counterChangedCallback(count);
+        }}
       >+</Button>
     </div>
   )

@@ -44,7 +44,7 @@ export default async function ProductDetailsPage({params: {productId}}: ProductD
   // todo: redirect if not found
   return (
     <main>
-      <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
+      <ContentContainer styleClass="flex flex-col items-center">
         <Breadcrumbs category={productCategory} product={product}/>
         <div className="w-full flex justify-between">
           <div className="w-full hidden md:block md:w-4/12 mr-4">
@@ -53,17 +53,19 @@ export default async function ProductDetailsPage({params: {productId}}: ProductD
           </div>
           <div className="w-full flex justify-between">
             <div className="w-full">
-              <div className="w-full flex">
+              <div className="w-full block md:flex">
+                <div className="mb-4 text-2xl bold text-center md:hidden">{product?.title}</div>
                 <ImgGallery imageUrls={product?.imageUrls}/>
-                <div className="w-full ml-4">
-                  <div className="mb-4 text-2xl bold text-center">{product?.title}</div>
+                <div className="w-full md:ml-4 mt-4 md:mt-0">
+                  <div className="mb-4 text-2xl bold text-center hidden md:block">{product?.title}</div>
                   <div
                     className="w-full text-2xl text-pink-500 font-bold text-center">{product?.price} {config.currency}</div>
                   <ProductDetailsActionsBlock product={product}/>
                 </div>
               </div>
               <div className="mt-4 ql-editor no-paddings whitespace-pre-line"
-                   dangerouslySetInnerHTML={{__html: product?.description || ''}}/>
+                   dangerouslySetInnerHTML={{__html: product?.description || ''}}
+              />
             </div>
           </div>
         </div>

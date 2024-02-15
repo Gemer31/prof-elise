@@ -3,11 +3,11 @@ import { Button } from '@/components/Button';
 import { ButtonType } from '@/app/enums';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setNotificationMessage, setRequestCallPopupVisible } from '@/store/dataSlice';
 import { useForm } from 'react-hook-form';
 import path from 'path';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
@@ -19,6 +19,9 @@ const validationSchema = yup.object().shape({
 
 export function RequestCallPopup() {
   const dispatch = useAppDispatch();
+  const requestCallPopupVisible = useAppSelector(
+    state => state.dataReducer.requestCallPopupVisible
+  );
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -44,8 +47,22 @@ export function RequestCallPopup() {
     dispatch(setRequestCallPopupVisible(false));
   };
 
+  const [popupClass, setPopupClass] = useState('opacity-0 z-0');
+
+  useEffect(() => {
+    if (requestCallPopupVisible) {
+      setPopupClass('opacity-1 z-30');
+    } else {
+      setPopupClass('opacity-0 z-30');
+      setTimeout(() => {
+        setPopupClass('opacity-0 z-0');
+      }, 200);
+    }
+  }, [requestCallPopupVisible]);
+
   return (
     <Popup
+      styleClass={`slow-appearance ${popupClass}`}
       title={TRANSLATES[LOCALE].requestCall}
       closeCallback={() => dispatch(setRequestCallPopupVisible(false))}
     >
@@ -68,12 +85,14 @@ export function RequestCallPopup() {
           error={errors.phone?.message}
           register={register}
         />
-        <Button
-          styleClass="text-amber-50 w-full py-2 mt-4"
-          disabled={isLoading}
-          loading={isLoading}
-          type={ButtonType.SUBMIT}
-        >{TRANSLATES[LOCALE].send}</Button>
+        <div className="w-full mt-4">
+          <Button
+            styleClass="text-amber-50 w-full py-2"
+            disabled={isLoading}
+            loading={isLoading}
+            type={ButtonType.SUBMIT}
+          >{TRANSLATES[LOCALE].send}</Button>
+        </div>
       </form>
     </Popup>
   );

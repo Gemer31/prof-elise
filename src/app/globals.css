@@ -64,6 +64,10 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.slow-appearance {
+    transition: opacity .2s ease-in-out;
+}
+
 .animate__animated.animate__delay-500ms {
     animation-delay: .5s;
 }

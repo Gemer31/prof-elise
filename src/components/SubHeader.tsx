@@ -77,7 +77,7 @@ export function SubHeader({firestoreConfigData}: ISubHeaderProps) {
         </div>
       </div>
 
-      <div className="flex flex-col 3xs:hidden mb-4">
+      <div className="flex flex-col 3xs:hidden mb-2 md:mb-4">
         <Link className="flex justify-center items-center mb-2" href={RouterPath.HOME}>
           <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>
         </Link>

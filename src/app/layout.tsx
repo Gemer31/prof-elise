@@ -35,7 +35,7 @@ export default async function RootLayout({children, params}: {
 
   return (
     <html lang="en" className="scroll-smooth">
-    <body className={'flex flex-col items-center h-full overflow-x-hidden bg-gray-200 ' + openSans.className}>
+    <body className={openSans.className}>
     <StoreProvider>
       <Layout
         firestoreDocsData={JSON.parse(JSON.stringify(firestoreData?.docs))}

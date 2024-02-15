@@ -12,15 +12,18 @@ interface IBreadcrumbsProps {
 export function Breadcrumbs({category, product}: IBreadcrumbsProps) {
   return (
     <ContentContainer styleClass="w-full flex items-center py-4">
-      <Link href={RouterPath.HOME}>
-        <Image width={30} height={30} src="/icons/home.svg" alt="Home"/>
-      </Link>
+      <div className="w-[20px] min-w-[20px]">
+        <Link className="block" href={RouterPath.HOME}>
+          <Image width={20} height={20} src="/icons/home.svg" alt="Home"/>
+        </Link>
+      </div>
+
       {
         category
-          ? <div className="flex items-center text-xl">
-            <Image width={25} height={25} src="/icons/arrow.svg" alt="Arrow"/>
+          ? <div className="flex items-center text-base">
+            <Image width={20} height={20} src="/icons/arrow.svg" alt="Arrow"/>
             <Link
-              className=""
+              className="overflow-ellipsis text-nowrap overflow-hidden max-w-[32vw]"
               key={category.id}
               href={RouterPath.CATEGORIES + '/' + category.id}
             >{category.title}</Link>
@@ -29,10 +32,12 @@ export function Breadcrumbs({category, product}: IBreadcrumbsProps) {
       }
       {
         product
-          ? <div className="flex items-center text-xl">
-            <Image width={25} height={25} src="/icons/arrow.svg" alt="Arrow"/>
+          ? <div className="flex items-center text-base">
+            <div className="w-[20px] min-w-[20px]">
+              <Image width={20} height={20} src="/icons/arrow.svg" alt="Arrow"/>
+            </div>
             <Link
-              className="overflow-ellipsis text-nowrap overflow-hidden max-w-96"
+              className="overflow-ellipsis text-nowrap overflow-hidden w-[32vw]"
               key={product.id}
               href={RouterPath.CATEGORIES + '/' + product.id}
             >{product.title}</Link>

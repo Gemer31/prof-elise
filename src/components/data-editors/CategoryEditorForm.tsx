@@ -178,12 +178,14 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
           </>
           : <></>
       }
-      <Button
-        styleClass="text-amber-50 w-full py-2 mt-2"
-        disabled={isLoading}
-        loading={isLoading}
-        type={ButtonType.SUBMIT}
-      >{selectedCategory ? TRANSLATES[LOCALE].update : TRANSLATES[LOCALE].add}</Button>
+      <div className="w-full mt-2">
+        <Button
+          styleClass="text-amber-50 w-full py-2"
+          disabled={isLoading}
+          loading={isLoading}
+          type={ButtonType.SUBMIT}
+        >{selectedCategory ? TRANSLATES[LOCALE].update : TRANSLATES[LOCALE].add}</Button>
+      </div>
     </form>
   );
 }

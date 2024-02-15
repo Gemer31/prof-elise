@@ -11,7 +11,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { IConfig, IProduct } from '@/app/models';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import path from 'path';
 import { auth } from '@/app/lib/firebase-config';
 
@@ -67,6 +67,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProp
   const router = useRouter();
   const pathname = usePathname();
   const [user, loading] = useAuthState(auth);
+  const burgerRef = useRef<HTMLInputElement>(null);
 
   const getNavigationLinkClass = (path: string) => {
     return navLinkClass + (path === pathname ? ' bg-gray-200' : '');
@@ -101,7 +102,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProp
             }
           </div>
           <div className="flex sm:hidden burger-container">
-            <input className="burger-checkbox" type="checkbox"/>
+            <input ref={burgerRef} className="burger-checkbox" type="checkbox"/>
             <div className="burger-lines">
               <div className="line1"></div>
               <div className="line2"></div>
@@ -114,6 +115,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProp
                     key={path}
                     className={getNavigationSidebarLinkClass(path)}
                     href={path}
+                    onClick={() => burgerRef.current?.click()}
                   >{TRANSLATES[LOCALE][translateCode]}</Link>
                 ))
               }

@@ -20,7 +20,7 @@ export function AboutUs({text}: IAboutUsProps) {
   });
 
   return (
-    <ContentContainer styleClass="w-full flex justify-start items-center">
+    <ContentContainer styleClass="w-full flex flex-col 2md:flex-row justify-start items-center">
       <div
         ref={ref1}
         className={handleInView(inView1, FADE_IN_LEFT_CLASS)}
@@ -38,9 +38,9 @@ export function AboutUs({text}: IAboutUsProps) {
         ref={ref2}
         style={{position: 'relative', top: '1rem'}}
         className={handleInView(inView2, FADE_IN_RIGHT_CLASS)}
-        width={400}
-        height={400}
-        src="/images/preview-girl.png"
+        width={500}
+        height={500}
+        src="/images/preview.png"
         alt="About Us"
       />
     </ContentContainer>

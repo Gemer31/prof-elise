@@ -60,7 +60,7 @@ export default function ProductDetails() {
 
   return (
     <main className="w-full">
-      <ContentContainer styleClass="flex flex-col items-center overflow-x-hidden lg:overflow-x-visible">
+      <ContentContainer styleClass="flex flex-col items-center">
         <form
           className="flex flex-col items-center w-6/12"
           onSubmit={handleSubmit(submitForm)}

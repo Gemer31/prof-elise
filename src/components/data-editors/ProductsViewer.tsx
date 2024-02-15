@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { IProduct } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 interface CategoriesViewerProps {
@@ -17,14 +17,14 @@ export function ProductsViewer({
                                  deleteProductClick,
                                  selectedProduct
                                }: CategoriesViewerProps) {
-  const itemClass = convertToClass([
+  const itemClass = useMemo(() => convertToClass([
     'cursor-pointer',
     'flex',
     'justify-between',
     'items-center',
     'px-2',
-    'py-1'
-  ]);
+    'py-1',
+  ]), []);
 
   const [chosenCategory, setChosenCategory] = useState<IProduct | undefined>();
 

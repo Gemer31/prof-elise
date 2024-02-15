@@ -55,13 +55,13 @@ export function Footer({ firestoreConfigData }: FooterProps) {
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>
             : <div className={infoClass}>
-              <div className="mb-4 sm:mb-0">
+              <div className="mb-4 sm:mb-0 flex flex-col items-center">
                 <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].information}</h2>
                 <div>
                   <Link className="" href="/delivery">{TRANSLATES[LOCALE].delivery}</Link>
                 </div>
               </div>
-              <div className="mb-4 sm:mb-0">
+              <div className="mb-4 sm:mb-0 flex flex-col items-center">
                 <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].contacts}</h2>
                 <a href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}
                 >{firestoreConfigData?.contactPhone}</a>
