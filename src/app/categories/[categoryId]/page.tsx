@@ -1,6 +1,6 @@
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
 import { EntityCard } from '@/components/EntityCard';
-import { Categories } from '@/components/Categories';
+import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { collection, getDocs } from '@firebase/firestore';
 import { listAll, ref } from '@firebase/storage';
@@ -44,11 +44,10 @@ export default async function CategoriesOrProductsPage({params: {categoryId}}: C
   return (
     <div className="">
       <Breadcrumbs category={currentCategory}/>
-      <div className="w-full flex justify-between">
-        {/*<div className="w-full  md:w-4/12 mr-4">*/}
-          <div className="w-full md:w-4/12 mr-4">
-          <Categories categories={categories} currentCategoryId={categoryId}/>
-          <Advantages/>
+      <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
+        <div className="w-full md:w-4/12 mr-4">
+          <Catalog categories={categories} currentCategoryId={categoryId}/>
+          <Advantages styleClass="hidden md:block"/>
         </div>
         <div className="w-full grid grid-cols-3 gap-4">
           {

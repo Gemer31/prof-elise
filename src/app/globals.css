@@ -5,20 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 214, 219, 220;
-    --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --foreground-rgb: 255, 255, 255;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
-    }
-}
-
 @keyframes pulse-ring {
     0% {
         transform: scale(.33);
@@ -50,12 +36,7 @@
 }
 
 body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-            to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))
-    ) rgb(var(--background-start-rgb));
+    color: black;
 }
 
 input::-webkit-outer-spin-button,
@@ -101,16 +82,20 @@ input::-webkit-inner-spin-button {
     padding: 0 !important;
 }
 /*cart table*/
+table {
+    border: 2px solid rgb(196, 197, 201);
+}
+
 td {
     padding: .5rem;
 }
 
 tr > td:not(:last-child) {
-    border-right: 2px solid rgba(229, 231, 235, 1);
+    border-right: 2px solid rgb(196, 197, 201);
 }
 
 tbody > tr {
-    border-top: 2px solid rgba(229, 231, 235, 1);
+    border-top: 2px solid rgb(196, 197, 201);
 }
 
 .field-label::after {
@@ -149,6 +134,21 @@ tbody > tr {
 
 
 /*burger button*/
+.aside-menu-items {
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(0, 0, 0, .7);
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transform: translate(-150%);
+    transition: transform 0.5s ease-in-out;
+}
+
 .burger-container {
     display: flex;
     justify-content: center;
@@ -195,7 +195,7 @@ tbody > tr {
     transition: all 0.4s ease-in-out;
 }
 
-.burger-container input[type="checkbox"]:checked ~ .aside-nav-items {
+.burger-container input[type="checkbox"]:checked ~ .aside-menu-items {
     transform: translateX(0);
 }
 
@@ -215,92 +215,71 @@ tbody > tr {
     transform: rotate(-45deg);
 }
 
-.burger-container input[type="checkbox"]:checked ~ .aside-nav-items {
+.burger-container input[type="checkbox"]:checked ~ .aside-menu-items {
     transform: translateX(0);
 }
 
-.aside-nav-items {
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: rgba(0, 0, 0, .7);
-    height: 100vh;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    transform: translate(-150%);
-    transition: transform 0.5s ease-in-out;
-}
-
-.aside-nav-categories {
+/*Catalog aside*/
+.aside-catalog {
     padding: 0 20px;
     position: fixed;
     top: 0;
     left: 0;
     width: 300px;
     height: 100vh;
-    background: rgba(0, 0, 0, .7);
+    background: rgb(236, 72, 153);
+    box-shadow: 10px 0px 15px -3px rgba(34, 60, 80, 0.2);
     transform: translate(-300px);
-    transition: transform 0.5s ease-in-out;
 }
 
-.aside-nav-categories-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    cursor: pointer;
-    background: rgba(0, 0, 0, .7);
-    top: 40vh;
-    right: -56px;
-    /*padding: 0.25rem;*/
-}
-
-.aside-nav-categories-button-icon {
+.aside-catalog-button {
+    z-index: 20;
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 40vh;
+    top: 50vh;
     left: 0;
     max-width: 42px;
     height: 42px;
     width: 42px;
     border-radius: 0 0.375rem 0.375rem 0;
-    background: rgba(0, 0, 0, .7);
+    background: rgb(236, 72, 153);
+    box-shadow: 10px 0px 15px -3px rgba(34, 60, 80, 0.2);
     transform: translateX(0);
-    transition: transform 0.5s ease-in-out;
 }
 
-.categories-checkbox {
+.aside-catalog-checkbox {
     position: absolute;
-    top: 40vh;
+    top: 50vh;
     display: block;
     height: 42px;
     width: 42px;
     z-index: 30;
     opacity: 0;
     cursor: pointer;
-    transition: transform 0.5s ease-in-out;
 }
 
-.aside-categories-wrapper {
+.aside-catalog-wrapper {
     z-index: 30;
     top: 0;
     bottom: 0;
     left: 0;
+    transition: transform 0.5s ease-in-out;
 }
 
-.aside-categories-wrapper input[type="checkbox"]:checked {
+.aside-catalog-wrapper > * {
+    transition: transform 0.5s ease-in-out;
+}
+
+.aside-catalog-wrapper input[type="checkbox"]:checked {
     transform: translateX(300px);
 }
 
-.aside-categories-wrapper input[type="checkbox"]:checked ~ .aside-nav-categories-button-icon {
+.aside-catalog-wrapper input[type="checkbox"]:checked ~ .aside-catalog-button {
     transform: translateX(300px);
 }
 
-.aside-categories-wrapper input[type="checkbox"]:checked ~ .aside-nav-categories {
+.aside-catalog-wrapper input[type="checkbox"]:checked ~ .aside-catalog {
     transform: translateX(0);
 }

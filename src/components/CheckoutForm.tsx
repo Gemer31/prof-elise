@@ -42,7 +42,6 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
   const [createdOrderNumber, setCreatedOrderNumber] = useState<number | undefined>();
   const {
     register,
-    setValue,
     handleSubmit,
     formState: {errors, isValid}
   } = useForm({
@@ -89,12 +88,12 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
   };
 
   return createdOrderNumber
-    ? <div className="flex flex-col justify-center items-center">
+    ? <div className="flex flex-col justify-center items-center my-80">
       <div className="flex items-center">
         <Image width={50} height={50} src="/icons/tick.svg" alt="Success"/>
         <span className="ml-2 text-4xl font-bold">{TRANSLATES[LOCALE].order} №{createdOrderNumber}</span>
       </div>
-      <span className="text-xl">{TRANSLATES[LOCALE].orderCreatedSuccessfully}</span>
+      <span className="text-2xl mt-4">{TRANSLATES[LOCALE].orderCreatedSuccessfully}</span>
     </div>
     : <form
       className="flex flex-col"

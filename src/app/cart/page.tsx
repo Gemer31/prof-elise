@@ -6,6 +6,7 @@ import { convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
 import { CartTable } from '@/components/CartTable';
 import { db } from '@/app/lib/firebase-config';
 import { Metadata } from 'next';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export const metadata: Metadata = {
   title: 'Корзина покупок',
@@ -21,9 +22,8 @@ export default async function CartPage() {
 
   return (
     <main className="w-full">
-      <ContentContainer styleClass="px-2">
-        <CartTable editable={true} firestoreConfigData={config}/>
-      </ContentContainer>
+      <h2 className="my-4 text-center sm:text-start text-2xl">{TRANSLATES[LOCALE].purchaseCart}</h2>
+      <CartTable editable={true} firestoreConfigData={config}/>
     </main>
   );
 }

@@ -1,5 +1,5 @@
 import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
-import { Categories } from '@/components/Categories';
+import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { FirebaseCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
@@ -46,10 +46,10 @@ export default async function ProductDetailsPage({params: {productId}}: ProductD
     <main>
       <ContentContainer styleClass="flex flex-col items-center">
         <Breadcrumbs category={productCategory} product={product}/>
-        <div className="w-full flex justify-between">
-          <div className="w-full hidden md:block md:w-4/12 mr-4">
-            <Categories currentCategoryId={product?.categoryId} categories={categories}/>
-            <Advantages/>
+        <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
+          <div className="w-full md:w-4/12 mr-4">
+            <Catalog currentCategoryId={product?.categoryId} categories={categories}/>
+            <Advantages styleClass="hidden md:block"/>
           </div>
           <div className="w-full flex justify-between">
             <div className="w-full">

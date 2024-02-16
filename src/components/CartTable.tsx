@@ -38,21 +38,21 @@ export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
     : cart.totalProductsAmount
       ? (
         <div>
-          <table className="w-full border-2 border-gray-200">
+          <table className="w-full">
             <thead>
             <tr>
-              <td className="w-2/12 text-center">{TRANSLATES[LOCALE].picture}</td>
+              <td className="w-2/12 text-center hidden sm:table-cell">{TRANSLATES[LOCALE].picture}</td>
               <td className="w-4/12">{TRANSLATES[LOCALE].productName}</td>
               <td className="w-2/12">{TRANSLATES[LOCALE].shortAmountText}</td>
               <td className="w-2/12 text-end">{TRANSLATES[LOCALE].priceForOneProduct}</td>
-              <td className="w-2/12 text-end">{TRANSLATES[LOCALE].all}</td>
+              <td className="w-2/12 text-end hidden sm:table-cell">{TRANSLATES[LOCALE].all}</td>
             </tr>
             </thead>
             <tbody>
             {
               Object.values<ICartProductData>(cart.products)?.map((productData: ICartProductData, index) => {
                 return <tr key={productData.data.id}>
-                  <td className="flex justify-center items-center">
+                  <td className="justify-center items-center hidden sm:flex">
                     <Image
                       width={100}
                       height={100}
@@ -87,7 +87,7 @@ export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
                   </td>
                   <td className="w-2/12 text-end">{productData.data.price} {firestoreConfigData.currency}</td>
                   <td
-                    className="w-2/12 text-end">{productData.data.price * productData.amount} {firestoreConfigData.currency}</td>
+                    className="w-2/12 text-end hidden sm:table-cell">{productData.data.price * productData.amount} {firestoreConfigData.currency}</td>
                 </tr>;
               })
             }

@@ -108,7 +108,7 @@ export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProp
               <div className="line2"></div>
               <div className="line3"></div>
             </div>
-            <aside className="aside-nav-items">
+            <aside className="aside-menu-items">
               {
                 siteLinks.map(([path, translateCode]) => (
                   <Link

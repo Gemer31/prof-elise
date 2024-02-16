@@ -23,14 +23,14 @@ export function AboutUs({text}: IAboutUsProps) {
     <ContentContainer styleClass="w-full flex flex-col 2md:flex-row justify-start items-center">
       <div
         ref={ref1}
-        className={handleInView(inView1, FADE_IN_LEFT_CLASS)}
+        className={`2md:mr-2 ${handleInView(inView1, FADE_IN_LEFT_CLASS)}`}
       >
         <div
           ref={ref1}
-          className="uppercase text-2xl mb-4"
+          className="uppercase text-2xl mb-4 text-center 2md:text-start"
         >{TRANSLATES[LOCALE].сonsumablesWholesaleRetail}</div>
         <div
-          className="ql-editor no-paddings whitespace-pre-line"
+          className="ql-editor no-paddings whitespace-pre-line text-justify"
           dangerouslySetInnerHTML={{__html: text}}
         />
       </div>

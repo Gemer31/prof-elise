@@ -71,6 +71,7 @@ export function RequestCallPopup() {
         onSubmit={handleSubmit(submitForm)}
       >
         <InputFormField
+          required={true}
           placeholder={TRANSLATES[LOCALE].enterName}
           label={TRANSLATES[LOCALE].yourName}
           name="name"
@@ -79,6 +80,7 @@ export function RequestCallPopup() {
           register={register}
         />
         <PhoneFormField
+          required={true}
           label={TRANSLATES[LOCALE].phone}
           name="phone"
           type="text"

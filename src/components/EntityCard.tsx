@@ -26,9 +26,8 @@ export function EntityCard({category, product, config}: EntityCardProps) {
     'justify-between',
     'rounded-lg',
     'p-4',
-    'border-2 border-gray-200',
+    'border-2 border-pink-200',
     'hover:bg-pink-100',
-    'hover:border-pink-200',
     'duration-500',
     'transition-colors',
   ]), []);
@@ -60,13 +59,13 @@ export function EntityCard({category, product, config}: EntityCardProps) {
       href={getPageLink()}
     >
       <Image
-        className="rounded-md"
+        className="rounded-md bg-amber-50"
         width={200}
         height={200}
         src={category?.imageUrl || product?.imageUrls?.[0] || ''}
         alt={category?.title || product?.title || ''}
       />
-      <h3 className={`text-center mt-2 min-h-16 ${product ? 'text-base' : 'text-lg'}`}>{category?.title || product?.title}</h3>
+      <h3 className={`flex justify-center items-center text-center mt-2 min-h-16 ${product ? 'text-base' : 'text-lg'}`}>{category?.title || product?.title}</h3>
       {
         product
           ? (
