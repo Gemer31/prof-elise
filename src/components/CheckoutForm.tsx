@@ -95,7 +95,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     setLoading(false);
   };
 
-  return !createdOrderNumber
+  return createdOrderNumber
     ? <div className="h-full flex flex-col justify-center items-center">
       <div className="flex items-center">
         <Image width={50} height={50} src="/icons/tick.svg" alt="Success"/>
