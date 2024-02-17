@@ -1,12 +1,11 @@
-import { ICategory, IConfig, IProduct } from '@/app/models';
+import { ICategory, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
-import { FirebaseCollections } from '@/app/enums';
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getFirebaseData } from '@/app/lib/firebase-api';
+import { getFirestoreData } from '@/app/lib/firebase-api';
 
 export interface IProductDetailsProps {
   params: {
@@ -15,15 +14,7 @@ export interface IProductDetailsProps {
 }
 
 export default async function ProductDetailsPage({params: {productId}}: IProductDetailsProps) {
-  const [
-    config,
-    categories,
-    products
-  ] = await Promise.all([
-    getFirebaseData<IConfig>(FirebaseCollections.CONFIG),
-    getFirebaseData<ICategory[]>(FirebaseCollections.CATEGORIES),
-    getFirebaseData<IProduct[]>(FirebaseCollections.PRODUCTS)
-  ]);
+  const {config, categories, products} = await getFirestoreData();
   const product: IProduct | undefined = products.find((item) => item.id === productId);
   const productCategory: ICategory | undefined = categories.find((item) => item.id === product?.categoryId);
 
@@ -49,7 +40,7 @@ export default async function ProductDetailsPage({params: {productId}}: IProduct
                   <ProductDetailsActionsBlock product={product}/>
                 </div>
               </div>
-              <div className="mt-4 ql-editor h-fit no-paddings whitespace-pre-line"
+              <div className="mt-4 ql-editor readonly-ql-editor no-paddings whitespace-pre-line"
                    dangerouslySetInnerHTML={{__html: product?.description || ''}}
               />
             </div>

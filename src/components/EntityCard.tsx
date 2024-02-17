@@ -11,13 +11,13 @@ import { useAppDispatch } from '@/store/store';
 import { MouseEvent, useMemo } from 'react';
 import { addProductToCart } from '@/store/dataSlice';
 
-export interface EntityCardProps {
+export interface IEntityCardProps {
   config: IConfig;
   category?: ICategory;
   product?: IProduct;
 }
 
-export function EntityCard({category, product, config}: EntityCardProps) {
+export function EntityCard({category, product, config}: IEntityCardProps) {
   const cardClass = useMemo(() => convertToClass([
     product ? 'h-96' : '',
     'flex',
@@ -33,7 +33,7 @@ export function EntityCard({category, product, config}: EntityCardProps) {
   ]), []);
   const titleClass = useMemo(() => convertToClass([
     product ? 'text-base' : 'text-lg',
-    product ? 'min-h-19' : 'min-h-6',
+    product ? 'min-h-16' : 'min-h-6',
     'h-full',
     'flex',
     'justify-center',
@@ -72,7 +72,7 @@ export function EntityCard({category, product, config}: EntityCardProps) {
       href={getPageLink()}
     >
       <Image
-        className="rounded-md bg-amber-50"
+        className="rounded-md bg-amber-50 h-[200px] w-[200px]"
         width={200}
         height={200}
         src={category?.imageUrl || product?.imageUrls?.[0] || ''}

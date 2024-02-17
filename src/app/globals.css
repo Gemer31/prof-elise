@@ -92,6 +92,7 @@ input::-webkit-inner-spin-button {
 .no-paddings {
     padding: 0 !important;
 }
+
 /*cart table*/
 table {
     border: 2px solid rgb(196, 197, 201);
@@ -118,6 +119,10 @@ tbody > tr {
 }
 
 /*text editor*/
+.readonly-ql-editor {
+    height: fit-content !important;
+}
+
 .ql-editor.ql-blank::before {
     font-style: normal !important;
 }

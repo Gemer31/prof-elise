@@ -30,7 +30,7 @@ export function AboutUs({text}: IAboutUsProps) {
           className="uppercase text-2xl mb-4 text-center 2md:text-start"
         >{TRANSLATES[LOCALE].сonsumablesWholesaleRetail}</div>
         <div
-          className="ql-editor no-paddings whitespace-pre-line text-justify"
+          className="ql-editor readonly-ql-editor no-paddings whitespace-pre-line text-justify"
           dangerouslySetInnerHTML={{__html: text}}
         />
       </div>

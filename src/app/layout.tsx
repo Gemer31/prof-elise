@@ -34,7 +34,7 @@ export default async function RootLayout({children, params}: {
   ]);
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html id="html" lang="en" className="scroll-smooth">
     <body className={openSans.className}>
     <StoreProvider>
       <Layout

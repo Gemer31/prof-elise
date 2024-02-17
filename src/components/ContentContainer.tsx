@@ -1,8 +1,12 @@
-import { CommonProps } from '@/app/models';
+import { ICommonProps } from '@/app/models';
 
-export function ContentContainer({children, styleClass}: CommonProps) {
+interface IContentContainer extends ICommonProps {
+  id?: string;
+}
+
+export function ContentContainer({children, styleClass, id}: IContentContainer) {
   return (
-    <article className={'w-full max-w-screen-xl px-2 ' + (styleClass || '')}>
+    <article id={id || ''} className={'w-full max-w-screen-xl px-2 ' + (styleClass || '')}>
       {children}
     </article>
   )

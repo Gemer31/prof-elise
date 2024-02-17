@@ -13,10 +13,10 @@ import { useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 interface ISubHeaderProps {
-  firestoreConfigData?: IConfig;
+  config?: IConfig;
 }
 
-export function SubHeader({firestoreConfigData}: ISubHeaderProps) {
+export function SubHeader({config}: ISubHeaderProps) {
   const containerClass: string = useMemo(() => convertToClass([
     'flex',
     'flex-col md:flex-row',
@@ -43,11 +43,11 @@ export function SubHeader({firestoreConfigData}: ISubHeaderProps) {
           <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>
         </Link>
         <div className="w-8/12 flex justify-between items-center">
-          <div className="uppercase text-center w-20 font-bold">{TRANSLATES[LOCALE].сonsumables}</div>
+          <h1 className="uppercase text-center w-20 font-bold">{TRANSLATES[LOCALE].сonsumables}</h1>
           <div className="text-center font-bold w-3/12">
             <a
-              href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
-            <div>{firestoreConfigData?.workingHours}</div>
+              href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}>{config?.contactPhone}</a>
+            <div>{config?.workingHours}</div>
           </div>
           <Button
             styleClass="hidden md:block uppercase text-amber-50 px-4 py-2"
@@ -72,8 +72,8 @@ export function SubHeader({firestoreConfigData}: ISubHeaderProps) {
         </div>
         <div className="text-center font-bold w-3/12">
           <a
-            href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
-          <div>{firestoreConfigData?.workingHours}</div>
+            href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}>{config?.contactPhone}</a>
+          <div>{config?.workingHours}</div>
         </div>
       </div>
 
@@ -89,8 +89,8 @@ export function SubHeader({firestoreConfigData}: ISubHeaderProps) {
         >{TRANSLATES[LOCALE].requestCall}</Button>
         <div className="text-center font-bold">
           <a
-            href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}>{firestoreConfigData?.contactPhone}</a>
-          <div>{firestoreConfigData?.workingHours}</div>
+            href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}>{config?.contactPhone}</a>
+          <div>{config?.workingHours}</div>
         </div>
       </div>
     </ContentContainer>;

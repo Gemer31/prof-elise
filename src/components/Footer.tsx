@@ -14,11 +14,11 @@ import { IConfig } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
 import { useMemo } from 'react';
 
-export interface FooterProps {
-  firestoreConfigData?: IConfig;
+export interface IFooterProps {
+  config?: IConfig;
 }
 
-export function Footer({ firestoreConfigData }: FooterProps) {
+export function Footer({ config }: IFooterProps) {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const instagramClass: string = useMemo(() => convertToClass([
@@ -63,8 +63,8 @@ export function Footer({ firestoreConfigData }: FooterProps) {
               </div>
               <div className="mb-4 sm:mb-0 flex flex-col items-center">
                 <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].contacts}</h2>
-                <a href={`tel:${transformPhoneUtil(firestoreConfigData?.contactPhone || '')}`}
-                >{firestoreConfigData?.contactPhone}</a>
+                <a href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}
+                >{config?.contactPhone}</a>
               </div>
               <div className={buttonsClass}>
                 <Button

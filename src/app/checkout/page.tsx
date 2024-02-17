@@ -1,8 +1,6 @@
-import { IConfig } from '@/app/models';
-import { FirebaseCollections } from '@/app/enums';
 import { CheckoutForm } from '@/components/CheckoutForm';
 import { Metadata } from 'next';
-import { getFirebaseData } from '@/app/lib/firebase-api';
+import { getFirestoreData } from '@/app/lib/firebase-api';
 
 export const metadata: Metadata = {
   title: 'Оформление заказа',
@@ -10,10 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default async function CheckoutPage() {
-  const config: IConfig = await getFirebaseData<IConfig>(FirebaseCollections.CONFIG);
+  const {config} = await getFirestoreData();
   return (
-    <main className="w-full">
-      <CheckoutForm firestoreConfigData={config}/>
+    <main className="w-full h-full">
+      <CheckoutForm config={config}/>
     </main>
   );
 }

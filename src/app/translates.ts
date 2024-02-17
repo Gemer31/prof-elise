@@ -84,6 +84,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     orderCreatedSuccessfully: 'Ваш заказ принят. Наши операторы свяжутся с вами',
     infoUpdated: 'Информация обновлена',
     deliveryDescription: 'Описание по доставке',
-    addDeliveryDescription: 'Введите описание по доставке'
+    addDeliveryDescription: 'Введите описание по доставке',
+    returnToCatalog: "Вернуться к каталогу товаров",
   }
 }

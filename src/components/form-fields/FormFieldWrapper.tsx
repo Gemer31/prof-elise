@@ -1,7 +1,7 @@
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { CommonProps } from '@/app/models';
+import { ICommonProps } from '@/app/models';
 
-export interface IFormFieldWrapperProps extends CommonProps {
+export interface IFormFieldWrapperProps extends ICommonProps {
   required?: boolean;
   label: string;
   error?: string | undefined;

@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { handleInView } from '@/utils/handle-intersection.util';
 import { FADE_IN_LEFT_CLASS, FADE_IN_UP_CLASS } from '@/app/constants';
 import { useEffect } from 'react';
-import { CommonProps } from '@/app/models';
+import { ICommonProps } from '@/app/models';
 
 const advantagesItems = [
   {

@@ -13,11 +13,12 @@ import { useRouter } from 'next/navigation';
 import { Loader } from '@/components/Loader';
 
 interface ICartTableProps {
+  title?: string;
   editable?: boolean;
-  firestoreConfigData: IConfig;
+  config: IConfig;
 }
 
-export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
+export function CartTable({config, editable, title}: ICartTableProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.dataReducer.cart);
@@ -38,6 +39,7 @@ export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
     : cart.totalProductsAmount
       ? (
         <div>
+          <h2 className="my-4 text-center sm:text-start text-2xl">{title}</h2>
           <table className="w-full">
             <thead>
             <tr>
@@ -85,9 +87,9 @@ export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
                       }
                     </div>
                   </td>
-                  <td className="w-2/12 text-end">{productData.data.price} {firestoreConfigData.currency}</td>
+                  <td className="w-2/12 text-end">{productData.data.price} {config.currency}</td>
                   <td
-                    className="w-2/12 text-end hidden sm:table-cell">{productData.data.price * productData.amount} {firestoreConfigData.currency}</td>
+                    className="w-2/12 text-end hidden sm:table-cell">{productData.data.price * productData.amount} {config.currency}</td>
                 </tr>;
               })
             }
@@ -97,7 +99,7 @@ export function CartTable({firestoreConfigData, editable}: ICartTableProps) {
             <div className="flex">
               <span className="bold">{TRANSLATES[LOCALE].result}</span>
               :
-              <span className="ml-4">{cart.totalProductsPrice} {firestoreConfigData.currency}</span>
+              <span className="ml-4">{cart.totalProductsPrice} {config.currency}</span>
             </div>
             {
               editable

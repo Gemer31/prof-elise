@@ -2,7 +2,7 @@
 
 import { CartTable } from '@/components/CartTable';
 import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections } from '@/app/enums';
+import { ButtonType, FirebaseCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
 import { useState } from 'react';
@@ -17,10 +17,10 @@ import { setCartData } from '@/store/dataSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { getOrderMessage } from '@/utils/telegram.util';
-import { useRouter } from 'next/navigation';
 import { doc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
@@ -31,13 +31,12 @@ const validationSchema = yup.object().shape({
 });
 
 interface ICheckoutFormProps {
-  firestoreConfigData: IConfig;
+  config: IConfig;
 }
 
-export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
+export function CheckoutForm({config}: ICheckoutFormProps) {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.dataReducer.cart);
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<number | undefined>();
   const {
@@ -49,6 +48,16 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
     resolver: yupResolver(validationSchema)
   });
 
+  // const setFullHeigth = (): void => {
+  //   const htmlEl: HTMLElement = document.getElementById('html') as HTMLElement;
+  //   const pageEl: HTMLElement = document.getElementById('page') as HTMLElement;
+  //   const contentEl: HTMLElement = document.getElementById('content') as HTMLElement;
+  //   document.body.style.height = '100%';
+  //   htmlEl.style.height = '100%';
+  //   pageEl.style.height = '100%';
+  //   contentEl.style.height = '100%';
+  // }
+
   const submitForm = async (formData: {
     name: string;
     phone: string;
@@ -57,43 +66,46 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
     comment?: string;
   }) => {
     setLoading(true);
-
     await fetch(path.join(process.cwd(), 'api', 'bot'), {
       method: 'POST',
       body: JSON.stringify({
         message: encodeURI(getOrderMessage({
           ...formData,
-          orderNumber: firestoreConfigData.nextOrderNumber,
+          orderNumber: config.nextOrderNumber,
           cart: cart,
-          config: firestoreConfigData,
+          config: config,
         }))
       })
     });
-    setCreatedOrderNumber(firestoreConfigData.nextOrderNumber);
+    // setFullHeigth();
+    setCreatedOrderNumber(config.nextOrderNumber);
     await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), {
-      contactPhone: firestoreConfigData.contactPhone,
-      workingHours: firestoreConfigData.workingHours,
-      currency: firestoreConfigData.currency,
-      shopDescription: firestoreConfigData.shopDescription,
-      deliveryDescription: firestoreConfigData.deliveryDescription,
-      nextOrderNumber: firestoreConfigData.nextOrderNumber + 1
+      contactPhone: config.contactPhone,
+      workingHours: config.workingHours,
+      currency: config.currency,
+      shopDescription: config.shopDescription,
+      deliveryDescription: config.deliveryDescription,
+      nextOrderNumber: config.nextOrderNumber + 1
     });
     dispatch(setCartData({
       totalProductsPrice: 0,
       totalProductsAmount: 0,
       products: {},
     }));
-
     setLoading(false);
   };
 
-  return createdOrderNumber
-    ? <div className="flex flex-col justify-center items-center my-80">
+  return !createdOrderNumber
+    ? <div className="h-full flex flex-col justify-center items-center">
       <div className="flex items-center">
         <Image width={50} height={50} src="/icons/tick.svg" alt="Success"/>
         <span className="ml-2 text-4xl font-bold">{TRANSLATES[LOCALE].order} №{createdOrderNumber}</span>
       </div>
-      <span className="text-2xl mt-4">{TRANSLATES[LOCALE].orderCreatedSuccessfully}</span>
+      <span className="text-2xl my-4 text-center">{TRANSLATES[LOCALE].orderCreatedSuccessfully}</span>
+      <Link
+        className="text-pink-500 hover:text-pink-400 text-xl duration-500 transition-colors"
+        href={RouterPath.HOME}
+      >{TRANSLATES[LOCALE].returnToCatalog}</Link>
     </div>
     : <form
       className="flex flex-col"
@@ -135,7 +147,6 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <TextareaFormField
-        required={true}
         placeholder={TRANSLATES[LOCALE].comment}
         label={TRANSLATES[LOCALE].comment}
         name="comment"
@@ -143,7 +154,7 @@ export function CheckoutForm({firestoreConfigData}: ICheckoutFormProps) {
         register={register}
       />
       <FormFieldWrapper label={TRANSLATES[LOCALE].order}>
-        <CartTable firestoreConfigData={firestoreConfigData}/>
+        <CartTable config={config}/>
       </FormFieldWrapper>
       <div className="w-full flex justify-end mt-4">
         <Button

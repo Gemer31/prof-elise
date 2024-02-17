@@ -9,11 +9,11 @@ import { IProduct } from '@/app/models';
 import { addProductToCart } from '@/store/dataSlice';
 import { useState } from 'react';
 
-interface ProductDetailsActionsBlockProps {
+interface IProductDetailsActionsBlockProps {
   product: IProduct | undefined;
 }
 
-export function ProductDetailsActionsBlock({ product }: ProductDetailsActionsBlockProps) {
+export function ProductDetailsActionsBlock({ product }: IProductDetailsActionsBlockProps) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>();
   const [amount, setAmount] = useState(1);

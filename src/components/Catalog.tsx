@@ -21,7 +21,7 @@ export function Catalog({categories, currentCategoryId}: ICategoriesProps) {
         </div>
         <div className="aside-catalog">
           <h2 className="text-center text-2xl font-bold text-amber-50 mt-4">{TRANSLATES[LOCALE].catalog}</h2>
-          <div className="h-full flex flex-col justify-center text-lg">
+          <div className="h-[90vh] flex flex-col justify-center text-lg">
             {
               categories.map((category: ICategory) => {
                 return (

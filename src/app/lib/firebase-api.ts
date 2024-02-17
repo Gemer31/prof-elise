@@ -7,31 +7,26 @@ import {
   convertProductsDataToModelArray,
   getDocData
 } from '@/utils/firebase.util';
-import { IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
+import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
 
-export async function getFirebaseData<T>(type?: FirebaseCollections): Promise<T> {
+export async function getFirestoreData(): Promise<{
+  config: IConfig;
+  categories: ICategory[];
+  products: IProduct[];
+}> {
   const firestoreData = await getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME)));
-  switch (type) {
-    case FirebaseCollections.CONFIG: {
-      return convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
-        firestoreData.docs,
-        FirebaseCollections.CONFIG,
-      )) as T;
-    }
-    case FirebaseCollections.CATEGORIES: {
-      return convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
-        firestoreData?.docs,
-        FirebaseCollections.CATEGORIES
-      )) as T;
-    }
-    case FirebaseCollections.PRODUCTS: {
-      return convertProductsDataToModelArray(getDocData<IFirestoreFields>(
-        firestoreData?.docs,
-        FirebaseCollections.PRODUCTS
-      )) as T;
-    }
-    default: {
-      return firestoreData as T;
-    }
-  }
+  return {
+    config: convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
+      firestoreData.docs,
+      FirebaseCollections.CONFIG
+    )),
+    categories: convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
+      firestoreData?.docs,
+      FirebaseCollections.CATEGORIES
+    )) || [],
+    products: convertProductsDataToModelArray(getDocData<IFirestoreFields>(
+      firestoreData?.docs,
+      FirebaseCollections.PRODUCTS
+    )) || [],
+  };
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import { CommonProps } from '@/app/models';
+import { ICommonProps } from '@/app/models';
 import { ButtonType } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Loader } from '@/components/Loader';
 import { MouseEvent, useMemo } from 'react';
 
-export interface ButtonProps extends CommonProps {
+export interface IButtonProps extends ICommonProps {
   type: ButtonType;
   disabled?: boolean;
   loading?: boolean;
@@ -14,7 +14,7 @@ export interface ButtonProps extends CommonProps {
   callback?: (event: MouseEvent) => void;
 }
 
-export function Button({children, callback, type, disabled, loading, styleClass}: ButtonProps) {
+export function Button({children, callback, type, disabled, loading, styleClass}: IButtonProps) {
   const buttonClass: string = useMemo(() => convertToClass([
     'flex',
     'relative',

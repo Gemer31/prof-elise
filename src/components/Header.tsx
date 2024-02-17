@@ -16,11 +16,11 @@ import path from 'path';
 import { auth } from '@/app/lib/firebase-config';
 
 export interface IHeaderProps {
-  firestoreConfigData?: IConfig;
+  config?: IConfig;
   firestoreProductsData?: IProduct[];
 }
 
-export function Header({firestoreConfigData, firestoreProductsData}: IHeaderProps) {
+export function Header({config, firestoreProductsData}: IHeaderProps) {
   const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',

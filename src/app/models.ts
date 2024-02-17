@@ -7,7 +7,7 @@ export interface IProduct {
   imageUrls?: string[];
 }
 
-export interface CommonProps {
+export interface ICommonProps {
   children: React.ReactNode,
   styleClass?: string;
 }
@@ -112,6 +112,7 @@ export interface IFirestoreProductsEditorInfo {
   };
   price: {
     integerValue: string;
+    doubleValue: string;
   };
   description: {
     stringValue: string;

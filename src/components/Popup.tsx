@@ -1,13 +1,13 @@
-import { CommonProps } from '@/app/models';
+import { ICommonProps } from '@/app/models';
 import Image from 'next/image';
 import { useClickAway } from '@uidotdev/usehooks';
 
-export interface PopupProps extends CommonProps {
+export interface IPopupProps extends ICommonProps {
   title: string;
   closeCallback: () => void;
 }
 
-export function Popup({ children, styleClass, title, closeCallback }: PopupProps) {
+export function Popup({ children, styleClass, title, closeCallback }: IPopupProps) {
   const ref = useClickAway<HTMLInputElement>(closeCallback);
 
   return (
