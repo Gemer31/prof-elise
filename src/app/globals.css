@@ -45,6 +45,17 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.entity-card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 1.4rem !important;
+
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: center;
+}
+
 .slow-appearance {
     transition: opacity .2s ease-in-out;
 }

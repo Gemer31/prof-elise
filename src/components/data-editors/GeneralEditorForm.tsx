@@ -25,11 +25,11 @@ const validationSchema = yup.object().shape({
 });
 
 interface GeneralEditorFormProps {
-  firebaseData: IConfig;
-  refreshData?: () => void;
+  config: IConfig | undefined;
+  refreshCallback?: () => void;
 }
 
-export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorFormProps) {
+export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormProps) {
   const dispatch = useAppDispatch();
   const [shopDescription, setShopDescription] = useState('');
   const [deliveryDescription, setDeliveryDescription] = useState('');
@@ -45,16 +45,16 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
   });
 
   useEffect(() => {
-    if (firebaseData) {
-      setValue('phone', firebaseData.contactPhone);
-      setValue('workingHours', firebaseData.workingHours);
-      setValue('currency', firebaseData.currency);
-      setValue('shopDescription', firebaseData.shopDescription);
-      setValue('deliveryDescription', firebaseData.deliveryDescription);
-      setShopDescription(firebaseData.shopDescription);
-      setDeliveryDescription(firebaseData.deliveryDescription);
+    if (config) {
+      setValue('phone', config.contactPhone);
+      setValue('workingHours', config.workingHours);
+      setValue('currency', config.currency);
+      setValue('shopDescription', config.shopDescription);
+      setValue('deliveryDescription', config.deliveryDescription);
+      setShopDescription(config.shopDescription);
+      setDeliveryDescription(config.deliveryDescription);
     }
-  }, [firebaseData]);
+  }, [config]);
 
   const submitForm = async (formData: {
     phone: string,
@@ -70,12 +70,12 @@ export function GeneralEditorForm({firebaseData, refreshData}: GeneralEditorForm
       currency: formData.currency,
       shopDescription: formData.shopDescription,
       deliveryDescription: formData.deliveryDescription,
-      nextOrderNumber: firebaseData.nextOrderNumber || 1
+      nextOrderNumber: config?.nextOrderNumber || 1,
     };
     try {
       await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
-      refreshData?.();
+      refreshCallback?.();
     } catch {
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
     } finally {

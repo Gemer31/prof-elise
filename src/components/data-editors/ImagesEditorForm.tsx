@@ -9,11 +9,11 @@ import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { storage } from '@/app/lib/firebase-config';
 
 interface ImagesEditorFormProps {
-  storageData?: StorageReference[];
-  refreshData?: () => void;
+  images?: StorageReference[];
+  refreshCallback?: () => void;
 }
 
-export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormProps) {
+export function ImagesEditorForm({images, refreshCallback}: ImagesEditorFormProps) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<StorageReference | null>();
@@ -28,7 +28,7 @@ export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormPro
           return uploadBytes(ref(storage, file.name), new Blob([arrBuffer]));
         }))
         dispatch(setNotificationMessage(TRANSLATES[LOCALE].imagesUploaded));
-        refreshData?.();
+        refreshCallback?.();
       }
     } catch {
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
@@ -45,7 +45,7 @@ export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormPro
       if (image.name === selectedImage?.name) {
         setSelectedImage(null);
       }
-      refreshData?.();
+      refreshCallback?.();
     } catch {
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
     }
@@ -53,7 +53,7 @@ export function ImagesEditorForm({storageData, refreshData}: ImagesEditorFormPro
 
   return (
     <>
-      <ImagesViewer storageData={storageData} editAvailable={true} deleteImageClick={deleteImg}/>
+      <ImagesViewer storageData={images} editAvailable={true} deleteImageClick={deleteImg}/>
 
       <label className="flex flex-col justify-center items-center border-dashed w-full rounded-md border-pink-500 border-2 mt-2 mb-2 p-6 cursor-pointer">
         <input

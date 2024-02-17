@@ -1,29 +1,25 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { collection, getDocs, QuerySnapshot } from '@firebase/firestore';
 import { ButtonType, EditGroup, FirebaseCollections } from '@/app/enums';
-import { db, storage } from '@/app/lib/firebase-config';
+import { storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Loader } from '@/components/Loader';
 import { Button } from '@/components/Button';
 import { GeneralEditorForm } from '@/components/data-editors/GeneralEditorForm';
-import {
-  convertCategoriesDataToModelArray,
-  convertConfigDataToModel,
-  convertProductsDataToModelArray,
-  getDocData
-} from '@/utils/firebase.util';
-import { IFirestoreConfigEditorInfo, IFirestoreFields } from '@/app/models';
+import { ICategory, IConfig, IProduct } from '@/app/models';
 import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
+import { getFirebaseData } from '@/app/lib/firebase-api';
 
 export function AdminEditor() {
-  const [storageData, setStorageData] = useState<StorageReference[]>();
-  const [firestoreData, setFirestoreData] = useState<QuerySnapshot>();
+  const [images, setImages] = useState<StorageReference[]>();
+  const [config, setConfig] = useState<IConfig>();
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<EditGroup | string>(EditGroup.GENERAL);
   const [loading, setLoading] = useState(true);
 
@@ -33,13 +29,21 @@ export function AdminEditor() {
   }, []);
 
   const loadData = async () => {
-    const [docs, images] = await Promise.all([
-      getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
+    const [
+      images,
+      configData,
+      categoriesData,
+      productsData
+    ] = await Promise.all([
       listAll(ref(storage)),
+      getFirebaseData<IConfig>(FirebaseCollections.CONFIG),
+      getFirebaseData<ICategory[]>(FirebaseCollections.CATEGORIES),
+      getFirebaseData<IProduct[]>(FirebaseCollections.PRODUCTS)
     ]);
-
-    setFirestoreData(docs);
-    setStorageData(images.items);
+    setImages(images.items);
+    setConfig(configData);
+    setCategories(categoriesData || [])
+    setProducts(productsData || []);
   };
 
   return (
@@ -64,43 +68,22 @@ export function AdminEditor() {
             <div className="w-full">
               {
                 selectedGroup === EditGroup.GENERAL
-                  ? <GeneralEditorForm
-                    firebaseData={convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(firestoreData?.docs, FirebaseCollections.CONFIG)) }
-                    refreshData={loadData}
-                  />
+                  ? <GeneralEditorForm config={config} refreshCallback={loadData}/>
                   : <></>
               }
               {
                 selectedGroup === EditGroup.CATEGORIES
-                  ? <CategoryEditorForm
-                    storageData={storageData}
-                    firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
-                      firestoreData?.docs,
-                      FirebaseCollections.CATEGORIES
-                    ))}
-                    refreshData={loadData}
-                  />
+                  ? <CategoryEditorForm images={images} categories={categories} refreshCallback={loadData}/>
                   : <></>
               }
               {
                 selectedGroup === EditGroup.PRODUCTS
-                  ? <ProductEditorForm
-                    firestoreCategories={convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
-                      firestoreData?.docs,
-                      FirebaseCollections.CATEGORIES
-                    ))}
-                    firestoreProducts={convertProductsDataToModelArray(getDocData<IFirestoreFields>(
-                      firestoreData?.docs,
-                      FirebaseCollections.PRODUCTS
-                    ))}
-                    storageData={storageData}
-                    refreshData={loadData}
-                  />
+                  ? <ProductEditorForm categories={categories} products={products} images={images} refreshCallback={loadData}/>
                   : <></>
               }
               {
                 selectedGroup === EditGroup.IMAGES
-                  ? <ImagesEditorForm storageData={storageData} refreshData={loadData}/>
+                  ? <ImagesEditorForm images={images} refreshCallback={loadData}/>
                   : <></>
               }
             </div>

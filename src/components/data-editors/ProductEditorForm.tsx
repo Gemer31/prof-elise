@@ -30,17 +30,17 @@ const validationSchema = yup.object().shape({
 });
 
 export interface ProductEditorFormProps {
-  firestoreCategories: ICategory[];
-  firestoreProducts: IProduct[];
-  storageData?: StorageReference[];
-  refreshData?: () => void;
+  categories: ICategory[];
+  products: IProduct[];
+  images?: StorageReference[];
+  refreshCallback?: () => void;
 }
 
 export function ProductEditorForm({
-                                    firestoreCategories,
-                                    firestoreProducts,
-                                    storageData,
-                                    refreshData
+                                    categories,
+                                    products,
+                                    images,
+                                    refreshCallback
                                   }: ProductEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +74,7 @@ export function ProductEditorForm({
 
     if (selectedProduct) {
       data = {
-        data: firestoreProducts.map((product: IProduct) => {
+        data: products.map((product: IProduct) => {
           return product.id === selectedProduct.id ? {
             ...selectedProduct,
             title: formData.title,
@@ -88,7 +88,7 @@ export function ProductEditorForm({
     } else {
       data = {
         data: [
-          ...firestoreProducts,
+          ...products,
           {
             id: uuidv4(),
             title: formData.title,
@@ -111,7 +111,7 @@ export function ProductEditorForm({
       setSelectedImages(undefined);
       setSelectedCategory(undefined);
       reset();
-      refreshData?.();
+      refreshCallback?.();
     } catch {
     } finally {
       setIsLoading(false);
@@ -124,7 +124,7 @@ export function ProductEditorForm({
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData> = {
-      data: firestoreProducts.filter((product) => product.id !== deletedProduct.id)
+      data: products.filter((product) => product.id !== deletedProduct.id)
     };
 
     try {
@@ -132,7 +132,7 @@ export function ProductEditorForm({
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].productDeleted));
       changeProduct(undefined);
       reset();
-      refreshData?.();
+      refreshCallback?.();
     } catch {
     } finally {
       setIsLoading(false);
@@ -153,8 +153,8 @@ export function ProductEditorForm({
 
   const changeProduct = (newProduct: IProduct | undefined) => {
     if (newProduct) {
-      const productCategory = firestoreCategories.find((category) => category.id === newProduct.categoryId);
-      const productImages: StorageReference[] = storageData?.filter((img) => {
+      const productCategory = categories.find((category) => category.id === newProduct.categoryId);
+      const productImages: StorageReference[] = images?.filter((img) => {
         return newProduct.imageUrls?.find((productImg) => productImg.includes(img.name));
       }) || [];
 
@@ -194,7 +194,7 @@ export function ProductEditorForm({
       <div className="pb-4">
         <ProductsViewer
           selectedProduct={selectedProduct}
-          firestoreProducts={firestoreProducts}
+          firestoreProducts={products}
           selectProductClick={changeProduct}
           deleteProductClick={deleteProduct}
         />
@@ -234,7 +234,7 @@ export function ProductEditorForm({
         error={errors.categoryId?.message}
       >
         <CategoriesViewer
-          firestoreCategories={firestoreCategories}
+          firestoreCategories={categories}
           selectedCategory={selectedCategory}
           selectCategoryClick={changeCategory}
         />
@@ -246,7 +246,7 @@ export function ProductEditorForm({
       >
         <ImagesViewer
           multiple={true}
-          storageData={storageData}
+          storageData={images}
           selectedImages={selectedImages}
           selectImageClick={changeImage}
         />

@@ -24,12 +24,12 @@ const validationSchema = yup.object().shape({
 });
 
 interface CategoryEditorFormProps {
-  firestoreCategories: ICategory[];
-  storageData?: StorageReference[];
-  refreshData?: () => void;
+  categories: ICategory[];
+  images?: StorageReference[];
+  refreshCallback?: () => void;
 }
 
-export function CategoryEditorForm({firestoreCategories, storageData, refreshData}: CategoryEditorFormProps) {
+export function CategoryEditorForm({categories, images, refreshCallback}: CategoryEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
@@ -52,7 +52,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
 
     if (selectedCategory) {
       data = {
-        data: firestoreCategories.map((category) => {
+        data: categories?.map((category) => {
           return category.id === selectedCategory.id ? {
             ...selectedCategory,
             title: formData.title,
@@ -63,7 +63,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     } else {
       data = {
         data: [
-          ...firestoreCategories,
+          ...categories,
           {
             id: uuidv4(),
             title: formData.title,
@@ -79,7 +79,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
       setSelectedImage(null);
       setSelectedCategory(undefined);
       reset();
-      refreshData?.();
+      refreshCallback?.();
     } catch {
     } finally {
       setIsLoading(false);
@@ -92,7 +92,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
     setIsLoading(true);
 
     let data: WithFieldValue<DocumentData> = {
-      data: firestoreCategories.filter((category) => category.id !== deleteCategory.id)
+      data: categories?.filter((category) => category.id !== deleteCategory.id)
     };
 
     try {
@@ -101,7 +101,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
       setSelectedImage(null);
       setSelectedCategory(undefined);
       reset();
-      refreshData?.();
+      refreshCallback?.();
     } catch {
     } finally {
       setIsLoading(false);
@@ -112,7 +112,7 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
 
   const changeCategory = (newCategory: ICategory | undefined) => {
     if (newCategory) {
-      const existingImage: StorageReference | undefined = storageData?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
+      const existingImage: StorageReference | undefined = images?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
       setSelectedImage(existingImage);
       setValue('title', newCategory.title);
       setValue('imageUrl', newCategory.imageUrl);
@@ -138,13 +138,13 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
       <CategoriesViewer
         editAvailable={true}
         selectedCategory={selectedCategory}
-        firestoreCategories={firestoreCategories}
+        firestoreCategories={categories}
         deleteCategoryClick={deleteCategory}
         selectCategoryClick={changeCategory}
       />
       <div className="mt-2">
         <ImagesViewer
-          storageData={storageData}
+          storageData={images}
           selectImageClick={changeImage}
           selectedImages={selectedImage ? [selectedImage] : []}
         />
@@ -159,11 +159,11 @@ export function CategoryEditorForm({firestoreCategories, storageData, refreshDat
         register={register as unknown}
       />
       {
-        firestoreCategories?.length
+        categories?.length
           ? <>
             <span className="my-2">{TRANSLATES[LOCALE].subcategories}</span>
             {
-              firestoreCategories?.map((category, index) => {
+              categories?.map((category, index) => {
                 return category.id !== selectedCategory?.id
                   ? <label className="flex items-center" key={category.id}>
                     <input

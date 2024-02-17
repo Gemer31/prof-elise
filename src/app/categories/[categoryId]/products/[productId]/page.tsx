@@ -1,45 +1,31 @@
-import { ICategory, IConfig, IFirestoreConfigEditorInfo, IFirestoreFields, IProduct } from '@/app/models';
+import { ICategory, IConfig, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { FirebaseCollections } from '@/app/enums';
-import { collection, getDocs } from '@firebase/firestore';
-import { listAll, ref } from '@firebase/storage';
-import {
-  convertCategoriesDataToModelArray,
-  convertConfigDataToModel,
-  convertProductsDataToModelArray,
-  getDocData
-} from '@/utils/firebase.util';
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
-import { db, storage } from '@/app/lib/firebase-config';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { getFirebaseData } from '@/app/lib/firebase-api';
 
-export interface ProductDetailsProps {
+export interface IProductDetailsProps {
   params: {
     productId: string;
   };
 }
 
-export default async function ProductDetailsPage({params: {productId}}: ProductDetailsProps) {
-  const [firestoreData, storageData] = await Promise.all([
-    getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))),
-    listAll(ref(storage))
+export default async function ProductDetailsPage({params: {productId}}: IProductDetailsProps) {
+  const [
+    config,
+    categories,
+    products
+  ] = await Promise.all([
+    getFirebaseData<IConfig>(FirebaseCollections.CONFIG),
+    getFirebaseData<ICategory[]>(FirebaseCollections.CATEGORIES),
+    getFirebaseData<IProduct[]>(FirebaseCollections.PRODUCTS)
   ]);
-  const product: IProduct | undefined = convertProductsDataToModelArray(getDocData<IFirestoreFields>(
-    firestoreData?.docs,
-    FirebaseCollections.PRODUCTS
-  )).find((item) => item.id === productId);
-  const categories: ICategory[] = convertCategoriesDataToModelArray(getDocData<IFirestoreFields>(
-    firestoreData?.docs,
-    FirebaseCollections.CATEGORIES
-  ));
-  const productCategory = categories.find((item) => item.id === product?.categoryId);
-  const config: IConfig = convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
-    firestoreData.docs,
-    FirebaseCollections.CONFIG
-  ));
+  const product: IProduct | undefined = products.find((item) => item.id === productId);
+  const productCategory: ICategory | undefined = categories.find((item) => item.id === product?.categoryId);
 
   // todo: redirect if not found
   return (
@@ -63,7 +49,7 @@ export default async function ProductDetailsPage({params: {productId}}: ProductD
                   <ProductDetailsActionsBlock product={product}/>
                 </div>
               </div>
-              <div className="mt-4 ql-editor no-paddings whitespace-pre-line"
+              <div className="mt-4 ql-editor h-fit no-paddings whitespace-pre-line"
                    dangerouslySetInnerHTML={{__html: product?.description || ''}}
               />
             </div>

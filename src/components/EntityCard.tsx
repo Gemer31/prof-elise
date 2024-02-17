@@ -19,7 +19,7 @@ export interface EntityCardProps {
 
 export function EntityCard({category, product, config}: EntityCardProps) {
   const cardClass = useMemo(() => convertToClass([
-    product ? 'h-96' : 'h-72',
+    product ? 'h-96' : '',
     'flex',
     'flex-col',
     'items-center',
@@ -30,6 +30,19 @@ export function EntityCard({category, product, config}: EntityCardProps) {
     'hover:bg-pink-100',
     'duration-500',
     'transition-colors',
+  ]), []);
+  const titleClass = useMemo(() => convertToClass([
+    product ? 'text-base' : 'text-lg',
+    product ? 'min-h-19' : 'min-h-6',
+    'h-full',
+    'flex',
+    'justify-center',
+    'items-center',
+    'text-center',
+    'text-sm',
+    'md:text-base',
+    'mt-2',
+    'entity-card-title',
   ]), []);
 
   const dispatch = useAppDispatch();
@@ -65,7 +78,7 @@ export function EntityCard({category, product, config}: EntityCardProps) {
         src={category?.imageUrl || product?.imageUrls?.[0] || ''}
         alt={category?.title || product?.title || ''}
       />
-      <h3 className={`flex justify-center items-center text-center mt-2 min-h-16 ${product ? 'text-base' : 'text-lg'}`}>{category?.title || product?.title}</h3>
+      <h3 className={titleClass}>{category?.title || product?.title}</h3>
       {
         product
           ? (

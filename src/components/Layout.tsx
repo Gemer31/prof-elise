@@ -31,7 +31,7 @@ export function Layout({children, firestoreDocsData}: LayoutProps) {
     <>
       <RequestCallPopup/>
       <Notification/>
-      <div className="relative flex flex-col items-center h-full overflow-hidden bg-gray-200 z-10">
+      <div className="relative flex flex-col items-center h-full bg-gray-200 z-10">
         <Header firestoreConfigData={config} firestoreProductsData={products}/>
         <SubHeader firestoreConfigData={config}/>
         <ContentContainer styleClass="w-full flex justify-start px-2">
