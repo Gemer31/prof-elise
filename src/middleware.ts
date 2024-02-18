@@ -4,6 +4,7 @@ import { RouterPath } from '@/app/enums';
 
 export async function middleware(request: NextRequest, response: NextResponse) {
   const session = request.cookies.get("session");
+  console.log("sessionMiddleware: ", session);
 
   if (!session && request.nextUrl.pathname === RouterPath.EDITOR) {
     return NextResponse.redirect(new URL(RouterPath.HOME, request.url));

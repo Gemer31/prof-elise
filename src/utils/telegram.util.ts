@@ -1,4 +1,4 @@
-import { ICart, IConfig, IFirestoreConfigEditorInfo } from '@/app/models';
+import { ICart, IConfig } from '@/app/models';
 
 export function getOrderMessage(data: {
   orderNumber: number;
