@@ -30,7 +30,6 @@ export default async function RootLayout({children, params}: {
       headers: {
         Cookie: `session=${cookies().get('session')?.value}`
       },
-      body: JSON.stringify({}),
     })
   ]);
 
