@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonType, EditGroup, FirebaseCollections } from '@/app/enums';
-import { storage } from '@/app/lib/firebase-config';
+import { ButtonType, EditGroup, RouterPath } from '@/app/enums';
+import { auth, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Loader } from '@/components/Loader';
@@ -14,19 +14,32 @@ import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
 import { getFirestoreData } from '@/app/lib/firebase-api';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/navigation';
 
 export function AdminEditor() {
+  const router = useRouter();
+  const [user, loading] = useAuthState(auth);
+  const [isAuth, setIsAuth] = useState(false);
   const [images, setImages] = useState<StorageReference[]>();
   const [config, setConfig] = useState<IConfig>();
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<EditGroup | string>(EditGroup.GENERAL);
-  const [loading, setLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    loadData().then(() => setLoading(false));
+    setIsDataLoading(true);
+    loadData().then(() => setIsDataLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      user
+        ? setIsAuth(true)
+        : router.push(RouterPath.HOME);
+    }
+  }, [loading]);
 
   const loadData = async () => {
     const [
@@ -46,7 +59,7 @@ export function AdminEditor() {
     <main className="w-full">
       <ContentContainer styleClass="flex flex-col items-center">
         <h1 className="text-2xl ">{TRANSLATES[LOCALE].editor}</h1>
-        {loading
+        {isDataLoading || !isAuth
           ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader styleClass="min-h-[250px] border-pink-500"/></div>
           : <>
             <div className="w-full mt-2 mb-4 flex gap-x-3">

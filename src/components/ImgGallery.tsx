@@ -18,10 +18,19 @@ export function ImgGallery({imageUrls}: IImgGalleryProps) {
     }
   }, [imageUrls]);
 
+  const changeScreen = (v: boolean) => {
+    if (v) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    setIsFullscreen(v);
+  }
+
   return (
     <ImageGallery
-      additionalClass={isFullscreen ? '' : 'gallery-small'}
-      onScreenChange={setIsFullscreen}
+      additionalClass={`${isFullscreen ? 'gallery-fullscreen' : 'gallery-small'}`}
+      onScreenChange={changeScreen}
       useBrowserFullscreen={false}
       showBullets={true}
       showPlayButton={false}

@@ -12,7 +12,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { IConfig, IProduct } from '@/app/models';
 import { useMemo, useRef } from 'react';
-import path from 'path';
 import { auth } from '@/app/lib/firebase-config';
 
 export interface IHeaderProps {
@@ -41,7 +40,7 @@ export function Header({config, firestoreProductsData}: IHeaderProps) {
     'duration-500',
     'transition-colors',
     'text-2xl',
-    'text-amber-50',
+    'text-amber-50'
   ]), []);
   const circleNavLinkClass: string = useMemo(() => convertToClass([
     'cursor-pointer',
@@ -56,7 +55,7 @@ export function Header({config, firestoreProductsData}: IHeaderProps) {
     'size-14',
     'hover:bg-pink-100',
     'duration-500',
-    'transition-colors',
+    'transition-colors'
   ]), []);
   const siteLinks: string[][] = useMemo(() => ([
     [RouterPath.HOME, 'main'],
@@ -66,7 +65,7 @@ export function Header({config, firestoreProductsData}: IHeaderProps) {
 
   const router = useRouter();
   const pathname = usePathname();
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const burgerRef = useRef<HTMLInputElement>(null);
 
   const getNavigationLinkClass = (path: string) => {
@@ -78,12 +77,13 @@ export function Header({config, firestoreProductsData}: IHeaderProps) {
 
   const logout = async () => {
     await signOut(auth);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/logout`, {
-      method: 'POST'
-    });
-    if (response.status === 200 && pathname === RouterPath.EDITOR) {
-      router.push(RouterPath.HOME);
-    }
+    pathname === RouterPath.EDITOR && router.push(RouterPath.HOME);
+    // const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/logout`, {
+    //   method: 'POST'
+    // });
+    // if (response.status === 200 && pathname === RouterPath.EDITOR) {
+    //   router.push(RouterPath.HOME);
+    // }
   };
 
   return (
