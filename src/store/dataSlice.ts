@@ -46,6 +46,7 @@ export const dataSlice = createSlice({
       products.forEach(({data, amount}) => totalProductsPrice += (amount * data.price));
       state.cart.totalProductsPrice = totalProductsPrice;
       state.cart.totalProductsAmount = products.length;
+      state.cartLoading = false;
 
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },

@@ -20,7 +20,7 @@ export function getOrderMessage(data: {
     + '\n'
     + `Адрес:${data.address}`
     + '\n'
-    + data.comment ? `Комментарий:${data.comment}\n` : ''
+    + (data.comment ? `Комментарий:${data.comment}\n` : '')
     + `Сумма:${data.cart.totalProductsPrice} ${data.config.currency}`
     + '\n';
 
