@@ -23,7 +23,7 @@ const validationSchema = yup.object().shape({
 export default function ProductDetails() {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginError, setIsLoginError] = useState(false);
   const {
@@ -41,7 +41,7 @@ export default function ProductDetails() {
     if (!loading) {
       user
         ? router.push(RouterPath.EDITOR)
-        : setIsAuth(false);
+        : setIsAuthChecked(true);
     }
   }, [loading]);
 
@@ -69,7 +69,7 @@ export default function ProductDetails() {
     }
   }, []);
 
-  return loading || !isAuth
+  return loading || !isAuthChecked
     ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader
       styleClass="min-h-[250px] border-pink-500"/></div>
     : (

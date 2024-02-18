@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import ReactQuill from 'react-quill';
+import dynamic from 'next/dynamic';
+const ReactQuill = dynamic(() => import("react-quill"), {ssr: false});
 
 interface ITextEditorFormFieldProps {
   placeholder: string;

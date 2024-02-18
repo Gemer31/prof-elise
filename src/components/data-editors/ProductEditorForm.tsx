@@ -18,7 +18,6 @@ import { useAppDispatch } from '@/store/store';
 import { InputFormField } from '@/components/form-fields/InputFormField';
 import { db } from '@/app/lib/firebase-config';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
-import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 import { TextEditor } from '@/components/data-editors/TextEditor';
 
 const validationSchema = yup.object().shape({
