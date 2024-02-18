@@ -78,7 +78,7 @@ export function Header({config, firestoreProductsData}: IHeaderProps) {
 
   const logout = async () => {
     await signOut(auth);
-    const response = await fetch(path.join(process.cwd(), 'api', 'logout'), {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/logout`, {
       method: 'POST'
     });
     if (response.status === 200 && pathname === RouterPath.EDITOR) {

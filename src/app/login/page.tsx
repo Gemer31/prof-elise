@@ -41,7 +41,7 @@ export default function ProductDetails() {
 
     try {
       const userCred = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      const serverLoginResponse = await fetch(path.join(process.cwd(), 'api', 'login'), {
+      const serverLoginResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/login`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${await userCred.user.getIdToken()}`

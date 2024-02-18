@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     return NextResponse.redirect(new URL(RouterPath.HOME, request.url));
   }
 
-  const responseAPI = await fetch(`${process.env.APP_SERVER_ENDPOINT}/api/login`, {
+  const responseAPI = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/login`, {
     headers: {
       Cookie: `session=${session?.value}`,
     },

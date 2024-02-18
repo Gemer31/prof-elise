@@ -66,7 +66,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     comment?: string;
   }) => {
     setLoading(true);
-    await fetch(path.join(process.cwd(), 'api', 'bot'), {
+    await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
       method: 'POST',
       body: JSON.stringify({
         message: encodeURI(getOrderMessage({

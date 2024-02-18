@@ -36,7 +36,7 @@ export function RequestCallPopup() {
     setIsLoading(true);
 
     const message: string = `Заказать звонок\n\nИмя: ${formData.name};\nТелефон: ${formData.phone}`;
-    const result = await fetch(path.join(process.cwd(), 'api', 'bot'), {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
       method: 'POST',
       body: JSON.stringify({message: encodeURI(message)})
     });
