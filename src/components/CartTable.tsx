@@ -11,6 +11,7 @@ import { addProductToCart, removeProductFromCart } from '@/store/dataSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { Loader } from '@/components/Loader';
+import { useState } from 'react';
 
 interface ICartTableProps {
   title?: string;
@@ -23,6 +24,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.dataReducer.cart);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
+  const [createOrderLoading, setCreateOrderLoading] = useState(false);
 
   const updateProductsCount = (productData: ICartProductData, amount: number) => {
     dispatch(addProductToCart({
@@ -89,7 +91,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
                   </td>
                   <td className="w-2/12 text-end">{productData.data.price} {config.currency}</td>
                   <td
-                    className="w-2/12 text-end hidden sm:table-cell">{productData.data.price * productData.amount} {config.currency}</td>
+                    className="w-2/12 text-end hidden sm:table-cell">{(parseFloat(productData.data.price) * productData.amount).toFixed(2)} {config.currency}</td>
                 </tr>;
               })
             }
@@ -104,9 +106,13 @@ export function CartTable({config, editable, title}: ICartTableProps) {
             {
               editable
                 ? <Button
-                  styleClass="w-fit text-base uppercase text-amber-50 px-4 py-2 mt-2 w-fit"
+                  styleClass="w-fit text-base uppercase text-amber-50 px-4 py-2 w-fit"
                   type={ButtonType.BUTTON}
-                  callback={() => router.push(RouterPath.CHECKOUT)}
+                  loading={createOrderLoading}
+                  callback={() => {
+                    setCreateOrderLoading(true);
+                    router.push(RouterPath.CHECKOUT);
+                  }}
                 >{TRANSLATES[LOCALE].createOrder}</Button>
                 : <></>
             }

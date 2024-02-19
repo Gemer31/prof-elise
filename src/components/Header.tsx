@@ -10,16 +10,15 @@ import { RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
-import { IConfig, IProduct } from '@/app/models';
+import { IProduct } from '@/app/models';
 import { useMemo, useRef } from 'react';
 import { auth } from '@/app/lib/firebase-config';
 
 export interface IHeaderProps {
-  config?: IConfig;
-  firestoreProductsData?: IProduct[];
+  products?: IProduct[];
 }
 
-export function Header({config, firestoreProductsData}: IHeaderProps) {
+export function Header({products}: IHeaderProps) {
   const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',
@@ -128,7 +127,7 @@ export function Header({config, firestoreProductsData}: IHeaderProps) {
             >
               <Image className="p-2" width={45} height={45} src="/icons/instagram.svg" alt="Instagram"/>
             </a>
-            <CartButton firestoreProductsData={firestoreProductsData}/>
+            <CartButton firestoreProductsData={products}/>
             {
               user
                 ? <>

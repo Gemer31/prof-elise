@@ -24,7 +24,7 @@ export function Layout({children, firestoreData}: ILayoutProps) {
       <RequestCallPopup/>
       <Notification/>
       <div id="page" className="relative flex flex-col items-center h-full bg-gray-200 z-10">
-        <Header config={firestoreData?.config} firestoreProductsData={firestoreData?.products}/>
+        <Header products={firestoreData?.products}/>
         <SubHeader config={firestoreData?.config}/>
         <ContentContainer id="content" styleClass="w-full flex justify-start px-2">
           {children}

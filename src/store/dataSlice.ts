@@ -15,7 +15,7 @@ export const dataSlice = createSlice({
     notificationMessage: null,
     cartLoading: true,
     cart: {
-      totalProductsPrice: 0,
+      totalProductsPrice: '0',
       totalProductsAmount: 0,
       products: {}
     }
@@ -38,13 +38,13 @@ export const dataSlice = createSlice({
       state.cart.products[action.payload.data.id] = cartProductData
         ? {
           ...cartProductData,
-          amount: action.payload.addToExist ? (cartProductData.amount + action.payload.amount) : action.payload.amount
+          amount: action.payload.addToExist ? Math.round(cartProductData.amount + action.payload.amount) : action.payload.amount
         }
         : action.payload;
 
       const products = Object.values(state.cart.products);
-      products.forEach(({data, amount}) => totalProductsPrice += (amount * data.price));
-      state.cart.totalProductsPrice = totalProductsPrice;
+      products.forEach(({data, amount}) => totalProductsPrice += (amount * parseFloat(data.price)));
+      state.cart.totalProductsPrice = totalProductsPrice.toFixed(2);
       state.cart.totalProductsAmount = products.length;
       state.cartLoading = false;
 
@@ -53,7 +53,7 @@ export const dataSlice = createSlice({
     removeProductFromCart: (state: IDataSlice, action: PayloadAction<string>) => {
       const cartProductData: ICartProductData = state.cart.products[action.payload];
       if (cartProductData) {
-        state.cart.totalProductsPrice -= (cartProductData.amount * cartProductData.data.price);
+        state.cart.totalProductsPrice = (parseFloat(state.cart.totalProductsPrice) - (cartProductData.amount * parseFloat(cartProductData.data.price))).toFixed(2);
         delete state.cart.products[action.payload];
         state.cart.totalProductsAmount = Object.keys(state.cart.products).length;
       }

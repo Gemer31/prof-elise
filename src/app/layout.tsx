@@ -25,7 +25,7 @@ export default async function RootLayout({children}: {
 
   return (
     <html id="html" lang="en" className="scroll-smooth">
-    <body className={openSans.className}>
+    <body className={'overflow-x-hidden ' + openSans.className}>
     <StoreProvider>
       <Layout
         firestoreData={firestoreData}

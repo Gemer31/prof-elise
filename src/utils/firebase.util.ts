@@ -70,7 +70,7 @@ export function convertProductsDataToModelArray(data: IFirestoreFields): IProduc
     return {
       id: product.mapValue.fields.id.stringValue,
       title: product.mapValue.fields.title.stringValue,
-      price: Number(product.mapValue.fields.price.integerValue || product.mapValue.fields.price.doubleValue),
+      price: product.mapValue.fields.price.stringValue,
       description: product.mapValue.fields.description.stringValue,
       categoryId: product.mapValue.fields.categoryId.stringValue,
       imageUrls: product.mapValue.fields.imageUrls.arrayValue.values.map((v) => (v.stringValue))

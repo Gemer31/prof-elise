@@ -1,7 +1,7 @@
 export interface IProduct {
   id: string;
   title: string;
-  price: number;
+  price: string;
   description: string;
   categoryId: string;
   imageUrls?: string[];
@@ -29,7 +29,7 @@ export interface ICategory {
 }
 
 export interface ICart {
-  totalProductsPrice: number;
+  totalProductsPrice: string;
   totalProductsAmount: number;
   products: Record<string, ICartProductData>;
 }
@@ -111,8 +111,7 @@ export interface IFirestoreProductsEditorInfo {
     stringValue: string;
   };
   price: {
-    integerValue: string;
-    doubleValue: string;
+    stringValue: string;
   };
   description: {
     stringValue: string;

@@ -20,7 +20,7 @@ export function CartButton({firestoreProductsData}: ICartProps) {
     if (localStorageCartData) {
       const oldCart: ICart = JSON.parse(localStorageCartData as string) as ICart;
       const updatedCart: ICart = {
-        totalProductsPrice: 0,
+        totalProductsPrice: '0',
         totalProductsAmount: 0,
         products: {}
       };
@@ -31,11 +31,17 @@ export function CartButton({firestoreProductsData}: ICartProps) {
             data: product,
             amount: oldCart.products[product.id].amount
           };
-          updatedCart.totalProductsPrice += (oldCart.products[product.id].amount * product.price);
+          updatedCart.totalProductsPrice = parseFloat(updatedCart.totalProductsPrice) + (oldCart.products[product.id].amount * parseFloat(product.price)).toFixed(2);
           updatedCart.totalProductsAmount += 1;
         }
       });
       dispatch(setCartData(updatedCart));
+    } else {
+      dispatch(setCartData({
+        totalProductsPrice: '0',
+        totalProductsAmount: 0,
+        products: {}
+      }));
     }
   }, []);
 

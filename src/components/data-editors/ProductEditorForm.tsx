@@ -22,7 +22,9 @@ import { TextEditor } from '@/components/data-editors/TextEditor';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),
-  price: yup.number().required('fieldRequired'),
+  price: yup.string()
+    .matches(/^\d*(\.\d{2})?$/, 'invalidPrice')
+    .required('fieldRequired'),
   description: yup.string().required('fieldRequired'),
   categoryId: yup.string().required('fieldRequired'),
   images: yup.array().required('fieldRequired')
@@ -60,7 +62,7 @@ export function ProductEditorForm({
 
   const submitForm = async (formData: {
     title: string,
-    price: number,
+    price: string,
     description: string,
     categoryId: string,
     images: StorageReference[]
@@ -111,7 +113,8 @@ export function ProductEditorForm({
       setSelectedCategory(undefined);
       reset();
       refreshCallback?.();
-    } catch {
+    } catch (e) {
+      console.log('Update product error: ', e);
     } finally {
       setIsLoading(false);
     }
@@ -168,7 +171,7 @@ export function ProductEditorForm({
       setSelectedImages(productImages);
     } else {
       setValue('title', '');
-      setValue('price', 0);
+      setValue('price', '');
       setValue('description', '');
       setValue('categoryId', '');
       setValue('images', []);
@@ -210,7 +213,7 @@ export function ProductEditorForm({
       <InputFormField
         required={true}
         placeholder={TRANSLATES[LOCALE].enterPrice}
-        label={TRANSLATES[LOCALE].price}
+        label={TRANSLATES[LOCALE].priceWithExamples}
         name="price"
         type="text"
         error={errors.price?.message}

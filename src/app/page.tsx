@@ -12,7 +12,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <ContentContainer styleClass="flex flex-col items-center overflow-hidden px-2">
+      <ContentContainer styleClass="flex flex-col items-center px-2">
         <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
           <div className="w-full md:w-4/12 mr-4 my-6">
             <Catalog categories={categories}/>

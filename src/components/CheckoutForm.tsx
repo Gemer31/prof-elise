@@ -88,7 +88,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
       nextOrderNumber: config.nextOrderNumber + 1
     });
     dispatch(setCartData({
-      totalProductsPrice: 0,
+      totalProductsPrice: '0',
       totalProductsAmount: 0,
       products: {},
     }));
