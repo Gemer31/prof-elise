@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       backgroundColor: {
         'black-1/2': 'rgba(0, 0, 0, 0.5)',
+        'black-1/5': 'rgba(0, 0, 0, 0.2)',
       },
       screens: {
         'xs': '320px',

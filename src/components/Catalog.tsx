@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { ICategory } from '@/app/models';
 import { RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
+import { useState } from 'react';
+import { Loader } from '@/components/Loader';
 
 interface ICategoriesProps {
   categories: ICategory[];
@@ -12,6 +14,8 @@ interface ICategoriesProps {
 }
 
 export function Catalog({categories, currentCategoryId}: ICategoriesProps) {
+  const [catalogIdIsLoading, setCatalogIdIsLoading] = useState('');
+
   return (
     <>
       <div className="fixed md:hidden aside-catalog-wrapper">
@@ -30,7 +34,8 @@ export function Catalog({categories, currentCategoryId}: ICategoriesProps) {
                     key={category.id}
                     href={RouterPath.CATEGORIES + '/' + category.id}
                   >
-                    <Image className="mr-4 p-1 bg-amber-50 rounded-full" width={25} height={25} src={category.imageUrl} alt={category.title}/>
+                    <Image className="mr-4 p-1 bg-amber-50 rounded-full" width={25} height={25} src={category.imageUrl}
+                           alt={category.title}/>
                     <span className={currentCategoryId === category.id ? 'font-bold' : ''}>{category.title}</span>
                   </Link>
                 );
@@ -44,12 +49,22 @@ export function Catalog({categories, currentCategoryId}: ICategoriesProps) {
           categories.map((category) => {
             return (
               <Link
-                className="flex items-center relative w-full categories-item duration-500 transition-colors hover:bg-pink-100 px-4 py-3"
+                className={'flex items-center relative w-full categories-item duration-500 transition-colors hover:bg-pink-100 px-4 py-3 ' + (currentCategoryId === category.id ? 'pointer-events-none' : '')}
                 key={category.id}
                 href={RouterPath.CATEGORIES + '/' + category.id}
+                onClick={() => setCatalogIdIsLoading(category.id)}
               >
-                <Image className="mr-4 p-1 bg-amber-50 rounded-full" width={25} height={25} src={category.imageUrl} alt={category.title}/>
-                <span className={currentCategoryId === category.id ? 'font-bold' : ''}>{category.title}</span>
+                <div className="flex items-center">
+                  <Image className="mr-4 p-1 bg-amber-50 rounded-full" width={25} height={25} src={category.imageUrl}
+                         alt={category.title}/>
+                  <span className={currentCategoryId === category.id ? 'font-bold' : ''}>{category.title}</span>
+                </div>
+                {catalogIdIsLoading === category.id ?
+                  <div className="absolute left-0 top-0 bottom-0 py-2.5 w-full flex justify-center overflow-hidden bg-black-1/5">
+                    <Loader styleClass="border-pink-500"/>
+                  </div>
+                  : <></>
+                }
               </Link>
             );
           })

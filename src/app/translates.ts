@@ -13,6 +13,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     products: 'Продукты',
     delivery: 'Доставка',
     contacts: 'Контакты',
+    preview: 'Просмотр',
     requestCall: 'Заказать звонок',
     send: 'Отправить',
     yourName: 'Ваше имя',
