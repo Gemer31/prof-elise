@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { MouseEvent, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
@@ -76,7 +76,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       onClick={onClick}
     >
       <Image
-        className="rounded-md bg-amber-50 h-[200px] w-[200px]"
+        className="rounded-md h-[200px] w-[200px]"
         width={200}
         height={200}
         src={data?.imageUrls?.[0] || ''}
@@ -104,8 +104,8 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       {
         isLoading
           ? <div className="w-full h-full absolute top-0 flex justify-center items-center bg-black-1/5">
-            <Loader styleClass="h-[50px] border-pink-500"
-            /></div>
+            <Loader styleClass="h-[50px] border-pink-500"/>
+          </div>
           : <></>
       }
     </Link>

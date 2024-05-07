@@ -44,7 +44,7 @@ export function Catalog({categories, currentCategoryId}: ICategoriesProps) {
           </div>
         </div>
       </div>
-      <div className="hidden md:block">
+      <div className="hidden md:block rounded-md border-2 bg-pink-300">
         {
           categories.map((category) => {
             return (

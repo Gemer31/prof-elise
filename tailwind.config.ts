@@ -11,6 +11,7 @@ const config: Config = {
       backgroundColor: {
         'black-1/2': 'rgba(0, 0, 0, 0.5)',
         'black-1/5': 'rgba(0, 0, 0, 0.2)',
+        'black-1/4': 'rgba(0, 0, 0, 0.25)',
       },
       screens: {
         'xs': '320px',

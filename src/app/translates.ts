@@ -15,6 +15,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     contacts: 'Контакты',
     preview: 'Просмотр',
     requestCall: 'Заказать звонок',
+    getDetails: 'Узнать подробнее',
     send: 'Отправить',
     yourName: 'Ваше имя',
     name: 'Имя',

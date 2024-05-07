@@ -47,7 +47,7 @@ export function CategoryCard({data, isLoading, onClick}: ICategoryCardProps) {
       onClick={onClick}
     >
       <Image
-        className="rounded-md bg-amber-50 h-[200px] w-[200px]"
+        className="rounded-md h-[200px] w-[200px]"
         width={200}
         height={200}
         src={data?.imageUrl || ''}

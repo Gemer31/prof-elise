@@ -33,7 +33,7 @@ export function Advantages({ styleClass }: IAdvantagesProps) {
   });
 
   return (
-    <div className={'py-4 ' + styleClass}>
+    <div className={'py-4 rounded-md border-2 bg-pink-300 ' + styleClass}>
       <h2 className="text-center uppercase mb-4 text-xl md:bold md:mb-2">{TRANSLATES[LOCALE].ourAdvantages}</h2>
       <div className="flex flex-col 3xs:flex-row justify-between gap-x-1 md:gap-x-0 md:block">
         {

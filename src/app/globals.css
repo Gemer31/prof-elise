@@ -63,12 +63,15 @@ input::-webkit-inner-spin-button {
 .animate__animated.animate__delay-500ms {
     animation-delay: .5s;
 }
+
 .animate__animated.animate__delay-1000ms {
     animation-delay: 1s;
 }
+
 .animate__animated.animate__delay-1500ms {
     animation-delay: 1.5s;
 }
+
 .animate__animated.animate__delay-2000ms {
     animation-delay: 2s;
 }
@@ -144,7 +147,7 @@ tbody > tr {
 
 /*images gallery*/
 .gallery-small .image-gallery-left-nav,
-.gallery-small .image-gallery-right-nav{
+.gallery-small .image-gallery-right-nav {
     transform: translateY(-50%) scale(.4)
 }
 
@@ -302,4 +305,89 @@ tbody > tr {
 
 .aside-catalog-wrapper input[type="checkbox"]:checked ~ .aside-catalog {
     transform: translateX(0);
+}
+
+@keyframes cartCounterSlideUp {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(22px);
+    }
+}
+
+@keyframes cartCounterSlideDown {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-22px);
+    }
+}
+
+@keyframes cartCounterDisappear {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes cartCounterAppear {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cart-counter-slide-up {
+    animation-name: cartCounterSlideUp;
+    align-self: end;
+}
+
+.cart-counter-slide-down {
+    animation-name: cartCounterSlideDown;
+    align-self: start;
+}
+
+.cart-counter-disappear {
+    animation-name: cartCounterDisappear;
+    animation-fill-mode: forwards;
+}
+
+.cart-counter-appear {
+    animation-name: cartCounterAppear;
+    animation-fill-mode: forwards;
+}
+
+.cart-counter {
+    animation-duration: .15s;
+    animation-timing-function: ease-in;
+    animation-direction: alternate;
+    align-self: start;
+    overflow: hidden;
+    position: absolute;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    background: rgb(236, 72, 153);
+    border-radius: 100%;
+    top: 4px;
+    width: 22px;
+    height: 22px;
+    right: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0);
+}
+
+.cart-counter-numbers {
+    animation-duration: .15s;
+    animation-timing-function: ease-in;
+    display: flex;
+    flex-direction: column;
 }

@@ -13,7 +13,7 @@ export default async function HomePage() {
     <main>
       <ContentContainer styleClass="flex flex-col items-center px-2">
         <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
-          <div className="w-full md:w-4/12 gap-x-3 my-6">
+          <div className="w-full gap-x-3 md:w-4/12 mr-4">
             <Catalog categories={categories}/>
             <Advantages/>
           </div>

@@ -27,3 +27,8 @@ export enum FirebaseCollections {
   CONFIG = 'config',
   PRODUCTS = 'products'
 }
+
+export enum CounterType {
+  DEFAULT,
+  SMART,
+}
