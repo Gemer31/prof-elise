@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/Button';
 import { ButtonType, CounterType } from '@/app/enums';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCounter } from '@uidotdev/usehooks';
 
 interface ICounterProps {
@@ -12,20 +12,33 @@ interface ICounterProps {
 }
 
 export function Counter({type, counterChangedCallback, selectedAmount}: ICounterProps) {
-  const [count, {increment, decrement, set}] = useCounter(1, {min: 1});
+  const [count, {increment, decrement, set}] = useCounter(1, {min: 0});
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     selectedAmount && set(selectedAmount);
   }, []);
 
   useEffect(() => {
-    counterChangedCallback(count);
+    console.log("count: ", count);
+    if (initialized) {
+      counterChangedCallback(count);
+    }
   }, [count]);
 
+  const incr = () => {
+    setInitialized(true);
+    increment();
+  }
+  const decr = () => {
+    setInitialized(true);
+    decrement();
+  }
+
   return type === CounterType.SMART
-    ? <div className="flex bg-pink-500 rounded-md text-amber-50">
-      <button type="button" className="w-[40px]" onClick={decrement}>
-        <div className="hover:scale-105">-</div>
+    ? <div className="justify-center h-full transition-all flex bg-pink-500 rounded-md text-amber-50" onClick={(e) => {e.preventDefault(); e.stopPropagation()}}>
+      <button type="button" className="w-[40px]" onClick={decr}>
+        <div className="hover:scale-125 duration-150">-</div>
       </button>
       <input
         className="w-[40px] text-center pointer-events-none bg-pink-500"
@@ -33,8 +46,8 @@ export function Counter({type, counterChangedCallback, selectedAmount}: ICounter
         min={1}
         value={count}
       />
-      <button type="button" className="w-[40px]" onClick={increment}>
-        <div className="hover:scale-105">+</div>
+      <button type="button" className="w-[40px]" onClick={incr}>
+        <div className="hover:scale-125 duration-150">+</div>
       </button>
     </div>
     : <div className="flex">
@@ -54,5 +67,5 @@ export function Counter({type, counterChangedCallback, selectedAmount}: ICounter
         type={ButtonType.BUTTON}
         callback={increment}
       >+</Button>
-    </div>
+    </div>;
 }

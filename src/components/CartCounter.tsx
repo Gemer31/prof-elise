@@ -30,12 +30,13 @@ export function CartCounter({firestoreProductsData}: ICartCounterProps) {
 
       firestoreProductsData?.forEach((product: IProduct) => {
         if (oldCart.products?.[product.id]) {
+          const amount = oldCart.products[product.id].amount;
           updatedCart.products[product.id] = {
             data: product,
-            amount: oldCart.products[product.id].amount
+            amount
           };
           updatedCart.totalProductsPrice = parseFloat(updatedCart.totalProductsPrice) + (oldCart.products[product.id].amount * parseFloat(product.price)).toFixed(2);
-          updatedCart.totalProductsAmount += 1;
+          updatedCart.totalProductsAmount += amount;
         }
       });
       dispatch(setCartData(updatedCart));

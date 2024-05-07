@@ -34,6 +34,7 @@ export const dataSlice = createSlice({
     }>) => {
       const cartProductData = state.cart.products[action.payload.data.id];
       let totalProductsPrice: number = 0;
+      const prevAmount = state.cart.products[action.payload.data.id]?.amount || 0;
 
       state.cart.products[action.payload.data.id] = cartProductData
         ? {
@@ -45,7 +46,11 @@ export const dataSlice = createSlice({
       const products = Object.values(state.cart.products);
       products.forEach(({data, amount}) => totalProductsPrice += (amount * parseFloat(data.price)));
       state.cart.totalProductsPrice = totalProductsPrice.toFixed(2);
-      state.cart.totalProductsAmount = products.length;
+      if (action.payload.addToExist) {
+        state.cart.totalProductsAmount += action.payload.amount;
+      } else {
+        state.cart.totalProductsAmount = state.cart.totalProductsAmount - prevAmount + action.payload.amount;
+      }
       state.cartLoading = false;
 
       localStorage.setItem('cart', JSON.stringify(state.cart));
@@ -55,7 +60,7 @@ export const dataSlice = createSlice({
       if (cartProductData) {
         state.cart.totalProductsPrice = (parseFloat(state.cart.totalProductsPrice) - (cartProductData.amount * parseFloat(cartProductData.data.price))).toFixed(2);
         delete state.cart.products[action.payload];
-        state.cart.totalProductsAmount = Object.keys(state.cart.products).length;
+        state.cart.totalProductsAmount -= cartProductData.amount;
       }
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },

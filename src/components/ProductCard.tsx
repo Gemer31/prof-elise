@@ -2,7 +2,7 @@
 
 import { MouseEvent, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { addProductToCart } from '@/store/dataSlice';
 import { ButtonType, CounterType, RouterPath } from '@/app/enums';
 import Link from 'next/link';
@@ -49,24 +49,28 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'entity-card-title'
   ]), []);
 
-  const [cartCounterVisible, setCartCounterVisible] = useState(false);
   const dispatch = useAppDispatch();
+  // @ts-ignore
+  const counter = useAppSelector(state => state.dataReducer.cart.products?.[data.id]?.amount);
+  const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
 
-  const addToCart = (event: MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
+  const addToCart = (event?: MouseEvent) => {
+    event?.stopPropagation();
+    event?.preventDefault();
 
     dispatch(addProductToCart({
       data,
-      amount: 1,
-      addToExist: true
+      addToExist: true,
+      amount: counter ? counter + 1 : 1,
     }));
-
-    setCartCounterVisible(true);
   };
 
-  const counterChange = () => {
-
+  const removeFromCart = () => {
+    dispatch(addProductToCart({
+      data,
+      addToExist: false,
+      amount: counter - 1
+    }));
   };
 
   return (
@@ -84,21 +88,33 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       />
       <h3 className={titleClass}>{data?.title}</h3>
       <div className="text-pink-500 bold my-2">{data.price} {config.currency}</div>
-      <div className="flex gap-1">
-        {
-          cartCounterVisible
-            ? <Counter type={CounterType.SMART} counterChangedCallback={() => {
-            }}/>
-            : <Button
-              styleClass="text-amber-50 w-full px-4 py-2"
-              type={ButtonType.BUTTON}
-              callback={addToCart}
-            >{TRANSLATES[LOCALE].intoCart}</Button>
-        }
+      <div className="flex gap-1 w-full">
+        <div className="w-1/2 h-full flex justify-center items-center">
+          {
+            cartLoading
+              ? <Loader styleClass="h-[25px] border-pink-500"/>
+              : counter
+                ?
+                <Counter
+                  type={CounterType.SMART}
+                  selectedAmount={counter}
+                  counterChangedCallback={(newCount) => {
+                    if (newCount > counter) {
+                      addToCart();
+                    } else {
+                      removeFromCart();
+                    }
+                  }}/>
+                : <Button
+                  styleClass="text-amber-50 w-full px-4 py-2 text-nowrap"
+                  type={ButtonType.BUTTON}
+                  callback={(e) => addToCart(e)}
+                >{TRANSLATES[LOCALE].intoCart}</Button>
+          }
+        </div>
         <Button
-          styleClass="text-amber-50 w-full px-4 py-2"
+          styleClass="text-amber-50 w-1/2 px-4 py-2"
           type={ButtonType.BUTTON}
-          callback={addToCart}
         >{TRANSLATES[LOCALE].preview}</Button>
       </div>
       {
