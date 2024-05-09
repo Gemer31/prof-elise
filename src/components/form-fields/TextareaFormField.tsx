@@ -9,7 +9,7 @@ interface ITextareaFormFieldProps {
   required?: boolean;
   rows?: number;
   placeholder: string;
-  error: string | undefined;
+  error: string;
   label: string;
   name: string;
   register: unknown;

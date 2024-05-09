@@ -11,7 +11,6 @@ export interface IProductsListProps {
 
 export function ProductsList({data, config}: IProductsListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
-
   return data?.map((product) => {
     return <ProductCard
       key={product.id}
@@ -19,6 +18,6 @@ export function ProductsList({data, config}: IProductsListProps) {
       config={config}
       isLoading={redirectIdInProgress === product.id}
       onClick={() => setRedirectIdInProgress(product.id)}
-    />
+    />;
   });
 }

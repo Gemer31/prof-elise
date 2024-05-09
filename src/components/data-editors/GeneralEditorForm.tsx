@@ -25,7 +25,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface GeneralEditorFormProps {
-  config: IConfig | undefined;
+  config: IConfig;
   refreshCallback?: () => void;
 }
 

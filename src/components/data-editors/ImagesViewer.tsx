@@ -25,7 +25,7 @@ export function ImagesViewer({
                                selectedImages
                              }: ImagesViewerProps) {
   const [chosenImages, setChosenImages] = useState<Record<string, StorageReference>>({});
-  const [lastSelectedImage, setLastSelectedImage] = useState<StorageReference | undefined>(undefined);
+  const [lastSelectedImage, setLastSelectedImage] = useState<StorageReference>(undefined);
   const [tabPressed, setTabPressed] = useState<boolean>();
 
   useEffect(() => {

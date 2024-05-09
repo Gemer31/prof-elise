@@ -38,7 +38,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.dataReducer.cart);
   const [loading, setLoading] = useState(false);
-  const [createdOrderNumber, setCreatedOrderNumber] = useState<number | undefined>();
+  const [createdOrderNumber, setCreatedOrderNumber] = useState<number>();
   const {
     register,
     handleSubmit,

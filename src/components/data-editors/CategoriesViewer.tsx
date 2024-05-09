@@ -5,11 +5,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 interface CategoriesViewerProps {
-  selectedCategory?: ICategory | undefined;
+  selectedCategory?: ICategory;
   firestoreCategories: ICategory[];
   editAvailable?: boolean;
   deleteCategoryClick?: (category: ICategory) => void;
-  selectCategoryClick?: (category: ICategory | undefined) => void;
+  selectCategoryClick?: (category: ICategory) => void;
 }
 
 export function CategoriesViewer({
@@ -28,13 +28,13 @@ export function CategoriesViewer({
     'py-1'
   ]), []);
 
-  const [chosenCategory, setChosenCategory] = useState<ICategory | undefined>();
+  const [chosenCategory, setChosenCategory] = useState<ICategory>();
 
   useEffect(() => {
     setChosenCategory(selectedCategory);
   }, [selectedCategory]);
 
-  const selectCategory = (category: ICategory | undefined) => {
+  const selectCategory = (category: ICategory) => {
     setChosenCategory(category);
     selectCategoryClick?.(category);
   };

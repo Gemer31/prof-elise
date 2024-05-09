@@ -4,7 +4,7 @@ import { ICommonProps } from '@/app/models';
 export interface IFormFieldWrapperProps extends ICommonProps {
   required?: boolean;
   label: string;
-  error?: string | undefined;
+  error?: string;
 }
 
 export function FormFieldWrapper({required, label, children, error}: IFormFieldWrapperProps) {

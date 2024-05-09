@@ -16,8 +16,8 @@ interface ImagesEditorFormProps {
 export function ImagesEditorForm({images, refreshCallback}: ImagesEditorFormProps) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<StorageReference | null>();
-  const [files, setFiles] = useState<FileList | null>();
+  const [selectedImage, setSelectedImage] = useState<StorageReference>();
+  const [files, setFiles] = useState<FileList>();
 
   const uploadFiles = async () => {
     setLoading(true);

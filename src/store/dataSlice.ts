@@ -1,15 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ICart, ICartProductData, IProduct } from '@/app/models';
 import { getClient, updateClient } from '@/store/asyncThunk';
+import { DocumentReference } from '@firebase/firestore';
+
+export interface ICartProductModel {
+  count: number;
+  productRef: DocumentReference;
+}
 
 export interface IClient {
-  cart?: ICart;
+  cart?: Record<string, ICartProductModel>;
   favourites?: Record<string, IProduct>;
 }
 
 interface IDataSlice {
   requestCallPopupVisible: boolean;
-  notificationMessage: string | null;
+  notificationMessage: string;
   cart: ICart;
   cartLoading: boolean;
   favourites: Record<string, IProduct>;
@@ -33,6 +39,7 @@ export const dataSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(getClient.settled, (state, action) => {
       state.client = action.payload as IClient;
+      state.cartLoading = false;
     });
     builder.addMatcher(updateClient.settled, (state, action) => {
       state.client = action.payload as IClient;
@@ -42,7 +49,7 @@ export const dataSlice = createSlice({
     setRequestCallPopupVisible: (state: IDataSlice, action: PayloadAction<boolean>) => {
       state.requestCallPopupVisible = action.payload;
     },
-    setNotificationMessage: (state: IDataSlice, action: PayloadAction<string | null>) => {
+    setNotificationMessage: (state: IDataSlice, action: PayloadAction<string>) => {
       state.notificationMessage = action.payload;
     },
     addProductToCart: (state: IDataSlice, action: PayloadAction<{

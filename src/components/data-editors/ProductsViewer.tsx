@@ -5,10 +5,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 
 interface CategoriesViewerProps {
-  selectedProduct?: IProduct | undefined;
+  selectedProduct?: IProduct;
   firestoreProducts: IProduct[];
   deleteProductClick?: (product: IProduct) => void;
-  selectProductClick?: (product: IProduct | undefined) => void;
+  selectProductClick?: (product: IProduct) => void;
 }
 
 export function ProductsViewer({
@@ -26,13 +26,13 @@ export function ProductsViewer({
     'py-1',
   ]), []);
 
-  const [chosenCategory, setChosenCategory] = useState<IProduct | undefined>();
+  const [chosenCategory, setChosenCategory] = useState<IProduct>();
 
   useEffect(() => {
     setChosenCategory(selectedProduct);
   }, [selectedProduct]);
 
-  const selectCategory = (product: IProduct | undefined) => {
+  const selectCategory = (product: IProduct) => {
     setChosenCategory(product);
     selectProductClick?.(product);
   };

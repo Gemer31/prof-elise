@@ -2,7 +2,7 @@ import { ICategory, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
+import { getConfig, getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
 import { CategoriesList } from '@/components/CategoriesList';
 import { ProductsList } from '@/components/ProductsList';
 import { RouterPath } from '@/app/enums';
@@ -14,11 +14,19 @@ export interface ICategoriesOrProductsProps {
 }
 
 export default async function CategoriesOrProductsPage({params: {categoryId}}: ICategoriesOrProductsProps) {
-  const {config, categories} = await getFirestoreData();
+  const {categories} = await getFirestoreData();
+  const config = await getConfig();
   const products = await getProductsV2();
-  const currentCategory: ICategory | undefined = categories.find((item) => item.id === categoryId);
-  const relatedCategories: ICategory[] = categories.filter((item) => currentCategory?.relatedCategories?.includes(item.id));
-  const currentCategoryProducts: IProduct[] | undefined = Object.values(products).filter((item) => item.categoryId === categoryId);
+  const currentCategory: ICategory = categories.find((item) => item.id === categoryId);
+  // const relatedCategories: ICategory[] = categories.filter((item) => currentCategory?.relatedCategories?.includes(item.id));
+  const currentCategoryProducts: IProduct[] = Object.values(products).filter((item) => {
+    const productCategoryId = item.categoryRef.path.split('/').pop();
+    return productCategoryId === categoryId;
+  }).map((item) => {
+    item.categoryId = item.categoryRef.path.split('/').pop();
+    delete item.categoryRef;
+    return item;
+  });
 
   return (
     <div className="">
@@ -30,9 +38,10 @@ export default async function CategoriesOrProductsPage({params: {categoryId}}: I
         </div>
         <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-4">
           {
-            relatedCategories?.length
-              ? <CategoriesList data={relatedCategories}/>
-              : <ProductsList data={currentCategoryProducts} config={config}/>
+            // relatedCategories?.length
+            //   ? <CategoriesList data={relatedCategories}/>
+            //   : <ProductsList data={currentCategoryProducts} config={config}/>
+            <ProductsList data={currentCategoryProducts} config={config}/>
           }
         </div>
       </div>

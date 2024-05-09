@@ -48,7 +48,7 @@ export function ProductEditorForm({
   const [description, setDescription] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<IProduct>();
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
-  const [selectedImages, setSelectedImages] = useState<StorageReference[] | undefined>();
+  const [selectedImages, setSelectedImages] = useState<StorageReference[]>();
   const {
     register,
     setValue,
@@ -149,12 +149,12 @@ export function ProductEditorForm({
     setValue(`images`, newImages);
   };
 
-  const changeCategory = (newCategory: ICategory | undefined) => {
+  const changeCategory = (newCategory: ICategory) => {
     setValue('categoryId', newCategory?.id || '');
     setSelectedCategory(newCategory);
   };
 
-  const changeProduct = (newProduct: IProduct | undefined) => {
+  const changeProduct = (newProduct: IProduct) => {
     if (newProduct) {
       const productCategory = categories.find((category) => category.id === newProduct.categoryId);
       const productImages: StorageReference[] = images?.filter((img) => {

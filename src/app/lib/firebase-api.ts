@@ -13,8 +13,6 @@ export async function getFirestoreData(): Promise<{
   categories: ICategory[];
 }> {
   const firestoreData = await getDocs(collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME)));
-
-  const productsV2Pr = await getDoc(doc(db, 'app', FirebaseCollections.PRODUCTS_V2));
   return {
     config: convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
       firestoreData.docs,
@@ -25,6 +23,11 @@ export async function getFirestoreData(): Promise<{
       FirebaseCollections.CATEGORIES
     )) || [],
   };
+}
+
+export async function getConfig(): Promise<IConfig> {
+  const config = await getDoc(doc(db, 'app', FirebaseCollections.CONFIG));
+  return config.data() as IConfig;
 }
 
 export async function getProductsV2(): Promise<Record<string, IProduct>> {

@@ -11,7 +11,7 @@ interface IInputFormFieldProps {
   label: string;
   type: string;
   name: string;
-  error: string | undefined;
+  error: string;
   register: unknown;
 }
 

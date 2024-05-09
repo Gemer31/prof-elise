@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { converImageUrlsToGallery } from '@/utils/firebase.util';
 
 interface IImgGalleryProps {
-  imageUrls: string[] | undefined;
+  imageUrls: string[];
 }
 
 export function ImgGallery({imageUrls}: IImgGalleryProps) {

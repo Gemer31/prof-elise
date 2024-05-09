@@ -10,7 +10,7 @@ import { addProductToCart } from '@/store/dataSlice';
 import { useState } from 'react';
 
 interface IProductDetailsActionsBlockProps {
-  product: IProduct | undefined;
+  product: IProduct;
 }
 
 export function ProductDetailsActionsBlock({ product }: IProductDetailsActionsBlockProps) {

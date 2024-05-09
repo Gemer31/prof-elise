@@ -10,7 +10,7 @@ import { Loader } from '@/components/Loader';
 
 interface ICategoriesProps {
   categories: ICategory[];
-  currentCategoryId?: string | undefined;
+  currentCategoryId?: string;
 }
 
 export function Catalog({categories, currentCategoryId}: ICategoriesProps) {

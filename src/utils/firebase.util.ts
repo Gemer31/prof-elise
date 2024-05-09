@@ -9,15 +9,15 @@ import {
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
 
-export function getDocData<T>(docs: Array<QueryDocumentSnapshot> | undefined, docName: string): T {
+export function getDocData<T>(docs: Array<QueryDocumentSnapshot>, docName: string): T {
   const typedDocs: IFirebaseDocumentModel[] = docs as unknown as IFirebaseDocumentModel[];
-  const doc: IFirebaseDocumentModel | undefined = typedDocs
+  const doc: IFirebaseDocumentModel = typedDocs
     ?.find((doc) => doc._document.key.path.segments.at(-1) === docName);
 
   return doc?._document.data?.value.mapValue.fields as T;
 }
 
-export function getStorageImageSrc(image: StorageReference | undefined): string {
+export function getStorageImageSrc(image: StorageReference): string {
   return image ? `https://firebasestorage.googleapis.com/v0/b/${image.bucket}/o/${image.fullPath}?alt=media` : '';
 }
 

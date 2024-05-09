@@ -33,7 +33,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
-  const [selectedImage, setSelectedImage] = useState<StorageReference | null>();
+  const [selectedImage, setSelectedImage] = useState<StorageReference>();
   const {
     register,
     setValue,
@@ -110,9 +110,9 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     setIsLoading(false);
   };
 
-  const changeCategory = (newCategory: ICategory | undefined) => {
+  const changeCategory = (newCategory: ICategory) => {
     if (newCategory) {
-      const existingImage: StorageReference | undefined = images?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
+      const existingImage: StorageReference = images?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
       setSelectedImage(existingImage);
       setValue('title', newCategory.title);
       setValue('imageUrl', newCategory.imageUrl);

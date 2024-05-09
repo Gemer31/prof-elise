@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEvent, useMemo } from 'react';
+import { MouseEvent, useEffect, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { addProductToCart, IClient } from '@/store/dataSlice';

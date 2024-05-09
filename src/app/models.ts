@@ -1,11 +1,15 @@
+import { DocumentReference } from '@firebase/firestore';
+
 export interface IProduct {
   id: string;
   title: string;
   price: string;
   description: string;
-  categoryId: string;
+  categoryRef: DocumentReference;
+  categoryId?: string;
   imageUrls?: string[];
 }
+
 
 export interface ICommonProps {
   children: React.ReactNode,
