@@ -20,7 +20,6 @@ export function Counter({type, counterChangedCallback, selectedAmount}: ICounter
   }, []);
 
   useEffect(() => {
-    console.log("count: ", count);
     if (initialized) {
       counterChangedCallback(count);
     }

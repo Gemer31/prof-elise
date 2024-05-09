@@ -13,6 +13,7 @@ export enum RouterPath {
   PRODUCTS = '/products',
   CART = '/cart',
   CHECKOUT = '/checkout',
+  FAVOURITES = '/favourites'
 }
 
 export enum EditGroup {
@@ -24,8 +25,11 @@ export enum EditGroup {
 
 export enum FirebaseCollections {
   CATEGORIES = 'categories',
+  CATEGORIES_V2 = 'categoriesV2',
   CONFIG = 'config',
-  PRODUCTS = 'products'
+  PRODUCTS = 'products',
+  PRODUCTS_V2 = 'productsV2',
+  CLIENT = 'client',
 }
 
 export enum CounterType {

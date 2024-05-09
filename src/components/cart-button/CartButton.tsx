@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { IProduct } from '@/app/models';
 import { RouterPath } from '@/app/enums';
-import { CartCounter } from '@/components/CartCounter';
+import { CartCounter } from '@/components/cart-button/CartCounter';
 
 interface ICartProps {
   firestoreProductsData?: IProduct[];

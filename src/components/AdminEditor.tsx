@@ -13,7 +13,7 @@ import { ICategory, IConfig, IProduct } from '@/app/models';
 import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
-import { getFirestoreData } from '@/app/lib/firebase-api';
+import { getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 
@@ -45,14 +45,16 @@ export function AdminEditor() {
     const [
       images,
       firebaseData,
+      productsV2,
     ] = await Promise.all([
       listAll(ref(storage)),
       getFirestoreData(),
+      getProductsV2(),
     ]);
     setImages(images.items);
     setConfig(firebaseData.config);
     setCategories(firebaseData.categories)
-    setProducts(firebaseData.products);
+    setProducts(Object.values(productsV2));
   };
 
   return (

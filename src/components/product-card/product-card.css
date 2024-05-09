@@ -1,0 +1,21 @@
+.product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 500ms;
+}
+
+.product-card:hover > .product-card-favourite-button {
+    transform: scale(1);
+}
+
+.product-card-favourite-button {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    transform: scale(0);
+    transition: all 200ms;
+}
+

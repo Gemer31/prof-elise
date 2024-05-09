@@ -5,7 +5,7 @@ import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBl
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getFirestoreData } from '@/app/lib/firebase-api';
+import { getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
 
 export interface IProductDetailsProps {
   params: {
@@ -14,8 +14,9 @@ export interface IProductDetailsProps {
 }
 
 export default async function ProductDetailsPage({params: {productId}}: IProductDetailsProps) {
-  const {config, categories, products} = await getFirestoreData();
-  const product: IProduct | undefined = products.find((item) => item.id === productId);
+  const {config, categories} = await getFirestoreData();
+  const products = await getProductsV2();
+  const product: IProduct | undefined = Object.values(products).find((item) => item.id === productId);
   const productCategory: ICategory | undefined = categories.find((item) => item.id === product?.categoryId);
 
   // todo: redirect if not found

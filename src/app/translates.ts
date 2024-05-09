@@ -5,6 +5,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     сonsumables: 'Расходные материалы',
     disposableConsumables: 'Одноразовые расходные материалы',
     сonsumablesWholesaleRetail: 'Расходные материалы оптом и в розницу',
+    favouriteProducts: 'Избранные товары',
     main: 'Главная',
     general: 'Основное',
     category: 'Категория',

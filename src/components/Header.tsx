@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CartButton } from '@/components/CartButton';
+import { CartButton } from '@/components/cart-button/CartButton';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
@@ -11,8 +11,14 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { IProduct } from '@/app/models';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { auth } from '@/app/lib/firebase-config';
+import { FavouritesCounter } from '@/components/favourites-button/FavouritesCounter';
+import { FavouritesButton } from '@/components/favourites-button/FavouritesButton';
+import { uuidv4 } from '@firebase/util';
+import { getClient, updateClient } from '@/store/asyncThunk';
+import { useAppDispatch } from '@/store/store';
+import { IClient } from '@/store/dataSlice';
 
 export interface IHeaderProps {
   products?: IProduct[];
@@ -62,10 +68,28 @@ export function Header({products}: IHeaderProps) {
     [RouterPath.CONTACTS, 'contacts']
   ]), []);
 
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const [user] = useAuthState(auth);
   const burgerRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let clientId: string = localStorage.getItem('clientId') as string;
+
+    if (clientId) {
+      dispatch(getClient(clientId));
+    } else {
+      clientId = uuidv4();
+      localStorage.setItem('clientId', clientId);
+      dispatch(updateClient({
+        [clientId]: {
+          cart: {},
+          favourites: {},
+        }
+      } as { [x: string]: IClient}));
+    }
+  }, []);
 
   const getNavigationLinkClass = (path: string) => {
     return navLinkClass + (path === pathname ? ' bg-gray-200' : '');
@@ -84,6 +108,13 @@ export function Header({products}: IHeaderProps) {
     //   router.push(RouterPath.HOME);
     // }
   };
+  //
+  // useEffect(() => {
+  //   document.addEventListener('scroll', (event) => {
+  //     // @ts-ignore
+  //     console.log(event.srcElement['scrollTop']);
+  //   })
+  // }, []);
 
   return (
     <header className="w-full z-10 top-0 sticky flex justify-center bg-pink-300 mb-4">
@@ -128,6 +159,7 @@ export function Header({products}: IHeaderProps) {
               <Image className="p-2" width={45} height={45} src="/icons/instagram.svg" alt="Instagram"/>
             </a>
             <CartButton firestoreProductsData={products}/>
+            <FavouritesButton firestoreProductsData={products}/>
             {
               user
                 ? <>

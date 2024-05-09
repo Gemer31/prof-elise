@@ -2,9 +2,10 @@ import { ICategory, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getFirestoreData } from '@/app/lib/firebase-api';
+import { getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
 import { CategoriesList } from '@/components/CategoriesList';
 import { ProductsList } from '@/components/ProductsList';
+import { RouterPath } from '@/app/enums';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -13,14 +14,15 @@ export interface ICategoriesOrProductsProps {
 }
 
 export default async function CategoriesOrProductsPage({params: {categoryId}}: ICategoriesOrProductsProps) {
-  const {config, categories, products} = await getFirestoreData();
+  const {config, categories} = await getFirestoreData();
+  const products = await getProductsV2();
   const currentCategory: ICategory | undefined = categories.find((item) => item.id === categoryId);
   const relatedCategories: ICategory[] = categories.filter((item) => currentCategory?.relatedCategories?.includes(item.id));
-  const currentCategoryProducts: IProduct[] | undefined = products.filter((item) => item.categoryId === categoryId);
+  const currentCategoryProducts: IProduct[] | undefined = Object.values(products).filter((item) => item.categoryId === categoryId);
 
   return (
     <div className="">
-      <Breadcrumbs category={currentCategory}/>
+      <Breadcrumbs links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
         <div className="w-full md:w-4/12 mr-4">
           <Catalog categories={categories} currentCategoryId={categoryId}/>

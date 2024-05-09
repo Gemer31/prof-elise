@@ -68,42 +68,43 @@ export function ProductEditorForm({
     images: StorageReference[]
   }) => {
     setIsLoading(true);
-
-    let data: WithFieldValue<DocumentData>;
+    let data: WithFieldValue<DocumentData> = {};
 
     const imageUrls: string[] = formData.images.map((img) => (getStorageImageSrc(img)));
 
     if (selectedProduct) {
-      data = {
-        data: products.map((product: IProduct) => {
-          return product.id === selectedProduct.id ? {
+      products.forEach((product: IProduct) => {
+        if (product.id === selectedProduct.id) {
+          data[product.id] = {
             ...selectedProduct,
             title: formData.title,
             price: formData.price,
             description: formData.description,
             categoryId: formData.categoryId,
-            imageUrls: imageUrls,
-          } : product;
-        }),
-      };
+            imageUrls: imageUrls
+          };
+        } else {
+          data[product.id] = product;
+        }
+      });
     } else {
-      data = {
-        data: [
-          ...products,
-          {
-            id: uuidv4(),
-            title: formData.title,
-            price: formData.price,
-            description: formData.description,
-            categoryId: formData.categoryId,
-            imageUrls: imageUrls,
-          },
-        ],
-      };
+      products.forEach((product: IProduct) => {
+        data[product.id] = product;
+      });
+
+      const id: string = uuidv4();
+      data[id] = {
+        id,
+        title: formData.title,
+        price: formData.price,
+        description: formData.description,
+        categoryId: formData.categoryId,
+        imageUrls: imageUrls
+      }
     }
 
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS_V2), data);
       dispatch(setNotificationMessage(
         selectedProduct
           ? TRANSLATES[LOCALE].infoUpdated
@@ -186,7 +187,7 @@ export function ProductEditorForm({
   const descriptionChange = (newValue: string) => {
     setValue('description', newValue);
     setDescription(newValue);
-  }
+  };
 
   return (
     <form

@@ -4,9 +4,7 @@ import {
   IFirebaseDocumentModel,
   IFirestoreCategoriesEditorInfo,
   IFirestoreConfigEditorInfo,
-  IFirestoreFields,
-  IFirestoreProductsEditorInfo,
-  IProduct
+  IFirestoreFields
 } from '@/app/models';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
@@ -51,29 +49,6 @@ export function convertCategoriesDataToModelArray(data: IFirestoreFields): ICate
       title: category.mapValue.fields.title.stringValue,
       imageUrl: category.mapValue.fields.imageUrl.stringValue
       // subcategories:
-    };
-  }) || [];
-}
-
-export function convertProductsDataToModelArray(data: IFirestoreFields): IProduct[] {
-  return data?.data?.arrayValue?.values?.map((item) => {
-    const product: {
-      mapValue: {
-        fields: IFirestoreProductsEditorInfo;
-      }
-    } = item as {
-      mapValue: {
-        fields: IFirestoreProductsEditorInfo;
-      }
-    };
-
-    return {
-      id: product.mapValue.fields.id.stringValue,
-      title: product.mapValue.fields.title.stringValue,
-      price: product.mapValue.fields.price.stringValue,
-      description: product.mapValue.fields.description.stringValue,
-      categoryId: product.mapValue.fields.categoryId.stringValue,
-      imageUrls: product.mapValue.fields.imageUrls.arrayValue.values.map((v) => (v.stringValue))
     };
   }) || [];
 }

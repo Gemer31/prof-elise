@@ -1,9 +1,9 @@
 'use client';
 
-import { MouseEvent, useMemo, useState } from 'react';
+import { MouseEvent, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { addProductToCart } from '@/store/dataSlice';
+import { addProductToCart, IClient } from '@/store/dataSlice';
 import { ButtonType, CounterType, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -12,6 +12,8 @@ import { Button } from '@/components/Button';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig, IProduct } from '@/app/models';
 import { Loader } from '@/components/Loader';
+import './product-card.css';
+import { updateClient } from '@/store/asyncThunk';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -22,18 +24,12 @@ export interface IProductCardProps {
 
 export function ProductCard({data, config, isLoading, onClick}: IProductCardProps) {
   const cardClass = useMemo(() => convertToClass([
-    'relative',
+    'product-card',
     'h-96',
-    'flex',
-    'flex-col',
-    'items-center',
-    'justify-between',
-    'rounded-lg',
     'p-4',
+    'rounded-lg',
     'border-2 border-pink-200',
-    'hover:bg-pink-100',
-    'duration-500',
-    'transition-colors'
+    'hover:bg-pink-100'
   ]), []);
   const titleClass = useMemo(() => convertToClass([
     'text-base',
@@ -53,6 +49,10 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
   // @ts-ignore
   const counter = useAppSelector(state => state.dataReducer.cart.products?.[data.id]?.amount);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
+  // @ts-ignore
+  const client: IClient = useAppSelector(state => state.dataReducer.client);
+  // @ts-ignore
+  const isFavourite = useAppSelector(state => state.dataReducer.client?.['favourites']?.[data.id]);
 
   const addToCart = (event?: MouseEvent) => {
     event?.stopPropagation();
@@ -61,7 +61,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     dispatch(addProductToCart({
       data,
       addToExist: true,
-      amount: counter ? counter + 1 : 1,
+      amount: 1
     }));
   };
 
@@ -73,12 +73,39 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     }));
   };
 
+  const favouriteClick = async (event: MouseEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    const newFavourites = { ...client.favourites } as Record<string, IProduct>;
+
+    if (isFavourite) {
+      delete newFavourites[data.id];
+    } else {
+      newFavourites[data.id] = data;
+    }
+
+    const clientId: string = localStorage.getItem('clientId') as string;
+    dispatch(updateClient({
+      [clientId]: {
+        ...client,
+        favourites: newFavourites,
+      },
+    }));
+  };
+
   return (
     <Link
       className={cardClass + (isLoading ? ' pointer-events-none' : '')}
       href={`${RouterPath.CATEGORIES}/${data?.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
+      <div className="product-card-favourite-button hover:scale-110" onClick={favouriteClick}>
+        {
+          isFavourite
+            ? <Image width={25} height={25} src="/icons/heart-filled.svg" alt="favourite"/>
+            : <Image width={25} height={25} src="/icons/heart.svg" alt="favourite"/>
+        }
+      </div>
       <Image
         className="rounded-md h-[200px] w-[200px]"
         width={200}

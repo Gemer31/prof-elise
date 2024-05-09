@@ -1,6 +1,6 @@
 'use client';
 
-import { ProductCard } from '@/components/ProductCard';
+import { ProductCard } from '@/components/product-card/ProductCard';
 import { IConfig, IProduct } from '@/app/models';
 import { useState } from 'react';
 
