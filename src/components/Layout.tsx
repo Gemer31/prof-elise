@@ -16,7 +16,6 @@ export interface ILayoutProps extends ICommonProps {
   firestoreData?: {
     config: IConfig;
     categories: ICategory[];
-    products: IProduct[];
   };
   storageData?: StorageReference[];
 }
@@ -29,7 +28,7 @@ export function Layout({children, firestoreData}: ILayoutProps) {
       <RequestCallPopup/>
       <Notification/>
       <div id="page" className="relative flex flex-col items-center h-full z-10">
-        <Header products={firestoreData?.products}/>
+        <Header/>
         <SubHeader config={firestoreData?.config}/>
         {pathname === RouterPath.HOME ? <Slider/> : <></>}
         <ContentContainer id="content" styleClass="w-full flex justify-start px-2">

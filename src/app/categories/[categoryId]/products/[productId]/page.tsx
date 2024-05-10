@@ -5,7 +5,7 @@ import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBl
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
+import { getCategories, getConfig, getProductsV2 } from '@/app/lib/firebase-api';
 import { RouterPath } from '@/app/enums';
 
 export interface IProductDetailsProps {
@@ -15,12 +15,15 @@ export interface IProductDetailsProps {
 }
 
 export default async function ProductDetailsPage({params: {productId}}: IProductDetailsProps) {
-  const {config, categories} = await getFirestoreData();
-  const products = await getProductsV2();
+  const [config, categories, products] = await Promise.all([
+    getConfig(),
+    getCategories(),
+    getProductsV2(),
+  ]);
   let product: IProduct = Object.values(products).find((item) => item.id === productId);
   product.categoryId = product.categoryRef.path.split('/').pop();
   delete product.categoryRef;
-  const productCategory: ICategory = categories.find((item) => product.categoryId === item.id);
+  const productCategory: ICategory = Object.values(categories).find((item) => product.categoryId === item.id);
 
   // todo: redirect if not found
   return (
@@ -32,7 +35,7 @@ export default async function ProductDetailsPage({params: {productId}}: IProduct
         ]}/>
         <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
           <div className="w-full md:w-4/12 mr-4">
-            <Catalog currentCategoryId={product.categoryId} categories={categories}/>
+            <Catalog currentCategoryId={product.categoryId} categories={Object.values(categories)}/>
             <Advantages styleClass="hidden md:block"/>
           </div>
           <div className="w-full flex justify-between">

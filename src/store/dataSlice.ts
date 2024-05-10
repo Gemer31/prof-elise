@@ -5,7 +5,7 @@ import { DocumentReference } from '@firebase/firestore';
 
 export interface ICartProductModel {
   count: number;
-  productRef: DocumentReference;
+  productRef: DocumentReference | string;
 }
 
 export interface IClient {
@@ -18,7 +18,7 @@ interface IDataSlice {
   notificationMessage: string;
   cart: ICart;
   cartLoading: boolean;
-  favourites: Record<string, IProduct>;
+  cartTotal: number;
   client: IClient;
 }
 
@@ -33,16 +33,31 @@ export const dataSlice = createSlice({
       totalProductsAmount: 0,
       products: {}
     },
-    favourites: {},
+
+    cartTotal: 0,
     client: {}
   },
   extraReducers: (builder) => {
-    builder.addMatcher(getClient.settled, (state, action) => {
-      state.client = action.payload as IClient;
+    builder.addMatcher(getClient.settled, (state: IDataSlice, action) => {
+      const newClient = action.payload as IClient;
+
+      state.cartTotal = 0;
+      newClient.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
+        state.cartTotal += item.count;
+      });
+
+      state.client = newClient;
       state.cartLoading = false;
     });
-    builder.addMatcher(updateClient.settled, (state, action) => {
-      state.client = action.payload as IClient;
+    builder.addMatcher(updateClient.settled, (state: IDataSlice, action) => {
+      const newClient = action.payload as IClient;
+
+      state.cartTotal = 0;
+      newClient.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
+        state.cartTotal += item.count;
+      });
+
+      state.client = newClient;
     });
   },
   reducers: {
@@ -94,19 +109,6 @@ export const dataSlice = createSlice({
       state.cartLoading = false;
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },
-    changeFavourites: (state: IDataSlice, action: PayloadAction<IProduct>) => {
-      if (state.favourites[action.payload.id]) {
-        delete state.favourites[action.payload.id];
-      } else {
-        state.favourites[action.payload.id] = action.payload;
-      }
-      localStorage.setItem('favourites', JSON.stringify(state.favourites));
-    },
-    setFavouritesData: (state: IDataSlice, action: PayloadAction<Record<string, IProduct>>) => {
-      state.favourites = action.payload;
-      state.cartLoading = false;
-      localStorage.setItem('favourites', JSON.stringify(state.favourites));
-    }
   }
 });
 
@@ -116,6 +118,4 @@ export const {
   addProductToCart,
   removeProductFromCart,
   setCartData,
-  setFavouritesData,
-  changeFavourites
 } = dataSlice.actions;

@@ -6,7 +6,7 @@ import 'animate.css';
 import { Metadata } from 'next';
 import { listAll, ref } from '@firebase/storage';
 import { storage } from '@/app/lib/firebase-config';
-import { getFirestoreData } from '@/app/lib/firebase-api';
+import { getCategories, getConfig } from '@/app/lib/firebase-api';
 
 const openSans = Open_Sans({subsets: ['latin']});
 
@@ -18,9 +18,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({children}: {
   children: React.ReactNode;
 }) {
-  const [firestoreData, storageData] = await Promise.all([
-    getFirestoreData(),
-    listAll(ref(storage)),
+  const [config, categories, storageData] = await Promise.all([
+    getConfig(),
+    getCategories(),
+    listAll(ref(storage))
   ]);
 
   return (
@@ -28,7 +29,7 @@ export default async function RootLayout({children}: {
     <body className={'overflow-x-hidden ' + openSans.className}>
     <StoreProvider>
       <Layout
-        firestoreData={firestoreData}
+        firestoreData={{config, categories: Object.values(categories)}}
         storageData={JSON.parse(JSON.stringify(storageData.items))}
       >
         {children}

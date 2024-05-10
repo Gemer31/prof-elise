@@ -2,15 +2,11 @@ import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { IProduct } from '@/app/models';
 import { RouterPath } from '@/app/enums';
 import { CartCounter } from '@/components/cart-button/CartCounter';
 
-interface ICartProps {
-  firestoreProductsData?: IProduct[];
-}
 
-export function CartButton({firestoreProductsData}: ICartProps) {
+export function CartButton() {
   const linkClass: string = useMemo(() => convertToClass([
     'relative',
     'flex',
@@ -30,7 +26,7 @@ export function CartButton({firestoreProductsData}: ICartProps) {
   return (
     <Link href={RouterPath.CART} className={linkClass}>
       <Image className="p-2" width={45} height={45} src="/icons/cart.svg" alt="CartButton"/>
-      <CartCounter firestoreProductsData={firestoreProductsData}/>
+      <CartCounter/>
     </Link>
   );
 }

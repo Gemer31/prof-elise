@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { IProduct } from '@/app/models';
-import { AddPrefixToKeys, collection, doc, getDoc, updateDoc, query } from '@firebase/firestore';
+import { AddPrefixToKeys, collection, doc, getDoc, updateDoc, query, deleteDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirebaseCollections } from '@/app/enums';
 import { IClient } from '@/store/dataSlice';

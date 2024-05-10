@@ -1,10 +1,10 @@
 'use client';
 
-import { MouseEvent, useEffect, useMemo } from 'react';
+import { MouseEvent, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { addProductToCart, IClient } from '@/store/dataSlice';
-import { ButtonType, CounterType, RouterPath } from '@/app/enums';
+import { ICartProductModel, IClient } from '@/store/dataSlice';
+import { ButtonType, CounterType, FirebaseCollections, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Counter } from '@/components/Counter';
@@ -14,6 +14,8 @@ import { IConfig, IProduct } from '@/app/models';
 import { Loader } from '@/components/Loader';
 import './product-card.css';
 import { updateClient } from '@/store/asyncThunk';
+import { doc } from '@firebase/firestore';
+import { db } from '@/app/lib/firebase-config';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -45,9 +47,10 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'entity-card-title'
   ]), []);
 
+  const clientId = useMemo(() => localStorage.getItem('clientId'), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
-  const counter = useAppSelector(state => state.dataReducer.cart.products?.[data.id]?.amount);
+  const counter = useAppSelector(state => state.dataReducer.client?.cart?.[data.id]?.count);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -58,25 +61,50 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     event?.stopPropagation();
     event?.preventDefault();
 
-    dispatch(addProductToCart({
-      data,
-      addToExist: true,
-      amount: 1
+    const newCart: Record<string, ICartProductModel> = {};
+    Object.keys(client.cart).forEach((item) => {
+      newCart[item] = {...client.cart[item]};
+    });
+
+    if (newCart[data.id]) {
+      newCart[data.id].count += 1;
+    } else {
+      newCart[data.id] = {
+        count: 1,
+        productRef: doc(db, FirebaseCollections.PRODUCTS_V2, data.id)
+        // `/${FirebaseCollections.PRODUCTS_V2}/${data.id}`
+      };
+    }
+
+    dispatch(updateClient({
+      [clientId]: {
+        ...client,
+        cart: newCart
+      }
     }));
   };
 
   const removeFromCart = () => {
-    dispatch(addProductToCart({
-      data,
-      addToExist: false,
-      amount: counter - 1
+    const newCart: Record<string, ICartProductModel> = {};
+    Object.keys(client.cart).forEach((item) => {
+      newCart[item] = {...client.cart[item]};
+    });
+
+    newCart[data.id].count -= 1;
+    newCart[data.id].count === 0 && delete newCart[data.id];
+
+    dispatch(updateClient({
+      [clientId]: {
+        ...client,
+        cart: newCart
+      }
     }));
   };
 
   const favouriteClick = async (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    const newFavourites = { ...client.favourites } as Record<string, IProduct>;
+    const newFavourites = {...client.favourites} as Record<string, IProduct>;
 
     if (isFavourite) {
       delete newFavourites[data.id];
@@ -88,8 +116,8 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     dispatch(updateClient({
       [clientId]: {
         ...client,
-        favourites: newFavourites,
-      },
+        favourites: newFavourites
+      }
     }));
   };
 

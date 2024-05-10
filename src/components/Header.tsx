@@ -10,21 +10,15 @@ import { RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
-import { IProduct } from '@/app/models';
 import { useEffect, useMemo, useRef } from 'react';
 import { auth } from '@/app/lib/firebase-config';
-import { FavouritesCounter } from '@/components/favourites-button/FavouritesCounter';
 import { FavouritesButton } from '@/components/favourites-button/FavouritesButton';
 import { uuidv4 } from '@firebase/util';
 import { getClient, updateClient } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
 import { IClient } from '@/store/dataSlice';
 
-export interface IHeaderProps {
-  products?: IProduct[];
-}
-
-export function Header({products}: IHeaderProps) {
+export function Header() {
   const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',
@@ -158,8 +152,8 @@ export function Header({products}: IHeaderProps) {
             >
               <Image className="p-2" width={45} height={45} src="/icons/instagram.svg" alt="Instagram"/>
             </a>
-            <CartButton firestoreProductsData={products}/>
-            <FavouritesButton firestoreProductsData={products}/>
+            <CartButton/>
+            <FavouritesButton/>
             {
               user
                 ? <>

@@ -7,11 +7,7 @@ import { RouterPath } from '@/app/enums';
 import { CartCounter } from '@/components/cart-button/CartCounter';
 import { FavouritesCounter } from '@/components/favourites-button/FavouritesCounter';
 
-interface ICartProps {
-  firestoreProductsData?: IProduct[];
-}
-
-export function FavouritesButton({firestoreProductsData}: ICartProps) {
+export function FavouritesButton() {
   const linkClass: string = useMemo(() => convertToClass([
     'relative',
     'flex',
@@ -31,7 +27,7 @@ export function FavouritesButton({firestoreProductsData}: ICartProps) {
   return (
     <Link href={RouterPath.FAVOURITES} className={linkClass}>
       <Image className="p-2" width={45} height={45} src="/icons/heart.svg" alt="CartButton"/>
-      <FavouritesCounter firestoreProductsData={firestoreProductsData}/>
+      <FavouritesCounter/>
     </Link>
   );
 }

@@ -1,7 +1,7 @@
 import { CartTable } from '@/components/CartTable';
 import { Metadata } from 'next';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getFirestoreData } from '@/app/lib/firebase-api';
+import { getConfig } from '@/app/lib/firebase-api';
 
 export const metadata: Metadata = {
   title: 'Корзина покупок',
@@ -9,7 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CartPage() {
-  const { config } = await getFirestoreData();
+  const config = await getConfig();
+
   return (
     <main className="w-full">
       <CartTable editable={true} config={config} title={TRANSLATES[LOCALE].purchaseCart}/>

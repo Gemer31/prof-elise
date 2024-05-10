@@ -80,7 +80,7 @@ export function ProductEditorForm({
             title: formData.title,
             price: formData.price,
             description: formData.description,
-            categoryId: formData.categoryId,
+            categoryRef: doc(db, FirebaseCollections.CATEGORIES_V2, formData.categoryId),
             imageUrls: imageUrls
           };
         } else {
@@ -98,7 +98,7 @@ export function ProductEditorForm({
         title: formData.title,
         price: formData.price,
         description: formData.description,
-        categoryId: formData.categoryId,
+        categoryRef: doc(db, FirebaseCollections.CATEGORIES_V2, formData.categoryId),
         imageUrls: imageUrls
       }
     }

@@ -1,15 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IProduct } from '@/app/models';
-import { setFavouritesData } from '@/store/dataSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 
-interface ICartCounterProps {
-  firestoreProductsData?: IProduct[];
-}
-
-export function FavouritesCounter({firestoreProductsData}: ICartCounterProps) {
+export function FavouritesCounter() {
   const dispatch = useAppDispatch();
   // @ts-ignore
   const favourites = useAppSelector(state => state.dataReducer.client?.['favourites']);

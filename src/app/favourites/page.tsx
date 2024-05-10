@@ -2,14 +2,15 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getFirestoreData, getProductsV2 } from '@/app/lib/firebase-api';
+import { getCategories, getConfig, getProductsV2 } from '@/app/lib/firebase-api';
 import { FavouritesList } from '@/components/FavouritesList';
-import { db } from '@/app/lib/firebase-config';
-import { doc, getDoc } from '@firebase/firestore';
 
 export default async function FavouritesPage() {
-  const {config, categories} = await getFirestoreData();
-  const products = getProductsV2();
+  const [config, products] = await Promise.all([
+    getConfig(),
+    getCategories(),
+    getProductsV2()
+  ]);
 
   return (
     <div className="">
@@ -24,5 +25,5 @@ export default async function FavouritesPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

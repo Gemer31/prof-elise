@@ -48,33 +48,30 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
   const submitForm = async (formData: { title: string; imageUrl: string, subcategories?: any[] | unknown }) => {
     setIsLoading(true);
 
-    let data: WithFieldValue<DocumentData>;
+    let data: WithFieldValue<DocumentData> = {};
 
     if (selectedCategory) {
-      data = {
-        data: categories?.map((category) => {
-          return category.id === selectedCategory.id ? {
-            ...selectedCategory,
-            title: formData.title,
-            imageUrl: formData.imageUrl
-          } : category;
-        })
-      };
+      categories?.forEach((category) => {
+        data[category.id] = category.id === selectedCategory.id ? {
+          ...selectedCategory,
+          title: formData.title,
+          imageUrl: formData.imageUrl
+        } : category;
+      });
     } else {
-      data = {
-        data: [
-          ...categories,
-          {
-            id: uuidv4(),
-            title: formData.title,
-            imageUrl: formData.imageUrl
-          }
-        ]
-      };
+      categories.forEach((category: ICategory) => {
+        data[category.id] = category;
+      });
+      const id: string = uuidv4();
+      data[id] = {
+        id,
+        title: formData.title,
+        imageUrl: formData.imageUrl
+      }
     }
 
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES_V2), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -96,7 +93,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     };
 
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES_V2), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       setSelectedImage(null);
       setSelectedCategory(undefined);
