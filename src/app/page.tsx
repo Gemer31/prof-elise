@@ -3,15 +3,23 @@ import { Catalog } from '@/components/Catalog';
 import { AboutUs } from '@/components/AboutUs';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getCategories, getConfig, getProductsV2 } from '@/app/lib/firebase-api';
 import { CategoriesList } from '@/components/CategoriesList';
+import { docsToData } from '@/utils/firebase.util';
+import { ICategory, IConfig } from '@/app/models';
+import { collection, getDocs } from '@firebase/firestore';
+import { db } from '@/app/lib/firebase-config';
+import { FirebaseCollections } from '@/app/enums';
 
 export default async function HomePage() {
-  const [config, categories, products] = await Promise.all([
-    getConfig(),
-    getCategories(),
-    getProductsV2(),
+  const [
+    settingsQuerySnapshot,
+    categoriesQuerySnapshot,
+  ] = await Promise.all([
+    getDocs(collection(db, FirebaseCollections.SETTINGS)),
+    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
   ]);
+  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
+  const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
   return (
     <main>

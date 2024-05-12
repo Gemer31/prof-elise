@@ -16,7 +16,7 @@ import { FavouritesButton } from '@/components/favourites-button/FavouritesButto
 import { uuidv4 } from '@firebase/util';
 import { getClient, updateClient } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
-import { IClient } from '@/store/dataSlice';
+import { CLIENT_ID } from '@/app/constants';
 
 export function Header() {
   const navLinkClass: string = useMemo(() => convertToClass([
@@ -69,19 +69,20 @@ export function Header() {
   const burgerRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    let clientId: string = localStorage.getItem('clientId') as string;
+    let clientId: string = localStorage.getItem(CLIENT_ID) as string;
 
     if (clientId) {
       dispatch(getClient(clientId));
     } else {
       clientId = uuidv4();
-      localStorage.setItem('clientId', clientId);
+      localStorage.setItem(CLIENT_ID, clientId);
       dispatch(updateClient({
-        [clientId]: {
+        clientId,
+        data: {
           cart: {},
           favourites: {},
         }
-      } as { [x: string]: IClient}));
+      }));
     }
   }, []);
 

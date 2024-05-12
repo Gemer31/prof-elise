@@ -1,13 +1,8 @@
-import { IFirebaseDocumentModel } from '@/app/models';
 import { QueryDocumentSnapshot } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
 
-export function getDocData<T>(docs: Array<QueryDocumentSnapshot>, docName: string): T {
-  const typedDocs: IFirebaseDocumentModel[] = docs as unknown as IFirebaseDocumentModel[];
-  const doc: IFirebaseDocumentModel = typedDocs
-    ?.find((doc) => doc._document.key.path.segments.at(-1) === docName);
-
-  return doc?._document.data?.value.mapValue.fields as T;
+export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
+  return docs.map(item => item.data()) as T[];
 }
 
 export function getStorageImageSrc(image: StorageReference): string {
@@ -16,6 +11,6 @@ export function getStorageImageSrc(image: StorageReference): string {
 
 export function converImageUrlsToGallery(imgs: string[]): { original: string }[] {
   return imgs.map((imgUrl) => ({
-    original: imgUrl,
+    original: imgUrl
   }));
 }

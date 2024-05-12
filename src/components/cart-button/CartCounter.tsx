@@ -1,13 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useAppSelector } from '@/store/store';
 
 export function CartCounter() {
-  const dispatch = useAppDispatch();
-  // const cartData = useAppSelector(state => state.dataReducer.cart);
-  // @ts-ignore
-  const cartData = useAppSelector(state => state.dataReducer.client['cart']);
   const cartTotal = useAppSelector(state => state.dataReducer.cartTotal);
   const [counterAnimationClass, setCounterAnimationClass] = useState<string>('');
   const [numbersAnimationClass, setNumbersAnimationClass] = useState<string>('');

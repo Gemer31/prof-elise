@@ -11,7 +11,7 @@ import { StorageReference } from '@firebase/storage';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
 import { ProductsViewer } from '@/components/data-editors/ProductsViewer';
-import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
+import { deleteDoc, doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { uuidv4 } from '@firebase/util';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
@@ -68,43 +68,36 @@ export function ProductEditorForm({
     images: StorageReference[]
   }) => {
     setIsLoading(true);
+
+    let documentId: string;
     let data: WithFieldValue<DocumentData> = {};
 
     const imageUrls: string[] = formData.images.map((img) => (getStorageImageSrc(img)));
 
     if (selectedProduct) {
-      products.forEach((product: IProduct) => {
-        if (product.id === selectedProduct.id) {
-          data[product.id] = {
-            ...selectedProduct,
-            title: formData.title,
-            price: formData.price,
-            description: formData.description,
-            categoryRef: doc(db, FirebaseCollections.CATEGORIES_V2, formData.categoryId),
-            imageUrls: imageUrls
-          };
-        } else {
-          data[product.id] = product;
-        }
-      });
-    } else {
-      products.forEach((product: IProduct) => {
-        data[product.id] = product;
-      });
-
-      const id: string = uuidv4();
-      data[id] = {
-        id,
+      documentId = selectedProduct.id;
+      data = {
+        ...selectedProduct,
         title: formData.title,
         price: formData.price,
         description: formData.description,
-        categoryRef: doc(db, FirebaseCollections.CATEGORIES_V2, formData.categoryId),
+        categoryRef: doc(db, FirebaseCollections.CATEGORIES, formData.categoryId),
+        imageUrls: imageUrls
+      }
+    } else {
+      documentId = uuidv4();
+      data = {
+        id: documentId,
+        title: formData.title,
+        price: formData.price,
+        description: formData.description,
+        categoryRef: doc(db, FirebaseCollections.CATEGORIES, formData.categoryId),
         imageUrls: imageUrls
       }
     }
 
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS_V2), data);
+      await setDoc(doc(db, FirebaseCollections.PRODUCTS, documentId), data);
       dispatch(setNotificationMessage(
         selectedProduct
           ? TRANSLATES[LOCALE].infoUpdated
@@ -126,12 +119,8 @@ export function ProductEditorForm({
   const deleteProduct = async (deletedProduct: IProduct) => {
     setIsLoading(true);
 
-    let data: WithFieldValue<DocumentData> = {
-      data: products.filter((product) => product.id !== deletedProduct.id)
-    };
-
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.PRODUCTS), data);
+      await deleteDoc(doc(db, FirebaseCollections.PRODUCTS, deletedProduct.id));
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].productDeleted));
       changeProduct(undefined);
       reset();

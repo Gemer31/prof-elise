@@ -1,10 +1,12 @@
-import { ICategory, IProduct } from '@/app/models';
+import { ICategory, IConfig, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getCategories, getConfig, getProductsV2 } from '@/app/lib/firebase-api';
 import { ProductsList } from '@/components/ProductsList';
-import { RouterPath } from '@/app/enums';
+import { FirebaseCollections, RouterPath } from '@/app/enums';
+import { collection, getDocs } from '@firebase/firestore';
+import { db } from '@/app/lib/firebase-config';
+import { docsToData } from '@/utils/firebase.util';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -13,11 +15,18 @@ export interface ICategoriesOrProductsProps {
 }
 
 export default async function CategoriesOrProductsPage({params: {categoryId}}: ICategoriesOrProductsProps) {
-  const [config, categories, products] = await Promise.all([
-    getConfig(),
-    getCategories(),
-    getProductsV2(),
+  const [
+    settingsQuerySnapshot,
+    categoriesQuerySnapshot,
+    productsQuerySnapshot,
+  ] = await Promise.all([
+    getDocs(collection(db, FirebaseCollections.SETTINGS)),
+    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
+    getDocs(collection(db, FirebaseCollections.PRODUCTS)),
   ]);
+  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
+  const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const products = docsToData<IProduct>(productsQuerySnapshot.docs);
   const currentCategory: ICategory = Object.values(categories).find((item) => item.id === categoryId);
   // const relatedCategories: ICategory[] = categories.filter((item) => currentCategory?.relatedCategories?.includes(item.id));
   const currentCategoryProducts: IProduct[] = Object.values(products).filter((item) => {

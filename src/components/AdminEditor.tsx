@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonType, EditGroup, RouterPath } from '@/app/enums';
-import { auth, storage } from '@/app/lib/firebase-config';
+import { ButtonType, EditGroup, FirebaseCollections, RouterPath } from '@/app/enums';
+import { auth, db, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Loader } from '@/components/Loader';
@@ -13,9 +13,11 @@ import { ICategory, IConfig, IProduct } from '@/app/models';
 import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
-import { getCategories, getConfig, getProductsV2 } from '@/app/lib/firebase-api';
+import { getConfig } from '@/app/lib/firebase-api';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
+import { collection, getDocs } from '@firebase/firestore';
+import { docsToData } from '@/utils/firebase.util';
 
 export function AdminEditor() {
   const router = useRouter();
@@ -46,17 +48,21 @@ export function AdminEditor() {
       images,
       config,
       categories,
-      productsV2,
+      products,
     ] = await Promise.all([
       listAll(ref(storage)),
       getConfig(),
-      getCategories(),
-      getProductsV2(),
+      getDocs(collection(db, FirebaseCollections.CATEGORIES)),
+      getDocs(collection(db, FirebaseCollections.PRODUCTS)),
     ]);
+
+    categories.docs.map(item => {
+      console.log(item.data());
+    })
     setImages(images.items);
     setConfig(config);
-    setCategories(Object.values(categories));
-    setProducts(Object.values(productsV2));
+    setCategories(docsToData<ICategory>(categories.docs));
+    setProducts(docsToData<IProduct>(products.docs));
   };
 
   return (

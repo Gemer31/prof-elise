@@ -1,12 +1,14 @@
-import { ICategory, IProduct } from '@/app/models';
+import { ICategory, IConfig, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { getCategories, getConfig, getProductsV2 } from '@/app/lib/firebase-api';
-import { RouterPath } from '@/app/enums';
+import { FirebaseCollections, RouterPath } from '@/app/enums';
+import { collection, getDocs } from '@firebase/firestore';
+import { db } from '@/app/lib/firebase-config';
+import { docsToData } from '@/utils/firebase.util';
 
 export interface IProductDetailsProps {
   params: {
@@ -15,11 +17,18 @@ export interface IProductDetailsProps {
 }
 
 export default async function ProductDetailsPage({params: {productId}}: IProductDetailsProps) {
-  const [config, categories, products] = await Promise.all([
-    getConfig(),
-    getCategories(),
-    getProductsV2(),
+  const [
+    settingsQuerySnapshot,
+    categoriesQuerySnapshot,
+    productsQuerySnapshot
+  ] = await Promise.all([
+    getDocs(collection(db, FirebaseCollections.SETTINGS)),
+    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
+    getDocs(collection(db, FirebaseCollections.PRODUCTS))
   ]);
+  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
+  const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const products = docsToData<IProduct>(productsQuerySnapshot.docs);
   let product: IProduct = Object.values(products).find((item) => item.id === productId);
   product.categoryId = product.categoryRef.path.split('/').pop();
   delete product.categoryRef;

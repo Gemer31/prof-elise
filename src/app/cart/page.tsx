@@ -1,7 +1,10 @@
 import { CartTable } from '@/components/CartTable';
 import { Metadata } from 'next';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getConfig } from '@/app/lib/firebase-api';
+import { collection, getDocs } from '@firebase/firestore';
+import { db } from '@/app/lib/firebase-config';
+import { FirebaseCollections } from '@/app/enums';
+import { IConfig } from '@/app/models';
 
 export const metadata: Metadata = {
   title: 'Корзина покупок',
@@ -9,11 +12,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CartPage() {
-  const config = await getConfig();
+  const [
+    settingsQuerySnapshot
+  ] = await Promise.all([
+    getDocs(collection(db, FirebaseCollections.SETTINGS))
+  ]);
+  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
 
-  return (
-    <main className="w-full">
-      <CartTable editable={true} config={config} title={TRANSLATES[LOCALE].purchaseCart}/>
-    </main>
-  );
+  return <main className="w-full">
+    <CartTable editable={true} config={config} title={TRANSLATES[LOCALE].purchaseCart}/>
+  </main>;
 }

@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { StorageReference } from '@firebase/storage';
 import { getStorageImageSrc } from '@/utils/firebase.util';
-import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
+import { deleteDoc, doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { uuidv4 } from '@firebase/util';
 import { useAppDispatch } from '@/store/store';
@@ -48,30 +48,27 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
   const submitForm = async (formData: { title: string; imageUrl: string, subcategories?: any[] | unknown }) => {
     setIsLoading(true);
 
+    let documentId: string;
     let data: WithFieldValue<DocumentData> = {};
 
     if (selectedCategory) {
-      categories?.forEach((category) => {
-        data[category.id] = category.id === selectedCategory.id ? {
-          ...selectedCategory,
-          title: formData.title,
-          imageUrl: formData.imageUrl
-        } : category;
-      });
+      documentId = selectedCategory.id;
+      data = {
+        ...selectedCategory,
+        title: formData.title,
+        imageUrl: formData.imageUrl
+      };
     } else {
-      categories.forEach((category: ICategory) => {
-        data[category.id] = category;
-      });
-      const id: string = uuidv4();
-      data[id] = {
-        id,
+      documentId = uuidv4();
+      data = {
+        id: documentId,
         title: formData.title,
         imageUrl: formData.imageUrl
       }
     }
 
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES_V2), data);
+      await setDoc(doc(db, FirebaseCollections.CATEGORIES, documentId), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -88,12 +85,8 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
   const deleteCategory = async (deleteCategory: ICategory) => {
     setIsLoading(true);
 
-    let data: WithFieldValue<DocumentData> = {
-      data: categories?.filter((category) => category.id !== deleteCategory.id)
-    };
-
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CATEGORIES_V2), data);
+      await deleteDoc(doc(db, FirebaseCollections.CATEGORIES, deleteCategory.id));
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       setSelectedImage(null);
       setSelectedCategory(undefined);

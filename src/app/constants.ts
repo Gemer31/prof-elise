@@ -6,4 +6,6 @@ export const FADE_OUT_LEFT_CLASS = 'animate__animated animate__fadeOutLeft';
 export const FADE_IN_CLASS = 'animate__animated animate__fadeIn';
 export const FADE_OUT_CLASS = 'animate__animated animate__fadeOut';
 
-export const CTRL_CODE = 17;
+export const CTRL_CODE: number = 17;
+
+export const CLIENT_ID: string = 'clientId';

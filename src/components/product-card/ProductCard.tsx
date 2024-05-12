@@ -14,8 +14,9 @@ import { IConfig, IProduct } from '@/app/models';
 import { Loader } from '@/components/Loader';
 import './product-card.css';
 import { updateClient } from '@/store/asyncThunk';
-import { doc } from '@firebase/firestore';
+import { doc, DocumentReference } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
+import { CLIENT_ID } from '@/app/constants';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -47,7 +48,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'entity-card-title'
   ]), []);
 
-  const clientId = useMemo(() => localStorage.getItem('clientId'), []);
+  const clientId = useMemo(() => localStorage.getItem(CLIENT_ID), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const counter = useAppSelector(state => state.dataReducer.client?.cart?.[data.id]?.count);
@@ -71,13 +72,13 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     } else {
       newCart[data.id] = {
         count: 1,
-        productRef: doc(db, FirebaseCollections.PRODUCTS_V2, data.id)
-        // `/${FirebaseCollections.PRODUCTS_V2}/${data.id}`
+        productRef: doc(db, FirebaseCollections.PRODUCTS, data.id)
       };
     }
 
     dispatch(updateClient({
-      [clientId]: {
+      clientId,
+      data: {
         ...client,
         cart: newCart
       }
@@ -94,7 +95,8 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     newCart[data.id].count === 0 && delete newCart[data.id];
 
     dispatch(updateClient({
-      [clientId]: {
+      clientId,
+      data: {
         ...client,
         cart: newCart
       }
@@ -104,17 +106,18 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
   const favouriteClick = async (event: MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    const newFavourites = {...client.favourites} as Record<string, IProduct>;
+    const newFavourites = {...client.favourites} as Record<string, DocumentReference>;
 
     if (isFavourite) {
       delete newFavourites[data.id];
     } else {
-      newFavourites[data.id] = data;
+      newFavourites[data.id] = doc(db, FirebaseCollections.PRODUCTS, data.id);
     }
 
-    const clientId: string = localStorage.getItem('clientId') as string;
+    const clientId: string = localStorage.getItem(CLIENT_ID) as string;
     dispatch(updateClient({
-      [clientId]: {
+      clientId,
+      data: {
         ...client,
         favourites: newFavourites
       }

@@ -5,8 +5,12 @@ import { Layout } from '@/components/Layout';
 import 'animate.css';
 import { Metadata } from 'next';
 import { listAll, ref } from '@firebase/storage';
-import { storage } from '@/app/lib/firebase-config';
-import { getCategories, getConfig } from '@/app/lib/firebase-api';
+import { db, storage } from '@/app/lib/firebase-config';
+import { getConfig } from '@/app/lib/firebase-api';
+import { collection, getDocs } from '@firebase/firestore';
+import { FirebaseCollections } from '@/app/enums';
+import { docsToData } from '@/utils/firebase.util';
+import { ICategory } from '@/app/models';
 
 const openSans = Open_Sans({subsets: ['latin']});
 
@@ -18,11 +22,13 @@ export const metadata: Metadata = {
 export default async function RootLayout({children}: {
   children: React.ReactNode;
 }) {
-  const [config, categories, storageData] = await Promise.all([
+  const [config, categoriesQuerySnapshot, storageData] = await Promise.all([
     getConfig(),
-    getCategories(),
+    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
     listAll(ref(storage))
   ]);
+
+  const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
   return (
     <html id="html" lang="en" className="scroll-smooth">

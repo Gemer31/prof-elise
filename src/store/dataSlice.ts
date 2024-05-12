@@ -5,12 +5,12 @@ import { DocumentReference } from '@firebase/firestore';
 
 export interface ICartProductModel {
   count: number;
-  productRef: DocumentReference | string;
+  productRef: DocumentReference;
 }
 
 export interface IClient {
   cart?: Record<string, ICartProductModel>;
-  favourites?: Record<string, IProduct>;
+  favourites?: Record<string, DocumentReference>;
 }
 
 interface IDataSlice {
@@ -42,7 +42,7 @@ export const dataSlice = createSlice({
       const newClient = action.payload as IClient;
 
       state.cartTotal = 0;
-      newClient.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
+      newClient?.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
         state.cartTotal += item.count;
       });
 
@@ -53,7 +53,7 @@ export const dataSlice = createSlice({
       const newClient = action.payload as IClient;
 
       state.cartTotal = 0;
-      newClient.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
+      newClient?.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
         state.cartTotal += item.count;
       });
 
@@ -108,7 +108,7 @@ export const dataSlice = createSlice({
       state.cart = action.payload;
       state.cartLoading = false;
       localStorage.setItem('cart', JSON.stringify(state.cart));
-    },
+    }
   }
 });
 
@@ -117,5 +117,5 @@ export const {
   setNotificationMessage,
   addProductToCart,
   removeProductFromCart,
-  setCartData,
+  setCartData
 } = dataSlice.actions;

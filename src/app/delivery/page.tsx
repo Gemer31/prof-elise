@@ -1,18 +1,16 @@
 import { ContentContainer } from '@/components/ContentContainer';
-import { IConfig, IFirestoreConfigEditorInfo } from '@/app/models';
-import { convertConfigDataToModel, getDocData } from '@/utils/firebase.util';
+import { IConfig } from '@/app/models';
 import { FirebaseCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 
 export default async function DeliveryPage() {
-  const firestoreData = await getDocs(
-    collection(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME))
-  );
-  const config: IConfig = convertConfigDataToModel(getDocData<IFirestoreConfigEditorInfo>(
-    firestoreData.docs,
-    FirebaseCollections.CONFIG,
-  ));
+  const [
+    settingsQuerySnapshot
+  ] = await Promise.all([
+    getDocs(collection(db, FirebaseCollections.SETTINGS))
+  ]);
+  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
 
   return (
     <main className="w-full ql-editor readonly-ql-editor no-paddings">
@@ -23,5 +21,5 @@ export default async function DeliveryPage() {
         />
       </ContentContainer>
     </main>
-  )
+  );
 }

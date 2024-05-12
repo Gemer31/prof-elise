@@ -24,12 +24,11 @@ export enum EditGroup {
 }
 
 export enum FirebaseCollections {
+  SETTINGS = 'settings',
   CATEGORIES = 'categories',
-  CATEGORIES_V2 = 'categoriesV2',
+  PRODUCTS = "products",
   CONFIG = 'config',
-  PRODUCTS = 'products',
-  PRODUCTS_V2 = 'productsV2',
-  CLIENT = 'client',
+  ANONYMOUS_CLIENTS = 'anonymousClients',
 }
 
 export enum CounterType {
