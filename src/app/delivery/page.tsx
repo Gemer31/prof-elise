@@ -5,11 +5,7 @@ import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 
 export default async function DeliveryPage() {
-  const [
-    settingsQuerySnapshot
-  ] = await Promise.all([
-    getDocs(collection(db, FirebaseCollections.SETTINGS))
-  ]);
+  const settingsQuerySnapshot = await getDocs(collection(db, FirebaseCollections.SETTINGS))
   const config = settingsQuerySnapshot.docs[0].data() as IConfig;
 
   return (

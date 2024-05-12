@@ -6,10 +6,13 @@ import { Loader } from '@/components/Loader';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { doc, DocumentReference, getDoc } from '@firebase/firestore';
+import { collection, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
+import { FirebaseCollections } from '@/app/enums';
+import { FavouriteProductCard } from '@/components/FavouriteProductCard';
 
 export function FavouritesList() {
+  const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
   const [data, setData] = useState<IProduct[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   // @ts-ignore
@@ -18,17 +21,12 @@ export function FavouritesList() {
 
   useEffect(() => {
     if (!cartLoading) {
-      let docs;
+      let productsIds: string[] = favourites && Object.keys(favourites);
 
-      if (favourites) {
-        docs = Object.values<DocumentReference>(favourites);
-      }
-      if (docs?.length) {
-        // think about better solution
-        Promise.all(docs.map((item) => getDoc(doc(db, item.path.at(-1), item.path.at(-2)))))
+      if (productsIds?.length) {
+        getDocs(query(collection(db, FirebaseCollections.PRODUCTS), where('id', 'in', productsIds)))
           .then((favouriteProducts) => {
-            const products = favouriteProducts.map((p) => p.data() as IProduct);
-            console.log(favouriteProducts);
+            const products: IProduct[] = favouriteProducts.docs.map((p) => p.data() as IProduct);
             setData(products);
             setDataLoading(false);
           });
@@ -44,11 +42,20 @@ export function FavouritesList() {
       /></div>
     : (
       data?.length
-        ? Object.values(data).map((favourite) => {
-          return <div className="grid grid-cols-4">
-            {JSON.stringify(favourite)}
-          </div>
-        })
+        ? <div className="w-full">
+        <div className="grid-cols-2">
+          <span>{TRANSLATES[LOCALE].naming}</span>
+          <span>{TRANSLATES[LOCALE].price}</span>
+        </div>
+          {
+            data.map((favourite) => <FavouriteProductCard
+              key={favourite.id}
+              data={favourite}
+              isLoading={redirectIdInProgress === favourite.id}
+              onClick={() => setRedirectIdInProgress(favourite.id)}
+            />)
+          }
+        </div>
         : <div className="w-full flex justify-center items-center text-3xl text-center">
           <Image width={100} height={100} src="/icons/empty-cart.svg" alt="Empty cart"/>
           <span>{TRANSLATES[LOCALE].emptyCart}</span>

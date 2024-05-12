@@ -13,7 +13,6 @@ import { ICategory, IConfig, IProduct } from '@/app/models';
 import { CategoryEditorForm } from '@/components/data-editors/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/data-editors/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/data-editors/ImagesEditorForm';
-import { getConfig } from '@/app/lib/firebase-api';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 import { collection, getDocs } from '@firebase/firestore';
@@ -46,23 +45,20 @@ export function AdminEditor() {
   const loadData = async () => {
     const [
       images,
-      config,
-      categories,
-      products,
+      settingsQuerySnapshot,
+      categoriesQuerySnapshot,
+      productsQuerySnapshot,
     ] = await Promise.all([
       listAll(ref(storage)),
-      getConfig(),
+      getDocs(collection(db, FirebaseCollections.SETTINGS)),
       getDocs(collection(db, FirebaseCollections.CATEGORIES)),
       getDocs(collection(db, FirebaseCollections.PRODUCTS)),
     ]);
 
-    categories.docs.map(item => {
-      console.log(item.data());
-    })
     setImages(images.items);
-    setConfig(config);
-    setCategories(docsToData<ICategory>(categories.docs));
-    setProducts(docsToData<IProduct>(products.docs));
+    setConfig(settingsQuerySnapshot.docs[0].data() as IConfig);
+    setCategories(docsToData<ICategory>(categoriesQuerySnapshot.docs));
+    setProducts(docsToData<IProduct>(productsQuerySnapshot.docs));
   };
 
   return (

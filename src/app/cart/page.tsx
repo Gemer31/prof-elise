@@ -12,11 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CartPage() {
-  const [
-    settingsQuerySnapshot
-  ] = await Promise.all([
-    getDocs(collection(db, FirebaseCollections.SETTINGS))
-  ]);
+  const settingsQuerySnapshot = await getDocs(collection(db, FirebaseCollections.SETTINGS));
   const config = settingsQuerySnapshot.docs[0].data() as IConfig;
 
   return <main className="w-full">

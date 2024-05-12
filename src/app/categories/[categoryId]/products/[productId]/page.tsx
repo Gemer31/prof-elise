@@ -30,7 +30,6 @@ export default async function ProductDetailsPage({params: {productId}}: IProduct
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const products = docsToData<IProduct>(productsQuerySnapshot.docs);
   let product: IProduct = Object.values(products).find((item) => item.id === productId);
-  product.categoryId = product.categoryRef.path.split('/').pop();
   delete product.categoryRef;
   const productCategory: ICategory = Object.values(categories).find((item) => product.categoryId === item.id);
 
