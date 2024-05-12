@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections } from '@/app/enums';
+import { ButtonType, FirestoreCollections } from '@/app/enums';
 import { useState } from 'react';
 import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
 import { ICategory, IProduct } from '@/app/models';
@@ -81,7 +81,7 @@ export function ProductEditorForm({
         title: formData.title,
         price: formData.price,
         description: formData.description,
-        categoryRef: doc(db, FirebaseCollections.CATEGORIES, formData.categoryId),
+        categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
         imageUrls: imageUrls
       }
     } else {
@@ -91,13 +91,13 @@ export function ProductEditorForm({
         title: formData.title,
         price: formData.price,
         description: formData.description,
-        categoryRef: doc(db, FirebaseCollections.CATEGORIES, formData.categoryId),
+        categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
         imageUrls: imageUrls
       }
     }
 
     try {
-      await setDoc(doc(db, FirebaseCollections.PRODUCTS, documentId), data);
+      await setDoc(doc(db, FirestoreCollections.PRODUCTS, documentId), data);
       dispatch(setNotificationMessage(
         selectedProduct
           ? TRANSLATES[LOCALE].infoUpdated
@@ -120,7 +120,7 @@ export function ProductEditorForm({
     setIsLoading(true);
 
     try {
-      await deleteDoc(doc(db, FirebaseCollections.PRODUCTS, deletedProduct.id));
+      await deleteDoc(doc(db, FirestoreCollections.PRODUCTS, deletedProduct.id));
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].productDeleted));
       changeProduct(undefined);
       reset();

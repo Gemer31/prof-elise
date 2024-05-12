@@ -23,7 +23,7 @@ export enum EditGroup {
   IMAGES = 'images',
 }
 
-export enum FirebaseCollections {
+export enum FirestoreCollections {
   SETTINGS = 'settings',
   CATEGORIES = 'categories',
   PRODUCTS = "products",

@@ -3,7 +3,7 @@
 import { IProduct } from '@/app/models';
 import Image from 'next/image';
 import { Button } from '@/components/Button';
-import { ButtonType, CounterType, FirebaseCollections, RouterPath } from '@/app/enums';
+import { ButtonType, CounterType, FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { MouseEvent, useMemo, useState } from 'react';
 import { ICartProductModel, IClient } from '@/store/dataSlice';
@@ -43,7 +43,7 @@ export function FavouriteProductCard({data, isLoading, onClick}: IFavouriteProdu
     } else {
       newCart[data.id] = {
         count: 1,
-        productRef: doc(db, FirebaseCollections.PRODUCTS, data.id)
+        productRef: doc(db, FirestoreCollections.PRODUCTS, data.id)
       };
     }
 

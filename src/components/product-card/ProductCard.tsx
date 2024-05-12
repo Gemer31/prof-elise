@@ -4,7 +4,7 @@ import { MouseEvent, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { ICartProductModel, IClient } from '@/store/dataSlice';
-import { ButtonType, CounterType, FirebaseCollections, RouterPath } from '@/app/enums';
+import { ButtonType, CounterType, FirestoreCollections, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Counter } from '@/components/Counter';
@@ -17,6 +17,7 @@ import { updateClient } from '@/store/asyncThunk';
 import { doc, DocumentReference } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { CLIENT_ID } from '@/app/constants';
+import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -26,14 +27,15 @@ export interface IProductCardProps {
 }
 
 export function ProductCard({data, config, isLoading, onClick}: IProductCardProps) {
-  const cardClass = useMemo(() => convertToClass([
+  const hostClass = useMemo(() => convertToClass([
     'product-card',
     'h-96',
     'p-4',
     'rounded-lg',
     'border-2 border-pink-200',
-    'hover:bg-pink-100'
-  ]), []);
+    'hover:bg-pink-100',
+    isLoading ? ' pointer-events-none' : '',
+  ]), [isLoading]);
   const titleClass = useMemo(() => convertToClass([
     'text-base',
     'min-h-16',
@@ -55,8 +57,6 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
-  // @ts-ignore
-  const isFavourite = useAppSelector(state => state.dataReducer.client?.['favourites']?.[data.id]);
 
   const addToCart = (event?: MouseEvent) => {
     event?.stopPropagation();
@@ -72,7 +72,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     } else {
       newCart[data.id] = {
         count: 1,
-        productRef: doc(db, FirebaseCollections.PRODUCTS, data.id)
+        productRef: doc(db, FirestoreCollections.PRODUCTS, data.id)
       };
     }
 
@@ -103,40 +103,13 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     }));
   };
 
-  const favouriteClick = async (event: MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-    const newFavourites = {...client.favourites} as Record<string, DocumentReference>;
-
-    if (isFavourite) {
-      delete newFavourites[data.id];
-    } else {
-      newFavourites[data.id] = doc(db, FirebaseCollections.PRODUCTS, data.id);
-    }
-
-    const clientId: string = localStorage.getItem(CLIENT_ID) as string;
-    dispatch(updateClient({
-      clientId,
-      data: {
-        ...client,
-        favourites: newFavourites
-      }
-    }));
-  };
-
   return (
     <Link
-      className={cardClass + (isLoading ? ' pointer-events-none' : '')}
+      className={hostClass}
       href={`${RouterPath.CATEGORIES}/${data?.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
-      <div className="product-card-favourite-button hover:scale-110" onClick={favouriteClick}>
-        {
-          isFavourite
-            ? <Image width={25} height={25} src="/icons/heart-filled.svg" alt="favourite"/>
-            : <Image width={25} height={25} src="/icons/heart.svg" alt="favourite"/>
-        }
-      </div>
+      <EntityFavouriteButton className="product-card-favourite-button scale-0 top-4 right-4" productId={data.id}/>
       <Image
         className="rounded-md h-[200px] w-[200px]"
         width={200}

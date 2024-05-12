@@ -2,7 +2,7 @@
 
 import { CartTable } from '@/components/CartTable';
 import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections, RouterPath } from '@/app/enums';
+import { ButtonType, FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
 import { useState } from 'react';
@@ -79,7 +79,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     });
     // setFullHeigth();
     setCreatedOrderNumber(config.nextOrderNumber);
-    await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), {
+    await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirestoreCollections.CONFIG), {
       contactPhone: config.contactPhone,
       workingHours: config.workingHours,
       currency: config.currency,

@@ -3,7 +3,7 @@ import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ProductsList } from '@/components/ProductsList';
-import { FirebaseCollections, RouterPath } from '@/app/enums';
+import { FirestoreCollections, RouterPath } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData } from '@/utils/firebase.util';
@@ -21,9 +21,9 @@ export default async function CategoriesOrProductsPage({params: {categoryId}}: I
     categoriesQuerySnapshot,
     productsQuerySnapshot
   ] = await Promise.all([
-    getDocs(collection(db, FirebaseCollections.SETTINGS)),
-    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
-    getDocs(collection(db, FirebaseCollections.PRODUCTS))
+    getDocs(collection(db, FirestoreCollections.SETTINGS)),
+    getDocs(collection(db, FirestoreCollections.CATEGORIES)),
+    getDocs(collection(db, FirestoreCollections.PRODUCTS))
   ]);
   const config = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);

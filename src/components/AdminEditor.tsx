@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonType, EditGroup, FirebaseCollections, RouterPath } from '@/app/enums';
+import { ButtonType, EditGroup, FirestoreCollections, RouterPath } from '@/app/enums';
 import { auth, db, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -50,9 +50,9 @@ export function AdminEditor() {
       productsQuerySnapshot,
     ] = await Promise.all([
       listAll(ref(storage)),
-      getDocs(collection(db, FirebaseCollections.SETTINGS)),
-      getDocs(collection(db, FirebaseCollections.CATEGORIES)),
-      getDocs(collection(db, FirebaseCollections.PRODUCTS)),
+      getDocs(collection(db, FirestoreCollections.SETTINGS)),
+      getDocs(collection(db, FirestoreCollections.CATEGORIES)),
+      getDocs(collection(db, FirestoreCollections.PRODUCTS)),
     ]);
 
     setImages(images.items);

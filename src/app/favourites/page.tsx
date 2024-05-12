@@ -5,12 +5,12 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { FavouritesList } from '@/components/FavouritesList';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirebaseCollections } from '@/app/enums';
+import { FirestoreCollections } from '@/app/enums';
 import { ICategory } from '@/app/models';
 import { docsToData } from '@/utils/firebase.util';
 
 export default async function FavouritesPage() {
-  const categoriesQuerySnapshot = await getDocs(collection(db, FirebaseCollections.CATEGORIES));
+  const categoriesQuerySnapshot = await getDocs(collection(db, FirestoreCollections.CATEGORIES));
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
   return (

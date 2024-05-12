@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections } from '@/app/enums';
+import { ButtonType, FirestoreCollections } from '@/app/enums';
 import { useState } from 'react';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { StorageReference } from '@firebase/storage';
@@ -68,7 +68,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     }
 
     try {
-      await setDoc(doc(db, FirebaseCollections.CATEGORIES, documentId), data);
+      await setDoc(doc(db, FirestoreCollections.CATEGORIES, documentId), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -86,7 +86,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     setIsLoading(true);
 
     try {
-      await deleteDoc(doc(db, FirebaseCollections.CATEGORIES, deleteCategory.id));
+      await deleteDoc(doc(db, FirestoreCollections.CATEGORIES, deleteCategory.id));
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       setSelectedImage(null);
       setSelectedCategory(undefined);

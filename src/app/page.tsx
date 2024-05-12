@@ -8,15 +8,15 @@ import { docsToData } from '@/utils/firebase.util';
 import { ICategory, IConfig } from '@/app/models';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirebaseCollections } from '@/app/enums';
+import { FirestoreCollections } from '@/app/enums';
 
 export default async function HomePage() {
   const [
     settingsQuerySnapshot,
     categoriesQuerySnapshot,
   ] = await Promise.all([
-    getDocs(collection(db, FirebaseCollections.SETTINGS)),
-    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
+    getDocs(collection(db, FirestoreCollections.SETTINGS)),
+    getDocs(collection(db, FirestoreCollections.CATEGORIES)),
   ]);
   const config = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);

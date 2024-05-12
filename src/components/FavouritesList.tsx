@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { collection, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirebaseCollections } from '@/app/enums';
+import { FirestoreCollections } from '@/app/enums';
 import { FavouriteProductCard } from '@/components/FavouriteProductCard';
 
 export function FavouritesList() {
@@ -24,7 +24,7 @@ export function FavouritesList() {
       let productsIds: string[] = favourites && Object.keys(favourites);
 
       if (productsIds?.length) {
-        getDocs(query(collection(db, FirebaseCollections.PRODUCTS), where('id', 'in', productsIds)))
+        getDocs(query(collection(db, FirestoreCollections.PRODUCTS), where('id', 'in', productsIds)))
           .then((favouriteProducts) => {
             const products: IProduct[] = favouriteProducts.docs.map((p) => p.data() as IProduct);
             setData(products);

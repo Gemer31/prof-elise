@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType, FirebaseCollections } from '@/app/enums';
+import { ButtonType, FirestoreCollections } from '@/app/enums';
 import { useEffect, useState } from 'react';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { setNotificationMessage } from '@/store/dataSlice';
@@ -73,7 +73,7 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
       nextOrderNumber: config?.nextOrderNumber || 1,
     };
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirebaseCollections.CONFIG), data);
+      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirestoreCollections.CONFIG), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       refreshCallback?.();
     } catch {

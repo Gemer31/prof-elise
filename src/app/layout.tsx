@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 import { listAll, ref } from '@firebase/storage';
 import { db, storage } from '@/app/lib/firebase-config';
 import { collection, getDocs } from '@firebase/firestore';
-import { FirebaseCollections } from '@/app/enums';
+import { FirestoreCollections } from '@/app/enums';
 import { docsToData } from '@/utils/firebase.util';
 import { ICategory, IConfig } from '@/app/models';
 
@@ -22,8 +22,8 @@ export default async function RootLayout({children}: {
   children: React.ReactNode;
 }) {
   const [settingsQuerySnapshot, categoriesQuerySnapshot, storageData] = await Promise.all([
-    getDocs(collection(db, FirebaseCollections.SETTINGS)),
-    getDocs(collection(db, FirebaseCollections.CATEGORIES)),
+    getDocs(collection(db, FirestoreCollections.SETTINGS)),
+    getDocs(collection(db, FirestoreCollections.CATEGORIES)),
     listAll(ref(storage))
   ]);
   const config = settingsQuerySnapshot.docs[0].data() as IConfig;
