@@ -1,13 +1,15 @@
+'use client';
+
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { RouterPath } from '@/app/enums';
-import { CartCounter } from '@/components/cart-button/CartCounter';
-
+import { HeaderCounter } from '@/components/header-counter/HeaderCounter';
+import { useAppSelector } from '@/store/store';
 
 export function CartButton() {
-  const linkClass: string = useMemo(() => convertToClass([
+  const hostClass: string = useMemo(() => convertToClass([
     'relative',
     'flex',
     'justify-center',
@@ -23,10 +25,12 @@ export function CartButton() {
     'transition-colors'
   ]), []);
 
+  const cartTotal = useAppSelector(state => state.dataReducer.cartTotal);
+
   return (
-    <Link href={RouterPath.CART} className={linkClass}>
+    <Link href={RouterPath.CART} className={hostClass}>
       <Image className="p-2" width={45} height={45} src="/icons/cart.svg" alt="CartButton"/>
-      <CartCounter/>
+      <HeaderCounter value={cartTotal}/>
     </Link>
   );
 }

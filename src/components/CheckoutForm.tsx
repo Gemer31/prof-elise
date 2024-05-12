@@ -5,15 +5,13 @@ import { Button } from '@/components/Button';
 import { ButtonType, FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
-import path from 'path';
-import { setCartData } from '@/store/dataSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { getOrderMessage } from '@/utils/telegram.util';
@@ -21,6 +19,9 @@ import { doc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import Image from 'next/image';
 import Link from 'next/link';
+import { updateClient } from '@/store/asyncThunk';
+import { CLIENT_ID } from '@/app/constants';
+import { IClient } from '@/store/dataSlice';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
@@ -35,8 +36,10 @@ interface ICheckoutFormProps {
 }
 
 export function CheckoutForm({config}: ICheckoutFormProps) {
+  const clientId = useMemo(() => localStorage.getItem(CLIENT_ID), []);
   const dispatch = useAppDispatch();
-  const cart = useAppSelector(state => state.dataReducer.cart);
+  // @ts-ignore
+  const client: IClient = useAppSelector(state => state.dataReducer.client);
   const [loading, setLoading] = useState(false);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<number>();
   const {
@@ -47,16 +50,6 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     mode: 'onSubmit',
     resolver: yupResolver(validationSchema)
   });
-
-  // const setFullHeigth = (): void => {
-  //   const htmlEl: HTMLElement = document.getElementById('html') as HTMLElement;
-  //   const pageEl: HTMLElement = document.getElementById('page') as HTMLElement;
-  //   const contentEl: HTMLElement = document.getElementById('content') as HTMLElement;
-  //   document.body.style.height = '100%';
-  //   htmlEl.style.height = '100%';
-  //   pageEl.style.height = '100%';
-  //   contentEl.style.height = '100%';
-  // }
 
   const submitForm = async (formData: {
     name: string;
@@ -77,7 +70,6 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
         }))
       })
     });
-    // setFullHeigth();
     setCreatedOrderNumber(config.nextOrderNumber);
     await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirestoreCollections.CONFIG), {
       contactPhone: config.contactPhone,
@@ -87,10 +79,12 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
       deliveryDescription: config.deliveryDescription,
       nextOrderNumber: config.nextOrderNumber + 1
     });
-    dispatch(setCartData({
-      totalProductsPrice: '0',
-      totalProductsAmount: 0,
-      products: {},
+    dispatch(updateClient({
+      clientId,
+      data: {
+        ...client,
+        cart: {}
+      }
     }));
     setLoading(false);
   };

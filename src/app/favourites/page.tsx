@@ -2,7 +2,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { FavouritesList } from '@/components/FavouritesList';
+import { FavouritesList } from '@/components/favourites-list/FavouritesList';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';

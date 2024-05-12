@@ -53,7 +53,7 @@ export function Counter({type, counterChangedCallback, selectedAmount}: ICounter
       <Button
         styleClass="text-amber-50 px-4 py-4 leading-3"
         type={ButtonType.BUTTON}
-        callback={decrement}
+        callback={decr}
       >-</Button>
       <input
         className="w-[40px] mx-2 rounded-md text-center pointer-events-none"
@@ -64,7 +64,7 @@ export function Counter({type, counterChangedCallback, selectedAmount}: ICounter
       <Button
         styleClass="text-amber-50 px-4 py-4 leading-3"
         type={ButtonType.BUTTON}
-        callback={increment}
+        callback={incr}
       >+</Button>
     </div>;
 }

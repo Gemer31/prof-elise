@@ -1,0 +1,84 @@
+@keyframes slideUpAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(22px);
+    }
+}
+
+@keyframes slideDownAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-22px);
+    }
+}
+
+@keyframes counterDisappearAnimation {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes counterAppearAnimation {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.header-counter-slide-up {
+    animation-name: slideUpAnimation;
+    align-self: end;
+}
+
+.header-counter-slide-down {
+    animation-name: slideDownAnimation;
+    align-self: start;
+}
+
+.header-counter-disappear {
+    animation-name: counterDisappearAnimation;
+    animation-fill-mode: forwards;
+}
+
+.header-counter-appear {
+    animation-name: counterAppearAnimation;
+    animation-fill-mode: forwards;
+}
+
+.header-counter {
+    animation-duration: .15s;
+    animation-timing-function: ease-in;
+    animation-direction: alternate;
+    align-self: start;
+    overflow: hidden;
+    position: absolute;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    background: rgb(236, 72, 153);
+    border-radius: 100%;
+    top: 4px;
+    width: 22px;
+    height: 22px;
+    right: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0);
+}
+
+.header-counter-numbers {
+    animation-duration: .15s;
+    animation-timing-function: ease-in;
+    display: flex;
+    flex-direction: column;
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CartButton } from '@/components/cart-button/CartButton';
+import { CartButton } from '@/components/CartButton';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ContentContainer } from '@/components/ContentContainer';
@@ -12,7 +12,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
 import { useEffect, useMemo, useRef } from 'react';
 import { auth } from '@/app/lib/firebase-config';
-import { FavouritesButton } from '@/components/favourites-button/FavouritesButton';
+import { FavouritesButton } from '@/components/FavouritesButton';
 import { uuidv4 } from '@firebase/util';
 import { getClient, updateClient } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
