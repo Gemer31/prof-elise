@@ -20,7 +20,7 @@ export function AboutUs({text}: IAboutUsProps) {
   });
 
   return (
-    <ContentContainer styleClass="w-full flex flex-col 2md:flex-row justify-start items-center">
+    <ContentContainer styleClass="w-full flex flex-col 2md:flex-row justify-start items-center pb-4">
       <div
         ref={ref1}
         className={`2md:mr-2 ${handleInView(inView1, FADE_IN_LEFT_CLASS)}`}

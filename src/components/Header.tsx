@@ -17,6 +17,7 @@ import { uuidv4 } from '@firebase/util';
 import { getClient, updateClient } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
 import { CLIENT_ID } from '@/app/constants';
+import { CircleButton } from '@/components/CircleButton';
 
 export function Header() {
   const navLinkClass: string = useMemo(() => convertToClass([
@@ -40,21 +41,6 @@ export function Header() {
     'transition-colors',
     'text-2xl',
     'text-amber-50'
-  ]), []);
-  const circleNavLinkClass: string = useMemo(() => convertToClass([
-    'cursor-pointer',
-    'flex',
-    'justify-center',
-    'items-center',
-    'rounded-full',
-    'border-2',
-    'border-pink-500',
-    'bg-amber-50',
-    'm-1',
-    'size-14',
-    'hover:bg-pink-100',
-    'duration-500',
-    'transition-colors'
   ]), []);
   const siteLinks: string[][] = useMemo(() => ([
     [RouterPath.HOME, 'main'],
@@ -81,7 +67,7 @@ export function Header() {
         data: {
           cart: {},
           favourites: {},
-          viewedRecently: {},
+          viewedRecently: {}
         }
       }));
     }
@@ -148,23 +134,20 @@ export function Header() {
             </aside>
           </div>
           <div className="flex py-1">
-            <a className={circleNavLinkClass}
-               href="https://www.instagram.com/prof_vik.elise/"
-               target="_blank"
-            >
+            <CircleButton styleClass="size-14" target="_blank" href="https://www.instagram.com/prof_vik.elise/">
               <Image className="p-2" width={45} height={45} src="/icons/instagram.svg" alt="Instagram"/>
-            </a>
+            </CircleButton>
             <CartButton/>
             <FavouritesButton/>
             {
               user
                 ? <>
-                  <Link href={RouterPath.EDITOR} className={circleNavLinkClass}>
+                  <CircleButton styleClass="size-14" href={RouterPath.EDITOR}>
                     <Image className="p-2" width={45} height={45} src="/icons/edit.svg" alt="Home"/>
-                  </Link>
-                  <div className={circleNavLinkClass} onClick={logout}>
+                  </CircleButton>
+                  <CircleButton styleClass="size-14" onClick={logout}>
                     <Image className="p-2" width={45} height={45} src="/icons/logout.svg" alt="Home"/>
-                  </div>
+                  </CircleButton>
                 </>
                 : <></>
             }
