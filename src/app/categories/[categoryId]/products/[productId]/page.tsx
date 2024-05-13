@@ -9,15 +9,21 @@ import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData } from '@/utils/firebase.util';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
-import { Counter } from '@/components/Counter';
+import { ProductDetailsActionsBar } from '@/components/ProductDetailsActionsBar';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface IProductDetailsProps {
   params: {
     productId: string;
   };
+  searchParams: {
+    pageLimit: number;
+  };
 }
 
-export default async function ProductDetailsPage({params: {productId}}: IProductDetailsProps) {
+export default async function ProductDetailsPage(
+  {params: {productId}, searchParams: {pageLimit}}: IProductDetailsProps
+) {
   const [
     settingsQuerySnapshot,
     categoriesQuerySnapshot,
@@ -43,33 +49,37 @@ export default async function ProductDetailsPage({params: {productId}}: IProduct
         ]}/>
         <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
           <div className="w-full md:w-4/12 mr-4">
-            <Catalog currentCategoryId={product.categoryId} categories={categories}/>
+            <Catalog pageLimit={pageLimit} currentCategoryId={product.categoryId} categories={categories}/>
             <Advantages styleClass="hidden md:block"/>
           </div>
           <div className="w-full flex justify-between">
             <div className="w-full">
-              <div className="w-full block md:flex">
-                <div className="mb-4 text-2xl bold text-center md:hidden">{product?.title}</div>
-                <div className="relative">
-                  <div className="absolute left-4 top-4 z-10">
-                    {
-                      product.labels?.map((item, index) => {
-                        return <div
-                          key={index}
-                          className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}
-                        >{item.text}</div>;
-                      })
-                    }
+              <div className="w-full">
+                <div className="mb-4 text-2xl bold">{product?.title}</div>
+                <div className="flex">
+                  <div className="relative">
+                    <div className="absolute left-4 top-4 z-10">
+                      {
+                        product.labels?.map((item, index) => {
+                          return <div
+                            key={index}
+                            className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}
+                          >{item.text}</div>;
+                        })
+                      }
+                    </div>
+                    <ImgGallery imageUrls={product?.imageUrls}/>
+                    <EntityFavouriteButton className="scale-100 top-4 right-2" productId={product.id}/>
                   </div>
-                  <ImgGallery imageUrls={product?.imageUrls}/>
-                  <EntityFavouriteButton className="scale-100 top-4 right-2" productId={product.id}/>
-                </div>
-                <div className="w-full md:ml-4 mt-4 md:mt-0">
-                  <div className="mb-4 text-2xl bold text-center hidden md:block">{product?.title}</div>
-                  <div className="w-full text-2xl text-pink-500 font-bold text-center">
-                    {product?.price} {config.currency}
+                  <div className="w-full md:ml-4 mt-4 md:mt-0">
+                    <div className="text-gray-400 text-base mb-4">
+                      {TRANSLATES[LOCALE].vendorCode}: {product.vendorCode}
+                    </div>
+                    <div className="w-full mb-4 text-2xl text-pink-500 font-bold">
+                      {product?.price} {config.currency}
+                    </div>
+                    <ProductDetailsActionsBar productId={product.id}/>
                   </div>
-                  <Counter productId={product.id}/>
                 </div>
               </div>
               <div className="mt-4 ql-editor readonly-ql-editor no-paddings whitespace-pre-line"

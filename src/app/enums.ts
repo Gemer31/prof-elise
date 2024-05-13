@@ -35,3 +35,12 @@ export enum CounterType {
   DEFAULT,
   SMART,
 }
+
+export enum PageLimits {
+  SIX = '6',
+  TWELVE = '12',
+}
+
+export enum SortValues {
+  BY_PRICE = 'byPrice'
+}

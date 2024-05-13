@@ -48,27 +48,15 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
   const submitForm = async (formData: { title: string; imageUrl: string, subcategories?: any[] | unknown }) => {
     setIsLoading(true);
 
-    let documentId: string;
-    let data: WithFieldValue<DocumentData> = {};
-
-    if (selectedCategory) {
-      documentId = selectedCategory.id;
-      data = {
-        ...selectedCategory,
-        title: formData.title,
-        imageUrl: formData.imageUrl
-      };
-    } else {
-      documentId = uuidv4();
-      data = {
-        id: documentId,
-        title: formData.title,
-        imageUrl: formData.imageUrl
-      }
-    }
+    let data: ICategory = {
+      id: selectedCategory ? selectedCategory.id : uuidv4(),
+      title: formData.title,
+      imageUrl: formData.imageUrl,
+      productsTotal: selectedCategory ? selectedCategory.productsTotal : 0,
+    };
 
     try {
-      await setDoc(doc(db, FirestoreCollections.CATEGORIES, documentId), data);
+      await setDoc(doc(db, FirestoreCollections.CATEGORIES, data.id), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setSelectedImage(null);
       setSelectedCategory(undefined);

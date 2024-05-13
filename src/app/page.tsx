@@ -10,13 +10,19 @@ import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
 
-export default async function HomePage() {
+export interface IHomePageProps {
+  searchParams: {
+    pageLimit: string;
+  };
+}
+
+export default async function HomePage({searchParams: {pageLimit}}: IHomePageProps) {
   const [
     settingsQuerySnapshot,
-    categoriesQuerySnapshot,
+    categoriesQuerySnapshot
   ] = await Promise.all([
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
-    getDocs(collection(db, FirestoreCollections.CATEGORIES)),
+    getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
   const config = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
@@ -31,9 +37,7 @@ export default async function HomePage() {
           </div>
           <div className="w-full">
             <h2 className="text-center text-xl uppercase mb-4">{TRANSLATES[LOCALE].disposableConsumables}</h2>
-            <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-4">
-              <CategoriesList data={Object.values(categories)}/>
-            </div>
+            <CategoriesList data={Object.values(categories)} pageLimit={Number(pageLimit)}/>
           </div>
         </div>
         <AboutUs text={config.shopDescription}/>

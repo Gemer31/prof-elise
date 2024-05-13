@@ -37,7 +37,7 @@ export function Button({children, callback, type, disabled, loading, styleClass}
       className={buttonClass + ' ' + styleClass}
       onClick={(event: MouseEvent) => callback?.(event)}
     >
-      <span className={loading ? 'invisible' : ''}>{children}</span>
+      <div className={loading ? 'invisible' : ''}>{children}</div>
       <div className={`${loading ? 'w-full h-full absolute top-0' : 'important-hidden'} ${styleClass}`}>
         <Loader className={'h-full'}/>
       </div>

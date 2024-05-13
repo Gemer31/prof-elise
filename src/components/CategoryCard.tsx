@@ -1,18 +1,19 @@
 import { useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { RouterPath } from '@/app/enums';
+import { PageLimits, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ICategory } from '@/app/models';
 import { Loader } from '@/components/Loader';
 
 export interface ICategoryCardProps {
+  pageLimit: number;
   data: ICategory,
   isLoading?: boolean,
   onClick?: () => void,
 }
 
-export function CategoryCard({data, isLoading, onClick}: ICategoryCardProps) {
+export function CategoryCard({data, isLoading, onClick, pageLimit}: ICategoryCardProps) {
   const cardClass = useMemo(() => convertToClass([
     'relative',
     'flex',
@@ -43,7 +44,7 @@ export function CategoryCard({data, isLoading, onClick}: ICategoryCardProps) {
   return (
     <Link
       className={cardClass + (isLoading ? ' pointer-events-none' : '')}
-      href={`${RouterPath.CATEGORIES}/${data.id}`}
+      href={`${RouterPath.CATEGORIES}/${data.id}?page=1&pageLimit=${pageLimit || PageLimits.SIX}`}
       onClick={onClick}
     >
       <Image

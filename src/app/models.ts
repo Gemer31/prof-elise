@@ -2,6 +2,7 @@ import { DocumentReference } from '@firebase/firestore';
 
 export interface IProduct {
   id: string;
+  vendorCode: string;
   title: string;
   price: string;
   description: string;
@@ -36,4 +37,5 @@ export interface ICategory {
   title: string;
   imageUrl: string;
   relatedCategories?: string[];
+  productsTotal: number;
 }

@@ -11,7 +11,7 @@ import { StorageReference } from '@firebase/storage';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
 import { ProductsViewer } from '@/components/data-editors/ProductsViewer';
-import { deleteDoc, doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
+import { deleteDoc, doc, setDoc } from '@firebase/firestore';
 import { uuidv4 } from '@firebase/util';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
@@ -27,6 +27,7 @@ const validationSchema = yup.object().shape({
     .required('fieldRequired'),
   description: yup.string().required('fieldRequired'),
   categoryId: yup.string().required('fieldRequired'),
+  vendorCode: yup.string().required('fieldRequired'),
   images: yup.array().required('fieldRequired'),
   label: yup.string()
 });
@@ -68,40 +69,36 @@ export function ProductEditorForm({
     categoryId: string,
     images: StorageReference[],
     label: string,
+    vendorCode: string,
   }) => {
     setIsLoading(true);
 
-    let documentId: string;
-    let data: WithFieldValue<DocumentData> = {};
-
     const imageUrls: string[] = formData.images.map((img) => (getStorageImageSrc(img)));
-
-    if (selectedProduct) {
-      documentId = selectedProduct.id;
-      data = {
-        ...selectedProduct,
-        title: formData.title,
-        price: formData.price,
-        description: formData.description,
-        categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
-        imageUrls: imageUrls,
-        labels: formData.label?.length ? [{text: formData.label, color: 'bg-pink-500'}] : []
+    const productData: IProduct = {
+      id: selectedProduct ? selectedProduct.id : uuidv4(),
+      title: formData.title,
+      price: formData.price,
+      description: formData.description,
+      categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
+      imageUrls: imageUrls,
+      labels: formData.label?.length ? [{text: formData.label, color: 'bg-pink-500'}] : [],
+      vendorCode: formData.vendorCode
+    };
+    const categoryData: ICategory = selectedProduct
+      ? null
+      : {
+        ...selectedCategory,
+        productsTotal: selectedCategory.productsTotal + 1
       };
-    } else {
-      documentId = uuidv4();
-      data = {
-        id: documentId,
-        title: formData.title,
-        price: formData.price,
-        description: formData.description,
-        categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
-        imageUrls: imageUrls,
-        labels: formData.label?.length ? [{text: formData.label, color: 'bg-pink-500'}] : []
-      };
-    }
 
     try {
-      await setDoc(doc(db, FirestoreCollections.PRODUCTS, documentId), data);
+      await Promise.all([
+        setDoc(doc(db, FirestoreCollections.PRODUCTS, productData.id), productData),
+        selectedProduct
+          ? Promise.resolve()
+          : setDoc(doc(db, FirestoreCollections.CATEGORIES, categoryData.id), categoryData)
+      ]);
+
       dispatch(setNotificationMessage(
         selectedProduct
           ? TRANSLATES[LOCALE].infoUpdated
@@ -129,7 +126,8 @@ export function ProductEditorForm({
       changeProduct(undefined);
       reset();
       refreshCallback?.();
-    } catch {
+    } catch (e) {
+      console.log('Delete product error: ', e);
     } finally {
       setIsLoading(false);
     }
@@ -200,6 +198,15 @@ export function ProductEditorForm({
         placeholder={TRANSLATES[LOCALE].enterTitle}
         label={TRANSLATES[LOCALE].title}
         name="title"
+        type="text"
+        error={errors.title?.message}
+        register={register}
+      />
+      <InputFormField
+        required={true}
+        placeholder={TRANSLATES[LOCALE].enterVendorCode}
+        label={TRANSLATES[LOCALE].vendorCode}
+        name="vendorCode"
         type="text"
         error={errors.title?.message}
         register={register}
