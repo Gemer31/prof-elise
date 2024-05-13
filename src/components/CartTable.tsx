@@ -25,7 +25,7 @@ interface ICartTableProps {
 
 export function CartTable({config, editable, title}: ICartTableProps) {
   const router = useRouter();
-  const clientId = useMemo(() => localStorage.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
   const [data, setData] = useState<{ count: number, product: IProduct }[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [createOrderLoading, setCreateOrderLoading] = useState(false);

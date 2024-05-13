@@ -307,87 +307,9 @@ tbody > tr {
     transform: translateX(0);
 }
 
-@keyframes cartCounterSlideUp {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(22px);
-    }
-}
-
-@keyframes cartCounterSlideDown {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-22px);
-    }
-}
-
-@keyframes cartCounterDisappear {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(0);
-    }
-}
-
-@keyframes cartCounterAppear {
-    0% {
-        transform: scale(0);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.cart-counter-slide-up {
-    animation-name: cartCounterSlideUp;
-    align-self: end;
-}
-
-.cart-counter-slide-down {
-    animation-name: cartCounterSlideDown;
-    align-self: start;
-}
-
-.cart-counter-disappear {
-    animation-name: cartCounterDisappear;
-    animation-fill-mode: forwards;
-}
-
-.cart-counter-appear {
-    animation-name: cartCounterAppear;
-    animation-fill-mode: forwards;
-}
-
-.cart-counter {
-    animation-duration: .15s;
-    animation-timing-function: ease-in;
-    animation-direction: alternate;
-    align-self: start;
-    overflow: hidden;
-    position: absolute;
-    color: white;
-    font-size: 15px;
-    text-align: center;
-    background: rgb(236, 72, 153);
-    border-radius: 100%;
-    top: 4px;
-    width: 22px;
-    height: 22px;
-    right: 6px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: scale(0);
-}
-
-.cart-counter-numbers {
-    animation-duration: .15s;
-    animation-timing-function: ease-in;
-    display: flex;
-    flex-direction: column;
+.separator:after {
+    width: 100%;
+    display: block;
+    content: '';
+    border-bottom: solid 1px lightgray;
 }

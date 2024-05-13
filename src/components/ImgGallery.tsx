@@ -34,7 +34,7 @@ export function ImgGallery({imageUrls}: IImgGalleryProps) {
       useBrowserFullscreen={false}
       showBullets={true}
       showPlayButton={false}
-      showThumbnails={false}
+      showThumbnails={true}
       items={gallery}
     />
   )

@@ -49,7 +49,7 @@ export function Footer({ config }: IFooterProps) {
   ]), []);
 
   return (
-    <footer className="w-full mt-4 flex justify-center bg-pink-300">
+    <footer className="w-full flex justify-center bg-pink-300">
       <ContentContainer styleClass="px-2">
         {
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR

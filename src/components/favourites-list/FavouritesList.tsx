@@ -10,6 +10,7 @@ import { collection, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
 import { FavouriteProductCard } from '@/components/FavouriteProductCard';
+import './favourites-list.css';
 
 export function FavouritesList() {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
@@ -43,10 +44,12 @@ export function FavouritesList() {
     : (
       data?.length
         ? <div className="w-full">
-        <div className="grid-cols-2">
-          <span>{TRANSLATES[LOCALE].naming}</span>
-          <span>{TRANSLATES[LOCALE].price}</span>
-        </div>
+          <div className="separator">
+            <div className="favourites-list-header">
+              <span>{TRANSLATES[LOCALE].naming}</span>
+              <span>{TRANSLATES[LOCALE].price}</span>
+            </div>
+          </div>
           {
             data.map((favourite) => <FavouriteProductCard
               key={favourite.id}

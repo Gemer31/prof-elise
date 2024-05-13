@@ -11,6 +11,7 @@ import { SubHeader } from '@/components/SubHeader';
 import { Slider } from '@/components/slider/Slider';
 import { usePathname } from 'next/navigation';
 import { RouterPath } from '@/app/enums';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export interface ILayoutProps extends ICommonProps {
   firestoreData?: {
@@ -34,6 +35,7 @@ export function Layout({children, firestoreData}: ILayoutProps) {
         <ContentContainer id="content" styleClass="w-full flex justify-start px-2">
           {children}
         </ContentContainer>
+        <ViewedRecently config={firestoreData.config}/>
         <Footer config={firestoreData?.config}/>
       </div>
     </>

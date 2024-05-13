@@ -36,7 +36,7 @@ interface ICheckoutFormProps {
 }
 
 export function CheckoutForm({config}: ICheckoutFormProps) {
-  const clientId = useMemo(() => localStorage.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);

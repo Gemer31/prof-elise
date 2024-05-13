@@ -51,6 +51,16 @@ export default async function ProductDetailsPage({params: {productId}}: IProduct
               <div className="w-full block md:flex">
                 <div className="mb-4 text-2xl bold text-center md:hidden">{product?.title}</div>
                 <div className="relative">
+                  <div className="absolute left-4 top-4 z-10">
+                    {
+                      product.labels?.map((item, index) => {
+                        return <div
+                          key={index}
+                          className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}
+                        >{item.text}</div>;
+                      })
+                    }
+                  </div>
                   <ImgGallery imageUrls={product?.imageUrls}/>
                   <EntityFavouriteButton className="scale-100 top-4 right-2" productId={product.id}/>
                 </div>

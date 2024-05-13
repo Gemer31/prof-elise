@@ -7,9 +7,14 @@ export interface IProduct {
   description: string;
   categoryRef: DocumentReference;
   categoryId?: string;
+  labels: ILabel[];
   imageUrls?: string[];
 }
 
+export interface ILabel {
+  text: string;
+  color?: string;
+}
 
 export interface ICommonProps {
   children: React.ReactNode,

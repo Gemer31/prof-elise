@@ -1,0 +1,5 @@
+.favourites-list-header {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+}

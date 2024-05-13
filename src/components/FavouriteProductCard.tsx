@@ -22,7 +22,7 @@ export interface IFavouriteProductCardProps {
 }
 
 export function FavouriteProductCard({data, isLoading, onClick}: IFavouriteProductCardProps) {
-  const clientId = useMemo(() => localStorage.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const counter = useAppSelector(state => state.dataReducer.client?.cart?.[data.id]?.count);

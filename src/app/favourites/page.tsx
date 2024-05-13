@@ -22,6 +22,7 @@ export default async function FavouritesPage() {
           <Advantages styleClass="hidden md:block"/>
         </div>
         <div className="w-full">
+          <h2 className="text-center text-xl uppercase mb-4">{TRANSLATES[LOCALE].favouriteProducts}</h2>
           <FavouritesList/>
         </div>
       </div>

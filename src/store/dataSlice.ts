@@ -7,9 +7,15 @@ export interface ICartProductModel {
   productRef: DocumentReference;
 }
 
+export interface IViewedRecentlyModel {
+  time: number;
+  productRef: DocumentReference;
+}
+
 export interface IClient {
   cart?: Record<string, ICartProductModel>;
   favourites?: Record<string, DocumentReference>;
+  viewedRecently?: Record<string, IViewedRecentlyModel>;
 }
 
 interface IDataSlice {

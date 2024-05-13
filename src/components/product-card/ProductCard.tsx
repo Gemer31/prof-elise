@@ -34,7 +34,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'rounded-lg',
     'border-2 border-pink-200',
     'hover:bg-pink-100',
-    isLoading ? ' pointer-events-none' : '',
+    isLoading ? ' pointer-events-none' : ''
   ]), [isLoading]);
   const titleClass = useMemo(() => convertToClass([
     'text-base',
@@ -50,7 +50,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'entity-card-title'
   ]), []);
 
-  const clientId = useMemo(() => localStorage.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const counter = useAppSelector(state => state.dataReducer.client?.cart?.[data.id]?.count);
@@ -109,6 +109,13 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       href={`${RouterPath.CATEGORIES}/${data?.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
+      <div className="absolute left-4 top-4">
+        {
+          data.labels?.map((item, index) => {
+            return <div key={index} className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}>{item.text}</div>;
+          })
+        }
+      </div>
       <EntityFavouriteButton className="product-card-favourite-button scale-0 top-4 right-4" productId={data.id}/>
       <Image
         className="rounded-md h-[200px] w-[200px]"

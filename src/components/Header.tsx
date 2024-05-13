@@ -69,7 +69,7 @@ export function Header() {
   const burgerRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    let clientId: string = localStorage.getItem(CLIENT_ID) as string;
+    let clientId: string = localStorage?.getItem(CLIENT_ID) as string;
 
     if (clientId) {
       dispatch(getClient(clientId));
@@ -81,6 +81,7 @@ export function Header() {
         data: {
           cart: {},
           favourites: {},
+          viewedRecently: {},
         }
       }));
     }
