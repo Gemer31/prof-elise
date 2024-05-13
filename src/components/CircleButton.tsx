@@ -11,7 +11,6 @@ interface ICircleButtonProps extends ICommonProps {
 
 export function CircleButton({href, target, onClick, styleClass, children}: ICircleButtonProps) {
   const hostClass: string = useMemo(() => convertToClass([
-    'relative',
     'flex',
     'justify-center',
     'items-center',

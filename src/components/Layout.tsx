@@ -3,7 +3,7 @@
 import { RequestCallPopup } from '@/components/RequestCallPopup';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { ICategory, ICommonProps, IConfig, IProduct } from '@/app/models';
+import { ICategory, ICommonProps, IConfig } from '@/app/models';
 import { Notification } from '@/components/Notification';
 import { ContentContainer } from '@/components/ContentContainer';
 import { StorageReference } from '@firebase/storage';

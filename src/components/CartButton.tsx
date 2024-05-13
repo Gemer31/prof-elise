@@ -8,7 +8,7 @@ import { CircleButton } from '@/components/CircleButton';
 
 export function CartButton() {
   const cartTotal = useAppSelector(state => state.dataReducer.cartTotal);
-  return <CircleButton styleClass="size-14" href={RouterPath.CART}>
+  return <CircleButton styleClass="size-14 relative" href={RouterPath.CART}>
     <Image className="p-2" width={45} height={45} src="/icons/cart.svg" alt="CartButton"/>
     <HeaderCounter value={cartTotal}/>
   </CircleButton>;

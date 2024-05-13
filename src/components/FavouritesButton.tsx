@@ -17,7 +17,7 @@ export function FavouritesButton() {
     setCounter(newCount);
   }, [favourites]);
 
-  return <CircleButton styleClass="size-14" href={RouterPath.FAVOURITES}>
+  return <CircleButton styleClass="size-14 relative" href={RouterPath.FAVOURITES}>
     <Image className="p-2" width={45} height={45} src="/icons/heart.svg" alt="CartButton"/>
     <HeaderCounter value={counter}/>
   </CircleButton>;

@@ -10,7 +10,7 @@ import { RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from '@firebase/auth';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { auth } from '@/app/lib/firebase-config';
 import { FavouritesButton } from '@/components/FavouritesButton';
 import { uuidv4 } from '@firebase/util';
@@ -20,6 +20,26 @@ import { CLIENT_ID } from '@/app/constants';
 import { CircleButton } from '@/components/CircleButton';
 
 export function Header() {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [user] = useAuthState(auth);
+  const burgerRef = useRef<HTMLInputElement>(null);
+  const [isScrollTop, setIsScrollTop] = useState(true);
+
+  const hostClass: string = useMemo(() => convertToClass([
+    'w-full',
+    'z-10',
+    'top-0',
+    'sticky',
+    'flex',
+    'justify-center',
+    'bg-pink-300',
+    'mb-4',
+    'transition-shadow',
+    'duration-500',
+    isScrollTop ? '' : 'shadow-lg'
+  ]), [isScrollTop]);
   const navLinkClass: string = useMemo(() => convertToClass([
     'flex',
     'items-center',
@@ -48,12 +68,6 @@ export function Header() {
     [RouterPath.CONTACTS, 'contacts']
   ]), []);
 
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [user] = useAuthState(auth);
-  const burgerRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     let clientId: string = localStorage?.getItem(CLIENT_ID) as string;
 
@@ -73,8 +87,18 @@ export function Header() {
     }
   }, []);
 
+  useEffect(() => {
+    window.onscroll = () => {
+      const el = (document.documentElement.clientHeight)
+        ? document.documentElement
+        : document.body;
+
+      setIsScrollTop(el.scrollTop === 0);
+    };
+  }, []);
+
   const getNavigationLinkClass = (path: string) => {
-    return navLinkClass + (path === pathname ? ' bg-gray-200' : '');
+    return navLinkClass + (path === pathname ? ' bg-white' : '');
   };
   const getNavigationSidebarLinkClass = (path: string) => {
     return navSidebarLinkClass + (path === pathname ? ' text-pink-500' : '');
@@ -90,16 +114,14 @@ export function Header() {
     //   router.push(RouterPath.HOME);
     // }
   };
-  //
-  // useEffect(() => {
-  //   document.addEventListener('scroll', (event) => {
-  //     // @ts-ignore
-  //     console.log(event.srcElement['scrollTop']);
-  //   })
-  // }, []);
 
   return (
-    <header className="w-full z-10 top-0 sticky flex justify-center bg-pink-300 mb-4">
+    <header className={hostClass}>
+      <CircleButton
+        href="#page"
+        styleClass={'size-6 fixed max-w-fit bottom-6 left-6 duration-500 transition-all ' + (isScrollTop ? 'scale-0' : 'scale-100')}>
+        <Image width={80} height={80} src="/icons/arrow.svg" alt="Scroll top"/>
+      </CircleButton>
       <ContentContainer>
         <nav className="flex justify-between">
           <div className="hidden sm:flex">

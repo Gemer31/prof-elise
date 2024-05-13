@@ -21,7 +21,7 @@ export function Breadcrumbs({links}: IBreadcrumbsProps) {
         links?.map((link, index) => {
           return <div className="flex items-center text-base" key={link.title + index}>
             <div className="w-[20px] min-w-[20px]">
-              <Image width={20} height={20} src="/icons/arrow.svg" alt="Arrow"/>
+              <Image className="rotate-90" width={20} height={20} src="/icons/arrow.svg" alt="Arrow"/>
             </div>
             <div className="overflow-ellipsis text-nowrap overflow-hidden">
               {
