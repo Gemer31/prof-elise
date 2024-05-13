@@ -4,7 +4,7 @@ import { MouseEvent, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { ICartProductModel, IClient } from '@/store/dataSlice';
-import { ButtonType, CounterType, FirestoreCollections, RouterPath } from '@/app/enums';
+import { ButtonType, FirestoreCollections, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Counter } from '@/components/Counter';
@@ -14,7 +14,7 @@ import { IConfig, IProduct } from '@/app/models';
 import { Loader } from '@/components/Loader';
 import './product-card.css';
 import { updateClient } from '@/store/asyncThunk';
-import { doc, DocumentReference } from '@firebase/firestore';
+import { doc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { CLIENT_ID } from '@/app/constants';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
@@ -112,7 +112,8 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       <div className="absolute left-4 top-4">
         {
           data.labels?.map((item, index) => {
-            return <div key={index} className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}>{item.text}</div>;
+            return <div key={index}
+                        className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}>{item.text}</div>;
           })
         }
       </div>
@@ -128,27 +129,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       <div className="text-pink-500 bold my-2">{data.price} {config.currency}</div>
       <div className="flex gap-1 w-full">
         <div className="w-1/2 h-full flex justify-center items-center">
-          {
-            cartLoading
-              ? <Loader styleClass="h-[25px] border-pink-500"/>
-              : counter
-                ?
-                <Counter
-                  type={CounterType.SMART}
-                  selectedAmount={counter}
-                  counterChangedCallback={(newCount) => {
-                    if (newCount > counter) {
-                      addToCart();
-                    } else {
-                      removeFromCart();
-                    }
-                  }}/>
-                : <Button
-                  styleClass="text-amber-50 w-full px-4 py-2 text-nowrap"
-                  type={ButtonType.BUTTON}
-                  callback={(e) => addToCart(e)}
-                >{TRANSLATES[LOCALE].intoCart}</Button>
-          }
+          <Counter productId={data.id}/>
         </div>
         <Button
           styleClass="text-amber-50 w-1/2 px-4 py-2"

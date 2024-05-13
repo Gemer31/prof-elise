@@ -1,7 +1,6 @@
 import { ICategory, IConfig, IProduct } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
-import { ProductDetailsActionsBlock } from '@/components/ProductDetailsActionsBlock';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -10,6 +9,7 @@ import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData } from '@/utils/firebase.util';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
+import { Counter } from '@/components/Counter';
 
 export interface IProductDetailsProps {
   params: {
@@ -66,9 +66,10 @@ export default async function ProductDetailsPage({params: {productId}}: IProduct
                 </div>
                 <div className="w-full md:ml-4 mt-4 md:mt-0">
                   <div className="mb-4 text-2xl bold text-center hidden md:block">{product?.title}</div>
-                  <div
-                    className="w-full text-2xl text-pink-500 font-bold text-center">{product?.price} {config.currency}</div>
-                  <ProductDetailsActionsBlock product={product}/>
+                  <div className="w-full text-2xl text-pink-500 font-bold text-center">
+                    {product?.price} {config.currency}
+                  </div>
+                  <Counter productId={product.id}/>
                 </div>
               </div>
               <div className="mt-4 ql-editor readonly-ql-editor no-paddings whitespace-pre-line"
