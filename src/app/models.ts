@@ -28,6 +28,7 @@ export interface IConfig {
   workingHours: string;
   shopDescription: string;
   deliveryDescription: string;
+  shopRegistrationDescription: string;
 }
 
 export interface ICategory {

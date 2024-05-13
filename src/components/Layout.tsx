@@ -35,7 +35,11 @@ export function Layout({children, firestoreData}: ILayoutProps) {
         <ContentContainer id="content" styleClass="w-full flex justify-start px-2">
           {children}
         </ContentContainer>
-        <ViewedRecently config={firestoreData.config}/>
+        {
+          pathname.includes(RouterPath.LOGIN) || pathname.includes(RouterPath.EDITOR)
+            ? <></>
+            : <ViewedRecently config={firestoreData.config}/>
+        }
         <Footer config={firestoreData?.config}/>
       </div>
     </>

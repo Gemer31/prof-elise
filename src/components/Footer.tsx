@@ -18,7 +18,7 @@ export interface IFooterProps {
   config?: IConfig;
 }
 
-export function Footer({ config }: IFooterProps) {
+export function Footer({config}: IFooterProps) {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const instagramClass: string = useMemo(() => convertToClass([
@@ -39,13 +39,13 @@ export function Footer({ config }: IFooterProps) {
     'flex',
     'flex-col sm:flex-row',
     'justify-between',
-    'pt-4',
+    'pt-4'
   ]), []);
   const buttonsClass: string = useMemo(() => convertToClass([
     'flex',
     'flex-row-reverse sm:flex-col',
     'justify-around',
-    'items-center',
+    'items-center'
   ]), []);
 
   return (
@@ -55,12 +55,9 @@ export function Footer({ config }: IFooterProps) {
           pathname === RouterPath.LOGIN || pathname === RouterPath.EDITOR
             ? <></>
             : <div className={infoClass}>
-              <div className="mb-4 sm:mb-0 flex flex-col items-center">
-                <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].information}</h2>
-                <div>
-                  <Link className="" href="/delivery">{TRANSLATES[LOCALE].delivery}</Link>
-                </div>
-              </div>
+              <div className="mb-4 sm:mb-0 flex flex-col items-center text-xs"
+                   dangerouslySetInnerHTML={{__html: config.shopRegistrationDescription}}
+              />
               <div className="mb-4 sm:mb-0 flex flex-col items-center">
                 <h2 className="text-xl mb-2 sm:mb-4">{TRANSLATES[LOCALE].contacts}</h2>
                 <a href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}

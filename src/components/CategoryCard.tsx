@@ -57,7 +57,7 @@ export function CategoryCard({data, isLoading, onClick}: ICategoryCardProps) {
       {
         isLoading
           ? <div className="w-full h-full absolute top-0 flex justify-center items-center bg-black-1/5">
-              <Loader styleClass="h-[50px] border-pink-500"
+              <Loader className="h-[50px] border-pink-500"
             /></div>
           : <></>
       }

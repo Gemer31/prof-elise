@@ -68,7 +68,7 @@ export function EntityFavouriteButton({productId, className}: IEntityFavouriteBu
   return <div className={hostClass} onClick={favouriteClick}>
     {
       isLoading
-        ? <Loader styleClass="h-[25px] border-pink-500"/>
+        ? <Loader className="h-[25px] border-pink-500"/>
         : isFavourite
           ? <Image width={25} height={25} src="/icons/heart-filled.svg" alt="favourite"/>
           : <Image className="" width={25} height={25} src="/icons/heart.svg" alt="favourite"/>

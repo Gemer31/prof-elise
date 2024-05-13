@@ -72,8 +72,8 @@ export function Counter({productId}: ICounterProps) {
     set(Number(e['target']['value']));
   };
 
-  return cartLoading && initialized
-    ? <Loader styleClass="h-[25px]"/>
+  return cartLoading && !initialized
+    ? <Loader className="h-[25px] border-pink-500"/>
     : cartCount
       ? <div className="justify-center h-full transition-all flex rounded-md text-amber-50"
              onClick={(e) => {

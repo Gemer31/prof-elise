@@ -39,7 +39,7 @@ export function Button({children, callback, type, disabled, loading, styleClass}
     >
       <span className={loading ? 'invisible' : ''}>{children}</span>
       <div className={`${loading ? 'w-full h-full absolute top-0' : 'important-hidden'} ${styleClass}`}>
-        <Loader styleClass={'h-full'}/>
+        <Loader className={'h-full'}/>
       </div>
     </button>
   );

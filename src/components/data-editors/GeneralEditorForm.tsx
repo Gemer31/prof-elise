@@ -21,7 +21,8 @@ const validationSchema = yup.object().shape({
   workingHours: yup.string().required('fieldRequired'),
   currency: yup.string().required('fieldRequired'),
   shopDescription: yup.string().required('fieldRequired'),
-  deliveryDescription: yup.string().required('fieldRequired')
+  deliveryDescription: yup.string().required('fieldRequired'),
+  shopRegistrationDescription: yup.string().required('fieldRequired'),
 });
 
 interface GeneralEditorFormProps {
@@ -33,6 +34,7 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
   const dispatch = useAppDispatch();
   const [shopDescription, setShopDescription] = useState('');
   const [deliveryDescription, setDeliveryDescription] = useState('');
+  const [shopRegistrationDescription, setShopRegistrationDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -53,6 +55,7 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
       setValue('deliveryDescription', config.deliveryDescription);
       setShopDescription(config.shopDescription);
       setDeliveryDescription(config.deliveryDescription);
+      setShopRegistrationDescription(config.shopRegistrationDescription);
     }
   }, [config]);
 
@@ -62,6 +65,7 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
     currency: string,
     shopDescription: string,
     deliveryDescription: string,
+    shopRegistrationDescription: string,
   }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
@@ -70,10 +74,11 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
       currency: formData.currency,
       shopDescription: formData.shopDescription,
       deliveryDescription: formData.deliveryDescription,
+      shopRegistrationDescription: formData.shopRegistrationDescription,
       nextOrderNumber: config?.nextOrderNumber || 1,
     };
     try {
-      await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirestoreCollections.CONFIG), data);
+      await setDoc(doc(db, FirestoreCollections.SETTINGS, 'config'), data);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       refreshCallback?.();
     } catch {
@@ -87,7 +92,10 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
     setValue('deliveryDescription', newValue);
     setDeliveryDescription(newValue);
   }
-
+  const shopRegistrationDescriptionChange = (newValue: string) => {
+    setValue('shopRegistrationDescription', newValue);
+    setShopRegistrationDescription(newValue);
+  }
   const shopDescriptionChange = (newValue: string) => {
     setValue('shopDescription', newValue);
     setShopDescription(newValue);
@@ -141,6 +149,17 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
           placeholder={TRANSLATES[LOCALE].addDeliveryDescription}
           value={deliveryDescription}
           onChange={deliveryDescriptionChange}
+        />
+      </FormFieldWrapper>
+      <FormFieldWrapper
+        label={TRANSLATES[LOCALE].shopRegistrationDescription}
+        required={true}
+        error={errors.shopRegistrationDescription?.message}
+      >
+        <TextEditor
+          placeholder={TRANSLATES[LOCALE].addShopRegistrationDescription}
+          value={shopRegistrationDescription}
+          onChange={shopRegistrationDescriptionChange}
         />
       </FormFieldWrapper>
       <Button

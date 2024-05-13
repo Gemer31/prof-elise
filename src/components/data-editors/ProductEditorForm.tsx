@@ -27,7 +27,8 @@ const validationSchema = yup.object().shape({
     .required('fieldRequired'),
   description: yup.string().required('fieldRequired'),
   categoryId: yup.string().required('fieldRequired'),
-  images: yup.array().required('fieldRequired')
+  images: yup.array().required('fieldRequired'),
+  label: yup.string()
 });
 
 export interface ProductEditorFormProps {
@@ -65,7 +66,8 @@ export function ProductEditorForm({
     price: string,
     description: string,
     categoryId: string,
-    images: StorageReference[]
+    images: StorageReference[],
+    label: string,
   }) => {
     setIsLoading(true);
 
@@ -82,8 +84,9 @@ export function ProductEditorForm({
         price: formData.price,
         description: formData.description,
         categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
-        imageUrls: imageUrls
-      }
+        imageUrls: imageUrls,
+        labels: formData.label?.length ? [{text: formData.label, color: 'bg-pink-500'}] : []
+      };
     } else {
       documentId = uuidv4();
       data = {
@@ -92,8 +95,9 @@ export function ProductEditorForm({
         price: formData.price,
         description: formData.description,
         categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
-        imageUrls: imageUrls
-      }
+        imageUrls: imageUrls,
+        labels: formData.label?.length ? [{text: formData.label, color: 'bg-pink-500'}] : []
+      };
     }
 
     try {
@@ -145,7 +149,7 @@ export function ProductEditorForm({
 
   const changeProduct = (newProduct: IProduct) => {
     if (newProduct) {
-      const productCategory = categories.find((category) => category.id === newProduct.categoryId);
+      const productCategory = categories.find((category) => category.id === newProduct.categoryRef.id);
       const productImages: StorageReference[] = images?.filter((img) => {
         return newProduct.imageUrls?.find((productImg) => productImg.includes(img.name));
       }) || [];
@@ -220,6 +224,14 @@ export function ProductEditorForm({
           onChange={descriptionChange}
         />
       </FormFieldWrapper>
+      <InputFormField
+        placeholder={TRANSLATES[LOCALE].enterLabel}
+        label={TRANSLATES[LOCALE].label}
+        name="label"
+        type="text"
+        error={errors.label?.message}
+        register={register}
+      />
       <FormFieldWrapper
         required={true}
         label={TRANSLATES[LOCALE].category}

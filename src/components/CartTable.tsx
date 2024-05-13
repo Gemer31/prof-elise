@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { Loader } from '@/components/Loader';
 import { useEffect, useMemo, useState } from 'react';
-import { collection, doc, getDocs, query, where } from '@firebase/firestore';
+import { collection, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { CLIENT_ID } from '@/app/constants';
 import { IConfig, IProduct } from '@/app/models';
@@ -52,7 +52,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
             total += +productData.price * cart[p.id]?.['count'];
             products.push({
               product: productData,
-              count: cart[p.id]?.['count'],
+              count: cart[p.id]?.['count']
             });
           });
 
@@ -62,26 +62,6 @@ export function CartTable({config, editable, title}: ICartTableProps) {
         });
     }
   }, [cart]);
-
-  const updateProductsCount = (product: IProduct, count: number) => {
-    const newCart: Record<string, ICartProductModel> = {};
-    Object.keys(client.cart).forEach((item) => {
-      newCart[item] = {...client.cart[item]};
-    });
-
-    newCart[product.id] = {
-      count,
-      productRef: doc(db, FirestoreCollections.PRODUCTS, product.id)
-    };
-
-    dispatch(updateClient({
-      clientId,
-      data: {
-        ...client,
-        cart: newCart
-      }
-    }));
-  };
 
   const deleteProduct = (productId: string) => {
     const newCart: Record<string, ICartProductModel> = {};
@@ -102,7 +82,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
 
   return cartLoading || dataLoading
     ? <div className="w-full flex justify-center mt-4 overflow-hidden">
-      <Loader styleClass="min-h-[250px] border-pink-500"
+      <Loader className="min-h-[250px] border-pink-500"
       /></div>
     : cartTotal
       ? (
@@ -141,10 +121,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
                       {
                         editable
                           ? <>
-                            <Counter
-                              selectedAmount={item.count}
-                              counterChangedCallback={(newAmount) => updateProductsCount(item.product, newAmount)}
-                            />
+                            <Counter productId={item.product.id}/>
                             <Button
                               styleClass="w-full text-base uppercase text-amber-50 px-4 py-2 mt-2"
                               type={ButtonType.BUTTON}

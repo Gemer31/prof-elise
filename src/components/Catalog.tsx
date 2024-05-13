@@ -61,7 +61,7 @@ export function Catalog({categories, currentCategoryId}: ICategoriesProps) {
                 </div>
                 {catalogIdIsLoading === category.id ?
                   <div className="absolute left-0 top-0 bottom-0 py-2.5 w-full flex justify-center overflow-hidden bg-black-1/5">
-                    <Loader styleClass="border-pink-500"/>
+                    <Loader className="border-pink-500"/>
                   </div>
                   : <></>
                 }

@@ -39,7 +39,7 @@ export function FavouritesList() {
 
   return cartLoading || dataLoading
     ? <div className="w-full flex justify-center mt-4 overflow-hidden">
-      <Loader styleClass="min-h-[250px] border-pink-500"
+      <Loader className="min-h-[250px] border-pink-500"
       /></div>
     : (
       data?.length

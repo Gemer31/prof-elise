@@ -1,9 +1,9 @@
 export interface ILoaderProps {
-    styleClass?: string;
+    className?: string;
 }
 
-export function Loader({ styleClass }: ILoaderProps) {
+export function Loader({ className }: ILoaderProps) {
     return (
-        <div className={'loader border-2 aspect-square ' + styleClass}></div>
+        <div className={'loader border-2 aspect-square ' + className}></div>
     )
 }

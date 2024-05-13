@@ -66,7 +66,7 @@ export function AdminEditor() {
       <ContentContainer styleClass="flex flex-col items-center">
         <h1 className="text-2xl ">{TRANSLATES[LOCALE].editor}</h1>
         {isDataLoading || !isAuth
-          ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader styleClass="min-h-[250px] border-pink-500"/></div>
+          ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader className="min-h-[250px] border-pink-500"/></div>
           : <>
             <div className="w-full mt-2 mb-4 flex gap-x-3">
               {
