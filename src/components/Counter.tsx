@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonType, FirestoreCollections } from '@/app/enums';
+import { ButtonTypes, FirestoreCollections } from '@/app/enums';
 import { useEffect, useMemo, useState } from 'react';
 import { useCounter } from '@uidotdev/usehooks';
 import { CLIENT_ID } from '@/app/constants';
@@ -12,6 +12,7 @@ import { updateClient } from '@/store/asyncThunk';
 import { Loader } from '@/components/Loader';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
+import { getClientId } from '@/utils/cookies.util';
 
 interface ICounterProps {
   productId: string;
@@ -20,7 +21,7 @@ interface ICounterProps {
 export function Counter({productId}: ICounterProps) {
   const [initialized, setInitialized] = useState(false);
   const [count, {increment, decrement, set}] = useCounter();
-  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => getClientId(), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[productId]?.count);
@@ -95,7 +96,7 @@ export function Counter({productId}: ICounterProps) {
       </div>
       : <Button
         styleClass="text-amber-50 w-full px-4 py-2 text-nowrap"
-        type={ButtonType.BUTTON}
+        type={ButtonTypes.BUTTON}
         callback={(e) => {
           e.preventDefault();
           e.stopPropagation();

@@ -1,6 +1,6 @@
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType } from '@/app/enums';
+import { ButtonTypes } from '@/app/enums';
 import { useState } from 'react';
 import { deleteObject, ref, StorageReference, uploadBytes } from '@firebase/storage';
 import { setNotificationMessage } from '@/store/dataSlice';
@@ -73,7 +73,7 @@ export function ImagesEditorForm({images, refreshCallback}: ImagesEditorFormProp
         styleClass="text-amber-50 w-full py-2"
         disabled={loading}
         loading={loading}
-        type={ButtonType.SUBMIT}
+        type={ButtonTypes.SUBMIT}
         callback={uploadFiles}
       >{TRANSLATES[LOCALE].save}</Button>
     </>

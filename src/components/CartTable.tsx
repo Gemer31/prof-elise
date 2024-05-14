@@ -3,7 +3,7 @@
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ButtonType, FirestoreCollections, RouterPath } from '@/app/enums';
+import { ButtonTypes, FirestoreCollections, RouterPath } from '@/app/enums';
 import { Counter } from '@/components/Counter';
 import { Button } from '@/components/Button';
 import { ICartProductModel, IClient } from '@/store/dataSlice';
@@ -16,6 +16,7 @@ import { db } from '@/app/lib/firebase-config';
 import { CLIENT_ID } from '@/app/constants';
 import { IConfig, IProduct } from '@/app/models';
 import { updateClient } from '@/store/asyncThunk';
+import { getClientId } from '@/utils/cookies.util';
 
 interface ICartTableProps {
   title?: string;
@@ -25,7 +26,7 @@ interface ICartTableProps {
 
 export function CartTable({config, editable, title}: ICartTableProps) {
   const router = useRouter();
-  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => getClientId(), []);
   const [data, setData] = useState<{ count: number, product: IProduct }[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [createOrderLoading, setCreateOrderLoading] = useState(false);
@@ -124,7 +125,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
                             <Counter productId={item.product.id}/>
                             <Button
                               styleClass="w-full text-base uppercase text-amber-50 px-4 py-2 mt-2"
-                              type={ButtonType.BUTTON}
+                              type={ButtonTypes.BUTTON}
                               callback={() => deleteProduct(item.product.id)}
                             >{TRANSLATES[LOCALE].delete}</Button>
                           </>
@@ -150,7 +151,7 @@ export function CartTable({config, editable, title}: ICartTableProps) {
               editable
                 ? <Button
                   styleClass="w-fit text-base uppercase text-amber-50 px-4 py-2 w-fit"
-                  type={ButtonType.BUTTON}
+                  type={ButtonTypes.BUTTON}
                   loading={createOrderLoading}
                   callback={() => {
                     setCreateOrderLoading(true);

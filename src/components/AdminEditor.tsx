@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonType, EditGroup, FirestoreCollections, RouterPath } from '@/app/enums';
+import { ButtonTypes, EditGroup, FirestoreCollections, RouterPath } from '@/app/enums';
 import { auth, db, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -74,7 +74,7 @@ export function AdminEditor() {
                   return <Button
                     key={v}
                     styleClass={`w-full text-amber-50 px-4 py-2 ${selectedGroup === v ? 'underline' : ''}`}
-                    type={ButtonType.BUTTON}
+                    type={ButtonTypes.BUTTON}
                     callback={() => setSelectedGroup(v)}
                   >{TRANSLATES[LOCALE][v]}</Button>;
                 })

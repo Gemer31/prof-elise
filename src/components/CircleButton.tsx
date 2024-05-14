@@ -17,11 +17,11 @@ export function CircleButton({href, target, onClick, styleClass, children}: ICir
     'rounded-full',
     'border-2',
     'border-pink-500',
-    'bg-amber-50',
+    'bg-white',
     'm-1',
     'hover:bg-pink-100',
     'duration-500',
-    'transition-colors'
+    'transition-all'
   ]), []);
 
   return <div className={`${hostClass} ${styleClass || ''}`} onClick={() => onClick?.()}>

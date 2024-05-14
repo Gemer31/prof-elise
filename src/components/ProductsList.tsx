@@ -4,9 +4,8 @@ import { ProductCard } from '@/components/product-card/ProductCard';
 import { IConfig, IProduct } from '@/app/models';
 import { useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { SortByButton, SortType } from '@/components/SortByButton';
 import { useRouter } from 'next/navigation';
-import { PageLimits, RouterPath, SortValues } from '@/app/enums';
+import { PageLimits, RouterPath } from '@/app/enums';
 import { PagesToolbar } from '@/components/PagesToolbar';
 
 export interface IProductsListProps {
@@ -34,23 +33,24 @@ export function ProductsList({data, config, pageLimit, page, pagesCount, categor
   return <div className="w-full">
     <div className="flex justify-between mb-4">
       <div className="flex">
-        {
-          Object.values(SortValues).map(item => (
-            <SortByButton
-              isActive={sortValue === item}
-              callback={(type) => {
-                setSortType(type);
-                setSortValue(item);
-              }}
-            >{TRANSLATES[LOCALE].byPrice}</SortByButton>
-          ))
-        }
+        {/*{*/}
+        {/*  Object.values(SortValues).map(item => (*/}
+        {/*    <SortByButton*/}
+        {/*      key={item}*/}
+        {/*      isActive={sortValue === item}*/}
+        {/*      callback={(type) => {*/}
+        {/*        setSortType(type);*/}
+        {/*        setSortValue(item);*/}
+        {/*      }}*/}
+        {/*    >{TRANSLATES[LOCALE].byPrice}</SortByButton>*/}
+        {/*  ))*/}
+        {/*}*/}
       </div>
       <div className="flex items-center">
         {TRANSLATES[LOCALE].showBy}:
         <select className="mx-2 border-2 rounded-md border-pink-500" value={pageLimitValue} onChange={pageLimitChange}>
           {
-            Object.values(PageLimits).map(item => (<option value={item}>{item}</option>))
+            Object.values(PageLimits).map(item => (<option key={item} value={item}>{item}</option>))
           }
         </select>
         {TRANSLATES[LOCALE].productsOnThePage}
@@ -67,6 +67,6 @@ export function ProductsList({data, config, pageLimit, page, pagesCount, categor
         />;
       })}
     </div>
-    <PagesToolbar pages={pagesCount} current={page}/>
+    <PagesToolbar categoryId={categoryId} pages={pagesCount} current={page}/>
   </div>
 }

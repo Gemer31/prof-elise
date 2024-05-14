@@ -2,7 +2,7 @@
 
 import { CartTable } from '@/components/CartTable';
 import { Button } from '@/components/Button';
-import { ButtonType, FirestoreCollections, RouterPath } from '@/app/enums';
+import { ButtonTypes, FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
 import { useMemo, useState } from 'react';
@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { updateClient } from '@/store/asyncThunk';
 import { CLIENT_ID } from '@/app/constants';
 import { IClient } from '@/store/dataSlice';
+import { getClientId } from '@/utils/cookies.util';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
@@ -36,7 +37,7 @@ interface ICheckoutFormProps {
 }
 
 export function CheckoutForm({config}: ICheckoutFormProps) {
-  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
+  const clientId = useMemo(() => getClientId(), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -65,13 +66,13 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
         message: encodeURI(getOrderMessage({
           ...formData,
           orderNumber: config.nextOrderNumber,
-          cart: cart,
-          config: config,
+          cart: {},
+          config: config
         }))
       })
     });
     setCreatedOrderNumber(config.nextOrderNumber);
-    await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirestoreCollections.CONFIG), {
+    await setDoc(doc(db, String(process.env.NEXT_PUBLIC_FIREBASE_DATABASE_NAME), FirestoreDocuments.CONFIG), {
       contactPhone: config.contactPhone,
       workingHours: config.workingHours,
       currency: config.currency,
@@ -153,7 +154,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
       <div className="w-full flex justify-end mt-4">
         <Button
           styleClass="uppercase text-amber-50 px-4 py-2"
-          type={ButtonType.SUBMIT}
+          type={ButtonTypes.SUBMIT}
           loading={loading}
           disabled={loading}
         >{TRANSLATES[LOCALE].confirmOrder}</Button>

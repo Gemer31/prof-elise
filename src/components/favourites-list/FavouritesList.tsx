@@ -1,47 +1,53 @@
 'use client';
 
-import { IProduct } from '@/app/models';
-import { useAppSelector } from '@/store/store';
-import { Loader } from '@/components/Loader';
-import { useEffect, useState } from 'react';
+import { IConfig, IProduct } from '@/app/models';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { collection, getDocs, query, where } from '@firebase/firestore';
-import { db } from '@/app/lib/firebase-config';
-import { FirestoreCollections } from '@/app/enums';
 import { FavouriteProductCard } from '@/components/FavouriteProductCard';
 import './favourites-list.css';
+import { Button } from '@/components/Button';
+import { ButtonTypes } from '@/app/enums';
+import { updateClient } from '@/store/asyncThunk';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { getClientId } from '@/utils/cookies.util';
+import { IClient } from '@/store/dataSlice';
 
-export function FavouritesList() {
+interface IFavouritesListProps {
+  config: IConfig;
+  serverProducts: IProduct[];
+}
+
+export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
   const [data, setData] = useState<IProduct[]>([]);
-  const [dataLoading, setDataLoading] = useState(true);
+  const clientId = useMemo(() => getClientId(), []);
+  const dispatch = useAppDispatch();
   // @ts-ignore
-  const favourites = useAppSelector(state => state.dataReducer.client['favourites']);
-  const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
+  const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
-    if (!cartLoading) {
-      let productsIds: string[] = favourites && Object.keys(favourites);
+    setData(serverProducts);
+  }, [serverProducts]);
 
-      if (productsIds?.length) {
-        getDocs(query(collection(db, FirestoreCollections.PRODUCTS), where('id', 'in', productsIds)))
-          .then((favouriteProducts) => {
-            const products: IProduct[] = favouriteProducts.docs.map((p) => p.data() as IProduct);
-            setData(products);
-            setDataLoading(false);
-          });
-      } else {
-        setDataLoading(false);
+  const cleanFavourites = () => {
+    setData([]);
+    dispatch(updateClient({
+      clientId,
+      data: {
+        ...client,
+        favourites: {},
       }
-    }
-  }, [cartLoading]);
+    }));
+  }
 
-  return cartLoading || dataLoading
-    ? <div className="w-full flex justify-center mt-4 overflow-hidden">
-      <Loader className="min-h-[250px] border-pink-500"
-      /></div>
-    : (
+  return <>
+    <div className="flex justify-end my-2">
+      <Button styleClass="px-2 py-1" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
+        {TRANSLATES[LOCALE].cleanFavourites} ✖
+      </Button>
+    </div>
+    {
       data?.length
         ? <div className="w-full">
           <div className="separator">
@@ -53,6 +59,7 @@ export function FavouritesList() {
           {
             data.map((favourite) => <FavouriteProductCard
               key={favourite.id}
+              config={config}
               data={favourite}
               isLoading={redirectIdInProgress === favourite.id}
               onClick={() => setRedirectIdInProgress(favourite.id)}
@@ -63,5 +70,6 @@ export function FavouritesList() {
           <Image width={100} height={100} src="/icons/empty-cart.svg" alt="Empty cart"/>
           <span>{TRANSLATES[LOCALE].emptyCart}</span>
         </div>
-    )
+    }
+  </>;
 }

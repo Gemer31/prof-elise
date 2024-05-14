@@ -1,6 +1,6 @@
 import { ReactImageGalleryItem } from 'react-image-gallery';
 import { Button } from '@/components/Button';
-import { ButtonType } from '@/app/enums';
+import { ButtonTypes } from '@/app/enums';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
@@ -13,7 +13,7 @@ export function SliderRenderItem({description, original}: ReactImageGalleryItem)
         <h2 className="text-amber-50 text-3xl mb-4">{description}</h2>
         <Button
           styleClass="hidden md:block text-amber-50 px-6 py-4 w-fit"
-          type={ButtonType.BUTTON}>{TRANSLATES[LOCALE].getDetails}</Button>
+          type={ButtonTypes.BUTTON}>{TRANSLATES[LOCALE].getDetails}</Button>
       </div>
     </ContentContainer>
   </div>

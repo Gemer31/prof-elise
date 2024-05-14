@@ -1,28 +1,26 @@
 'use client';
 
 import { ICommonProps } from '@/app/models';
-import { ButtonType } from '@/app/enums';
+import { ButtonColors, ButtonTypes } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Loader } from '@/components/Loader';
 import { MouseEvent, useMemo } from 'react';
 
 export interface IButtonProps extends ICommonProps {
-  type: ButtonType;
+  color?: ButtonColors;
+  type: ButtonTypes;
   disabled?: boolean;
   loading?: boolean;
   styleClass?: string;
   callback?: (event: MouseEvent) => void;
 }
 
-export function Button({children, callback, type, disabled, loading, styleClass}: IButtonProps) {
+export function Button({children, callback, type, disabled, loading, color, styleClass}: IButtonProps) {
   const buttonClass: string = useMemo(() => convertToClass([
     'flex',
     'relative',
     'justify-center',
     'items-center',
-    'bg-pink-500',
-    'hover:bg-pink-400',
-    'active:bg-pink-600',
     'rounded-md',
     'h-fit',
     'duration-200',
@@ -33,8 +31,8 @@ export function Button({children, callback, type, disabled, loading, styleClass}
 
   return (
     <button
-      type={type || ButtonType.BUTTON}
-      className={buttonClass + ' ' + styleClass}
+      type={type || ButtonTypes.BUTTON}
+      className={buttonClass + ' ' + (color || ButtonColors.PINK) + ' ' + styleClass}
       onClick={(event: MouseEvent) => callback?.(event)}
     >
       <div className={loading ? 'invisible' : ''}>{children}</div>

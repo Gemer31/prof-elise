@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType, FirestoreCollections } from '@/app/enums';
+import { ButtonTypes, FirestoreCollections } from '@/app/enums';
 import { useState } from 'react';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { StorageReference } from '@firebase/storage';
@@ -161,7 +161,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
           styleClass="text-amber-50 w-full py-2"
           disabled={isLoading}
           loading={isLoading}
-          type={ButtonType.SUBMIT}
+          type={ButtonTypes.SUBMIT}
         >{selectedCategory ? TRANSLATES[LOCALE].update : TRANSLATES[LOCALE].add}</Button>
       </div>
     </form>

@@ -4,7 +4,7 @@ import { ContentContainer } from '@/components/ContentContainer';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Button } from '@/components/Button';
-import { ButtonType, RouterPath } from '@/app/enums';
+import { ButtonTypes, RouterPath } from '@/app/enums';
 import { useAppDispatch } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import Link from 'next/link';
@@ -89,7 +89,7 @@ export function Footer({config}: IFooterProps) {
                     </CircleButton>
                     <Button
                       styleClass="uppercase text-amber-50 text-sm px-4 py-2"
-                      type={ButtonType.BUTTON}
+                      type={ButtonTypes.BUTTON}
                       callback={() => dispatch(setRequestCallPopupVisible(true))}
                     >{TRANSLATES[LOCALE].requestCall}</Button>
                   </div>

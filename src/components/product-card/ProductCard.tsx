@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { ButtonType, RouterPath } from '@/app/enums';
+import { ButtonTypes, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Counter } from '@/components/Counter';
@@ -74,7 +74,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
         </div>
         <Button
           styleClass="text-amber-50 w-1/2 px-4 py-2"
-          type={ButtonType.BUTTON}
+          type={ButtonTypes.BUTTON}
         >{TRANSLATES[LOCALE].preview}</Button>
       </div>
       {

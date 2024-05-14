@@ -2,7 +2,7 @@
 
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType, RouterPath } from '@/app/enums';
+import { ButtonTypes, RouterPath } from '@/app/enums';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useEffect, useState } from 'react';
@@ -102,7 +102,7 @@ export default function ProductDetails() {
               styleClass="text-amber-50 w-full px-4 py-2"
               disabled={isLoading}
               loading={isLoading}
-              type={ButtonType.SUBMIT}
+              type={ButtonTypes.SUBMIT}
             >{TRANSLATES[LOCALE].enter}</Button>
           </form>
         </ContentContainer>

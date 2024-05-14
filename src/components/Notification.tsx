@@ -1,3 +1,5 @@
+'use client'
+
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { useEffect, useMemo, useState } from 'react';

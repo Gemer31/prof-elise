@@ -1,11 +1,14 @@
-'use client';
+'use client'
 
 import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import * as React from 'react';
 import { useState } from 'react';
 import { SliderRenderItem } from '@/components/slider/SliderRenderItem';
+import { RouterPath } from '@/app/enums';
+import { usePathname } from 'next/navigation';
 
 export function Slider() {
+  const pathname = usePathname();
   const [play, setPlay] = useState(true);
 
   const items: ReactImageGalleryItem[] = [
@@ -20,7 +23,7 @@ export function Slider() {
       renderItem: SliderRenderItem,
     }
   ]
-  return <ImageGallery
+  return pathname === RouterPath.HOME ? <ImageGallery
     additionalClass="w-full my-4"
     useBrowserFullscreen={false}
     autoPlay={play}
@@ -33,5 +36,5 @@ export function Slider() {
     onMouseLeave={() => setPlay(true)}
     onMouseOver={() => setPlay(false)}
     items={items}
-  />
+  /> : <></>
 }

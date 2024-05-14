@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonType, FirestoreCollections } from '@/app/enums';
+import { ButtonTypes, FirestoreCollections } from '@/app/enums';
 import { useState } from 'react';
 import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
 import { ICategory, IProduct } from '@/app/models';
@@ -267,7 +267,7 @@ export function ProductEditorForm({
           styleClass="text-amber-50 w-full py-2"
           disabled={isLoading}
           loading={isLoading}
-          type={ButtonType.SUBMIT}
+          type={ButtonTypes.SUBMIT}
         >{TRANSLATES[LOCALE].save}</Button>
       </div>
     </form>

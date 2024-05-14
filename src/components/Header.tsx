@@ -16,8 +16,9 @@ import { FavouritesButton } from '@/components/FavouritesButton';
 import { uuidv4 } from '@firebase/util';
 import { getClient, updateClient } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
-import { CLIENT_ID } from '@/app/constants';
 import { CircleButton } from '@/components/CircleButton';
+import { getClientId } from '@/utils/cookies.util';
+import { CLIENT_ID } from '@/app/constants';
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -69,13 +70,13 @@ export function Header() {
   ]), []);
 
   useEffect(() => {
-    let clientId: string = localStorage?.getItem(CLIENT_ID) as string;
+    let clientId: string = getClientId();
 
     if (clientId) {
       dispatch(getClient(clientId));
     } else {
       clientId = uuidv4();
-      localStorage.setItem(CLIENT_ID, clientId);
+      document.cookie = `${CLIENT_ID}=${clientId}`;
       dispatch(updateClient({
         clientId,
         data: {
@@ -119,11 +120,11 @@ export function Header() {
     <header className={hostClass}>
       <CircleButton
         href="#page"
-        styleClass={'size-6 fixed max-w-fit bottom-6 left-6 duration-500 transition-all ' + (isScrollTop ? 'scale-0' : 'scale-100')}>
-        <Image width={80} height={80} src="/icons/arrow.svg" alt="Scroll top"/>
+        styleClass={'size-10 fixed max-w-fit bottom-6 left-6 duration-500 scale-0 ' + (isScrollTop ? '' : 'scale-100')}>
+        <Image width={50} height={50} src="/icons/arrow.svg" alt="Scroll top"/>
       </CircleButton>
       <ContentContainer>
-        <nav className="flex justify-between">
+        <nav className="flex justify-between transi">
           <div className="hidden sm:flex">
             {
               siteLinks.map(([path, translateCode]) => (

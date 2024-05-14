@@ -1,6 +1,8 @@
+'use client'
+
 import { Popup } from '@/components/Popup';
 import { Button } from '@/components/Button';
-import { ButtonType } from '@/app/enums';
+import { ButtonTypes } from '@/app/enums';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -92,7 +94,7 @@ export function RequestCallPopup() {
             styleClass="text-amber-50 w-full py-2"
             disabled={isLoading}
             loading={isLoading}
-            type={ButtonType.SUBMIT}
+            type={ButtonTypes.SUBMIT}
           >{TRANSLATES[LOCALE].send}</Button>
         </div>
       </form>

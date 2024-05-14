@@ -83,6 +83,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     purchaseCart: 'Корзина покупок',
     productName: 'Наименование товара',
     naming: 'Наименование',
+    cleanFavourites: 'Очистить избранное',
     productAdded: 'Продукт добавлен',
     shortAmountText: 'Кол-во',
     priceForOneProduct: 'Цена за шт.',

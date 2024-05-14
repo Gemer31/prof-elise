@@ -10,6 +10,7 @@ import { CLIENT_ID } from '@/app/constants';
 import { updateClient } from '@/store/asyncThunk';
 import { Loader } from '@/components/Loader';
 import { convertToClass } from '@/utils/convert-to-class.util';
+import { getClientId } from '@/utils/cookies.util';
 
 
 export interface IEntityFavouriteButtonProps {
@@ -19,7 +20,6 @@ export interface IEntityFavouriteButtonProps {
 
 export function EntityFavouriteButton({productId, className}: IEntityFavouriteButtonProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const clientId = useMemo(() => localStorage?.getItem(CLIENT_ID), []);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
   const dispatch = useAppDispatch();
   // @ts-ignore
@@ -57,7 +57,7 @@ export function EntityFavouriteButton({productId, className}: IEntityFavouriteBu
 
     setIsLoading(true);
     dispatch(updateClient({
-      clientId,
+      clientId: getClientId(),
       data: {
         ...client,
         favourites: newFavourites

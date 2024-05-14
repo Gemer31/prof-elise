@@ -7,7 +7,7 @@ export function getOrderMessage(data: {
   email: string;
   address: string;
   comment?: string;
-  cart: ICart;
+  cart: unknown;
   config: IConfig;
 }): string {
   let message: string = `Заказ №${data.orderNumber}`
