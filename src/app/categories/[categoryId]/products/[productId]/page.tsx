@@ -1,18 +1,17 @@
-import { ICategory, IConfig, IProduct } from '@/app/models';
+import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
-import { Advantages } from '@/components/Advantages';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
-import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData } from '@/utils/firebase.util';
+import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 import { ProductDetailsActionsBar } from '@/components/ProductDetailsActionsBar';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { BasePage } from '@/components/BasePage';
-import { IClient } from '@/store/dataSlice';
+import { IClient, IViewedRecentlyModel } from '@/store/dataSlice';
 import { cookies } from 'next/headers';
 import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
 
@@ -29,45 +28,53 @@ export default async function ProductDetailsPage(
   {params: {productId}, searchParams: {pageLimit}}: IProductDetailsProps
 ) {
   const clientId: string = cookies().get(CLIENT_ID)?.value;
-  // let client: IClient;
 
   const [
-    clientData,
+    clientDataDocumentSnapshot,
     settingsDocumentSnapshot,
     productDocumentSnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
     getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
-    // clientId
-    //   ? getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId))
-    //   .then((res) => {
-    //     client = res.data() as IClient;
-    //     const viewedRecentlyProductsIds: string[] = Object.keys(client.viewedRecently);
-    //     if (viewedRecentlyProductsIds?.length) {
-    //       return getDocs(query(
-    //         collection(db, FirestoreCollections.PRODUCTS),
-    //         where('id', 'in', viewedRecentlyProductsIds)
-    //       ));
-    //     } else {
-    //       return Promise.resolve([]);
-    //     }
-    //   })
-    //   : Promise.resolve(),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDoc(doc(db, FirestoreCollections.PRODUCTS, productId)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
-  const client: IClient = clientData.data() as IClient;
+  const client: IClient = clientDataDocumentSnapshot.data() as IClient;
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
   const product: IProduct = productDocumentSnapshot.data() as IProduct;
   const productCategory: ICategory = categories.find((item) => product.categoryRef.path.includes(item.id));
   delete product.categoryRef;
 
+  if (!client?.viewedRecently[productId]) {
+    const newViewRecently = [...viewedRecently];
+    if (newViewRecently.length > 4) {
+      newViewRecently.pop();
+    }
+    newViewRecently.unshift({
+      time: +new Date(),
+      product
+    });
+    const newViewedRecentlyObj: Record<string, IViewedRecentlyModel> = {};
+    newViewRecently.forEach(item => {
+      newViewedRecentlyObj[item.product.id] = {
+        time: item.time,
+        productRef: doc(db, FirestoreCollections.PRODUCTS, item.product.id)
+      };
+    });
+    await setDoc(
+      doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId),
+      {
+        ...client,
+        viewedRecently: newViewedRecentlyObj
+      }
+    );
+  }
 
-  console.log(client.viewedRecently);
   // todo: redirect if not found
-  return <BasePage config={config}>
+  return <BasePage viewedRecently={viewedRecently} config={config}>
     <ContentContainer styleClass="flex flex-col items-center">
       <Breadcrumbs links={[
         {title: productCategory?.title, href: `${RouterPath.CATEGORIES}/${productCategory?.id}`},

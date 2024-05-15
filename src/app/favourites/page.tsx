@@ -1,8 +1,8 @@
 import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
-import { ICategory, IConfig, IProduct } from '@/app/models';
-import { docsToData } from '@/utils/firebase.util';
+import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
 import { redirect } from 'next/navigation';
@@ -11,7 +11,6 @@ import { BasePage } from '@/components/BasePage';
 import { FavouritesList } from '@/components/favourites-list/FavouritesList';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Catalog } from '@/components/Catalog';
-import { Advantages } from '@/components/Advantages';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 
@@ -32,18 +31,19 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
   }
 
   const [
-    settingsDocumentSnapshot,
     clientDocumentSnapshot,
+    settingsDocumentSnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
   const config = settingsDocumentSnapshot.data() as IConfig;
   let data: IProduct[] = [];
   const client: IClient = clientDocumentSnapshot.data() as IClient;
-  const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   const productsIds: string[] = Object.keys(client.favourites);
   if (productsIds.length) {
@@ -58,7 +58,7 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
       });
   }
 
-  return <BasePage config={config}>
+  return <BasePage viewedRecently={viewedRecently} config={config}>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].favourites}

@@ -1,5 +1,5 @@
 import { DocumentReference } from '@firebase/firestore';
-import { ColorOptions } from '@/components/data-editors/ColorPicker';
+import { ColorOptions } from '@/app/enums';
 
 export interface IProduct {
   id: string;
@@ -39,4 +39,9 @@ export interface ICategory {
   imageUrl: string;
   relatedCategories?: string[];
   productsTotal: number;
+}
+
+export interface IViewedRecently {
+  time: number;
+  product: IProduct;
 }

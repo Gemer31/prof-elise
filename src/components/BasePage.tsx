@@ -3,17 +3,17 @@ import { Notification } from '@/components/Notification';
 import { Header } from '@/components/Header';
 import { SubHeader } from '@/components/SubHeader';
 import { Slider } from '@/components/slider/Slider';
-import { ContentContainer } from '@/components/ContentContainer';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import { Footer } from '@/components/Footer';
-import { ICommonProps, IConfig } from '@/app/models';
+import { ICommonProps, IConfig, IViewedRecently } from '@/app/models';
 
 interface IBasePageProps extends ICommonProps {
   sliderVisible?: boolean;
   config: IConfig;
+  viewedRecently: IViewedRecently[];
 }
 
-export function BasePage({config, sliderVisible, children}: IBasePageProps) {
+export function BasePage({config, sliderVisible, viewedRecently, children}: IBasePageProps) {
   return <>
     <RequestCallPopup/>
     <Notification/>
@@ -22,7 +22,10 @@ export function BasePage({config, sliderVisible, children}: IBasePageProps) {
       <SubHeader config={config}/>
       {sliderVisible ? <Slider/> : <></>}
       {children}
-      <ViewedRecently config={config}/>
+      <ViewedRecently
+        viewedRecently={viewedRecently}
+        config={config}
+      />
       <Footer config={config}/>
     </div>
   </>;
