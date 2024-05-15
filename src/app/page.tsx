@@ -1,5 +1,3 @@
-import { Advantages } from '@/components/Advantages';
-import { Catalog } from '@/components/Catalog';
 import { AboutUs } from '@/components/AboutUs';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -8,8 +6,10 @@ import { docsToData } from '@/utils/firebase.util';
 import { ICategory, IConfig } from '@/app/models';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirestoreCollections } from '@/app/enums';
+import { ButtonTypes, FirestoreCollections, RouterPath } from '@/app/enums';
 import { BasePage } from '@/components/BasePage';
+import { Button } from '@/components/Button';
+import Link from 'next/link';
 
 export interface IHomePageProps {
   searchParams: {
@@ -29,20 +29,18 @@ export default async function HomePage({searchParams: {pageLimit}}: IHomePagePro
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
   return <BasePage config={config} sliderVisible={true}>
-      <main>
-          <ContentContainer styleClass="flex flex-col items-center px-2">
-              <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
-                  <div className="w-full gap-x-3 md:w-4/12 mr-4">
-                      <Catalog pageLimit={pageLimit} categories={Object.values(categories)}/>
-                      <Advantages/>
-                  </div>
-                  <div className="w-full">
-                      <h2 className="text-center text-xl uppercase mb-4">{TRANSLATES[LOCALE].disposableConsumables}</h2>
-                      <CategoriesList data={Object.values(categories)} pageLimit={Number(pageLimit)}/>
-                  </div>
-              </div>
-              <AboutUs text={config.shopDescription}/>
-          </ContentContainer>
-      </main>
-  </BasePage>
+    <ContentContainer styleClass="flex flex-col items-center px-2">
+      <div className="w-full">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].popularCategories}</h2>
+          <Button type={ButtonTypes.BUTTON}>
+            <Link className="flex px-4 py-2" href={RouterPath.CATEGORIES}>{TRANSLATES[LOCALE].allCategories}</Link>
+          </Button>
+        </div>
+        <CategoriesList data={Object.values(categories)} pageLimit={Number(pageLimit)}/>
+      </div>
+      {/*<Advantages/>*/}
+      <AboutUs text={config.shopDescription}/>
+    </ContentContainer>
+  </BasePage>;
 }

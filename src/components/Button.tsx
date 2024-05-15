@@ -1,13 +1,14 @@
 'use client';
 
 import { ICommonProps } from '@/app/models';
-import { ButtonColors, ButtonTypes } from '@/app/enums';
+import { ButtonTypes, ColorOptions } from '@/app/enums';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { Loader } from '@/components/Loader';
 import { MouseEvent, useMemo } from 'react';
+import { COLOR_OPTION_VALUES } from '@/app/constants';
 
 export interface IButtonProps extends ICommonProps {
-  color?: ButtonColors;
+  color?: ColorOptions;
   type: ButtonTypes;
   disabled?: boolean;
   loading?: boolean;
@@ -32,7 +33,7 @@ export function Button({children, callback, type, disabled, loading, color, styl
   return (
     <button
       type={type || ButtonTypes.BUTTON}
-      className={buttonClass + ' ' + (color || ButtonColors.PINK) + ' ' + styleClass}
+      className={buttonClass + ' ' + COLOR_OPTION_VALUES.get(color || ColorOptions.PINK) + ' ' + styleClass}
       onClick={(event: MouseEvent) => callback?.(event)}
     >
       <div className={loading ? 'invisible' : ''}>{children}</div>

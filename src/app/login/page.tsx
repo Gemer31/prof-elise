@@ -14,13 +14,14 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { auth } from '@/app/lib/firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Loader } from '@/components/Loader';
+import { Header } from '@/components/Header';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('fieldRequired').email('fieldInvalid'),
   password: yup.string().required('fieldRequired')
 });
 
-export default function ProductDetails() {
+export default function LoginPage() {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
@@ -69,13 +70,14 @@ export default function ProductDetails() {
     }
   }, []);
 
-  return loading || !isAuthChecked
-    ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader
-      className="min-h-[250px] border-pink-500"/></div>
-    : (
-      <main className="w-full">
-        <ContentContainer styleClass="flex flex-col items-center">
-          <form
+  return <div id="page" className="relative flex flex-col items-center h-full z-10">
+    <Header/>
+    <ContentContainer styleClass="flex flex-col items-center px-2">
+      {
+        loading || !isAuthChecked
+          ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader
+            className="min-h-[250px] border-pink-500"/></div>
+          : <form
             className="flex flex-col items-center w-6/12"
             onSubmit={handleSubmit(submitForm)}
           >
@@ -105,7 +107,7 @@ export default function ProductDetails() {
               type={ButtonTypes.SUBMIT}
             >{TRANSLATES[LOCALE].enter}</Button>
           </form>
-        </ContentContainer>
-      </main>
-    );
+      }
+    </ContentContainer>
+  </div>;
 }

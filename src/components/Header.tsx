@@ -65,6 +65,7 @@ export function Header() {
   ]), []);
   const siteLinks: string[][] = useMemo(() => ([
     [RouterPath.HOME, 'main'],
+    [RouterPath.CATEGORIES, 'catalog'],
     [RouterPath.DELIVERY, 'delivery'],
     [RouterPath.CONTACTS, 'contacts']
   ]), []);

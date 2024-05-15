@@ -13,6 +13,7 @@ import { ContentContainer } from '@/components/ContentContainer';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { LOCALE, TRANSLATES } from '@/app/translates';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 export interface IFavouritesPageProps {
   params: {
@@ -58,19 +59,19 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
   }
 
   return <BasePage config={config}>
-    <main>
-      <ContentContainer styleClass="flex flex-col items-center px-2">
-        <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
-          <div className="w-full gap-x-3 md:w-4/12 mr-4">
-            <Catalog pageLimit={pageLimit} categories={Object.values(categories)}/>
-            <Advantages/>
-          </div>
-          <div className="w-full">
-            <h2 className="text-center text-xl uppercase mb-4">{TRANSLATES[LOCALE].favouriteProducts}</h2>
-            <FavouritesList serverProducts={data} config={config}/>
-          </div>
+    <ContentContainer styleClass="flex flex-col items-center px-2">
+      <Breadcrumbs links={[
+        {title: TRANSLATES[LOCALE].favourites}
+      ]}/>
+      <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
+        <div className="w-full gap-x-3 md:w-4/12 mr-4">
+          <Catalog pageLimit={pageLimit} categories={Object.values(categories)}/>
         </div>
-      </ContentContainer>
-    </main>
+        <div className="w-full">
+          <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].favouriteProducts}</h1>
+          <FavouritesList serverProducts={data} config={config}/>
+        </div>
+      </div>
+    </ContentContainer>
   </BasePage>;
 }

@@ -1,4 +1,5 @@
 import { DocumentReference } from '@firebase/firestore';
+import { ColorOptions } from '@/components/data-editors/ColorPicker';
 
 export interface IProduct {
   id: string;
@@ -14,7 +15,7 @@ export interface IProduct {
 
 export interface ILabel {
   text: string;
-  color?: string;
+  color?: ColorOptions;
 }
 
 export interface ICommonProps {

@@ -21,11 +21,9 @@ export function BasePage({config, sliderVisible, children}: IBasePageProps) {
       <Header/>
       <SubHeader config={config}/>
       {sliderVisible ? <Slider/> : <></>}
-      <ContentContainer id="content" styleClass="w-full flex justify-start px-2">
-        {children}
-      </ContentContainer>
+      {children}
       <ViewedRecently config={config}/>
       <Footer config={config}/>
     </div>
-  </>
+  </>;
 }

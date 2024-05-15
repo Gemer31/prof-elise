@@ -3,9 +3,9 @@ export enum ButtonTypes {
   SUBMIT = 'submit'
 }
 
-export enum ButtonColors {
-  PINK = 'text-white bg-pink-500 hover:bg-pink-400 active:bg-pink-600',
-  GRAY = 'text-black bg-slate-100 hover:bg-slate-400 active:bg-slate-600'
+export enum ColorOptions {
+  PINK = 'pink',
+  GRAY = 'gray',
 }
 
 export enum RouterPath {

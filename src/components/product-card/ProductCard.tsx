@@ -12,6 +12,7 @@ import { IConfig, IProduct } from '@/app/models';
 import { Loader } from '@/components/Loader';
 import './product-card.css';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
+import { COLOR_OPTION_VALUES } from '@/app/constants';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -50,11 +51,13 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
       href={`${RouterPath.CATEGORIES}/${data?.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
-      <div className="absolute left-4 top-4">
+      <div className="absolute flex flex-col gap-y-2 left-4 top-4">
         {
           data.labels?.map((item, index) => {
-            return <div key={index}
-                        className={'px-2 py-1 text-white rounded-md text-xs ' + item.color}>{item.text}</div>;
+            return <div
+              key={index}
+              className={'pointer-events-none w-fit px-2 py-1 text-white rounded-md text-xs ' + COLOR_OPTION_VALUES.get(item.color)}
+            >{item.text}</div>;
           })
         }
       </div>

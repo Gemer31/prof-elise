@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { RouterPath } from '@/app/enums';
 import { Counter } from '@/components/Counter';
 import Link from 'next/link';
+import './favourite-product-card.css';
 
 export interface IFavouriteProductCardProps {
   config: IConfig;
@@ -12,16 +13,22 @@ export interface IFavouriteProductCardProps {
 }
 
 export function FavouriteProductCard({data, isLoading, config, onClick}: IFavouriteProductCardProps) {
-  return <div className="grid grid-cols-3">
+  return <div className="favourite-product-card">
     <Link
-      className={'flex gap-x-2 ' + (isLoading ? ' pointer-events-none' : '')}
+      className={'flex items-center gap-x-2 ' + (isLoading ? ' pointer-events-none' : '')}
       href={`${RouterPath.CATEGORIES}/${data.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
       <Image width={150} height={150} src={data.imageUrls[0]} alt={data.title}/>
-      <span>{data.title}</span>
+      <span className="favourite-product-card__title ml-2">{data.title}</span>
     </Link>
-    <span className="text-pink-500">{data.price} {config.currency}</span>
-    <Counter productId={data.id}/>
+    <span className="flex justify-center items-center text-pink-500 text-center font-medium text-xl">
+      {data.price} {config.currency}
+    </span>
+    <div className="flex items-center justify-end">
+      <div className="h-fit flex">
+        <Counter productId={data.id}/>
+      </div>
+    </div>
   </div>;
 }

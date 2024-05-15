@@ -1,0 +1,12 @@
+.favourite-product-card {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+}
+
+.favourite-product-card__title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

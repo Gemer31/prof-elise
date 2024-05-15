@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 import { ButtonTypes, FirestoreCollections } from '@/app/enums';
 import { useState } from 'react';
 import { CategoriesViewer } from '@/components/data-editors/CategoriesViewer';
-import { ICategory, IProduct } from '@/app/models';
+import { ICategory, ILabel, IProduct } from '@/app/models';
 import { StorageReference } from '@firebase/storage';
 import { ImagesViewer } from '@/components/data-editors/ImagesViewer';
 import { getStorageImageSrc } from '@/utils/firebase.util';
@@ -19,6 +19,7 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { db } from '@/app/lib/firebase-config';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { TextEditor } from '@/components/data-editors/TextEditor';
+import { ProductLabelsEditor } from '@/components/data-editors/ProductLabelsEditor';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),
@@ -29,7 +30,7 @@ const validationSchema = yup.object().shape({
   categoryId: yup.string().required('fieldRequired'),
   vendorCode: yup.string().required('fieldRequired'),
   images: yup.array().required('fieldRequired'),
-  label: yup.string()
+  labels: yup.array(),
 });
 
 export interface ProductEditorFormProps {
@@ -51,6 +52,7 @@ export function ProductEditorForm({
   const [selectedProduct, setSelectedProduct] = useState<IProduct>();
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
   const [selectedImages, setSelectedImages] = useState<StorageReference[]>();
+  const [labels, setLabels] = useState<ILabel[]>();
   const {
     register,
     setValue,
@@ -68,7 +70,7 @@ export function ProductEditorForm({
     description: string,
     categoryId: string,
     images: StorageReference[],
-    label: string,
+    labels: ILabel[],
     vendorCode: string,
   }) => {
     setIsLoading(true);
@@ -81,7 +83,7 @@ export function ProductEditorForm({
       description: formData.description,
       categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
       imageUrls: imageUrls,
-      labels: formData.label?.length ? [{text: formData.label, color: 'bg-pink-500'}] : [],
+      labels: formData.labels,
       vendorCode: formData.vendorCode
     };
     const categoryData: ICategory = selectedProduct
@@ -135,16 +137,6 @@ export function ProductEditorForm({
     setIsLoading(false);
   };
 
-  const changeImage = (newImages: StorageReference[]) => {
-    setSelectedImages(newImages);
-    setValue(`images`, newImages);
-  };
-
-  const changeCategory = (newCategory: ICategory) => {
-    setValue('categoryId', newCategory?.id || '');
-    setSelectedCategory(newCategory);
-  };
-
   const changeProduct = (newProduct: IProduct) => {
     if (newProduct) {
       const productCategory = categories.find((category) => category.id === newProduct.categoryRef.id);
@@ -157,28 +149,44 @@ export function ProductEditorForm({
       setValue('description', newProduct.description);
       setValue('categoryId', newProduct.categoryId);
       setValue('images', productImages);
+      setValue('labels', newProduct.labels || []);
 
       setDescription(newProduct.description);
       setSelectedCategory(productCategory);
       setSelectedImages(productImages);
+      setLabels(newProduct.labels || []);
     } else {
       setValue('title', '');
       setValue('price', '');
       setValue('description', '');
       setValue('categoryId', '');
       setValue('images', []);
+      setValue('labels', []);
 
       setDescription('');
       setSelectedCategory(undefined);
       setSelectedImages(undefined);
+      setLabels(undefined);
     }
     setSelectedProduct(newProduct);
   };
 
-  const descriptionChange = (newValue: string) => {
+  const changeImage = (newImages: StorageReference[]) => {
+    setSelectedImages(newImages);
+    setValue(`images`, newImages);
+  };
+  const changeCategory = (newCategory: ICategory) => {
+    setValue('categoryId', newCategory?.id || '');
+    setSelectedCategory(newCategory);
+  };
+  const changeDescription = (newValue: string) => {
     setValue('description', newValue);
     setDescription(newValue);
   };
+  const changeLabels = (newLabels: ILabel[]) => {
+    setValue('labels', newLabels);
+    setLabels(newLabels)
+  }
 
   return (
     <form
@@ -228,17 +236,18 @@ export function ProductEditorForm({
         <TextEditor
           placeholder={TRANSLATES[LOCALE].enterDescription}
           value={description}
-          onChange={descriptionChange}
+          onChange={changeDescription}
         />
       </FormFieldWrapper>
-      <InputFormField
-        placeholder={TRANSLATES[LOCALE].enterLabel}
+      <FormFieldWrapper
         label={TRANSLATES[LOCALE].label}
-        name="label"
-        type="text"
-        error={errors.label?.message}
-        register={register}
-      />
+        error={errors.categoryId?.message}
+      >
+        <ProductLabelsEditor
+          value={labels}
+          onChange={changeLabels}
+        />
+      </FormFieldWrapper>
       <FormFieldWrapper
         required={true}
         label={TRANSLATES[LOCALE].category}

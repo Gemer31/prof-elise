@@ -4,14 +4,15 @@ import { IConfig, IProduct } from '@/app/models';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { FavouriteProductCard } from '@/components/FavouriteProductCard';
+import { FavouriteProductCard } from '@/components/favourite-product-card/FavouriteProductCard';
 import './favourites-list.css';
 import { Button } from '@/components/Button';
-import { ButtonTypes } from '@/app/enums';
+import { ButtonTypes, RouterPath } from '@/app/enums';
 import { updateClient } from '@/store/asyncThunk';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { getClientId } from '@/utils/cookies.util';
 import { IClient } from '@/store/dataSlice';
+import Link from 'next/link';
 
 interface IFavouritesListProps {
   config: IConfig;
@@ -36,17 +37,21 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
       clientId,
       data: {
         ...client,
-        favourites: {},
+        favourites: {}
       }
     }));
-  }
+  };
 
   return <>
-    <div className="flex justify-end my-2">
-      <Button styleClass="px-2 py-1" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
-        {TRANSLATES[LOCALE].cleanFavourites} ✖
-      </Button>
-    </div>
+    {
+      data?.length
+        ? <div className="flex justify-end my-4">
+          <Button styleClass="px-2 py-1" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
+            {TRANSLATES[LOCALE].cleanFavourites} ✖
+          </Button>
+        </div>
+        : <></>
+    }
     {
       data?.length
         ? <div className="w-full">
@@ -66,9 +71,17 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
             />)
           }
         </div>
-        : <div className="w-full flex justify-center items-center text-3xl text-center">
+        : <div className="w-full h-full gap-x-2 gap-y-2 flex justify-center items-center text-3xl text-center">
           <Image width={100} height={100} src="/icons/empty-cart.svg" alt="Empty cart"/>
-          <span>{TRANSLATES[LOCALE].emptyCart}</span>
+          <div className="flex flex-col gap-y-4 items-center">
+            <h3>{TRANSLATES[LOCALE].thereAreNoFavouritesProducts}</h3>
+            <h4 className="text-xl">{TRANSLATES[LOCALE].addToFavouritesHint}</h4>
+            <Button styleClass="w-fit px-4 py-2" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
+              <Link className="text-xl flex" href={RouterPath.CATEGORIES}>
+                {TRANSLATES[LOCALE].intoCatalog}
+              </Link>
+            </Button>
+          </div>
         </div>
     }
   </>;

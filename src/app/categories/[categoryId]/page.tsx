@@ -10,6 +10,7 @@ import { docsToData } from '@/utils/firebase.util';
 import { redirect } from 'next/navigation';
 import { BasePage } from '@/components/BasePage';
 import chunk from 'lodash.chunk';
+import { ContentContainer } from '@/components/ContentContainer';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -60,7 +61,7 @@ export default async function CategoriesOrProductsPage(
     });
 
   return <BasePage sliderVisible={false} config={config}>
-    <div>
+    <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs
         links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
@@ -77,7 +78,7 @@ export default async function CategoriesOrProductsPage(
           config={config}
         />
       </div>
-    </div>
+    </ContentContainer>
   </BasePage>;
 }
 

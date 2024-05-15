@@ -1,5 +1,5 @@
 import { Button } from '@/components/Button';
-import { ButtonColors, ButtonTypes, PageLimits, RouterPath } from '@/app/enums';
+import { ButtonTypes, ColorOptions, PageLimits, RouterPath } from '@/app/enums';
 import Link from 'next/link';
 
 interface IPagesToolbarProps {
@@ -13,7 +13,7 @@ export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
     {
       current === 1
         ? <></>
-        : <Button color={ButtonColors.GRAY} type={ButtonTypes.BUTTON}>
+        : <Button color={ColorOptions.GRAY} type={ButtonTypes.BUTTON}>
           <Link
             className="flex px-4 py-2"
             href={`${RouterPath.CATEGORIES}/${categoryId}?page=${current - 1}&pageLimit=${PageLimits.SIX}`}
@@ -24,7 +24,7 @@ export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
       Array(pages).fill(null).map((item, index) => {
         const value: number = index + 1;
         return <Button
-          color={value === current ? ButtonColors.PINK : ButtonColors.GRAY}
+          color={value === current ? ColorOptions.PINK : ColorOptions.GRAY}
           disabled={value === current}
           key={`${value}${current}`}
           type={ButtonTypes.BUTTON}
@@ -39,7 +39,7 @@ export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
     {
       current === pages
         ? <></>
-        : <Button color={ButtonColors.GRAY} type={ButtonTypes.BUTTON}>
+        : <Button color={ColorOptions.GRAY} type={ButtonTypes.BUTTON}>
           <Link
             className="flex px-4 py-2"
             href={`${RouterPath.CATEGORIES}/${categoryId}?page=${current + 1}&pageLimit=${PageLimits.SIX}`}
