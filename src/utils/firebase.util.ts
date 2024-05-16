@@ -1,6 +1,15 @@
-import { collection, doc, getDoc, getDocs, query, QueryDocumentSnapshot, where } from '@firebase/firestore';
+import {
+  collection,
+  doc,
+  DocumentReference,
+  getDoc,
+  getDocs,
+  query,
+  QueryDocumentSnapshot,
+  where
+} from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import { IClient, IClientEnriched, IProduct, IViewedRecently } from '@/app/models';
+import { ICartProductModel, IClient, IClientEnriched, IProduct, IViewedRecently } from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
 
@@ -47,25 +56,11 @@ export async function getClientEnriched(client: IClient): Promise<IClientEnriche
   const clientEnriched: IClientEnriched = {
     cart: {},
     favourites: {},
-    viewedRecently: {},
+    viewedRecently: {}
   };
 
-  const cartProductsIds: string[] = Object.keys(client.cart);
-  if (cartProductsIds?.length) {
-    const products = await getDocs(query(
-      collection(db, FirestoreCollections.PRODUCTS),
-      where('id', 'in', cartProductsIds)
-    ));
-    products.forEach(item => {
-      const data: IProduct = item.data() as IProduct;
-      data.categoryId = data.categoryRef.id;
-      delete data.categoryRef;
-      clientEnriched.cart[data.id] = {
-        ...client.cart[data.id],
-        productRef: data,
-      }
-    })
-  }
+  clientEnriched.cart = await getEnrichedCart(client.cart);
+
   const cartFavouritesProductsIds: string[] = Object.keys(client);
   if (cartFavouritesProductsIds?.length) {
     const products = await getDocs(query(
@@ -75,7 +70,7 @@ export async function getClientEnriched(client: IClient): Promise<IClientEnriche
     products.forEach(item => {
       const data = item.data() as IProduct;
       clientEnriched.favourites[data.id] = data;
-    })
+    });
   }
   const cartViewedRecentlyProductsIds: string[] = Object.keys(client);
   if (cartViewedRecentlyProductsIds?.length) {
@@ -87,9 +82,9 @@ export async function getClientEnriched(client: IClient): Promise<IClientEnriche
       const data = item.data() as IProduct;
       clientEnriched.viewedRecently[data.id] = {
         time: client.viewedRecently[data.id].time,
-        productRef: data,
+        productRef: data
       };
-    })
+    });
   }
 
   return clientEnriched;
@@ -105,7 +100,7 @@ export function getNonEnrichedClient(enrichedClient: IClientEnriched): IClient {
   Object.values(enrichedClient.cart).forEach(item => {
     client.cart[item.productRef.id] = {
       count: item.count,
-      productRef: doc(db, FirestoreCollections.PRODUCTS, item.productRef.id),
+      productRef: doc(db, FirestoreCollections.PRODUCTS, item.productRef.id)
     };
   });
   Object.values(enrichedClient.favourites).forEach(item => {
@@ -114,9 +109,34 @@ export function getNonEnrichedClient(enrichedClient: IClientEnriched): IClient {
   Object.values(enrichedClient.viewedRecently).forEach(item => {
     client.viewedRecently[item.productRef.id] = {
       time: client.viewedRecently[item.productRef.id].time,
-      productRef: doc(db, FirestoreCollections.PRODUCTS, item.productRef.id),
+      productRef: doc(db, FirestoreCollections.PRODUCTS, item.productRef.id)
     };
   });
 
   return client;
+}
+
+export async function getEnrichedCart(
+  cart: Record<string, ICartProductModel<DocumentReference>>
+): Promise<Record<string, ICartProductModel<IProduct>>> {
+  const enrichedCart: Record<string, ICartProductModel<IProduct>> = {};
+  const cartProductsIds: string[] = cart ? Object.keys(cart) : [];
+
+  if (cartProductsIds?.length) {
+    const products = await getDocs(query(
+      collection(db, FirestoreCollections.PRODUCTS),
+      where('id', 'in', cartProductsIds)
+    ));
+    products.forEach(item => {
+      const data: IProduct = item.data() as IProduct;
+      data.categoryId = data.categoryRef.id;
+      delete data.categoryRef;
+      enrichedCart[data.id] = {
+        ...cart[data.id],
+        productRef: data
+      };
+    });
+  }
+
+  return enrichedCart;
 }

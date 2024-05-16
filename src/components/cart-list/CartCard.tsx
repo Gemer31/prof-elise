@@ -15,7 +15,7 @@ export function CartCard({data, config }: ICartCardProps) {
     <Image width={150} height={150} src={data?.productRef?.imageUrls[0]} alt={data.productRef.title}/>
     <div className="flex flex-col justify-between p-2">
       <div className="text-lg">{data.productRef.title}</div>
-      <EntityFavouriteButton productId={data.productRef.id}/>
+      <EntityFavouriteButton className="w-fit" productId={data.productRef.id}/>
     </div>
     <div className="flex justify-center items-center">
       <div className="text-center">

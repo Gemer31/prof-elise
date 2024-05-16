@@ -1,8 +1,6 @@
 'use client';
 
-import { CartTable } from '@/components/CartTable';
-import { Button } from '@/components/Button';
-import { ButtonTypes, FirestoreDocuments, RouterPath } from '@/app/enums';
+import { FirestoreDocuments, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
 import { useMemo, useState } from 'react';
@@ -13,14 +11,12 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 import { TextareaFormField } from '@/components/form-fields/TextareaFormField';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { getOrderMessage } from '@/utils/telegram.util';
 import { doc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { updateClient } from '@/store/asyncThunk';
-import { IClient } from '@/store/dataSlice';
 import { getClientId } from '@/utils/cookies.util';
 
 const validationSchema = yup.object().shape({
@@ -102,7 +98,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
       >{TRANSLATES[LOCALE].returnToCatalog}</Link>
     </div>
     : <form
-      className="flex flex-col"
+      className="w-full flex flex-col"
       onSubmit={handleSubmit(submitForm)}
     >
       <InputFormField
@@ -147,17 +143,5 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
         error={errors.comment?.message}
         register={register}
       />
-      <FormFieldWrapper label={TRANSLATES[LOCALE].order}>
-        a
-        {/*<CartTable config={config}/>*/}
-      </FormFieldWrapper>
-      <div className="w-full flex justify-end mt-4">
-        <Button
-          styleClass="uppercase text-amber-50 px-4 py-2"
-          type={ButtonTypes.SUBMIT}
-          loading={loading}
-          disabled={loading}
-        >{TRANSLATES[LOCALE].confirmOrder}</Button>
-      </div>
     </form>;
 }
