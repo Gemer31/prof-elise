@@ -43,13 +43,12 @@ export default async function HomePage({searchParams: {pageLimit}}: IHomePagePro
       <div className="w-full">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].popularCategories}</h2>
-          <Button type={ButtonTypes.BUTTON}>
-            <Link className="flex px-4 py-2" href={RouterPath.CATEGORIES}>{TRANSLATES[LOCALE].allCategories}</Link>
+          <Button styleClass="flex px-4 py-2" href={RouterPath.CATEGORIES}>
+            {TRANSLATES[LOCALE].allCategories}
           </Button>
         </div>
         <CategoriesList data={Object.values(categories)} pageLimit={Number(pageLimit)}/>
       </div>
-      {/*<Advantages/>*/}
       <AboutUs text={config.shopDescription}/>
     </ContentContainer>
     <ViewedRecently

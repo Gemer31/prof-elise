@@ -7,7 +7,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { FavouriteProductCard } from '@/components/favourite-product-card/FavouriteProductCard';
 import './favourites-list.css';
 import { Button } from '@/components/Button';
-import { ButtonTypes, RouterPath } from '@/app/enums';
+import { ButtonTypes, ColorOptions, PageLimits, RouterPath } from '@/app/enums';
 import { updateClient } from '@/store/asyncThunk';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { getClientId } from '@/utils/cookies.util';
@@ -79,11 +79,11 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
           <div className="flex flex-col gap-y-4 items-center">
             <h3>{TRANSLATES[LOCALE].thereAreNoFavouritesProducts}</h3>
             <h4 className="text-xl">{TRANSLATES[LOCALE].addToFavouritesHint}</h4>
-            <Button styleClass="w-fit px-4 py-2" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
-              <Link className="text-xl flex" href={RouterPath.CATEGORIES}>
-                {TRANSLATES[LOCALE].intoCatalog}
-              </Link>
-            </Button>
+            <Button
+              styleClass="flex px-4 py-2 text-xl"
+              href={RouterPath.CATEGORIES}
+              callback={cleanFavourites}
+            >{TRANSLATES[LOCALE].intoCatalog}</Button>
           </div>
         </div>
     }

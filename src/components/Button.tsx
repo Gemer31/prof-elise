@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export interface IButtonProps extends ICommonProps {
   color?: ColorOptions;
-  type: ButtonTypes;
+  type?: ButtonTypes;
   href?: string;
   disabled?: boolean;
   loading?: boolean;
