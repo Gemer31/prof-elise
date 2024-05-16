@@ -6,8 +6,9 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     disposableConsumables: 'Одноразовые расходные материалы',
     popularCategories: 'Популярные категории',
     сonsumablesWholesaleRetail: 'Расходные материалы оптом и в розницу',
+    gotoCreateOrder: 'Перейти к оформлению',
     favouriteProducts: 'Избранные товары',
-
+    createOrderHint: 'Доступные способы доставки и оплаты можно выбрать при оформлении заказа',
     allCategories: 'Весь каталог',
     youViewed: 'Вы просматривали',
     main: 'Главная',
@@ -90,6 +91,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     productName: 'Наименование товара',
     naming: 'Наименование',
     cleanFavourites: 'Очистить избранное',
+    cleanCart: 'Очистить корзину',
     favourites: 'Избранное',
     productAdded: 'Продукт добавлен',
     shortAmountText: 'Кол-во',

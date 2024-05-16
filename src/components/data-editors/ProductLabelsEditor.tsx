@@ -67,7 +67,10 @@ export function ProductLabelsEditor({onChange, value}: IProductLabelsEditorProps
             value={item.text}
             onChange={(e) => labelsChange(index, e.target.value)}
           />
-          <ColorPicker onChange={(newColor) => labelsChange(index, undefined, newColor)}/>
+          <ColorPicker
+            value={item.color}
+            onChange={(newColor) => labelsChange(index, undefined, newColor)}
+          />
           <Button
             styleClass="h-full px-2 py-1"
             type={ButtonTypes.BUTTON} callback={() => deleteLabel(index)}>✖</Button>

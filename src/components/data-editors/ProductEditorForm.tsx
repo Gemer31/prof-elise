@@ -146,6 +146,7 @@ export function ProductEditorForm({
 
       setValue('title', newProduct.title);
       setValue('price', newProduct.price);
+      setValue('vendorCode', newProduct.vendorCode);
       setValue('description', newProduct.description);
       setValue('categoryId', newProduct.categoryId);
       setValue('images', productImages);
@@ -158,6 +159,7 @@ export function ProductEditorForm({
     } else {
       setValue('title', '');
       setValue('price', '');
+      setValue('vendorCode', '');
       setValue('description', '');
       setValue('categoryId', '');
       setValue('images', []);

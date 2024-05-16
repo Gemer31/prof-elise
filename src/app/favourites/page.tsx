@@ -1,12 +1,11 @@
 import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
-import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { ICategory, IClient, IConfig, IProduct, IViewedRecently } from '@/app/models';
 import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
 import { redirect } from 'next/navigation';
-import { IClient } from '@/store/dataSlice';
 import { BasePage } from '@/components/BasePage';
 import { FavouritesList } from '@/components/favourites-list/FavouritesList';
 import { ContentContainer } from '@/components/ContentContainer';

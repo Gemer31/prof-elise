@@ -30,7 +30,6 @@ export function EntityFavouriteButton({productId, className}: IEntityFavouriteBu
   const hostClass: string = useMemo(() => convertToClass([
     'entity-favourite-button',
     'cursor-pointer',
-    'absolute',
     'transition-transform',
     'hover:scale-110',
     'duration-200',

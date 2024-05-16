@@ -1,9 +1,8 @@
-import { collection, getDocs, query, QueryDocumentSnapshot, where } from '@firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, QueryDocumentSnapshot, where } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import { IProduct, IViewedRecently } from '@/app/models';
+import { IClient, IClientEnriched, IProduct, IViewedRecently } from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
-import { IClient } from '@/store/dataSlice';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
   return docs.map(item => item.data()) as T[];
@@ -42,4 +41,82 @@ export async function getViewedRecently(client: IClient): Promise<IViewedRecentl
     });
   }
   return viewedRecently;
+}
+
+export async function getClientEnriched(client: IClient): Promise<IClientEnriched> {
+  const clientEnriched: IClientEnriched = {
+    cart: {},
+    favourites: {},
+    viewedRecently: {},
+  };
+
+  const cartProductsIds: string[] = Object.keys(client.cart);
+  if (cartProductsIds?.length) {
+    const products = await getDocs(query(
+      collection(db, FirestoreCollections.PRODUCTS),
+      where('id', 'in', cartProductsIds)
+    ));
+    products.forEach(item => {
+      const data: IProduct = item.data() as IProduct;
+      data.categoryId = data.categoryRef.id;
+      delete data.categoryRef;
+      clientEnriched.cart[data.id] = {
+        ...client.cart[data.id],
+        productRef: data,
+      }
+    })
+  }
+  const cartFavouritesProductsIds: string[] = Object.keys(client);
+  if (cartFavouritesProductsIds?.length) {
+    const products = await getDocs(query(
+      collection(db, FirestoreCollections.PRODUCTS),
+      where('id', 'in', cartFavouritesProductsIds)
+    ));
+    products.forEach(item => {
+      const data = item.data() as IProduct;
+      clientEnriched.favourites[data.id] = data;
+    })
+  }
+  const cartViewedRecentlyProductsIds: string[] = Object.keys(client);
+  if (cartViewedRecentlyProductsIds?.length) {
+    const products = await getDocs(query(
+      collection(db, FirestoreCollections.PRODUCTS),
+      where('id', 'in', cartViewedRecentlyProductsIds)
+    ));
+    products.forEach(item => {
+      const data = item.data() as IProduct;
+      clientEnriched.viewedRecently[data.id] = {
+        time: client.viewedRecently[data.id].time,
+        productRef: data,
+      };
+    })
+  }
+
+  return clientEnriched;
+}
+
+export function getNonEnrichedClient(enrichedClient: IClientEnriched): IClient {
+  const client: IClient = {
+    cart: {},
+    favourites: {},
+    viewedRecently: {}
+  };
+
+  Object.values(enrichedClient.cart).forEach(item => {
+    client.cart[item.productRef.id] = {
+      count: item.count,
+      productRef: doc(db, FirestoreCollections.PRODUCTS, item.productRef.id),
+    };
+  });
+  Object.values(enrichedClient.favourites).forEach(item => {
+    client.favourites[item.id] = doc(db, FirestoreCollections.PRODUCTS, item.id);
+  });
+  Object.values(enrichedClient.viewedRecently).forEach(item => {
+    client.viewedRecently[item.productRef.id] = {
+      time: client.viewedRecently[item.productRef.id].time,
+      productRef: doc(db, FirestoreCollections.PRODUCTS, item.productRef.id),
+    };
+  });
+
+  return client;
 }

@@ -2,7 +2,7 @@
 
 import { CartTable } from '@/components/CartTable';
 import { Button } from '@/components/Button';
-import { ButtonTypes, FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
+import { ButtonTypes, FirestoreDocuments, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
 import { useMemo, useState } from 'react';
@@ -20,7 +20,6 @@ import { db } from '@/app/lib/firebase-config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { updateClient } from '@/store/asyncThunk';
-import { CLIENT_ID } from '@/app/constants';
 import { IClient } from '@/store/dataSlice';
 import { getClientId } from '@/utils/cookies.util';
 
@@ -149,7 +148,8 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
         register={register}
       />
       <FormFieldWrapper label={TRANSLATES[LOCALE].order}>
-        <CartTable config={config}/>
+        a
+        {/*<CartTable config={config}/>*/}
       </FormFieldWrapper>
       <div className="w-full flex justify-end mt-4">
         <Button

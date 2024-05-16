@@ -13,7 +13,7 @@ export interface IFavouriteProductCardProps {
 }
 
 export function FavouriteProductCard({data, isLoading, config, onClick}: IFavouriteProductCardProps) {
-  return <div className="favourite-product-card">
+  return <div className="favourite-product-card py-2">
     <Link
       className={'flex items-center gap-x-2 ' + (isLoading ? ' pointer-events-none' : '')}
       href={`${RouterPath.CATEGORIES}/${data.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}

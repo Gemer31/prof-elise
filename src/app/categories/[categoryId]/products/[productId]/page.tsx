@@ -1,17 +1,16 @@
-import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { ICategory, IClient, IConfig, IProduct, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
-import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
+import { collection, doc, DocumentReference, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 import { ProductDetailsActionsBar } from '@/components/ProductDetailsActionsBar';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { BasePage } from '@/components/BasePage';
-import { IClient, IViewedRecentlyModel } from '@/store/dataSlice';
 import { cookies } from 'next/headers';
 import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
 
@@ -57,7 +56,7 @@ export default async function ProductDetailsPage(
       time: +new Date(),
       product
     });
-    const newViewedRecentlyObj: Record<string, IViewedRecentlyModel> = {};
+    const newViewedRecentlyObj: Record<string, IViewedRecentlyModel<DocumentReference>> = {};
     newViewRecently.forEach(item => {
       newViewedRecentlyObj[item.product.id] = {
         time: item.time,
@@ -101,7 +100,7 @@ export default async function ProductDetailsPage(
                     }
                   </div>
                   <ImgGallery imageUrls={product?.imageUrls}/>
-                  <EntityFavouriteButton className="scale-100 top-4 right-2" productId={product.id}/>
+                  <EntityFavouriteButton className="absolute scale-100 top-4 right-2" productId={product.id}/>
                 </div>
                 <div className="w-full md:ml-4 mt-4 md:mt-0">
                   <div className="text-gray-400 text-base mb-4">

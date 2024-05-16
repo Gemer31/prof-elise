@@ -1,19 +1,24 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ColorOptions } from '@/app/enums';
 import { COLOR_OPTION_VALUES } from '@/app/constants';
 
 export interface IColorPickerProps {
+  value: ColorOptions;
   onChange: (newColor: ColorOptions) => void;
 }
 
-export function ColorPicker({onChange}: IColorPickerProps) {
-  const [value, setValue] = useState<ColorOptions>(ColorOptions.PINK);
+export function ColorPicker({onChange, value}: IColorPickerProps) {
+  const [color, setColor] = useState<ColorOptions>();
+
+  useEffect(() => {
+    setColor(value || ColorOptions.PINK);
+  }, []);
 
   const valueChange = (event) => {
     const newValue: ColorOptions = event.target.value;
-    setValue(newValue);
+    setColor(newValue);
     onChange?.(newValue);
   };
 

@@ -1,4 +1,4 @@
-import { ICategory, IConfig, IViewedRecently } from '@/app/models';
+import { ICategory, IClient, IConfig, IViewedRecently } from '@/app/models';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { FirestoreCollections } from '@/app/enums';
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
@@ -10,7 +10,6 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { ContentContainer } from '@/components/ContentContainer';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
-import { IClient } from '@/store/dataSlice';
 
 export interface ICategoriesPageProps {
   searchParams: {

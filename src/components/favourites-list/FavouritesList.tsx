@@ -11,7 +11,6 @@ import { ButtonTypes, RouterPath } from '@/app/enums';
 import { updateClient } from '@/store/asyncThunk';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { getClientId } from '@/utils/cookies.util';
-import { IClient } from '@/store/dataSlice';
 import Link from 'next/link';
 
 interface IFavouritesListProps {
@@ -56,22 +55,26 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
       data?.length
         ? <div className="w-full">
           <div className="separator">
-            <div className="favourites-list-header">
+            <div className="favourites-list-header text-lg">
               <span>{TRANSLATES[LOCALE].naming}</span>
               <span>{TRANSLATES[LOCALE].price}</span>
             </div>
           </div>
           {
-            data.map((favourite) => <FavouriteProductCard
+            data.map((favourite, index) => <div
+              className={'w-full ' + (index !== data.length - 1 ? 'separator' :'')}
               key={favourite.id}
-              config={config}
-              data={favourite}
-              isLoading={redirectIdInProgress === favourite.id}
-              onClick={() => setRedirectIdInProgress(favourite.id)}
-            />)
+            >
+              <FavouriteProductCard
+                config={config}
+                data={favourite}
+                isLoading={redirectIdInProgress === favourite.id}
+                onClick={() => setRedirectIdInProgress(favourite.id)}
+              />
+            </div>)
           }
         </div>
-        : <div className="w-full h-full gap-x-2 gap-y-2 flex justify-center items-center text-3xl text-center">
+        : <div className="w-full h-full py-10 gap-x-2 gap-y-2 flex justify-center items-center text-3xl text-center">
           <Image width={100} height={100} src="/icons/empty-cart.svg" alt="Empty cart"/>
           <div className="flex flex-col gap-y-4 items-center">
             <h3>{TRANSLATES[LOCALE].thereAreNoFavouritesProducts}</h3>

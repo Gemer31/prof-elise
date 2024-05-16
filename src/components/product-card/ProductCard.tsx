@@ -56,12 +56,12 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
           data.labels?.map((item, index) => {
             return <div
               key={index}
-              className={'pointer-events-none w-fit px-2 py-1 text-white rounded-md text-xs ' + COLOR_OPTION_VALUES.get(item.color)}
+              className={'pointer-events-none w-fit px-2 py-1 rounded-md text-xs ' + COLOR_OPTION_VALUES.get(item.color)}
             >{item.text}</div>;
           })
         }
       </div>
-      <EntityFavouriteButton className="product-card-favourite-button scale-0 top-4 right-4" productId={data.id}/>
+      <EntityFavouriteButton className="product-card-favourite-button absolute scale-0 top-4 right-4" productId={data.id}/>
       <Image
         className="rounded-md h-[200px] w-[200px]"
         width={200}

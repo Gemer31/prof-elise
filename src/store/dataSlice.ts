@@ -1,22 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getClient, updateClient } from '@/store/asyncThunk';
-import { DocumentReference } from '@firebase/firestore';
+import { ICartProductModel, IClient } from '@/app/models';
 
-export interface ICartProductModel {
-  count: number;
-  productRef: DocumentReference;
-}
-
-export interface IViewedRecentlyModel {
-  time: number;
-  productRef: DocumentReference;
-}
-
-export interface IClient {
-  cart?: Record<string, ICartProductModel>;
-  favourites?: Record<string, DocumentReference>;
-  viewedRecently?: Record<string, IViewedRecentlyModel>;
-}
 
 interface IDataSlice {
   requestCallPopupVisible: boolean;

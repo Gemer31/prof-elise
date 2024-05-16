@@ -1,4 +1,4 @@
-import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { ICategory, IClient, IConfig, IProduct, IViewedRecently } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Advantages } from '@/components/Advantages';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -13,7 +13,6 @@ import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ContentContainer';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
-import { IClient } from '@/store/dataSlice';
 
 export interface ICategoriesOrProductsProps {
   params: {

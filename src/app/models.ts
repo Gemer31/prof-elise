@@ -45,3 +45,26 @@ export interface IViewedRecently {
   time: number;
   product: IProduct;
 }
+
+export interface ICartProductModel<T> {
+  count: number;
+  productRef: T;
+}
+
+export interface IViewedRecentlyModel<T> {
+  time: number;
+  productRef: T;
+}
+
+export interface IClient {
+  cart?: Record<string, ICartProductModel<DocumentReference>>;
+  favourites?: Record<string, DocumentReference>;
+  viewedRecently?: Record<string, IViewedRecentlyModel<DocumentReference>>;
+}
+
+export interface IClientEnriched {
+  cart?: Record<string, ICartProductModel<IProduct>>;
+  favourites?: Record<string, IProduct>;
+  viewedRecently?: Record<string, IViewedRecentlyModel<IProduct>>;
+}
+
