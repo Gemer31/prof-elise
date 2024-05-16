@@ -85,6 +85,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     workingHours: 'Время работы',
     enterWorkingHours: 'Введите время работы',
     emptyCart: 'Корзина пуста',
+    gotoCatalogToChooseProducts: 'Перейдите в каталог, чтобы выбрать товары',
     thereAreNoFavouritesProducts: 'В избранном пусто',
     addToFavouritesHint: 'Выберите в каталоге интересующий товар и нажмите на ',
     purchaseCart: 'Корзина покупок',

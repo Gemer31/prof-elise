@@ -3,10 +3,8 @@
 import { ContentContainer } from '@/components/ContentContainer';
 import Image from 'next/image';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { Button } from '@/components/Button';
-import { ButtonTypes, RouterPath } from '@/app/enums';
+import { RouterPath } from '@/app/enums';
 import { useAppDispatch } from '@/store/store';
-import { setRequestCallPopupVisible } from '@/store/dataSlice';
 import Link from 'next/link';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { usePathname } from 'next/navigation';
@@ -14,6 +12,7 @@ import { IConfig } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
 import { useMemo } from 'react';
 import { CircleButton } from '@/components/CircleButton';
+import { RequestCallButton } from '@/components/RequestCallButton';
 
 export interface IFooterProps {
   config?: IConfig;
@@ -35,7 +34,7 @@ export function Footer({config}: IFooterProps) {
     'flex-row-reverse sm:flex-col',
     'justify-around',
     'items-center',
-    'basis-1/3',
+    'basis-1/3'
   ]), []);
 
   return (
@@ -87,11 +86,7 @@ export function Footer({config}: IFooterProps) {
                     <CircleButton styleClass="size-8" target="_blank" href="https://www.instagram.com/prof_vik.elise/">
                       <Image className="p-2" width={45} height={45} src="/icons/instagram.svg" alt="Instagram"/>
                     </CircleButton>
-                    <Button
-                      styleClass="uppercase text-amber-50 text-sm px-4 py-2"
-                      type={ButtonTypes.BUTTON}
-                      callback={() => dispatch(setRequestCallPopupVisible(true))}
-                    >{TRANSLATES[LOCALE].requestCall}</Button>
+                    <RequestCallButton/>
                   </div>
                 </div>
               </div>

@@ -6,14 +6,12 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setRequestCallPopupVisible } from '@/store/dataSlice';
-import { useRouter } from 'next/navigation';
 
 interface IProductDetailsActionsBarProps {
   productId: string;
 }
 
 export function ProductDetailsActionsBar({productId}: IProductDetailsActionsBarProps) {
-  const router = useRouter();
   // @ts-ignore
   const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[productId]?.count);
   const dispatch = useAppDispatch();
@@ -24,7 +22,7 @@ export function ProductDetailsActionsBar({productId}: IProductDetailsActionsBarP
         ? <Button
           styleClass="text-white py-2 px-4"
           type={ButtonTypes.BUTTON}
-          callback={() => router.push(RouterPath.CART)}
+          href={RouterPath.CART}
         >
           <div className="w-max">{TRANSLATES[LOCALE].alreadyInCart}</div>
           <span className="text-xs">{TRANSLATES[LOCALE].goto}</span>

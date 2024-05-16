@@ -68,7 +68,7 @@ export function Counter({productId}: ICounterProps) {
     }
   }, [count]);
 
-  const onInputChange = (e) => {
+  const onInputChange = (e): void => {
     set(Number(e['target']['value']));
   };
 

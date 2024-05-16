@@ -1,6 +1,5 @@
 import { ICategory, IClient, IConfig, IProduct, IViewedRecently } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
-import { Advantages } from '@/components/Advantages';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ProductsList } from '@/components/ProductsList';
 import { FirestoreCollections, PageLimits, RouterPath } from '@/app/enums';
@@ -75,7 +74,6 @@ export default async function CategoriesOrProductsPage(
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <div className="w-full md:w-4/12 mr-4">
           <Catalog pageLimit={pageLimit} categories={Object.values(categories)} currentCategoryId={categoryId}/>
-          <Advantages styleClass="hidden md:block"/>
         </div>
         <ProductsList
           pagesCount={pagesCount}
