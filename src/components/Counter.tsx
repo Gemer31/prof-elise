@@ -3,16 +3,15 @@
 import { ButtonTypes, FirestoreCollections } from '@/app/enums';
 import { useEffect, useMemo, useState } from 'react';
 import { useCounter } from '@uidotdev/usehooks';
-import { CLIENT_ID } from '@/app/constants';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { ICartProductModel, IClient } from '@/store/dataSlice';
-import { doc } from '@firebase/firestore';
+import { doc, DocumentReference } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { updateClient } from '@/store/asyncThunk';
 import { Loader } from '@/components/Loader';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { getClientId } from '@/utils/cookies.util';
+import { ICartProductModel, IClient } from '@/app/models';
 
 interface ICounterProps {
   productId: string;
@@ -39,7 +38,7 @@ export function Counter({productId}: ICounterProps) {
   useEffect(() => {
     if (initialized) {
       if (count) {
-        const newCart: Record<string, ICartProductModel> = {};
+        const newCart: Record<string, ICartProductModel<DocumentReference>> = {};
         Object.keys(client.cart).forEach((item) => {
           newCart[item] = {...client.cart[item]};
         });
@@ -56,7 +55,7 @@ export function Counter({productId}: ICounterProps) {
           data: {...client, cart: newCart}
         }));
       } else {
-        const newCart: Record<string, ICartProductModel> = {};
+        const newCart: Record<string, ICartProductModel<DocumentReference>> = {};
         Object.keys(client.cart).forEach((item) => {
           newCart[item] = {...client.cart[item]};
         });
@@ -76,7 +75,7 @@ export function Counter({productId}: ICounterProps) {
   return cartLoading && !initialized
     ? <Loader className="h-[25px] border-pink-500"/>
     : cartCount
-      ? <div className="justify-center h-full transition-all flex rounded-md text-amber-50"
+      ? <div className="justify-center h-full transition-all flex rounded-md text-amber-50 min-h-10"
              onClick={(e) => {
                e.preventDefault();
                e.stopPropagation();

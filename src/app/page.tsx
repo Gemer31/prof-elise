@@ -3,16 +3,16 @@ import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { CategoriesList } from '@/components/CategoriesList';
 import { docsToData, getViewedRecently } from '@/utils/firebase.util';
-import { ICategory, IConfig, IViewedRecently } from '@/app/models';
+import { ICategory, IClient, IConfig, IViewedRecently } from '@/app/models';
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { ButtonTypes, FirestoreCollections, RouterPath } from '@/app/enums';
-import { BasePage } from '@/components/BasePage';
 import { Button } from '@/components/Button';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
-import { IClient } from '@/store/dataSlice';
+import { Slider } from '@/components/slider/Slider';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export interface IHomePageProps {
   searchParams: {
@@ -37,7 +37,8 @@ export default async function HomePage({searchParams: {pageLimit}}: IHomePagePro
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
-  return <BasePage viewedRecently={viewedRecently} config={config} sliderVisible={true}>
+  return <>
+    <Slider/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <div className="w-full">
         <div className="flex justify-between items-center mb-2">
@@ -51,5 +52,9 @@ export default async function HomePage({searchParams: {pageLimit}}: IHomePagePro
       {/*<Advantages/>*/}
       <AboutUs text={config.shopDescription}/>
     </ContentContainer>
-  </BasePage>;
+    <ViewedRecently
+      viewedRecently={viewedRecently}
+      config={config}
+    />
+  </>;
 }

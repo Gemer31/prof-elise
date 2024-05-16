@@ -10,9 +10,9 @@ import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 import { ProductDetailsActionsBar } from '@/components/ProductDetailsActionsBar';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { BasePage } from '@/components/BasePage';
 import { cookies } from 'next/headers';
 import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export interface IProductDetailsProps {
   params: {
@@ -73,7 +73,7 @@ export default async function ProductDetailsPage(
   }
 
   // todo: redirect if not found
-  return <BasePage viewedRecently={viewedRecently} config={config}>
+  return <>
     <ContentContainer styleClass="flex flex-col items-center">
       <Breadcrumbs links={[
         {title: productCategory?.title, href: `${RouterPath.CATEGORIES}/${productCategory?.id}`},
@@ -120,5 +120,9 @@ export default async function ProductDetailsPage(
         </div>
       </div>
     </ContentContainer>
-  </BasePage>;
+    <ViewedRecently
+      viewedRecently={viewedRecently}
+      config={config}
+    />
+  </>;
 }

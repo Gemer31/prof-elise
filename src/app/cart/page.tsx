@@ -6,12 +6,12 @@ import { IClient, IClientEnriched, IConfig, IViewedRecently } from '@/app/models
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
 import { redirect } from 'next/navigation';
-import { BasePage } from '@/components/BasePage';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { getClientEnriched, getViewedRecently } from '@/utils/firebase.util';
 import { CartList } from '@/components/cart-list/CartList';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export const metadata: Metadata = {
   title: 'Корзина покупок',
@@ -44,7 +44,7 @@ export default async function CartPage({searchParams: {pageLimit}}: ICartPagePro
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
   const clientEnriched: IClientEnriched = await getClientEnriched(client);
 
-  return <BasePage viewedRecently={viewedRecently} config={config}>
+  return <>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].purchaseCart}
@@ -53,5 +53,9 @@ export default async function CartPage({searchParams: {pageLimit}}: ICartPagePro
         <CartList config={config} serverClient={clientEnriched}/>
       </div>
     </ContentContainer>
-  </BasePage>;
+    <ViewedRecently
+      viewedRecently={viewedRecently}
+      config={config}
+    />
+  </>;
 }

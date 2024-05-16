@@ -4,12 +4,12 @@ import { FirestoreCollections } from '@/app/enums';
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getViewedRecently } from '@/utils/firebase.util';
-import { BasePage } from '@/components/BasePage';
 import { CategoriesList } from '@/components/CategoriesList';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { ContentContainer } from '@/components/ContentContainer';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export interface ICategoriesPageProps {
   searchParams: {
@@ -36,7 +36,7 @@ export default async function CategoriesPage(
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
-  return <BasePage viewedRecently={viewedRecently} sliderVisible={false} config={config}>
+  return <>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[{title: TRANSLATES[LOCALE].catalog}]}/>
       <h1 className="text-2xl self-start uppercase py-2">{TRANSLATES[LOCALE].productsCatalog}</h1>
@@ -44,6 +44,10 @@ export default async function CategoriesPage(
         <CategoriesList data={categories} pageLimit={pageLimit}/>
       </div>
     </ContentContainer>
-  </BasePage>;
+    <ViewedRecently
+      viewedRecently={viewedRecently}
+      config={config}
+    />
+  </>;
 }
 

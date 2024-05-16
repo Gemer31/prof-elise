@@ -9,11 +9,11 @@ import { useEffect, useState } from 'react';
 import { Loader } from '@/components/Loader';
 import { getEnrichedCart } from '@/utils/firebase.util';
 
-interface ICartListTotalBarProps {
+interface ICheckoutTotalBarProps {
   config: IConfig;
 }
 
-export function CartListTotalBar({config}: ICartListTotalBarProps) {
+export function CheckoutTotalBar({config}: ICheckoutTotalBarProps) {
   const [total, setTotal] = useState<number>(0);
   const [redirectLoading, setRedirectLoading] = useState(false);
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -29,7 +29,7 @@ export function CartListTotalBar({config}: ICartListTotalBarProps) {
   }, [client]);
 
   return <section className="w-4/12 sticky top-20 h-fit bg-slate-100 rounded-md">
-    <div className="w-full p-4 separator">
+    <div className="w-full px-4 pt-4 separator">
       <Button
         disabled={!total || redirectLoading}
         loading={redirectLoading}
@@ -37,8 +37,7 @@ export function CartListTotalBar({config}: ICartListTotalBarProps) {
         type={ButtonTypes.BUTTON}
         href={RouterPath.CHECKOUT}
         callback={() => setRedirectLoading(true)}
-      >{TRANSLATES[LOCALE].gotoCreateOrder}</Button>
-      <div className="py-2 text-center text-xs">{TRANSLATES[LOCALE].createOrderHint}</div>
+      >{TRANSLATES[LOCALE].createOrder}</Button>
     </div>
     <div className="flex justify-between items-center p-4 text-lg">
       <span>{TRANSLATES[LOCALE].result}:</span>

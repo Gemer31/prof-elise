@@ -8,11 +8,11 @@ import { collection, doc, getDoc, getDocs, orderBy, query, where } from '@fireba
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { redirect } from 'next/navigation';
-import { BasePage } from '@/components/BasePage';
 import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ContentContainer';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -68,7 +68,7 @@ export default async function CategoriesOrProductsPage(
       return item;
     });
 
-  return <BasePage viewedRecently={viewedRecently} sliderVisible={false} config={config}>
+  return <>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs
         links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
@@ -87,6 +87,10 @@ export default async function CategoriesOrProductsPage(
         />
       </div>
     </ContentContainer>
-  </BasePage>;
+    <ViewedRecently
+      viewedRecently={viewedRecently}
+      config={config}
+    />
+  </>;
 }
 

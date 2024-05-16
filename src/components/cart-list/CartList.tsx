@@ -9,6 +9,8 @@ import { IClientEnriched, IConfig } from '@/app/models';
 import { getClientId } from '@/utils/cookies.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { CartCard } from '@/components/cart-list/CartCard';
+import { getEnrichedCart } from '@/utils/firebase.util';
+import { updateClient } from '@/store/asyncThunk';
 
 export interface ICartListProps {
   serverClient: IClientEnriched;
@@ -29,14 +31,21 @@ export function CartList({serverClient, config}: ICartListProps) {
   }, []);
 
   useEffect(() => {
-    // setData(Object.values(client.cart));
+    if (client.cart) {
+      getEnrichedCart(client.cart).then(enrichedCart => {
+        setData(Object.values(enrichedCart));
+      });
+    }
   }, [client]);
 
   const cleanCart = async () => {
-    // const newClient: IClient;
-    // await setDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId), {
-    //
-    // })
+    dispatch(updateClient({
+      clientId,
+      data: {
+        ...client,
+        cart: {}
+      }
+    }));
   };
 
   return <div className="w-full">
@@ -57,7 +66,7 @@ export function CartList({serverClient, config}: ICartListProps) {
                 config={config}
                 data={item}
               />
-            </div>
+            </div>;
           })
         }
       </div>

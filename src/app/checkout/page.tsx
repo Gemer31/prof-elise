@@ -10,11 +10,10 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
 import { getViewedRecently } from '@/utils/firebase.util';
-import { CheckoutForm } from '@/components/CheckoutForm';
-import { CartListTotalBar } from '@/components/cart-list/CartListTotalBar';
+import { CheckoutForm } from '@/components/checkout-form/CheckoutForm';
 import { Button } from '@/components/Button';
-import { CartCard } from '@/components/cart-list/CartCard';
 import Link from 'next/link';
+import { CheckoutTotalBar } from '@/components/checkout-form/CheckoutTotalBar';
 
 export const metadata: Metadata = {
   title: 'Оформление заказа',
@@ -38,20 +37,20 @@ export default async function CheckoutPage() {
   return <BasePage viewedRecently={viewedRecently} config={config}>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
-        {title: TRANSLATES[LOCALE].delivery}
+        {title: TRANSLATES[LOCALE].orderCreation}
       ]}/>
       <div className="w-full">
         <div className="w-full flex justify-between mb-2">
-          <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].placeOrder}</h1>
+          <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].orderCreation}</h1>
           <Button type={ButtonTypes.BUTTON}>
             <Link className="flex px-4 py-2" href={RouterPath.CART}>{TRANSLATES[LOCALE].returnToCart}</Link>
           </Button>
         </div>
         <div className="w-full flex gap-x-4">
           <CheckoutForm config={config}/>
-          <CartListTotalBar config={config}/>
+          <CheckoutTotalBar config={config}/>
         </div>
-      </div>;
+      </div>
     </ContentContainer>
   </BasePage>;
 }

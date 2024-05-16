@@ -93,7 +93,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     cleanFavourites: 'Очистить избранное',
     cleanCart: 'Очистить корзину',
     returnToCart: '← Вернуться в корзину',
-    placeOrder: 'Оформление заказа',
+    orderCreation: 'Оформление заказа',
     favourites: 'Избранное',
     productAdded: 'Продукт добавлен',
     shortAmountText: 'Кол-во',

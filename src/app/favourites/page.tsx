@@ -6,12 +6,12 @@ import { docsToData, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { CLIENT_ID } from '@/app/constants';
 import { redirect } from 'next/navigation';
-import { BasePage } from '@/components/BasePage';
 import { FavouritesList } from '@/components/favourites-list/FavouritesList';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Catalog } from '@/components/Catalog';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export interface IFavouritesPageProps {
   params: {
@@ -57,7 +57,7 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
       });
   }
 
-  return <BasePage viewedRecently={viewedRecently} config={config}>
+  return <>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].favourites}
@@ -72,5 +72,9 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
         </div>
       </div>
     </ContentContainer>
-  </BasePage>;
+    <ViewedRecently
+      viewedRecently={viewedRecently}
+      config={config}
+    />
+  </>;
 }
