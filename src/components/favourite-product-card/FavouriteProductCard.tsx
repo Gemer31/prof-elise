@@ -4,6 +4,7 @@ import { RouterPath } from '@/app/enums';
 import { Counter } from '@/components/Counter';
 import Link from 'next/link';
 import './favourite-product-card.css';
+import currency from 'currency.js';
 
 export interface IFavouriteProductCardProps {
   config: IConfig;
@@ -23,7 +24,7 @@ export function FavouriteProductCard({data, isLoading, config, onClick}: IFavour
       <span className="favourite-product-card__title ml-2">{data.title}</span>
     </Link>
     <span className="flex justify-center items-center text-pink-500 text-center font-medium text-xl">
-      {data.price} {config.currency}
+      {currency(data.price).toString()} {config.currency}
     </span>
     <div className="flex items-center justify-end">
       <div className="h-fit flex">

@@ -1,4 +1,4 @@
-import { ICategory, IClient, IConfig, IProduct, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
+import { ICategory, IConfig, IProduct, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ImgGallery } from '@/components/ImgGallery';
@@ -6,13 +6,14 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
 import { collection, doc, DocumentReference, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData, getViewedRecently } from '@/utils/firebase.util';
+import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 import { ProductDetailsActionsBar } from '@/components/ProductDetailsActionsBar';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { cookies } from 'next/headers';
 import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import currency from 'currency.js';
 
 export interface IProductDetailsProps {
   params: {
@@ -29,17 +30,16 @@ export default async function ProductDetailsPage(
   const clientId: string = cookies().get(CLIENT_ID)?.value;
 
   const [
-    clientDataDocumentSnapshot,
+    client,
     settingsDocumentSnapshot,
     productDocumentSnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getClient(cookies()),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDoc(doc(db, FirestoreCollections.PRODUCTS, productId)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
-  const client: IClient = clientDataDocumentSnapshot.data() as IClient;
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
@@ -47,7 +47,7 @@ export default async function ProductDetailsPage(
   const productCategory: ICategory = categories.find((item) => product.categoryRef.path.includes(item.id));
   delete product.categoryRef;
 
-  if (!client?.viewedRecently[productId]) {
+  if (clientId && !client?.viewedRecently[productId]) {
     const newViewRecently = [...viewedRecently];
     if (newViewRecently.length > 4) {
       newViewRecently.pop();
@@ -107,7 +107,7 @@ export default async function ProductDetailsPage(
                     {TRANSLATES[LOCALE].vendorCode}: {product.vendorCode}
                   </div>
                   <div className="w-full mb-4 text-2xl text-pink-500 font-bold">
-                    {product?.price} {config.currency}
+                    {currency(product.price).toString()} {config.currency}
                   </div>
                   <ProductDetailsActionsBar productId={product.id}/>
                 </div>

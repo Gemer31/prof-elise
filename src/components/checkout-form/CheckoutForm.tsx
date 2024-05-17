@@ -3,7 +3,7 @@
 import { FirestoreDocuments, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IConfig } from '@/app/models';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -32,7 +32,6 @@ interface ICheckoutFormProps {
 }
 
 export function CheckoutForm({config}: ICheckoutFormProps) {
-  const clientId = useMemo(() => getClientId(), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -76,7 +75,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
       nextOrderNumber: config.nextOrderNumber + 1
     });
     dispatch(updateClient({
-      clientId,
+      clientId: getClientId(),
       data: {
         ...client,
         cart: {}

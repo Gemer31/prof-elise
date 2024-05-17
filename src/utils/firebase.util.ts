@@ -12,6 +12,8 @@ import { StorageReference } from '@firebase/storage';
 import { ICartProductModel, IClient, IClientEnriched, IProduct, IViewedRecently } from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
+import { CLIENT_ID } from '@/app/constants';
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
   return docs.map(item => item.data()) as T[];
@@ -139,4 +141,22 @@ export async function getEnrichedCart(
   }
 
   return enrichedCart;
+}
+
+export async function getClient(cookies: ReadonlyRequestCookies): Promise<IClient> {
+  let clientId: string = cookies.get(CLIENT_ID)?.value;
+  let client: IClient;
+
+  if (clientId?.length) {
+    const clientDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId));
+    client = clientDocumentSnapshot.data();
+  } else {
+    client = {
+      cart: {},
+      favourites: {},
+      viewedRecently: {}
+    };
+  }
+
+  return client;
 }

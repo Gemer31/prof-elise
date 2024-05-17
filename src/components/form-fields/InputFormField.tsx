@@ -12,10 +12,11 @@ interface IInputFormFieldProps {
   type: string;
   name: string;
   error: string;
+  onBlur?: () => void;
   register: unknown;
 }
 
-export function InputFormField({label, name, register, type, error, required, placeholder}: IInputFormFieldProps) {
+export function InputFormField({label, name, register, type, error, required, placeholder, onBlur}: IInputFormFieldProps) {
   const inputClass: string = useMemo(() => convertToClass([
     'border-2',
     'rounded-md',
@@ -31,6 +32,7 @@ export function InputFormField({label, name, register, type, error, required, pl
         className={inputClass}
         placeholder={placeholder}
         type={type}
+        onBlur={onBlur}
         {...(register as UseFormRegister<Record<string, unknown>>)(name)}
       />
     </FormFieldWrapper>

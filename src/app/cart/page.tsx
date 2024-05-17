@@ -1,15 +1,13 @@
 import { Metadata } from 'next';
-import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
+import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirestoreCollections, RouterPath } from '@/app/enums';
-import { IClient, IClientEnriched, IConfig, IViewedRecently } from '@/app/models';
+import { FirestoreCollections } from '@/app/enums';
+import { IClientEnriched, IConfig, IViewedRecently } from '@/app/models';
 import { cookies } from 'next/headers';
-import { CLIENT_ID } from '@/app/constants';
-import { redirect } from 'next/navigation';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getClientEnriched, getViewedRecently } from '@/utils/firebase.util';
+import { getClient, getClientEnriched, getViewedRecently } from '@/utils/firebase.util';
 import { CartList } from '@/components/cart-list/CartList';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
@@ -29,19 +27,12 @@ export interface ICartPageProps {
 }
 
 export default async function CartPage({searchParams: {pageLimit}}: ICartPageProps) {
-  const clientId: string = cookies().get(CLIENT_ID)?.value;
-
-  if (!clientId?.length) {
-    redirect(RouterPath.HOME);
-  }
-
-  const [clientDocumentSnapshot, settingsQuerySnapshot] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+  const [client, settingsQuerySnapshot] = await Promise.all([
+    getClient(cookies()),
     getDocs(collection(db, FirestoreCollections.SETTINGS))
   ]);
-  const client: IClient = clientDocumentSnapshot.data() as IClient;
-  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
-  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
+  const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
+  const viewedRecently: IViewedRecently[] = client ? await getViewedRecently(client) : [];
   const clientEnriched: IClientEnriched = await getClientEnriched(client);
 
   return <>

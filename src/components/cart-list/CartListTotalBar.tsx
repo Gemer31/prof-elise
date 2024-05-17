@@ -8,21 +8,22 @@ import { useAppSelector } from '@/store/store';
 import { useEffect, useState } from 'react';
 import { Loader } from '@/components/Loader';
 import { getEnrichedCart } from '@/utils/firebase.util';
+import currency from 'currency.js';
 
 interface ICartListTotalBarProps {
   config: IConfig;
 }
 
 export function CartListTotalBar({config}: ICartListTotalBarProps) {
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState<string>('0');
   const [redirectLoading, setRedirectLoading] = useState(false);
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
     getEnrichedCart(client.cart).then(enrichedCart => {
-      let newTotal: number = 0;
+      let newTotal: string = '0';
       Object.values(enrichedCart).forEach(item => {
-        newTotal += (+item.productRef.price * item.count);
+        newTotal = currency(newTotal).add((+item.productRef.price * item.count)).toString();
       });
       setTotal(newTotal);
     })

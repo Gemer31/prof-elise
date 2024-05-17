@@ -1,26 +1,22 @@
 import { ContentContainer } from '@/components/ContentContainer';
-import { IClient, IConfig, IViewedRecently } from '@/app/models';
+import { IConfig, IViewedRecently } from '@/app/models';
 import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
 import { doc, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getViewedRecently } from '@/utils/firebase.util';
+import { getClient, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
-import { CLIENT_ID } from '@/app/constants';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 
 export default async function DeliveryPage() {
-  const clientId: string = cookies().get(CLIENT_ID)?.value;
-
   const [
-    clientDocumentSnapshot,
+    client,
     settingsDocumentSnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getClient(cookies()),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG))
   ]);
-  const client: IClient = clientDocumentSnapshot.data() as IClient;
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 

@@ -121,11 +121,11 @@ export function Header() {
     <header className={hostClass}>
       <CircleButton
         href="#page"
-        styleClass={'size-10 fixed max-w-fit bottom-6 left-6 duration-500 scale-0 ' + (isScrollTop ? '' : 'scale-100')}>
+        styleClass={'size-10 shadow-md fixed max-w-fit bottom-6 left-6 duration-500 scale-0 ' + (isScrollTop ? '' : 'scale-100')}>
         <Image width={50} height={50} src="/icons/arrow.svg" alt="Scroll top"/>
       </CircleButton>
       <ContentContainer>
-        <nav className="flex justify-between transi">
+        <nav className="flex justify-between">
           <div className="hidden sm:flex">
             {
               siteLinks.map(([path, translateCode]) => (

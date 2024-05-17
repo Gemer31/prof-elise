@@ -1,17 +1,16 @@
-import { ICategory, IClient, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
 import { Catalog } from '@/components/Catalog';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ProductsList } from '@/components/ProductsList';
 import { FirestoreCollections, PageLimits, RouterPath } from '@/app/enums';
-import { collection, doc, getDoc, getDocs, orderBy, query, where } from '@firebase/firestore';
+import { collection, doc, getDocs, orderBy, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData, getViewedRecently } from '@/utils/firebase.util';
+import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { redirect } from 'next/navigation';
 import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ContentContainer';
-import { cookies } from 'next/headers';
-import { CLIENT_ID } from '@/app/constants';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { cookies } from 'next/headers';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -27,22 +26,19 @@ export interface ICategoriesOrProductsProps {
 export default async function CategoriesOrProductsPage(
   {params: {categoryId}, searchParams: {pageLimit, page, sortBy}}: ICategoriesOrProductsProps
 ) {
-  const clientId: string = cookies().get(CLIENT_ID)?.value;
-
   if (!Object.values<string>(PageLimits).includes(String(pageLimit))) {
     redirect(`${RouterPath.CATEGORIES}/${categoryId}?page=1&pageLimit=${PageLimits.SIX}`);
   }
 
   const [
-    clientDataDocumentSnapshot,
+    client,
     settingsQuerySnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getClient(cookies()),
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
-  const client: IClient = clientDataDocumentSnapshot.data() as IClient;
   const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const currentCategory: ICategory = Object.values(categories).find((item) => item.id === categoryId);

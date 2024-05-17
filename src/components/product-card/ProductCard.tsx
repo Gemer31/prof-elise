@@ -13,6 +13,7 @@ import { Loader } from '@/components/Loader';
 import './product-card.css';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 import { COLOR_OPTION_VALUES } from '@/app/constants';
+import currency from 'currency.js';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -70,7 +71,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
         alt={data?.title || ''}
       />
       <h3 className={titleClass}>{data?.title}</h3>
-      <div className="text-pink-500 bold my-2">{data.price} {config.currency}</div>
+      <div className="text-pink-500 bold my-2">{currency(data.price).toString()} {config.currency}</div>
       <div className="flex gap-1 w-full">
         <div className="w-1/2 h-full flex justify-center items-center">
           <Counter productId={data.id}/>

@@ -2,17 +2,15 @@ import { AboutUs } from '@/components/AboutUs';
 import { ContentContainer } from '@/components/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { CategoriesList } from '@/components/CategoriesList';
-import { docsToData, getViewedRecently } from '@/utils/firebase.util';
-import { ICategory, IClient, IConfig, IViewedRecently } from '@/app/models';
-import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
+import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
+import { ICategory, IConfig, IViewedRecently } from '@/app/models';
+import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { ButtonTypes, FirestoreCollections, RouterPath } from '@/app/enums';
+import { FirestoreCollections, RouterPath } from '@/app/enums';
 import { Button } from '@/components/Button';
-import Link from 'next/link';
-import { cookies } from 'next/headers';
-import { CLIENT_ID } from '@/app/constants';
 import { Slider } from '@/components/slider/Slider';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { cookies } from 'next/headers';
 
 export interface IHomePageProps {
   searchParams: {
@@ -21,20 +19,17 @@ export interface IHomePageProps {
 }
 
 export default async function HomePage({searchParams: {pageLimit}}: IHomePageProps) {
-  const clientId: string = cookies().get(CLIENT_ID)?.value;
-
   const [
-    clientDataDocumentSnapshot,
+    client,
     settingsQuerySnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getClient(cookies()),
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
-  const client: IClient = clientDataDocumentSnapshot.data() as IClient;
-  const config = settingsQuerySnapshot.docs[0].data() as IConfig;
-  const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
+  const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>

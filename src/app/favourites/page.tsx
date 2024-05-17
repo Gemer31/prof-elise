@@ -1,11 +1,9 @@
 import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
-import { ICategory, IClient, IConfig, IProduct, IViewedRecently } from '@/app/models';
-import { docsToData, getViewedRecently } from '@/utils/firebase.util';
+import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
+import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
-import { CLIENT_ID } from '@/app/constants';
-import { redirect } from 'next/navigation';
 import { FavouritesList } from '@/components/favourites-list/FavouritesList';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Catalog } from '@/components/Catalog';
@@ -24,26 +22,20 @@ export interface IFavouritesPageProps {
 }
 
 export default async function FavouritesPage({searchParams: {pageLimit}}: IFavouritesPageProps) {
-  const clientId: string = cookies().get(CLIENT_ID)?.value;
-  if (!clientId?.length) {
-    redirect(RouterPath.HOME);
-  }
-
   const [
-    clientDocumentSnapshot,
+    client,
     settingsDocumentSnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getClient(cookies()),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
   const config = settingsDocumentSnapshot.data() as IConfig;
-  let data: IProduct[] = [];
-  const client: IClient = clientDocumentSnapshot.data() as IClient;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
+  let data: IProduct[] = [];
   const productsIds: string[] = Object.keys(client.favourites);
   if (productsIds.length) {
     const products = await getDocs(

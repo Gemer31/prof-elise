@@ -20,6 +20,7 @@ import { db } from '@/app/lib/firebase-config';
 import { FormFieldWrapper } from '@/components/form-fields/FormFieldWrapper';
 import { TextEditor } from '@/components/data-editors/TextEditor';
 import { ProductLabelsEditor } from '@/components/data-editors/ProductLabelsEditor';
+import currency from 'currency.js';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required('fieldRequired'),
@@ -30,7 +31,7 @@ const validationSchema = yup.object().shape({
   categoryId: yup.string().required('fieldRequired'),
   vendorCode: yup.string().required('fieldRequired'),
   images: yup.array().required('fieldRequired'),
-  labels: yup.array(),
+  labels: yup.array()
 });
 
 export interface ProductEditorFormProps {
@@ -79,7 +80,7 @@ export function ProductEditorForm({
     const productData: IProduct = {
       id: selectedProduct ? selectedProduct.id : uuidv4(),
       title: formData.title,
-      price: formData.price,
+      price: currency(formData.price).toString(),
       description: formData.description,
       categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
       imageUrls: imageUrls,
@@ -187,8 +188,8 @@ export function ProductEditorForm({
   };
   const changeLabels = (newLabels: ILabel[]) => {
     setValue('labels', newLabels);
-    setLabels(newLabels)
-  }
+    setLabels(newLabels);
+  };
 
   return (
     <form

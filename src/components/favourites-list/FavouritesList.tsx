@@ -1,17 +1,16 @@
 'use client';
 
 import { IConfig, IProduct } from '@/app/models';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { FavouriteProductCard } from '@/components/favourite-product-card/FavouriteProductCard';
 import './favourites-list.css';
 import { Button } from '@/components/Button';
-import { ButtonTypes, ColorOptions, PageLimits, RouterPath } from '@/app/enums';
+import { ButtonTypes, RouterPath } from '@/app/enums';
 import { updateClient } from '@/store/asyncThunk';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { getClientId } from '@/utils/cookies.util';
-import Link from 'next/link';
 
 interface IFavouritesListProps {
   config: IConfig;
@@ -21,7 +20,6 @@ interface IFavouritesListProps {
 export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
   const [data, setData] = useState<IProduct[]>([]);
-  const clientId = useMemo(() => getClientId(), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -33,7 +31,7 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const cleanFavourites = () => {
     setData([]);
     dispatch(updateClient({
-      clientId,
+      clientId: getClientId(),
       data: {
         ...client,
         favourites: {}

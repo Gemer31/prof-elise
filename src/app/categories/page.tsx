@@ -1,15 +1,14 @@
-import { ICategory, IClient, IConfig, IViewedRecently } from '@/app/models';
+import { ICategory, IConfig, IViewedRecently } from '@/app/models';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { FirestoreCollections } from '@/app/enums';
-import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
+import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData, getViewedRecently } from '@/utils/firebase.util';
+import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { CategoriesList } from '@/components/CategoriesList';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { ContentContainer } from '@/components/ContentContainer';
-import { cookies } from 'next/headers';
-import { CLIENT_ID } from '@/app/constants';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { cookies } from 'next/headers';
 
 export interface ICategoriesPageProps {
   searchParams: {
@@ -20,18 +19,15 @@ export interface ICategoriesPageProps {
 export default async function CategoriesPage(
   {searchParams: {pageLimit}}: ICategoriesPageProps
 ) {
-  const clientId: string = cookies().get(CLIENT_ID)?.value;
-
   const [
-    clientDataDocumentSnapshot,
+    client,
     settingsQuerySnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId)),
+    getClient(cookies()),
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
-  const client: IClient = clientDataDocumentSnapshot.data() as IClient;
   const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);

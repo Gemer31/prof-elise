@@ -4,7 +4,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { CartListTotalBar } from '@/components/cart-list/CartListTotalBar';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IClientEnriched, IConfig } from '@/app/models';
 import { getClientId } from '@/utils/cookies.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -20,7 +20,6 @@ export interface ICartListProps {
 
 export function CartList({serverClient, config}: ICartListProps) {
   const [data, setData] = useState([]);
-  const clientId = useMemo(() => getClientId(), []);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -41,7 +40,7 @@ export function CartList({serverClient, config}: ICartListProps) {
 
   const cleanCart = async () => {
     dispatch(updateClient({
-      clientId,
+      clientId: getClientId(),
       data: {
         ...client,
         cart: {}
