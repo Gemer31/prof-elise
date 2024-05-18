@@ -94,7 +94,7 @@ export function Footer({config}: IFooterProps) {
         }
         <div className="flex justify-center gap-x-4 mt-2">
           {
-            PAYMENTS_IMGs.map(url => (<Image width={60} height={60} src={`/payments/${url}`} alt={url}/>))
+            PAYMENTS_IMGs.map(url => (<Image key={url} width={60} height={60} src={`/payments/${url}`} alt={url}/>))
           }
         </div>
         <div className="text-xs text-center py-4">© 2024 prof-elise.by - Расходные материалы в Могилеве</div>

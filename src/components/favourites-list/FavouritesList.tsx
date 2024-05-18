@@ -19,6 +19,7 @@ interface IFavouritesListProps {
 
 export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
+  const [intoCatalogRedirectInProgress, setIntoCatalogRedirectInProgress] = useState(false);
   const [data, setData] = useState<IProduct[]>([]);
   const dispatch = useAppDispatch();
   // @ts-ignore
@@ -80,7 +81,8 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
             <Button
               styleClass="flex px-4 py-2 text-xl"
               href={RouterPath.CATEGORIES}
-              callback={cleanFavourites}
+              loading={intoCatalogRedirectInProgress}
+              callback={() => setIntoCatalogRedirectInProgress(true)}
             >{TRANSLATES[LOCALE].intoCatalog}</Button>
           </div>
         </div>

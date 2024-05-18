@@ -41,6 +41,7 @@ export const dataSlice = createSlice({
       });
 
       state.client = newClient;
+      state.cartLoading = false;
     });
   },
   reducers: {

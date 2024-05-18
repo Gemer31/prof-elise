@@ -11,6 +11,7 @@ import { Button } from '@/components/Button';
 import { Slider } from '@/components/slider/Slider';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import { cookies } from 'next/headers';
+import { SubHeader } from '@/components/SubHeader';
 
 export interface IHomePageProps {
   searchParams: {
@@ -33,6 +34,7 @@ export default async function HomePage({searchParams: {pageLimit}}: IHomePagePro
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>
+    <SubHeader config={config}/>
     <Slider/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <div className="w-full">

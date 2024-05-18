@@ -29,7 +29,7 @@ export function CartListTotalBar({config}: ICartListTotalBarProps) {
     })
   }, [client]);
 
-  return <section className="w-4/12 sticky top-20 h-fit bg-slate-100 rounded-md">
+  return <section className="w-4/12 mb-4 sticky top-20 h-fit bg-slate-100 rounded-md">
     <div className="w-full p-4 separator">
       <Button
         disabled={!total || redirectLoading}

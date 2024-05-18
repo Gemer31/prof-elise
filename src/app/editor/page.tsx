@@ -3,7 +3,7 @@ import { ContentContainer } from '@/components/ContentContainer';
 
 export default function EditorPage() {
   return <>
-    <ContentContainer id="content" styleClass="w-full flex justify-start px-2">
+    <ContentContainer id="content" styleClass="w-full flex justify-start px-2 mb-4">
       <AdminEditor/>
     </ContentContainer>
   </>;

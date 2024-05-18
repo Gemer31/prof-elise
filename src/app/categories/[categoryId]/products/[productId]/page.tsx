@@ -14,6 +14,7 @@ import { cookies } from 'next/headers';
 import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import currency from 'currency.js';
+import { SubHeader } from '@/components/SubHeader';
 
 export interface IProductDetailsProps {
   params: {
@@ -74,6 +75,7 @@ export default async function ProductDetailsPage(
 
   // todo: redirect if not found
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center">
       <Breadcrumbs links={[
         {title: productCategory?.title, href: `${RouterPath.CATEGORIES}/${productCategory?.id}`},

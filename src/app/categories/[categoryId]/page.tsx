@@ -11,6 +11,7 @@ import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import { cookies } from 'next/headers';
+import { SubHeader } from '@/components/SubHeader';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -64,6 +65,7 @@ export default async function CategoriesOrProductsPage(
     });
 
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs
         links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>

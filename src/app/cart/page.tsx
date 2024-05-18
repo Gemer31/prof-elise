@@ -10,6 +10,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { getClient, getClientEnriched, getViewedRecently } from '@/utils/firebase.util';
 import { CartList } from '@/components/cart-list/CartList';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/SubHeader';
 
 export const metadata: Metadata = {
   title: 'Корзина покупок',
@@ -36,6 +37,7 @@ export default async function CartPage({searchParams: {pageLimit}}: ICartPagePro
   const clientEnriched: IClientEnriched = await getClientEnriched(client);
 
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].purchaseCart}

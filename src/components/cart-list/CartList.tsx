@@ -20,6 +20,7 @@ export interface ICartListProps {
 
 export function CartList({serverClient, config}: ICartListProps) {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -80,8 +81,10 @@ export function CartList({serverClient, config}: ICartListProps) {
         <h3>{TRANSLATES[LOCALE].emptyCart}</h3>
         <h4 className="text-xl">{TRANSLATES[LOCALE].gotoCatalogToChooseProducts}</h4>
         <Button
-          styleClass="flex px-4 py-2 text-xl"
+          styleClass="flex px-4 justify-center py-2 text-xl"
           href={RouterPath.CATEGORIES}
+          loading={loading}
+          callback={() => setLoading(true)}
         >{TRANSLATES[LOCALE].intoCatalog}</Button>
       </div>
     </div>

@@ -12,6 +12,7 @@ import { CheckoutForm } from '@/components/checkout-form/CheckoutForm';
 import { Button } from '@/components/Button';
 import { CheckoutTotalBar } from '@/components/checkout-form/CheckoutTotalBar';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/SubHeader';
 
 export const metadata: Metadata = {
   title: 'Оформление заказа',
@@ -30,21 +31,13 @@ export default async function CheckoutPage() {
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].orderCreation}
       ]}/>
       <div className="w-full">
-        <div className="w-full flex justify-between mb-2">
-          <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].orderCreation}</h1>
-          <Button styleClass="flex px-4 py-2" href={RouterPath.CART}>
-            {TRANSLATES[LOCALE].returnToCart}
-          </Button>
-        </div>
-        <div className="w-full flex gap-x-4">
-          <CheckoutForm config={config}/>
-          <CheckoutTotalBar config={config}/>
-        </div>
+        <CheckoutForm config={config}/>
       </div>
     </ContentContainer>
     <ViewedRecently

@@ -9,6 +9,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import { cookies } from 'next/headers';
+import { SubHeader } from '@/components/SubHeader';
 
 export interface ICategoriesPageProps {
   searchParams: {
@@ -33,6 +34,7 @@ export default async function CategoriesPage(
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[{title: TRANSLATES[LOCALE].catalog}]}/>
       <h1 className="text-2xl self-start uppercase py-2">{TRANSLATES[LOCALE].productsCatalog}</h1>

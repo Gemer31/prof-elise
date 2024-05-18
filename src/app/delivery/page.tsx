@@ -8,6 +8,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { getClient, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/SubHeader';
 
 export default async function DeliveryPage() {
   const [
@@ -21,6 +22,7 @@ export default async function DeliveryPage() {
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].delivery}

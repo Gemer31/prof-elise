@@ -10,6 +10,7 @@ import { Catalog } from '@/components/Catalog';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/SubHeader';
 
 export interface IFavouritesPageProps {
   params: {
@@ -50,6 +51,7 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
   }
 
   return <>
+    <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].favourites}

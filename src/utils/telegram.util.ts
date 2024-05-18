@@ -1,13 +1,14 @@
-import { IConfig } from '@/app/models';
+import { ICartProductModel, IConfig, IProduct } from '@/app/models';
+import currency from 'currency.js';
 
 export function getOrderMessage(data: {
-  orderNumber: number;
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
+  orderNumber?: number;
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
   comment?: string;
-  cart: unknown;
+  cart: Record<string, ICartProductModel<IProduct>>;
   config: IConfig;
 }): string {
   let message: string = `Заказ №${data.orderNumber}`
@@ -21,12 +22,15 @@ export function getOrderMessage(data: {
     + `Адрес:${data.address}`
     + '\n'
     + (data.comment ? `Комментарий:${data.comment}\n` : '')
-    + `Сумма:${data.cart.totalProductsPrice} ${data.config.currency}`
-    + '\n';
 
-  Object.values(data.cart.products).forEach((product) => {
-    message += `\n-${product.data.title} | ${product.data.price} ${data.config.currency} за шт. | ${product.amount} шт.`
+  let total: string = '0';
+  Object.values(data.cart).forEach((item) => {
+    message += `\n-${item.productRef.title} | ${currency(item.productRef.price).toString()} ${data.config.currency}/шт. | ${item.count} шт.`
+    const totalProduct = currency(item.productRef.price).multiply(item.count);
+    total = currency(total).add(totalProduct).toString();
   });
+
+  message += `\n\nСумма:${data.cart.totalProductsPrice} ${data.config.currency}`;
 
   return message;
 }

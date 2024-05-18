@@ -29,6 +29,7 @@ export enum EditGroup {
 }
 
 export enum FirestoreCollections {
+  STATE = 'state',
   SETTINGS = 'settings',
   CATEGORIES = 'categories',
   PRODUCTS = "products",

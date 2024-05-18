@@ -14,7 +14,6 @@ import { InputFormField } from '@/components/form-fields/InputFormField';
 import { auth } from '@/app/lib/firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Loader } from '@/components/Loader';
-import { Header } from '@/components/Header';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('fieldRequired').email('fieldInvalid'),
@@ -70,9 +69,8 @@ export default function LoginPage() {
     }
   }, []);
 
-  return <div id="page" className="relative flex flex-col items-center h-full z-10">
-    <Header/>
-    <ContentContainer styleClass="flex flex-col items-center px-2">
+  return <>
+    <ContentContainer styleClass="flex flex-col items-center px-2 mb-4">
       {
         loading || !isAuthChecked
           ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader
@@ -109,5 +107,5 @@ export default function LoginPage() {
           </form>
       }
     </ContentContainer>
-  </div>;
+  </>
 }

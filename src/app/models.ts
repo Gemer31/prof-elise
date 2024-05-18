@@ -24,7 +24,6 @@ export interface ICommonProps {
 }
 
 export interface IConfig {
-  nextOrderNumber: number;
   contactPhone: string;
   currency: string;
   workingHours: string;
@@ -46,7 +45,7 @@ export interface IViewedRecently {
   product: IProduct;
 }
 
-export interface ICartProductModel<T> {
+export interface ICartProductModel<T = DocumentReference> {
   count: number;
   productRef: T;
 }
