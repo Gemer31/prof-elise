@@ -17,7 +17,6 @@ import Link from 'next/link';
 import { updateClient } from '@/store/asyncThunk';
 import { getClientId } from '@/utils/cookies.util';
 import { getEnrichedCart } from '@/utils/firebase.util';
-import { setNotificationMessage } from '@/store/dataSlice';
 import { CheckoutTotalBar } from '@/components/checkout-form/CheckoutTotalBar';
 import { Button } from '@/components/Button';
 import { generateOrderNumber } from '@/utils/order-number.util';
@@ -69,36 +68,38 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     const orderNumber = generateOrderNumber();
     const enrichedCart = await getEnrichedCart(client.cart);
 
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
-        method: 'POST',
-        body: JSON.stringify({
-          message: encodeURI(getOrderMessage({
-            ...formData,
-            orderNumber,
-            cart: enrichedCart,
-            config: config
-          }))
-        })
-      });
-      setCreatedOrderNumber(orderNumber);
-      await setDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, getClientId()), {
+    await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
+      method: 'POST',
+      body: JSON.stringify({
+        message: encodeURI(getOrderMessage({
+          ...formData,
+          orderNumber,
+          cart: enrichedCart,
+          config: config
+        }))
+      })
+    });
+    setCreatedOrderNumber(orderNumber);
+    await setDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, getClientId()), {
+      ...client,
+      cart: {}
+    });
+    dispatch(updateClient({
+      clientId: getClientId(),
+      data: {
         ...client,
         cart: {}
-      });
-      dispatch(updateClient({
-        clientId: getClientId(),
-        data: {
-          ...client,
-          cart: {}
-        }
-      }));
-    } catch (e) {
-      setCreatedOrderNumber(null);
-      dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
-    } finally {
-      setLoading(false);
-    }
+      }
+    }));
+
+    setLoading(false);
+    // try {
+    //
+    // } catch (e) {
+    //   setCreatedOrderNumber(null);
+    //   dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
+    // } finally {
+    // }
   };
 
   return <>

@@ -78,7 +78,7 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
             <h3>{TRANSLATES[LOCALE].thereAreNoFavouritesProducts}</h3>
             <h4 className="text-xl">{TRANSLATES[LOCALE].addToFavouritesHint}</h4>
             <Button
-              styleClass="flex px-4 py-2 text-xl"
+              styleClass="flex justify-center px-4 py-2 text-xl"
               href={RouterPath.CATEGORIES}
               loading={intoCatalogRedirectInProgress}
               callback={() => setIntoCatalogRedirectInProgress(true)}
