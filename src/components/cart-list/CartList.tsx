@@ -5,7 +5,7 @@ import { Button } from '@/components/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { CartListTotalBar } from '@/components/cart-list/CartListTotalBar';
 import { useEffect, useState } from 'react';
-import { IClientEnriched, IConfig } from '@/app/models';
+import { IClient, IClientEnriched, IConfig } from '@/app/models';
 import { getClientId } from '@/utils/cookies.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { CartCard } from '@/components/cart-list/CartCard';
@@ -22,7 +22,6 @@ export function CartList({serverClient, config}: ICartListProps) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
@@ -32,8 +31,8 @@ export function CartList({serverClient, config}: ICartListProps) {
   }, []);
 
   useEffect(() => {
-    if (client.cart) {
-      getEnrichedCart(client.cart).then(enrichedCart => {
+    if (client?.cart) {
+      getEnrichedCart(client?.cart).then(enrichedCart => {
         setData(Object.values(enrichedCart));
       });
     }

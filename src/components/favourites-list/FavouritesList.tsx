@@ -1,6 +1,6 @@
 'use client';
 
-import { IConfig, IProduct } from '@/app/models';
+import { IClient, IConfig, IProduct } from '@/app/models';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -22,7 +22,6 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [intoCatalogRedirectInProgress, setIntoCatalogRedirectInProgress] = useState(false);
   const [data, setData] = useState<IProduct[]>([]);
   const dispatch = useAppDispatch();
-  // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {

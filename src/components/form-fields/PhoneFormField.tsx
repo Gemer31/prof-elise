@@ -29,7 +29,8 @@ export function PhoneFormField({label, name, register, type, error, required}: I
     <label className="w-full pb-4 relative">
       <span className={`mr-2 ${required ? 'field-label' : ''}`}>{label}</span>
       <InputMask
-        placeholder="+375 (99) 999-99-99"
+        // @ts-ignore
+        placeholder="+375 (XX) XXX-XX-XX"
         mask="+375 (__) ___-__-__"
         replacement={{_: /\d/}}
         className={inputClass}

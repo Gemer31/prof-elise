@@ -45,7 +45,7 @@ export default function LoginPage() {
     }
   }, [loading]);
 
-  const submitForm = useCallback(async (formData: { email: string; password: string }) => {
+  const submitForm = useCallback(async (formData: { email?: string; password?: string }) => {
     setIsLoginError(false);
     setIsLoading(true);
 

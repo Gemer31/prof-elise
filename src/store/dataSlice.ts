@@ -18,7 +18,7 @@ export const dataSlice = createSlice({
     notificationMessage: null,
     cartLoading: true,
     cartTotal: 0,
-    client: {}
+    client: null
   },
   extraReducers: (builder) => {
     builder.addMatcher(getClient.settled, (state: IDataSlice, action) => {

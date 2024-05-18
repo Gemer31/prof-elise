@@ -2,7 +2,7 @@
 
 import { FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { IConfig } from '@/app/models';
+import { IClient, IConfig } from '@/app/models';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,7 +40,6 @@ interface ICheckoutFormProps {
 export function CheckoutForm({config}: ICheckoutFormProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
   const cartLoading: boolean = useAppSelector(state => state.dataReducer.cartLoading);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<number>();

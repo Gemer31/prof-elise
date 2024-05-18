@@ -12,7 +12,6 @@ interface IProductDetailsActionsBarProps {
 }
 
 export function ProductDetailsActionsBar({productId}: IProductDetailsActionsBarProps) {
-  // @ts-ignore
   const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[productId]?.count);
   const dispatch = useAppDispatch();
 

@@ -8,7 +8,6 @@ import { useAppSelector } from '@/store/store';
 import { CircleButton } from '@/components/CircleButton';
 
 export function FavouritesButton() {
-  // @ts-ignore
   const favourites = useAppSelector(state => state.dataReducer.client?.['favourites']);
   const [counter, setCounter] = useState(0);
 

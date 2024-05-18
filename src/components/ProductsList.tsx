@@ -2,7 +2,7 @@
 
 import { ProductCard } from '@/components/product-card/ProductCard';
 import { IConfig, IProduct } from '@/app/models';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useRouter } from 'next/navigation';
 import { PageLimits, RouterPath } from '@/app/enums';
@@ -24,11 +24,11 @@ export function ProductsList({data, config, pageLimit, page, pagesCount, categor
   const [sortValue, setSortValue] = useState();
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
-  const pageLimitChange = (event) => {
-    const newLimit: number = event.target.value;
+  const pageLimitChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const newLimit: number = Number(event.target.value);
     setPageLimitValue(newLimit);
     router.push(`${RouterPath.CATEGORIES}/${categoryId}?page=${page}&pageLimit=${newLimit}`);
-  }
+  };
 
   return <div className="w-full">
     <div className="flex justify-between mb-4">
@@ -68,5 +68,5 @@ export function ProductsList({data, config, pageLimit, page, pagesCount, categor
       })}
     </div>
     <PagesToolbar categoryId={categoryId} pages={pagesCount} current={page}/>
-  </div>
+  </div>;
 }

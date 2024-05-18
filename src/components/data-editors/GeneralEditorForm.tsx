@@ -60,12 +60,12 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
   }, [config]);
 
   const submitForm = async (formData: {
-    phone: string,
-    workingHours: string,
-    currency: string,
-    shopDescription: string,
-    deliveryDescription: string,
-    shopRegistrationDescription: string,
+    phone?: string,
+    workingHours?: string,
+    currency?: string,
+    shopDescription?: string,
+    deliveryDescription?: string,
+    shopRegistrationDescription?: string,
   }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
@@ -75,7 +75,6 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
       shopDescription: formData.shopDescription,
       deliveryDescription: formData.deliveryDescription,
       shopRegistrationDescription: formData.shopRegistrationDescription,
-      nextOrderNumber: config?.nextOrderNumber || 1,
     };
     try {
       await setDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG), data);

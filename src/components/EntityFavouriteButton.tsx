@@ -11,6 +11,7 @@ import { updateClient } from '@/store/asyncThunk';
 import { Loader } from '@/components/Loader';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { getClientId } from '@/utils/cookies.util';
+import { IClient } from '@/app/models';
 
 
 export interface IEntityFavouriteButtonProps {
@@ -22,9 +23,7 @@ export function EntityFavouriteButton({productId, className}: IEntityFavouriteBu
   const [isLoading, setIsLoading] = useState(true);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
   const dispatch = useAppDispatch();
-  // @ts-ignore
   const isFavourite = useAppSelector(state => state.dataReducer.client?.['favourites']?.[productId]);
-  // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   const hostClass: string = useMemo(() => convertToClass([

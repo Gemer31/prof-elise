@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AddPrefixToKeys, doc, getDoc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
-import { IClient } from '@/store/dataSlice';
+import { IClient } from '@/app/models';
 
 export const getClient = createAsyncThunk( // todo think if no such clientId
   'client/get',

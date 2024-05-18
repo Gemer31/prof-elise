@@ -1,7 +1,7 @@
 'use client';
 
 import { ButtonTypes, FirestoreCollections } from '@/app/enums';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useCounter } from '@uidotdev/usehooks';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { doc, DocumentReference } from '@firebase/firestore';
@@ -21,10 +21,8 @@ export function Counter({productId}: ICounterProps) {
   const [initialized, setInitialized] = useState(false);
   const [count, {increment, decrement, set}] = useCounter();
   const dispatch = useAppDispatch();
-  // @ts-ignore
   const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[productId]?.count);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
-  // @ts-ignore
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
@@ -68,8 +66,8 @@ export function Counter({productId}: ICounterProps) {
     }
   }, [count]);
 
-  const onInputChange = (e): void => {
-    set(Number(e['target']['value']));
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    set(Number(e.target.value));
   };
 
   return cartLoading && !initialized

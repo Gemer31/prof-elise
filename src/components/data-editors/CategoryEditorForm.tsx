@@ -45,7 +45,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     resolver: yupResolver(validationSchema)
   });
 
-  const submitForm = async (formData: { title: string; imageUrl: string, subcategories?: any[] | unknown }) => {
+  const submitForm = async (formData: { title?: string; imageUrl?: string, subcategories?: any[] | unknown }) => {
     setIsLoading(true);
 
     let data: ICategory = {

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Popup } from '@/components/Popup';
 import { Button } from '@/components/Button';
@@ -8,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setNotificationMessage, setRequestCallPopupVisible } from '@/store/dataSlice';
 import { useForm } from 'react-hook-form';
-import path from 'path';
 import { useEffect, useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { InputFormField } from '@/components/form-fields/InputFormField';
@@ -16,7 +15,7 @@ import { PhoneFormField } from '@/components/form-fields/PhoneFormField';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
-  phone: yup.string().required('fieldRequired'),
+  phone: yup.string().required('fieldRequired')
 });
 
 export function RequestCallPopup() {
@@ -34,11 +33,11 @@ export function RequestCallPopup() {
     resolver: yupResolver(validationSchema)
   });
 
-  const submitForm = async (formData: { name: string; phone: string }) => {
+  const submitForm = async (formData: { name?: string; phone?: string }) => {
     setIsLoading(true);
 
     const message: string = `Заказать звонок\n\nИмя: ${formData.name};\nТелефон: ${formData.phone}`;
-    const result = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
+    await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
       method: 'POST',
       body: JSON.stringify({message: encodeURI(message)})
     });

@@ -1,5 +1,6 @@
 import { ICartProductModel, IConfig, IProduct } from '@/app/models';
 import currency from 'currency.js';
+import { transformPhoneUtil } from '@/utils/transform-phone.util';
 
 export function getOrderMessage(data: {
   orderNumber?: number;
@@ -13,24 +14,24 @@ export function getOrderMessage(data: {
 }): string {
   let message: string = `Заказ №${data.orderNumber}`
     + '\n\n'
-    + `Имя:${data.name}`
+    + `Имя: ${data.name}`
     + '\n'
-    + `Телефон:${data.phone}`
+    + `Телефон: +${transformPhoneUtil(data.phone)}`
     + '\n'
-    + `E-mail:${data.email}`
+    + `E-mail: ${data.email}`
     + '\n'
-    + `Адрес:${data.address}`
+    + `Адрес: ${data.address}`
     + '\n'
-    + (data.comment ? `Комментарий:${data.comment}\n` : '')
+    + (data.comment ? `Комментарий: ${data.comment}\n` : '')
 
   let total: string = '0';
   Object.values(data.cart).forEach((item) => {
-    message += `\n-${item.productRef.title} | ${currency(item.productRef.price).toString()} ${data.config.currency}/шт. | ${item.count} шт.`
+    message += `\n- ${item.productRef.title} | ${currency(item.productRef.price).toString()} ${data.config.currency}/шт. | ${item.count} шт.`
     const totalProduct = currency(item.productRef.price).multiply(item.count);
     total = currency(total).add(totalProduct).toString();
   });
 
-  message += `\n\nСумма:${data.cart.totalProductsPrice} ${data.config.currency}`;
+  message += `\n\nСумма: ${total} ${data.config.currency}`;
 
   return message;
 }

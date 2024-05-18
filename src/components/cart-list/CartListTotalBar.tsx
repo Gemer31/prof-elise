@@ -20,7 +20,7 @@ export function CartListTotalBar({config}: ICartListTotalBarProps) {
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
-    getEnrichedCart(client.cart).then(enrichedCart => {
+    getEnrichedCart(client?.cart).then(enrichedCart => {
       let newTotal: string = '0';
       Object.values(enrichedCart).forEach(item => {
         newTotal = currency(newTotal).add((+item.productRef.price * item.count)).toString();

@@ -66,13 +66,13 @@ export function ProductEditorForm({
   });
 
   const submitForm = async (formData: {
-    title: string,
-    price: string,
-    description: string,
-    categoryId: string,
-    images: StorageReference[],
-    labels: ILabel[],
-    vendorCode: string,
+    title?: string,
+    price?: string,
+    description?: string,
+    categoryId?: string,
+    images?: StorageReference[],
+    labels?: ILabel[],
+    vendorCode?: string,
   }) => {
     setIsLoading(true);
 

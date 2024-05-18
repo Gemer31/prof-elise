@@ -20,7 +20,7 @@ export function CheckoutTotalBar({config, isLoading, onSubmit}: ICheckoutTotalBa
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
-    getEnrichedCart(client.cart).then(enrichedCart => {
+    getEnrichedCart(client?.cart).then(enrichedCart => {
       let newTotal: number = 0;
       Object.values(enrichedCart).forEach(item => {
         newTotal += (+item.productRef.price * item.count);
