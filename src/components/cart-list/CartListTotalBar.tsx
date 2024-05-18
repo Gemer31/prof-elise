@@ -26,7 +26,7 @@ export function CartListTotalBar({config}: ICartListTotalBarProps) {
         newTotal = currency(newTotal).add((+item.productRef.price * item.count)).toString();
       });
       setTotal(newTotal);
-    })
+    });
   }, [client]);
 
   return <section className="w-4/12 mb-4 sticky top-20 h-fit bg-slate-100 rounded-md">
@@ -49,5 +49,5 @@ export function CartListTotalBar({config}: ICartListTotalBarProps) {
           : <span className="font-bold">{total} {config.currency}</span>
       }
     </div>
-  </section>
+  </section>;
 }

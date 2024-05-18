@@ -3,11 +3,12 @@
 import { IClient, IConfig } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
-import { ButtonTypes, RouterPath } from '@/app/enums';
+import { ButtonTypes } from '@/app/enums';
 import { useAppSelector } from '@/store/store';
 import { useEffect, useState } from 'react';
 import { Loader } from '@/components/Loader';
 import { getEnrichedCart } from '@/utils/firebase.util';
+import currency from 'currency.js';
 
 interface ICheckoutTotalBarProps {
   config: IConfig;
@@ -16,17 +17,17 @@ interface ICheckoutTotalBarProps {
 }
 
 export function CheckoutTotalBar({config, isLoading, onSubmit}: ICheckoutTotalBarProps) {
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState<string>('0');
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
     getEnrichedCart(client?.cart).then(enrichedCart => {
-      let newTotal: number = 0;
+      let newTotal: string = '0';
       Object.values(enrichedCart).forEach(item => {
-        newTotal += (+item.productRef.price * item.count);
+        newTotal = currency(newTotal).add((+item.productRef.price * item.count)).toString();
       });
       setTotal(newTotal);
-    })
+    });
   }, [client]);
 
   return <section className="w-4/12 mb-4 sticky top-20 h-fit bg-slate-100 rounded-md">
@@ -47,5 +48,5 @@ export function CheckoutTotalBar({config, isLoading, onSubmit}: ICheckoutTotalBa
           : <span className="font-bold">{total} {config.currency}</span>
       }
     </div>
-  </section>
+  </section>;
 }
