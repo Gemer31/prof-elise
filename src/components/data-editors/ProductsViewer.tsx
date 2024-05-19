@@ -3,6 +3,7 @@ import { IProduct } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
+import { SearchInput } from '@/components/data-editors/SearchInput';
 
 interface CategoriesViewerProps {
   selectedProduct?: IProduct;
@@ -23,10 +24,11 @@ export function ProductsViewer({
     'justify-between',
     'items-center',
     'px-2',
-    'py-1',
+    'py-1'
   ]), []);
 
   const [chosenCategory, setChosenCategory] = useState<IProduct>();
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     setChosenCategory(selectedProduct);
@@ -38,27 +40,34 @@ export function ProductsViewer({
   };
 
   return (
-    <div className="overflow-auto max-h-48 w-full rounded-md border-pink-500 border-2 px-2 py-1">
-      <div
-        onClick={() => selectCategory(undefined)}
-        key="new"
-        className={`cursor-pointer flex justify-between items-center px-2 py-1 ${!chosenCategory ? 'rounded-md bg-pink-300' : ''}`}
-      >
-        <span>{TRANSLATES[LOCALE].newProduct}</span>
+    <div className="overflow-auto max-h-48 w-full rounded-md border-pink-500 border-2">
+      <SearchInput onChange={setSearchValue}/>
+      <div className="px-2 py-1">
+        <div
+          onClick={() => selectCategory(undefined)}
+          key="new"
+          className={`cursor-pointer flex justify-between items-center px-2 py-1 ${!chosenCategory ? 'rounded-md bg-pink-300' : ''}`}
+        >
+          <span>{TRANSLATES[LOCALE].newProduct}</span>
+        </div>
+        {
+          (
+            searchValue
+              ? firestoreProducts.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()))
+              : firestoreProducts
+          )?.map((item) => (
+            <div
+              onClick={() => selectCategory(item)}
+              key={item.id}
+              className={`${itemClass} ${chosenCategory?.id === item.id ? 'rounded-md bg-pink-300' : ''}`}
+            >
+              <span>{item.title}</span>
+              <Image onClick={() => deleteProductClick?.(item)} width={30} height={30} src="/icons/cross.svg"
+                     alt="Close"/>
+            </div>
+          ))
+        }
       </div>
-      {
-        firestoreProducts?.map((item) => (
-          <div
-            onClick={() => selectCategory(item)}
-            key={item.id}
-            className={`${itemClass} ${chosenCategory?.id === item.id ? 'rounded-md bg-pink-300' : ''}`}
-          >
-            <span>{item.title}</span>
-            <Image onClick={() => deleteProductClick?.(item)} width={30} height={30} src="/icons/cross.svg"
-                   alt="Close"/>
-          </div>
-        ))
-      }
     </div>
   );
 }

@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
 import { ICommonProps } from '@/app/models';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { OrderByDirection } from '@firebase/firestore';
 
-export enum SortType {
-  DESC = 'descent',
-  ASC = 'ascent',
-
-}
 interface ISortByButtonProps extends ICommonProps {
-  isActive: boolean;
-  callback: (type: SortType) => void;
+  value: OrderByDirection;
+  onClick: (type: OrderByDirection) => void;
 }
 
-export function SortByButton({children, callback, isActive}: ISortByButtonProps) {
-  const [sortType, setSortType] = useState<SortType>();
+export function SortByButton({children, onClick, value}: ISortByButtonProps) {
+  const [sortType, setSortType] = useState<OrderByDirection>();
+
+  useEffect(() => {
+    setSortType(value);
+  }, []);
 
   return <button
-    className={isActive ? 'text-pink-500' : 'text-gray-400'}
+    className={value?.length ? 'text-pink-500' : 'text-gray-400'}
     onClick={() => {
-      const newSortType = sortType === SortType.DESC ? SortType.ASC : SortType.DESC;
+      const newSortType = sortType === 'desc' ? 'asc' : 'desc';
       setSortType(newSortType)
-      callback(newSortType);
+      onClick(newSortType);
     }}>
-    {children} {sortType === SortType.ASC ? '🡑' : '🡓'}
+    {children} {sortType === 'desc' ? '🡑' : '🡓'}
   </button>
 }

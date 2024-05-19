@@ -5,7 +5,8 @@ import { Counter } from '@/components/Counter';
 import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
 import currency from 'currency.js';
 import Link from 'next/link';
-import { RouterPath } from '@/app/enums';
+import { ButtonTypes, RouterPath } from '@/app/enums';
+import { Button } from '@/components/Button';
 
 export interface ICartCardProps {
   data: ICartProductModel<IProduct>;
@@ -13,15 +14,24 @@ export interface ICartCardProps {
 }
 
 export function CartCard({data, config}: ICartCardProps) {
-  return <div className="cart-card pb-2">
+  return <div className="cart-card pb-2 bg-slate-100 p-2 rounded-md mb-2">
     <Link
       className="flex"
       href={`${RouterPath.CATEGORIES}/${data.productRef.categoryId}${RouterPath.PRODUCTS}/${data?.productRef.id}`}
     >
-      <Image width={150} height={150} src={data?.productRef?.imageUrls[0]} alt={data.productRef.title}/>
+      <Image
+        className="rounded-md"
+        width={150}
+        height={150}
+        src={data?.productRef?.imageUrls[0]}
+        alt={data.productRef.title}
+      />
       <div className="flex flex-col justify-between p-2">
         <div className="text-lg">{data.productRef.title}</div>
-        <EntityFavouriteButton className="w-fit" productId={data.productRef.id}/>
+        <div className="flex items-center gap-x-2">
+          <EntityFavouriteButton className="w-fit" productId={data.productRef.id}/>
+          <Button styleClass="px-2 py-1" type={ButtonTypes.BUTTON}>✖</Button>
+        </div>
       </div>
     </Link>
     <div className="flex justify-center items-center">
@@ -34,7 +44,7 @@ export function CartCard({data, config}: ICartCardProps) {
     </div>
     <div className="flex justify-end items-center">
       <div className="h-fit">
-        <Counter productId={data.productRef.id}/>
+        <Counter productId={data.productRef.id} min={1}/>
       </div>
     </div>
   </div>;

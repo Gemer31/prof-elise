@@ -5,12 +5,13 @@ export interface IProduct {
   id: string;
   vendorCode: string;
   title: string;
-  price: string;
+  price: number;
   description: string;
   categoryRef: DocumentReference;
   categoryId?: string;
   labels: ILabel[];
   imageUrls?: string[];
+  createDate: number;
 }
 
 export interface ILabel {

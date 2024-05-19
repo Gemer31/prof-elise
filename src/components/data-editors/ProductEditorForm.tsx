@@ -80,12 +80,13 @@ export function ProductEditorForm({
     const productData: IProduct = {
       id: selectedProduct ? selectedProduct.id : uuidv4(),
       title: formData.title,
-      price: currency(formData.price).toString(),
+      price: Number(currency(formData.price).toString()),
       description: formData.description,
       categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
       imageUrls: imageUrls,
       labels: formData.labels,
-      vendorCode: formData.vendorCode
+      vendorCode: formData.vendorCode,
+      createDate: selectedProduct.createDate || +new Date(),
     };
     const categoryData: ICategory = selectedProduct
       ? null
@@ -107,8 +108,11 @@ export function ProductEditorForm({
           ? TRANSLATES[LOCALE].infoUpdated
           : TRANSLATES[LOCALE].productAdded
       ));
-      setSelectedImages(undefined);
-      setSelectedCategory(undefined);
+      setSelectedImages(null);
+      setSelectedCategory(null);
+      setSelectedProduct(null);
+      setLabels(null);
+      setDescription('');
       reset();
       refreshCallback?.();
     } catch (e) {
@@ -146,10 +150,10 @@ export function ProductEditorForm({
       }) || [];
 
       setValue('title', newProduct.title);
-      setValue('price', newProduct.price);
+      setValue('price', String(newProduct.price));
       setValue('vendorCode', newProduct.vendorCode);
       setValue('description', newProduct.description);
-      setValue('categoryId', newProduct.categoryId);
+      setValue('categoryId', newProduct.categoryRef.id);
       setValue('images', productImages);
       setValue('labels', newProduct.labels || []);
 

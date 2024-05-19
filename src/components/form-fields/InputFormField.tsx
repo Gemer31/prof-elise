@@ -17,7 +17,7 @@ interface IInputFormFieldProps {
 }
 
 export function InputFormField({label, name, register, type, error, required, placeholder, onBlur}: IInputFormFieldProps) {
-  const inputClass: string = useMemo(() => convertToClass([
+  const hostClass: string = useMemo(() => convertToClass([
     'border-2',
     'rounded-md',
     'mt-1',
@@ -29,7 +29,7 @@ export function InputFormField({label, name, register, type, error, required, pl
   return (
     <FormFieldWrapper label={label} error={error} required={required}>
       <input
-        className={inputClass}
+        className={hostClass}
         placeholder={placeholder}
         type={type}
         onBlur={onBlur}

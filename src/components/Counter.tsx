@@ -15,9 +15,10 @@ import { ICartProductModel, IClient } from '@/app/models';
 
 interface ICounterProps {
   productId: string;
+  min?: number;
 }
 
-export function Counter({productId}: ICounterProps) {
+export function Counter({productId, min}: ICounterProps) {
   const [initialized, setInitialized] = useState(false);
   const [count, {increment, decrement, set}] = useCounter();
   const dispatch = useAppDispatch();
@@ -78,7 +79,12 @@ export function Counter({productId}: ICounterProps) {
                e.preventDefault();
                e.stopPropagation();
              }}>
-        <button type="button" className="w-[40px] bg-pink-500 rounded-md" onClick={decrement}>
+        <button
+          type="button"
+          disabled={min !== undefined && cartCount === min}
+          className="w-[40px] bg-pink-500 rounded-md"
+          onClick={decrement}
+        >
           <div className="hover:scale-125 duration-150">-</div>
         </button>
         <input
@@ -87,7 +93,11 @@ export function Counter({productId}: ICounterProps) {
           value={count}
           onBlur={onInputChange}
         />
-        <button type="button" className="w-[40px] bg-pink-500 rounded-md" onClick={increment}>
+        <button
+          type="button"
+          className="w-[40px] bg-pink-500 rounded-md"
+          onClick={increment}
+        >
           <div className="hover:scale-125 duration-150">+</div>
         </button>
       </div>

@@ -3,6 +3,17 @@ export enum ButtonTypes {
   SUBMIT = 'submit'
 }
 
+export enum UrlQueryParamsNames {
+  PAGE = 'page',
+  PAGE_LIMIT = 'pageLimit',
+  SORT_BY = 'sortBy',
+  BY_PRICE = 'byPrice',
+  BY_DATE = 'byDate',
+  BY_ALFABET = 'byAlfabet',
+  PRICE_MIN = 'priceMin',
+  PRICE_MAX = 'priceMax',
+}
+
 export enum ColorOptions {
   PINK = 'pink',
   GRAY = 'gray',
@@ -32,7 +43,7 @@ export enum FirestoreCollections {
   STATE = 'state',
   SETTINGS = 'settings',
   CATEGORIES = 'categories',
-  PRODUCTS = "products",
+  PRODUCTS = 'products',
   ANONYMOUS_CLIENTS = 'anonymousClients',
 }
 
@@ -50,6 +61,8 @@ export enum PageLimits {
   TWELVE = '12',
 }
 
-export enum SortValues {
-  BY_PRICE = 'byPrice'
+export enum SortByValues {
+  BY_PRICE = 'byPrice',
+  BY_DATE = 'byDate',
+  BY_ALFABET = 'byAlfabet',
 }

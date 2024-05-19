@@ -61,7 +61,6 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
           <Catalog pageLimit={pageLimit} categories={Object.values(categories)}/>
         </div>
         <div className="w-full">
-          <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].favouriteProducts}</h1>
           <FavouritesList serverProducts={data} config={config}/>
         </div>
       </div>

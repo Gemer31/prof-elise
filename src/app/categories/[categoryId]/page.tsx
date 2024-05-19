@@ -3,7 +3,16 @@ import { Catalog } from '@/components/Catalog';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ProductsList } from '@/components/ProductsList';
 import { FirestoreCollections, PageLimits, RouterPath } from '@/app/enums';
-import { collection, doc, getDocs, orderBy, query, where } from '@firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  OrderByDirection,
+  query,
+  QueryConstraint,
+  where
+} from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { redirect } from 'next/navigation';
@@ -20,12 +29,14 @@ export interface ICategoriesOrProductsProps {
   searchParams: {
     pageLimit: number;
     page: number;
-    sortBy: string;
+    byPrice: OrderByDirection;
+    byDate: OrderByDirection;
+    byAlfabet: OrderByDirection;
   };
 }
 
 export default async function CategoriesOrProductsPage(
-  {params: {categoryId}, searchParams: {pageLimit, page, sortBy}}: ICategoriesOrProductsProps
+  {params: {categoryId}, searchParams: {pageLimit, page, byPrice, byDate, byAlfabet}}: ICategoriesOrProductsProps
 ) {
   if (!Object.values<string>(PageLimits).includes(String(pageLimit))) {
     redirect(`${RouterPath.CATEGORIES}/${categoryId}?page=1&pageLimit=${PageLimits.SIX}`);
@@ -50,11 +61,24 @@ export default async function CategoriesOrProductsPage(
     redirect(`${RouterPath.CATEGORIES}/${categoryId}?page=1&pageLimit=${pageLimit}`);
   }
 
+  const productsFilters: QueryConstraint[] = [
+    where('categoryRef', '==', doc(db, FirestoreCollections.CATEGORIES, categoryId))
+    // limit(pageLimit),
+  ];
+  const orderByField: string = byPrice?.length
+    ? 'price'
+    : byDate?.length
+      ? 'createDate'
+      : byAlfabet
+        ? 'title'
+        : null;
+  if (orderByField) {
+    productsFilters.push(orderBy(orderByField, byPrice || byDate || byAlfabet));
+  }
+
   const productsQuerySnapshot = await getDocs(query(
     collection(db, FirestoreCollections.PRODUCTS),
-    where('categoryRef', '==', doc(db, FirestoreCollections.CATEGORIES, categoryId)),
-    orderBy(sortBy?.length ? sortBy : 'title')
-    // limit(pageLimit),
+    ...productsFilters
   ));
   const productsChunks = chunk(productsQuerySnapshot.docs, pageLimit);
   const products: IProduct[] = docsToData<IProduct>(productsChunks[page - 1])
@@ -72,8 +96,14 @@ export default async function CategoriesOrProductsPage(
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <div className="w-full md:w-4/12 mr-4">
           <Catalog pageLimit={pageLimit} categories={Object.values(categories)} currentCategoryId={categoryId}/>
+          {/*<FilterBar/>*/}
         </div>
         <ProductsList
+          orderByParams={{
+            byDate,
+            byPrice,
+            byAlfabet
+          }}
           pagesCount={pagesCount}
           categoryId={categoryId}
           pageLimit={pageLimit}

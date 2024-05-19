@@ -50,10 +50,10 @@ export function CartList({serverClient, config}: ICartListProps) {
 
   return data?.length
     ? <div className="w-full">
-      <div className="w-full flex justify-between mb-2">
-        <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].purchaseCart}</h1>
+      <div className="w-full flex justify-between items-center mb-4">
+        <h1 className="text-center text-2xl uppercase">{TRANSLATES[LOCALE].purchaseCart}</h1>
         <Button
-          styleClass="px-4 py-2"
+          styleClass="flex px-2 py-1 text-sm"
           type={ButtonTypes.BUTTON}
           callback={cleanCart}
         >{TRANSLATES[LOCALE].cleanCart}</Button>
@@ -62,12 +62,11 @@ export function CartList({serverClient, config}: ICartListProps) {
         <div>
           {
             data.map((item, index) => {
-              return <div key={item.id} className={'py-2 ' + (index !== data.length - 1 ? 'separator' : '')}>
-                <CartCard
-                  config={config}
-                  data={item}
-                />
-              </div>;
+              return <CartCard
+                key={item.id}
+                config={config}
+                data={item}
+              />;
             })
           }
         </div>

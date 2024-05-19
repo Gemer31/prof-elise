@@ -119,7 +119,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
         : <>
           <div className="w-full flex justify-between items-center mb-2">
             <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].orderCreation}</h1>
-            <Button styleClass="flex px-4 py-2" href={RouterPath.CART}>
+            <Button styleClass="flex px-2 py-1 text-sm" href={RouterPath.CART}>
               {TRANSLATES[LOCALE].returnToCart}
             </Button>
           </div>
@@ -171,7 +171,15 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
                 register={register}
               />
             </div>
-            <CheckoutTotalBar isLoading={loading} onSubmit={() => setLoading(true)} config={config}/>
+            <CheckoutTotalBar
+              isLoading={loading}
+              onSubmit={() => {
+                if (isValid) {
+                  setLoading(true);
+                }
+              }}
+              config={config}
+            />
           </form>
         </>
     }

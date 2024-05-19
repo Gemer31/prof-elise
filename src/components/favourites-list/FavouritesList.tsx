@@ -42,34 +42,23 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   return <>
     {
       data?.length
-        ? <div className="flex justify-end my-4">
-          <Button styleClass="px-2 py-1" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
-            {TRANSLATES[LOCALE].cleanFavourites} ✖
-          </Button>
-        </div>
-        : <></>
-    }
-    {
-      data?.length
         ? <div className="w-full">
-          <div className="separator">
-            <div className="favourites-list-header text-lg">
-              <span>{TRANSLATES[LOCALE].naming}</span>
-              <span>{TRANSLATES[LOCALE].price}</span>
-            </div>
-          </div>
           {
-            data.map((favourite, index) => <div
-              className={'w-full ' + (index !== data.length - 1 ? 'separator' :'')}
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="text-center text-2xl uppercase">{TRANSLATES[LOCALE].favouriteProducts}</h1>
+              <Button styleClass="px-2 py-1 text-sm" type={ButtonTypes.BUTTON} callback={cleanFavourites}>
+                {TRANSLATES[LOCALE].cleanFavourites} ✖
+              </Button>
+            </div>
+          }
+          {
+            data.map((favourite, index) => <FavouriteProductCard
               key={favourite.id}
-            >
-              <FavouriteProductCard
-                config={config}
-                data={favourite}
-                isLoading={redirectIdInProgress === favourite.id}
-                onClick={() => setRedirectIdInProgress(favourite.id)}
-              />
-            </div>)
+              config={config}
+              data={favourite}
+              isLoading={redirectIdInProgress === favourite.id}
+              onClick={() => setRedirectIdInProgress(favourite.id)}
+            />)
           }
         </div>
         : <div className="w-full h-full py-10 gap-x-2 gap-y-2 flex justify-center items-center text-3xl text-center">
