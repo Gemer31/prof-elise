@@ -51,11 +51,6 @@ export enum FirestoreDocuments {
   CONFIG = 'config'
 }
 
-export enum CounterType {
-  DEFAULT,
-  SMART,
-}
-
 export enum PageLimits {
   SIX = '6',
   TWELVE = '12',
@@ -65,4 +60,9 @@ export enum SortByValues {
   BY_PRICE = 'byPrice',
   BY_DATE = 'byDate',
   BY_ALFABET = 'byAlfabet',
+}
+
+export enum PopupTypes {
+  REQUEST_CALL,
+  BUY_IN_ONE_CLICK,
 }

@@ -1,5 +1,5 @@
 import { DocumentReference } from '@firebase/firestore';
-import { ColorOptions } from '@/app/enums';
+import { ColorOptions, PopupTypes } from '@/app/enums';
 
 export interface IProduct {
   id: string;
@@ -66,5 +66,10 @@ export interface IClientEnriched {
   cart?: Record<string, ICartProductModel<IProduct>>;
   favourites?: Record<string, IProduct>;
   viewedRecently?: Record<string, IViewedRecentlyModel<IProduct>>;
+}
+
+export interface IPopupData {
+  formType: PopupTypes;
+  product?: IProduct;
 }
 

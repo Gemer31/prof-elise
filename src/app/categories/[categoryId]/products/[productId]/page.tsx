@@ -86,11 +86,11 @@ export default async function ProductDetailsPage(
           <Catalog pageLimit={pageLimit} currentCategoryId={product.categoryId} categories={categories}/>
         </div>
         <div className="w-full flex justify-between">
-          <div className="w-full">
+          <div className="w-full bg-slate-100 rounded-md p-4">
             <div className="w-full">
               <div className="mb-4 text-2xl bold">{product?.title}</div>
               <div className="flex">
-                <div className="relative">
+                <div className="relative rounded-md">
                   <div className="absolute left-4 top-4 z-10">
                     {
                       product.labels?.map((item, index) => {
@@ -111,7 +111,7 @@ export default async function ProductDetailsPage(
                   <div className="w-full mb-4 text-2xl text-pink-500 font-bold">
                     {currency(product.price).toString()} {config.currency}
                   </div>
-                  <ProductDetailsActionsBar productId={product.id}/>
+                  <ProductDetailsActionsBar product={product}/>
                 </div>
               </div>
             </div>

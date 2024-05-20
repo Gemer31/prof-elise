@@ -14,7 +14,7 @@ export function SortByButton({children, onClick, value}: ISortByButtonProps) {
 
   useEffect(() => {
     setSortType(value);
-  }, []);
+  }, [value]);
 
   return <button
     className={value?.length ? 'text-pink-500' : 'text-gray-400'}
@@ -23,6 +23,6 @@ export function SortByButton({children, onClick, value}: ISortByButtonProps) {
       setSortType(newSortType)
       onClick(newSortType);
     }}>
-    {children} {sortType === 'desc' ? '🡑' : '🡓'}
+    {children} {sortType === 'asc' ? '🡑' : '🡓'}
   </button>
 }

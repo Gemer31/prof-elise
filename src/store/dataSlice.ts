@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getClient, updateClient } from '@/store/asyncThunk';
-import { ICartProductModel, IClient } from '@/app/models';
-
+import { ICartProductModel, IClient, IPopupData } from '@/app/models';
 
 interface IDataSlice {
-  requestCallPopupVisible: boolean;
+  popupData: IPopupData;
   notificationMessage: string;
   cartLoading: boolean;
   cartTotal: number;
@@ -14,7 +13,7 @@ interface IDataSlice {
 export const dataSlice = createSlice({
   name: 'dataSlice',
   initialState: {
-    requestCallPopupVisible: false,
+    popupData: null,
     notificationMessage: null,
     cartLoading: true,
     cartTotal: 0,
@@ -45,8 +44,8 @@ export const dataSlice = createSlice({
     });
   },
   reducers: {
-    setRequestCallPopupVisible: (state: IDataSlice, action: PayloadAction<boolean>) => {
-      state.requestCallPopupVisible = action.payload;
+    setPopupData: (state: IDataSlice, action: PayloadAction<IPopupData>) => {
+      state.popupData = action.payload;
     },
     setNotificationMessage: (state: IDataSlice, action: PayloadAction<string>) => {
       state.notificationMessage = action.payload;
@@ -55,6 +54,6 @@ export const dataSlice = createSlice({
 });
 
 export const {
-  setRequestCallPopupVisible,
+  setPopupData,
   setNotificationMessage
 } = dataSlice.actions;

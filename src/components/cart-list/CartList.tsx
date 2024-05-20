@@ -5,7 +5,7 @@ import { Button } from '@/components/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { CartListTotalBar } from '@/components/cart-list/CartListTotalBar';
 import { useEffect, useState } from 'react';
-import { IClient, IClientEnriched, IConfig } from '@/app/models';
+import { ICartProductModel, IClient, IClientEnriched, IConfig, IProduct } from '@/app/models';
 import { getClientId } from '@/utils/cookies.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { CartCard } from '@/components/cart-list/CartCard';
@@ -19,7 +19,7 @@ export interface ICartListProps {
 }
 
 export function CartList({serverClient, config}: ICartListProps) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ICartProductModel<IProduct>[]>([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -48,7 +48,22 @@ export function CartList({serverClient, config}: ICartListProps) {
     }));
   };
 
-  return data?.length
+  const deleteProduct = (productId: string) => {
+    const newCart = {
+      ...client.cart
+    };
+    delete newCart[productId];
+
+    dispatch(updateClient({
+      clientId: getClientId(),
+      data: {
+        ...client,
+        cart: newCart,
+      }
+    }));
+  }
+
+  return serverClient !== undefined ? data?.length
     ? <div className="w-full">
       <div className="w-full flex justify-between items-center mb-4">
         <h1 className="text-center text-2xl uppercase">{TRANSLATES[LOCALE].purchaseCart}</h1>
@@ -63,9 +78,10 @@ export function CartList({serverClient, config}: ICartListProps) {
           {
             data.map((item, index) => {
               return <CartCard
-                key={item.id}
+                key={item.productRef.id}
                 config={config}
                 data={item}
+                onDelete={() => deleteProduct(item.productRef.id)}
               />;
             })
           }
@@ -85,5 +101,5 @@ export function CartList({serverClient, config}: ICartListProps) {
           callback={() => setLoading(true)}
         >{TRANSLATES[LOCALE].intoCatalog}</Button>
       </div>
-    </div>
+    </div> : <></>
 }

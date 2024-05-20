@@ -11,9 +11,10 @@ import { Button } from '@/components/Button';
 export interface ICartCardProps {
   data: ICartProductModel<IProduct>;
   config: IConfig;
+  onDelete: () => void;
 }
 
-export function CartCard({data, config}: ICartCardProps) {
+export function CartCard({data, config, onDelete}: ICartCardProps) {
   return <div className="cart-card pb-2 bg-slate-100 p-2 rounded-md mb-2">
     <Link
       className="flex"
@@ -30,7 +31,15 @@ export function CartCard({data, config}: ICartCardProps) {
         <div className="text-lg">{data.productRef.title}</div>
         <div className="flex items-center gap-x-2">
           <EntityFavouriteButton className="w-fit" productId={data.productRef.id}/>
-          <Button styleClass="px-2 py-1" type={ButtonTypes.BUTTON}>✖</Button>
+          <Button
+            styleClass="px-2 py-1"
+            type={ButtonTypes.BUTTON}
+            callback={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onDelete()
+            }}
+          >✖</Button>
         </div>
       </div>
     </Link>

@@ -1,38 +1,39 @@
 'use client';
 
 import { Counter } from '@/components/Counter';
-import { ButtonTypes, RouterPath } from '@/app/enums';
+import { ButtonTypes, PopupTypes, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/Button';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { setRequestCallPopupVisible } from '@/store/dataSlice';
+import { setPopupData } from '@/store/dataSlice';
+import { IProduct } from '@/app/models';
 
 interface IProductDetailsActionsBarProps {
-  productId: string;
+  product: IProduct;
 }
 
-export function ProductDetailsActionsBar({productId}: IProductDetailsActionsBarProps) {
-  const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[productId]?.count);
+export function ProductDetailsActionsBar({product}: IProductDetailsActionsBarProps) {
+  const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[product?.id]?.count);
   const dispatch = useAppDispatch();
 
-  return <div className="flex gap-x-2 items-center w-fit">
+  return <div className="flex gap-x-2 items-center">
     {
       cartCount
         ? <Button
-          styleClass="text-white py-2 px-4"
+          styleClass="text-white w-full py-2 px-4"
           type={ButtonTypes.BUTTON}
           href={RouterPath.CART}
-        >
-          <div className="w-max">{TRANSLATES[LOCALE].alreadyInCart}</div>
-          <span className="text-xs">{TRANSLATES[LOCALE].goto}</span>
-        </Button>
+        >{TRANSLATES[LOCALE].alreadyInCart}</Button>
         : <></>
     }
-    <Counter productId={productId}/>
+    <Counter productId={product?.id}/>
     <Button
       styleClass="text-white w-full py-2 px-4"
       type={ButtonTypes.BUTTON}
-      callback={() => dispatch(setRequestCallPopupVisible(true))}
+      callback={() => dispatch(setPopupData({
+        formType: PopupTypes.BUY_IN_ONE_CLICK,
+        product
+      }))}
     >{TRANSLATES[LOCALE].buyInOneClick}</Button>
   </div>;
 }
