@@ -39,7 +39,7 @@ export default async function CategoriesPage(
       <Breadcrumbs links={[{title: TRANSLATES[LOCALE].catalog}]}/>
       <h1 className="text-2xl self-start uppercase py-2">{TRANSLATES[LOCALE].productsCatalog}</h1>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
-        <CategoriesList itemsLimit={6} data={categories} pageLimit={pageLimit}/>
+        <CategoriesList data={categories} pageLimit={pageLimit}/>
       </div>
     </ContentContainer>
     <ViewedRecently

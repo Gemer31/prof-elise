@@ -14,15 +14,13 @@ export function CategoriesList({data, pageLimit, itemsLimit}: ICategoriesListPro
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   return <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-4">
-    {data.map((category, index) => (
-      itemsLimit > index - 1
-        ? <></>
-        : <CategoryCard
-          key={category.id}
-          pageLimit={pageLimit}
-          data={category}
-          isLoading={redirectIdInProgress === category.id}
-          onClick={() => setRedirectIdInProgress(category.id)}
-        />))}
+    {(itemsLimit ? [...data.slice(0, itemsLimit)] : data)
+      .map((category, index) => (<CategoryCard
+        key={category.id}
+        pageLimit={pageLimit}
+        data={category}
+        isLoading={redirectIdInProgress === category.id}
+        onClick={() => setRedirectIdInProgress(category.id)}
+      />))}
   </div>;
 }

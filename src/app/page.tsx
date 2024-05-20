@@ -44,7 +44,7 @@ export default async function HomePage({searchParams: {pageLimit}}: IHomePagePro
             {TRANSLATES[LOCALE].allCategories}
           </Button>
         </div>
-        <CategoriesList data={Object.values(categories)} pageLimit={Number(pageLimit)}/>
+        <CategoriesList itemsLimit={6} data={Object.values(categories)} pageLimit={Number(pageLimit)}/>
       </div>
       <AboutUs text={config.shopDescription}/>
     </ContentContainer>
