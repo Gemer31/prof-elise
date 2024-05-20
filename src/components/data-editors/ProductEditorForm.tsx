@@ -86,7 +86,7 @@ export function ProductEditorForm({
       imageUrls: imageUrls,
       labels: formData.labels,
       vendorCode: formData.vendorCode,
-      createDate: selectedProduct.createDate || +new Date(),
+      createDate: selectedProduct?.createDate || +new Date(),
     };
     const categoryData: ICategory = selectedProduct
       ? null
