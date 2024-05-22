@@ -56,7 +56,7 @@ export enum PageLimits {
   TWELVE = '12',
 }
 
-export enum SortByValues {
+export enum OrderByKeys {
   BY_PRICE = 'byPrice',
   BY_DATE = 'byDate',
   BY_ALFABET = 'byAlfabet',

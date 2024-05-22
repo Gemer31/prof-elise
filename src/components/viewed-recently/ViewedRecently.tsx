@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ContentContainer } from '@/components/ContentContainer';
 import Link from 'next/link';
 import './viewed-recently.css';
+import currency from 'currency.js';
 
 interface IViewedRecentlyProps {
   config: IConfig;
@@ -28,7 +29,7 @@ export function ViewedRecently({config, viewedRecently}: IViewedRecentlyProps) {
                   <Image width={55} height={55} src={item.product?.imageUrls[0]} alt={item.product?.title}/>
                   <div className="ml-2">
                     <div className="viewed-recently__card-title text-base">{item.product?.title}</div>
-                    <div className="font-light">{item.product?.price} {config.currency}</div>
+                    <div className="font-light">{currency(item.product?.price).toString()} {config.currency}</div>
                   </div>
                 </Link>;
               })

@@ -1,5 +1,5 @@
-import { DocumentReference } from '@firebase/firestore';
-import { ColorOptions, PopupTypes } from '@/app/enums';
+import { DocumentReference, OrderByDirection } from '@firebase/firestore';
+import { ColorOptions, OrderByKeys, PopupTypes } from '@/app/enums';
 
 export interface IProduct {
   id: string;
@@ -73,3 +73,7 @@ export interface IPopupData {
   product?: IProduct;
 }
 
+export interface IOrderByModel {
+  key: OrderByKeys;
+  value: OrderByDirection;
+}

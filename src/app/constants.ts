@@ -1,4 +1,4 @@
-import { ColorOptions } from '@/app/enums';
+import { ColorOptions, OrderByKeys } from '@/app/enums';
 
 export const FADE_IN_RIGHT_CLASS = 'animate__animated animate__fadeInRight';
 export const FADE_IN_LEFT_CLASS = 'animate__animated animate__fadeInLeft';
@@ -16,4 +16,10 @@ export const CLIENT_ID: string = 'clientId';
 export const COLOR_OPTION_VALUES = new Map<ColorOptions, string>([
   [ColorOptions.PINK, 'bg-pink-500 hover:bg-pink-400 active:bg-pink-600 text-white'],
   [ColorOptions.GRAY, 'bg-slate-100 hover:bg-slate-400 active:bg-slate-600 text-black']
+]);
+
+export const ORDER_BY_FIELDS = new Map<OrderByKeys, string>([
+  [OrderByKeys.BY_PRICE, 'price'],
+  [OrderByKeys.BY_ALFABET, 'title'],
+  [OrderByKeys.BY_DATE, 'createDate'],
 ]);

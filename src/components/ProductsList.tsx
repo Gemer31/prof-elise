@@ -1,11 +1,11 @@
 'use client';
 
 import { ProductCard } from '@/components/product-card/ProductCard';
-import { IConfig, IProduct } from '@/app/models';
+import { IConfig, IOrderByModel, IProduct } from '@/app/models';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useRouter } from 'next/navigation';
-import { PageLimits, SortByValues } from '@/app/enums';
+import { PageLimits, OrderByKeys } from '@/app/enums';
 import { PagesToolbar } from '@/components/PagesToolbar';
 import { SortByButton } from '@/components/SortByButton';
 import { getCategoryUrl } from '@/utils/router.util';
@@ -18,11 +18,7 @@ export interface IProductsListProps {
   pagesCount: number;
   pageLimit: number;
   page: number;
-  orderByParams?: {
-    byPrice: OrderByDirection;
-    byDate: OrderByDirection;
-    byAlfabet: OrderByDirection;
-  };
+  orderByParams?: IOrderByModel;
 }
 
 export function ProductsList({
@@ -36,21 +32,14 @@ export function ProductsList({
                              }: IProductsListProps) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
-  const [sortType, setSortType] = useState<SortByValues>();
+  const [sortType, setSortType] = useState<OrderByKeys>();
   const [sortValue, setSortValue] = useState<OrderByDirection>();
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
 
   useEffect(() => {
-    setSortType(orderByParams.byPrice
-      ? SortByValues.BY_PRICE
-      : orderByParams.byDate
-        ? SortByValues.BY_DATE
-        : orderByParams.byAlfabet
-          ? SortByValues.BY_ALFABET
-          : null
-    );
-    setSortValue(orderByParams.byPrice || orderByParams.byDate || orderByParams.byAlfabet);
+    setSortType(orderByParams.key);
+    setSortValue(orderByParams.value);
   }, [orderByParams]);
   const pageLimitChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newLimit: number = Number(event.target.value);
@@ -59,21 +48,20 @@ export function ProductsList({
       categoryId,
       page: 1,
       pageLimit: newLimit,
-      byDate: orderByParams.byDate,
-      byAlfabet: orderByParams.byAlfabet,
-      byPrice: orderByParams.byPrice
+      orderBy: orderByParams,
     }));
   };
-  const sortByChange = (newType: SortByValues, newValue: OrderByDirection) => {
+  const sortByChange = (newType: OrderByKeys, newValue: OrderByDirection) => {
     setSortType(newType);
     setSortValue(newValue);
     router.push(getCategoryUrl({
       categoryId,
       page,
       pageLimit,
-      byDate: newType === SortByValues.BY_DATE ? newValue : null,
-      byAlfabet: newType === SortByValues.BY_ALFABET ? newValue : null,
-      byPrice: newType === SortByValues.BY_PRICE ? newValue : null
+      orderBy: {
+        key: newType,
+        value: newValue
+      },
     }));
   };
 
@@ -81,11 +69,11 @@ export function ProductsList({
     <div className="flex justify-between mb-4">
       <div className="flex gap-x-3">
         {
-          Object.values(SortByValues).map(item => (
+          Object.values(OrderByKeys).map(item => (
             <SortByButton
               key={item}
               value={sortType === item ? sortValue : null}
-              onClick={() => sortByChange(item, orderByParams[item] === 'desc' ? 'asc' : 'desc')}
+              onClick={(newValue) => sortByChange(item, newValue)}
             >{TRANSLATES[LOCALE][item]}</SortByButton>
           ))
         }
@@ -115,6 +103,12 @@ export function ProductsList({
         />;
       })}
     </div>
-    <PagesToolbar categoryId={categoryId} pages={pagesCount} current={page}/>
+    <PagesToolbar
+      categoryId={categoryId}
+      pages={pagesCount}
+      pageLimit={pageLimit}
+      current={page}
+      orderByParams={{ key: sortType, value: sortValue }}
+    />
   </div>;
 }

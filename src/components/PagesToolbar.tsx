@@ -1,15 +1,17 @@
 import { Button } from '@/components/Button';
-import { ButtonTypes, ColorOptions, PageLimits, RouterPath } from '@/app/enums';
-import Link from 'next/link';
-import { LOCALE, TRANSLATES } from '@/app/translates';
+import { ColorOptions } from '@/app/enums';
+import { getCategoryUrl } from '@/utils/router.util';
+import { IOrderByModel } from '@/app/models';
 
 interface IPagesToolbarProps {
-  pages: number;
   current: number;
+  pages: number;
+  pageLimit: number;
+  orderByParams: IOrderByModel;
   categoryId: string;
 }
 
-export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
+export function PagesToolbar({current, pages, pageLimit, categoryId, orderByParams}: IPagesToolbarProps) {
   return <div className={'w-full justify-center gap-x-1 ' + (pages < 2 ? 'hidden' : 'flex')}>
     {
       current === 1
@@ -17,7 +19,12 @@ export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
         : <Button
           color={ColorOptions.GRAY}
           styleClass="flex px-4 py-2"
-          href={`${RouterPath.CATEGORIES}/${categoryId}?page=${current - 1}&pageLimit=${PageLimits.SIX}`}
+          href={getCategoryUrl({
+            categoryId: categoryId,
+            page: current - 1,
+            pageLimit,
+            orderBy: orderByParams
+          })}
         >←</Button>
     }
     {
@@ -28,8 +35,13 @@ export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
           disabled={value === current}
           key={`${value}${current}`}
           styleClass="flex px-4 py-2"
-          href={`${RouterPath.CATEGORIES}/${categoryId}?page=${value}&pageLimit=${PageLimits.SIX}`}
-        >{value}</Button>
+          href={getCategoryUrl({
+            categoryId: categoryId,
+            page: value,
+            pageLimit,
+            orderBy: orderByParams
+          })}
+        >{value}</Button>;
       })
     }
     {
@@ -38,7 +50,12 @@ export function PagesToolbar({current, pages, categoryId}: IPagesToolbarProps) {
         : <Button
           color={ColorOptions.GRAY}
           styleClass="flex px-4 py-2"
-          href={`${RouterPath.CATEGORIES}/${categoryId}?page=${current + 1}&pageLimit=${PageLimits.SIX}`}
+          href={getCategoryUrl({
+            categoryId: categoryId,
+            page: current + 1,
+            pageLimit,
+            orderBy: orderByParams
+          })}
         >→</Button>
     }
   </div>;
