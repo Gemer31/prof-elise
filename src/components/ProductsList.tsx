@@ -92,7 +92,7 @@ export function ProductsList({
         {TRANSLATES[LOCALE].productsOnThePage}
       </div>
     </div>
-    <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+    <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
       {data?.map((product) => {
         return <ProductCard
           key={product.id}

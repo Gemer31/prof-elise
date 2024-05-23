@@ -13,6 +13,7 @@ import { transformPhoneUtil } from '@/utils/transform-phone.util';
 import { useMemo } from 'react';
 import { CircleButton } from '@/components/CircleButton';
 import { RequestCallButton } from '@/components/RequestCallButton';
+import { SITE_HEADER_LINKS } from '@/app/constants';
 
 export interface IFooterProps {
   config?: IConfig;
@@ -21,7 +22,6 @@ export interface IFooterProps {
 const PAYMENTS_IMGs = ['belkart.svg', 'erip.svg', 'visa.svg'];
 
 export function Footer({config}: IFooterProps) {
-  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const infoClass: string = useMemo(() => convertToClass([
     'flex',
@@ -50,11 +50,7 @@ export function Footer({config}: IFooterProps) {
               <div className="mb-4 sm:mb-0 flex flex-col items-center basis-1/3">
                 <div>
                   {
-                    [
-                      [RouterPath.HOME, 'main'],
-                      [RouterPath.DELIVERY, 'delivery'],
-                      [RouterPath.CONTACTS, 'contacts']
-                    ].map(([path, translateCode]) => {
+                    SITE_HEADER_LINKS.map(([path, translateCode]) => {
                       return <Link
                         className="text-lg"
                         key={path}

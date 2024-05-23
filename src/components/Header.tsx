@@ -13,12 +13,10 @@ import { signOut } from '@firebase/auth';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { auth } from '@/app/lib/firebase-config';
 import { FavouritesButton } from '@/components/FavouritesButton';
-import { uuidv4 } from '@firebase/util';
-import { getClient, updateClient } from '@/store/asyncThunk';
+import { getClient } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
 import { CircleButton } from '@/components/CircleButton';
-import { getClientId } from '@/utils/cookies.util';
-import { CLIENT_ID } from '@/app/constants';
+import { SITE_HEADER_LINKS } from '@/app/constants';
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -63,30 +61,9 @@ export function Header() {
     'text-2xl',
     'text-amber-50'
   ]), []);
-  const siteLinks: string[][] = useMemo(() => ([
-    [RouterPath.HOME, 'main'],
-    [RouterPath.CATEGORIES, 'catalog'],
-    [RouterPath.DELIVERY, 'delivery'],
-    [RouterPath.CONTACTS, 'contacts']
-  ]), []);
 
   useEffect(() => {
-    let clientId: string = getClientId();
-
-    if (clientId) {
-      dispatch(getClient(clientId));
-    } else {
-      clientId = uuidv4();
-      document.cookie = `${CLIENT_ID}=${clientId}`;
-      dispatch(updateClient({
-        clientId,
-        data: {
-          cart: {},
-          favourites: {},
-          viewedRecently: {}
-        }
-      }));
-    }
+    dispatch(getClient());
   }, []);
 
   useEffect(() => {
@@ -128,7 +105,7 @@ export function Header() {
         <nav className="flex justify-between">
           <div className="hidden sm:flex">
             {
-              siteLinks.map(([path, translateCode]) => (
+              SITE_HEADER_LINKS.map(([path, translateCode]) => (
                 <Link
                   key={path}
                   className={getNavigationLinkClass(path)}
@@ -146,7 +123,7 @@ export function Header() {
             </div>
             <aside className="aside-menu-items">
               {
-                siteLinks.map(([path, translateCode]) => (
+                SITE_HEADER_LINKS.map(([path, translateCode]) => (
                   <Link
                     key={path}
                     className={getNavigationSidebarLinkClass(path)}

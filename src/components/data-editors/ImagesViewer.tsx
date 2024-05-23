@@ -78,7 +78,7 @@ export function ImagesViewer({
   };
 
   return (
-    <div className="flex justify-between gap-4">
+    <div className="flex justify-between gap-2">
       {
         storageData?.length
           ? <>

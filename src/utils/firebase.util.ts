@@ -150,7 +150,9 @@ export async function getClient(cookies: ReadonlyRequestCookies): Promise<IClien
   if (clientId?.length) {
     const clientDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId));
     client = clientDocumentSnapshot.data();
-  } else {
+  }
+
+  if (!client) {
     client = {
       cart: {},
       favourites: {},
