@@ -142,20 +142,22 @@ export default async function CategoriesOrProductsPage(
         links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <div className="w-full md:w-4/12 mr-4">
-          <Catalog pageLimit={searchParams.pageLimit} categories={Object.values(categories)}
-                   currentCategoryId={categoryId}/>
-          <div className="mt-1">
-            <FilterBar
-              config={config}
-              categoryId={categoryId}
-              pageLimit={searchParams.pageLimit}
-              orderByParams={{
-                key: orderByKey,
-                value: orderByValue
-              }}
-              minPrice={searchParams.minPrice}
-              maxPrice={searchParams.maxPrice}
-            />
+          <div className="sticky top-20">
+            <Catalog pageLimit={searchParams.pageLimit} categories={Object.values(categories)}
+                     currentCategoryId={categoryId}/>
+            <div className="mt-1">
+              <FilterBar
+                config={config}
+                categoryId={categoryId}
+                pageLimit={searchParams.pageLimit}
+                orderByParams={{
+                  key: orderByKey,
+                  value: orderByValue
+                }}
+                minPrice={searchParams.minPrice}
+                maxPrice={searchParams.maxPrice}
+              />
+            </div>
           </div>
         </div>
         <ProductsList
