@@ -10,8 +10,8 @@ export enum UrlQueryParamsNames {
   BY_PRICE = 'byPrice',
   BY_DATE = 'byDate',
   BY_ALFABET = 'byAlfabet',
-  PRICE_MIN = 'priceMin',
-  PRICE_MAX = 'priceMax',
+  MIN_PRICE = 'minPrice',
+  MAX_PRICE = 'maxPrice',
 }
 
 export enum ColorOptions {

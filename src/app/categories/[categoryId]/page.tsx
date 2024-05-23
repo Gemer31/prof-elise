@@ -24,6 +24,7 @@ import { cookies } from 'next/headers';
 import { SubHeader } from '@/components/SubHeader';
 import { getCategoryUrl } from '@/utils/router.util';
 import { ORDER_BY_FIELDS } from '@/app/constants';
+import { FilterBar } from '@/components/FilterBar';
 
 export interface ICategoriesOrProductsProps {
   params: {
@@ -35,6 +36,8 @@ export interface ICategoriesOrProductsProps {
     byPrice: OrderByDirection;
     byDate: OrderByDirection;
     byAlfabet: OrderByDirection;
+    minPrice: string;
+    maxPrice: string;
   };
 }
 
@@ -96,11 +99,6 @@ export default async function CategoriesOrProductsPage(
   const currentCategory: ICategory = Object.values(categories).find((item) => item.id === categoryId);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
-  const pagesCount: number = Math.ceil(currentCategory.productsTotal / searchParams.pageLimit);
-  if (searchParams.page > pagesCount) {
-    redirect(`${RouterPath.CATEGORIES}/${categoryId}?page=1&pageLimit=${searchParams.pageLimit}`);
-  }
-
   const productsFilters: QueryConstraint[] = [
     where('categoryRef', '==', doc(db, FirestoreCollections.CATEGORIES, categoryId))
     // limit(pageLimit),
@@ -110,11 +108,25 @@ export default async function CategoriesOrProductsPage(
   if (orderByField) {
     productsFilters.push(orderBy(orderByField, orderByValue));
   }
+  if (searchParams.minPrice?.length) {
+    productsFilters.push(where('price', '>=', Number(searchParams.minPrice)));
+  }
+  if (searchParams.maxPrice?.length) {
+    productsFilters.push(where('price', '<=', Number(searchParams.maxPrice)));
+  }
 
   const productsQuerySnapshot = await getDocs(query(
     collection(db, FirestoreCollections.PRODUCTS),
     ...productsFilters
   ));
+
+  const pagesCount: number = productsQuerySnapshot.docs.length
+    ? Math.ceil(productsQuerySnapshot.docs.length / searchParams.pageLimit)
+    : 0;
+  if (searchParams.page > pagesCount) {
+    redirect(`${RouterPath.CATEGORIES}/${categoryId}?page=1&pageLimit=${searchParams.pageLimit}`);
+  }
+
   const productsChunks = chunk(productsQuerySnapshot.docs, searchParams.pageLimit);
   const products: IProduct[] = docsToData<IProduct>(productsChunks[searchParams.page - 1])
     .map((item) => {
@@ -132,13 +144,27 @@ export default async function CategoriesOrProductsPage(
         <div className="w-full md:w-4/12 mr-4">
           <Catalog pageLimit={searchParams.pageLimit} categories={Object.values(categories)}
                    currentCategoryId={categoryId}/>
-          {/*<FilterBar/>*/}
+          <div className="mt-1">
+            <FilterBar
+              config={config}
+              categoryId={categoryId}
+              pageLimit={searchParams.pageLimit}
+              orderByParams={{
+                key: orderByKey,
+                value: orderByValue
+              }}
+              minPrice={searchParams.minPrice}
+              maxPrice={searchParams.maxPrice}
+            />
+          </div>
         </div>
         <ProductsList
           orderByParams={{
             key: orderByKey,
             value: orderByValue
           }}
+          minPrice={searchParams.minPrice}
+          maxPrice={searchParams.maxPrice}
           pagesCount={pagesCount}
           categoryId={categoryId}
           pageLimit={searchParams.pageLimit}

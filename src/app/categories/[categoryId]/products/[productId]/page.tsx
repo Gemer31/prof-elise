@@ -96,7 +96,7 @@ export default async function ProductDetailsPage(
                       product.labels?.map((item, index) => {
                         return <div
                           key={index}
-                          className={'px-2 py-1 text-white rounded-md text-xs ' + COLOR_OPTION_VALUES.get(item.color)}
+                          className={'px-2 py-1 text-white rounded-md text-xs pointer-events-none ' + COLOR_OPTION_VALUES.get(item.color)}
                         >{item.text}</div>;
                       })
                     }

@@ -5,7 +5,7 @@ import { IConfig, IOrderByModel, IProduct } from '@/app/models';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useRouter } from 'next/navigation';
-import { PageLimits, OrderByKeys } from '@/app/enums';
+import { OrderByKeys, PageLimits } from '@/app/enums';
 import { PagesToolbar } from '@/components/PagesToolbar';
 import { SortByButton } from '@/components/SortByButton';
 import { getCategoryUrl } from '@/utils/router.util';
@@ -19,6 +19,8 @@ export interface IProductsListProps {
   pageLimit: number;
   page: number;
   orderByParams?: IOrderByModel;
+  minPrice?: string;
+  maxPrice?: string;
 }
 
 export function ProductsList({
@@ -28,7 +30,9 @@ export function ProductsList({
                                page,
                                pagesCount,
                                categoryId,
-                               orderByParams
+                               orderByParams,
+                               maxPrice,
+                               minPrice
                              }: IProductsListProps) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
@@ -49,6 +53,8 @@ export function ProductsList({
       page: 1,
       pageLimit: newLimit,
       orderBy: orderByParams,
+      minPrice,
+      maxPrice,
     }));
   };
   const sortByChange = (newType: OrderByKeys, newValue: OrderByDirection) => {
@@ -62,6 +68,8 @@ export function ProductsList({
         key: newType,
         value: newValue
       },
+      maxPrice,
+      minPrice,
     }));
   };
 
@@ -104,11 +112,13 @@ export function ProductsList({
       })}
     </div>
     <PagesToolbar
+      minPrice={minPrice}
+      maxPrice={maxPrice}
       categoryId={categoryId}
       pages={pagesCount}
       pageLimit={pageLimit}
       current={page}
-      orderByParams={{ key: sortType, value: sortValue }}
+      orderByParams={{key: sortType, value: sortValue}}
     />
   </div>;
 }

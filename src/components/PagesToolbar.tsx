@@ -9,9 +9,11 @@ interface IPagesToolbarProps {
   pageLimit: number;
   orderByParams: IOrderByModel;
   categoryId: string;
+  minPrice?: string;
+  maxPrice?: string;
 }
 
-export function PagesToolbar({current, pages, pageLimit, categoryId, orderByParams}: IPagesToolbarProps) {
+export function PagesToolbar({current, pages, pageLimit, categoryId, orderByParams, maxPrice, minPrice}: IPagesToolbarProps) {
   return <div className={'w-full justify-center gap-x-1 ' + (pages < 2 ? 'hidden' : 'flex')}>
     {
       current === 1
@@ -23,7 +25,9 @@ export function PagesToolbar({current, pages, pageLimit, categoryId, orderByPara
             categoryId: categoryId,
             page: current - 1,
             pageLimit,
-            orderBy: orderByParams
+            orderBy: orderByParams,
+            maxPrice,
+            minPrice,
           })}
         >←</Button>
     }
@@ -39,7 +43,9 @@ export function PagesToolbar({current, pages, pageLimit, categoryId, orderByPara
             categoryId: categoryId,
             page: value,
             pageLimit,
-            orderBy: orderByParams
+            orderBy: orderByParams,
+            maxPrice,
+            minPrice,
           })}
         >{value}</Button>;
       })
@@ -54,7 +60,9 @@ export function PagesToolbar({current, pages, pageLimit, categoryId, orderByPara
             categoryId: categoryId,
             page: current + 1,
             pageLimit,
-            orderBy: orderByParams
+            orderBy: orderByParams,
+            maxPrice,
+            minPrice,
           })}
         >→</Button>
     }

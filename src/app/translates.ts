@@ -122,5 +122,8 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     addShopRegistrationDescription: 'Введите регистрационные данные',
     shopRegistrationDescription: 'Регистрационные данные',
     returnToCatalog: "Вернуться к каталогу товаров",
+    from: 'От',
+    to: 'До',
+    accept: 'Применить'
   }
 }

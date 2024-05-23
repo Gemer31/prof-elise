@@ -6,15 +6,15 @@ export function getCategoryUrl({
                                  page,
                                  pageLimit,
                                  orderBy,
-                                 priceMin,
-                                 priceMax
+                                 minPrice,
+                                 maxPrice
                                }: {
   categoryId: string,
   page: number,
   pageLimit: number,
   orderBy?: IOrderByModel
-  priceMin?: string,
-  priceMax?: string
+  minPrice?: string,
+  maxPrice?: string
 }): string {
   return RouterPath.CATEGORIES
     + '/'
@@ -22,6 +22,6 @@ export function getCategoryUrl({
     + '?' + UrlQueryParamsNames.PAGE + '=' + page
     + '&' + UrlQueryParamsNames.PAGE_LIMIT + '=' + pageLimit
     + (orderBy?.value ? ('&' + orderBy.key + '=' + orderBy?.value) : '')
-    + (priceMin ? ('&' + UrlQueryParamsNames.PRICE_MIN + '=' + priceMin) : '')
-    + (priceMax ? ('&' + UrlQueryParamsNames.PRICE_MAX + '=' + priceMin) : '');
+    + (minPrice ? ('&' + UrlQueryParamsNames.MIN_PRICE + '=' + minPrice) : '')
+    + (maxPrice ? ('&' + UrlQueryParamsNames.MAX_PRICE + '=' + maxPrice) : '');
 }

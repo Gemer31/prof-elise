@@ -16,7 +16,7 @@ import { CLIENT_ID } from '@/app/constants';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
-  return docs.map(item => item.data()) as T[];
+  return docs?.map(item => item.data()) as T[] || [];
 }
 
 export function getStorageImageSrc(image: StorageReference): string {
