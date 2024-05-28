@@ -105,7 +105,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
   return <>
     {
       createdOrderNumber
-        ? <div className="h-full flex flex-col justify-center items-center py-10">
+        ? <section className="h-full flex flex-col justify-center items-center py-10">
           <div className="flex items-center">
             <Image width={50} height={50} src="/icons/tick.svg" alt="Success"/>
             <span className="ml-2 text-4xl font-bold">{TRANSLATES[LOCALE].order} №{createdOrderNumber}</span>
@@ -115,7 +115,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
             className="text-pink-500 hover:text-pink-400 text-xl duration-500 transition-colors"
             href={RouterPath.CATEGORIES}
           >{TRANSLATES[LOCALE].returnToCatalog}</Link>
-        </div>
+        </section>
         : <>
           <div className="w-full flex justify-between items-center mb-2">
             <h1 className="text-center text-2xl uppercase mb-4">{TRANSLATES[LOCALE].orderCreation}</h1>

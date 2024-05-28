@@ -2,6 +2,11 @@ export const LOCALE: string = 'ru';
 
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
+    youAreOnThisPageBecause: 'Вы оказались на этой странице по следующим причинам',
+    pageDoesNotAvailable: 'Страница временно недоступна',
+    pageDoesNotExist: 'Страница не существует',
+    wrongURLAddress: 'Неправильный URL адрес',
+    pageIsNotFound: 'Страница не найдена',
     сonsumables: 'Расходные материалы',
     disposableConsumables: 'Одноразовые расходные материалы',
     popularCategories: 'Популярные категории',

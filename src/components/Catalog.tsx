@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Loader } from '@/components/Loader';
 
 interface ICategoriesProps {
-  pageLimit: number;
+  pageLimit?: number;
   categories: ICategory[];
   currentCategoryId?: string;
 }
@@ -19,7 +19,7 @@ export function Catalog({categories, currentCategoryId, pageLimit}: ICategoriesP
 
   return (
     <>
-      <div className="fixed md:hidden aside-catalog-wrapper">
+      <aside className="fixed md:hidden aside-catalog-wrapper">
         <input className="aside-catalog-checkbox" type="checkbox"/>
         <div className="aside-catalog-button">
           <Image width={30} height={30} src="/icons/categories.svg" alt="Catalog list"/>
@@ -44,8 +44,8 @@ export function Catalog({categories, currentCategoryId, pageLimit}: ICategoriesP
             }
           </div>
         </div>
-      </div>
-      <div className="hidden md:block rounded-md border-2 bg-pink-300">
+      </aside>
+      <section className="hidden md:block rounded-md border-2 bg-pink-300">
         {
           categories.map((category) => {
             return (
@@ -70,7 +70,7 @@ export function Catalog({categories, currentCategoryId, pageLimit}: ICategoriesP
             );
           })
         }
-      </div>
+      </section>
     </>
   );
 }

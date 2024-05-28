@@ -38,9 +38,9 @@ export default async function CategoriesPage(
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs links={[{title: TRANSLATES[LOCALE].catalog}]}/>
       <h1 className="text-2xl self-start uppercase py-2">{TRANSLATES[LOCALE].productsCatalog}</h1>
-      <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
+      <article className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <CategoriesList data={categories} pageLimit={pageLimit}/>
-      </div>
+      </article>
     </ContentContainer>
     <ViewedRecently
       viewedRecently={viewedRecently}

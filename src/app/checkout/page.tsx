@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { doc, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
+import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
 import { IConfig, IViewedRecently } from '@/app/models';
 import { ContentContainer } from '@/components/ContentContainer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -9,8 +9,6 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { cookies } from 'next/headers';
 import { getClient, getViewedRecently } from '@/utils/firebase.util';
 import { CheckoutForm } from '@/components/checkout-form/CheckoutForm';
-import { Button } from '@/components/Button';
-import { CheckoutTotalBar } from '@/components/checkout-form/CheckoutTotalBar';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/SubHeader';
 
@@ -36,9 +34,9 @@ export default async function CheckoutPage() {
       <Breadcrumbs links={[
         {title: TRANSLATES[LOCALE].orderCreation}
       ]}/>
-      <div className="w-full">
+      <article className="w-full">
         <CheckoutForm config={config}/>
-      </div>
+      </article>
     </ContentContainer>
     <ViewedRecently
       viewedRecently={viewedRecently}

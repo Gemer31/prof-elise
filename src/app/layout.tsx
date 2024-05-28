@@ -40,7 +40,9 @@ export default async function RootLayout({children}: {
       <Notification/>
       <div id="page" className="relative flex flex-col items-center h-full z-10">
         <Header/>
-        {children}
+        <main className="w-full flex flex-col items-center">
+          {children}
+        </main>
         <Footer config={config}/>
       </div>
     </StoreProvider>

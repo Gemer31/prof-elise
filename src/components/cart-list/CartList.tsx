@@ -58,22 +58,22 @@ export function CartList({serverClient, config}: ICartListProps) {
       clientId: getClientId(),
       data: {
         ...client,
-        cart: newCart,
+        cart: newCart
       }
     }));
-  }
+  };
 
   return serverClient !== undefined ? data?.length
-    ? <div className="w-full">
-      <div className="w-full flex justify-between items-center mb-4">
+    ? <article className="w-full">
+      <section className="w-full flex justify-between items-center mb-4">
         <h1 className="text-center text-2xl uppercase">{TRANSLATES[LOCALE].purchaseCart}</h1>
         <Button
           styleClass="flex px-2 py-1 text-sm"
           type={ButtonTypes.BUTTON}
           callback={cleanCart}
         >{TRANSLATES[LOCALE].cleanCart}</Button>
-      </div>
-      <div className="w-full flex gap-x-4">
+      </section>
+      <section className="w-full flex gap-x-4">
         <div>
           {
             data.map((item, index) => {
@@ -87,9 +87,9 @@ export function CartList({serverClient, config}: ICartListProps) {
           }
         </div>
         <CartListTotalBar config={config}/>
-      </div>
-    </div>
-    : <div className="w-full h-full py-10 gap-x-2 gap-y-2 flex justify-center items-center text-3xl text-center">
+      </section>
+    </article>
+    : <article className="w-full h-full py-10 gap-x-2 gap-y-2 flex justify-center items-center text-3xl text-center">
       <Image width={100} height={100} src="/icons/empty-cart.svg" alt="Empty cart"/>
       <div className="flex flex-col gap-y-4 items-center">
         <h3>{TRANSLATES[LOCALE].emptyCart}</h3>
@@ -101,5 +101,5 @@ export function CartList({serverClient, config}: ICartListProps) {
           callback={() => setLoading(true)}
         >{TRANSLATES[LOCALE].intoCatalog}</Button>
       </div>
-    </div> : <></>
+    </article> : <></>;
 }

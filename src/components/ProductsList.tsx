@@ -73,7 +73,7 @@ export function ProductsList({
     }));
   };
 
-  return <div className="w-full">
+  return <article className="w-full">
     <div className="flex justify-between mb-4">
       <div className="flex gap-x-3">
         {
@@ -120,5 +120,5 @@ export function ProductsList({
       current={page}
       orderByParams={{key: sortType, value: sortValue}}
     />
-  </div>;
+  </article>;
 }

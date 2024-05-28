@@ -24,17 +24,12 @@ export default async function DeliveryPage() {
   return <>
     <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
-      <Breadcrumbs links={[
-        {title: TRANSLATES[LOCALE].delivery}
-      ]}/>
-      <div
+      <Breadcrumbs links={[{title: TRANSLATES[LOCALE].delivery}]}/>
+      <article
         className="whitespace-pre-line"
         dangerouslySetInnerHTML={{__html: config.deliveryDescription}}
       />
     </ContentContainer>
-    <ViewedRecently
-      viewedRecently={viewedRecently}
-      config={config}
-    />
+    <ViewedRecently viewedRecently={viewedRecently} config={config}/>
   </>;
 }

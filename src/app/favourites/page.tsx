@@ -53,16 +53,16 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
   return <>
     <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
-      <Breadcrumbs links={[
-        {title: TRANSLATES[LOCALE].favourites}
-      ]}/>
+      <Breadcrumbs links={[{title: TRANSLATES[LOCALE].favourites}]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
-        <div className="w-full gap-x-3 md:w-4/12 mr-4">
-          <Catalog pageLimit={pageLimit} categories={Object.values(categories)}/>
-        </div>
-        <div className="w-full">
+        <section className="w-full gap-x-3 md:w-4/12 mr-4">
+          <div className="sticky top-20">
+            <Catalog pageLimit={pageLimit} categories={Object.values(categories)}/>
+          </div>
+        </section>
+        <section className="w-full">
           <FavouritesList serverProducts={data} config={config}/>
-        </div>
+        </section>
       </div>
     </ContentContainer>
     <ViewedRecently

@@ -14,22 +14,15 @@ interface ISubHeaderProps {
 }
 
 export function SubHeader({config}: ISubHeaderProps) {
-  const containerClass: string = useMemo(() => convertToClass([
+  const hostClass: string = useMemo(() => convertToClass([
     'flex',
     'flex-col md:flex-row',
     'justify-between',
     'items-center',
     'mb-2'
   ]), []);
-  const infoClass: string = useMemo(() => convertToClass([
-    'w-full md:w-8/12',
-    'hidden 3xs:flex md:hidden',
-    'justify-between',
-    'items-center',
-    'mb-2 md:mb-0'
-  ]), []);
 
-  return <ContentContainer styleClass={containerClass}>
+  return <ContentContainer styleClass={hostClass}>
     <div className="hidden md:flex justify-between w-full">
       <Link className="flex justify-center items-center w-3/12" href={RouterPath.HOME}>
         <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>

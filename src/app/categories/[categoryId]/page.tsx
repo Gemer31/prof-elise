@@ -16,7 +16,7 @@ import {
 } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ContentContainer';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
@@ -97,6 +97,11 @@ export default async function CategoriesOrProductsPage(
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const currentCategory: ICategory = Object.values(categories).find((item) => item.id === categoryId);
+
+  if (!currentCategory) {
+    notFound();
+  }
+
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   const productsFilters: QueryConstraint[] = [
@@ -141,25 +146,26 @@ export default async function CategoriesOrProductsPage(
       <Breadcrumbs
         links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
-        <div className="w-full md:w-4/12 mr-4">
+        <article className="w-full md:w-4/12 mr-4">
           <div className="sticky top-20">
-            <Catalog pageLimit={searchParams.pageLimit} categories={Object.values(categories)}
-                     currentCategoryId={categoryId}/>
-            <div className="mt-1">
-              <FilterBar
-                config={config}
-                categoryId={categoryId}
-                pageLimit={searchParams.pageLimit}
-                orderByParams={{
-                  key: orderByKey,
-                  value: orderByValue
-                }}
-                minPrice={searchParams.minPrice}
-                maxPrice={searchParams.maxPrice}
-              />
-            </div>
+            <Catalog
+              pageLimit={searchParams.pageLimit}
+              categories={Object.values(categories)}
+              currentCategoryId={categoryId}
+            />
+            <FilterBar
+              config={config}
+              categoryId={categoryId}
+              pageLimit={searchParams.pageLimit}
+              orderByParams={{
+                key: orderByKey,
+                value: orderByValue
+              }}
+              minPrice={searchParams.minPrice}
+              maxPrice={searchParams.maxPrice}
+            />
           </div>
-        </div>
+        </article>
         <ProductsList
           orderByParams={{
             key: orderByKey,

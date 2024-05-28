@@ -19,30 +19,28 @@ export function AboutUs({text}: IAboutUsProps) {
     triggerOnce: true
   });
 
-  return (
-    <ContentContainer styleClass="w-full flex flex-col 2md:flex-row justify-start items-center pb-4">
+  return <ContentContainer type="article" styleClass="w-full flex flex-col 2md:flex-row justify-start items-center pb-4">
+    <div
+      ref={ref1}
+      className={`2md:mr-2 ${handleInView(inView1, FADE_IN_LEFT_CLASS)}`}
+    >
       <div
         ref={ref1}
-        className={`2md:mr-2 ${handleInView(inView1, FADE_IN_LEFT_CLASS)}`}
-      >
-        <div
-          ref={ref1}
-          className="uppercase text-2xl mb-4 text-center 2md:text-start"
-        >{TRANSLATES[LOCALE].сonsumablesWholesaleRetail}</div>
-        <div
-          className="ql-editor readonly-ql-editor no-paddings whitespace-pre-line text-justify"
-          dangerouslySetInnerHTML={{__html: text}}
-        />
-      </div>
-      <Image
-        ref={ref2}
-        style={{position: 'relative', top: '1rem'}}
-        className={handleInView(inView2, FADE_IN_RIGHT_CLASS)}
-        width={500}
-        height={500}
-        src="/images/preview.png"
-        alt="About Us"
+        className="uppercase text-2xl mb-4 text-center 2md:text-start"
+      >{TRANSLATES[LOCALE].сonsumablesWholesaleRetail}</div>
+      <div
+        className="ql-editor readonly-ql-editor no-paddings whitespace-pre-line text-justify"
+        dangerouslySetInnerHTML={{__html: text}}
       />
-    </ContentContainer>
-  );
+    </div>
+    <Image
+      ref={ref2}
+      style={{position: 'relative', top: '1rem'}}
+      className={handleInView(inView2, FADE_IN_RIGHT_CLASS)}
+      width={500}
+      height={500}
+      src="/images/preview.png"
+      alt="About Us"
+    />
+  </ContentContainer>;
 }

@@ -45,7 +45,7 @@ export function FilterBar({categoryId, pageLimit, orderByParams, minPrice, maxPr
     }));
   };
 
-  return <section className="bg-pink-300 rounded-md px-4 py-3">
+  return <section className="bg-pink-300 rounded-md px-4 py-3 mt-1">
     <h3 className="text-center text-lg font-bold pb-1">{TRANSLATES[LOCALE].filter}</h3>
     <form className="flex flex-col gap-y-2" onSubmit={onSubmit}>
       <div>

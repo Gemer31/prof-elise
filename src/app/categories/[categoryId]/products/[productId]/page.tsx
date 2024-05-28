@@ -15,6 +15,7 @@ import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
 import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
 import currency from 'currency.js';
 import { SubHeader } from '@/components/SubHeader';
+import { notFound } from 'next/navigation';
 
 export interface IProductDetailsProps {
   params: {
@@ -44,8 +45,17 @@ export default async function ProductDetailsPage(
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
+
   const product: IProduct = productDocumentSnapshot.data() as IProduct;
+  if (!product) {
+    notFound();
+  }
+
   const productCategory: ICategory = categories.find((item) => product.categoryRef.path.includes(item.id));
+  if (!productCategory) {
+    notFound();
+  }
+
   delete product.categoryRef;
 
   if (clientId && !client?.viewedRecently[productId]) {
@@ -83,11 +93,13 @@ export default async function ProductDetailsPage(
       ]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
         <div className="w-full md:w-4/12 mr-4">
-          <Catalog pageLimit={pageLimit} currentCategoryId={product.categoryId} categories={categories}/>
+          <div className="sticky top-20">
+            <Catalog pageLimit={pageLimit} currentCategoryId={product.categoryId} categories={categories}/>
+          </div>
         </div>
-        <div className="w-full flex justify-between">
+        <article className="w-full flex justify-between">
           <div className="w-full bg-slate-100 rounded-md p-4">
-            <div className="w-full">
+            <section className="w-full">
               <div className="mb-4 text-2xl bold">{product?.title}</div>
               <div className="flex">
                 <div className="relative rounded-md">
@@ -114,12 +126,12 @@ export default async function ProductDetailsPage(
                   <ProductDetailsActionsBar product={product}/>
                 </div>
               </div>
-            </div>
-            <div className="mt-4 ql-editor readonly-ql-editor no-paddings whitespace-pre-line"
+            </section>
+            <section className="mt-4 ql-editor readonly-ql-editor no-paddings whitespace-pre-line"
                  dangerouslySetInnerHTML={{__html: product?.description || ''}}
             />
           </div>
-        </div>
+        </article>
       </div>
     </ContentContainer>
     <ViewedRecently
