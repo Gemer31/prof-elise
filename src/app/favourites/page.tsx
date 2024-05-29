@@ -4,13 +4,13 @@ import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
 import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
-import { FavouritesList } from '@/components/favourites-list/FavouritesList';
-import { ContentContainer } from '@/components/ContentContainer';
-import { Catalog } from '@/components/Catalog';
+import { FavouritesList } from '@/components/view/favourites-list/FavouritesList';
+import { ContentContainer } from '@/components/ui/ContentContainer';
+import { Catalog } from '@/components/view/Catalog';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
-import { SubHeader } from '@/components/SubHeader';
+import { Breadcrumbs } from '@/components/view/Breadcrumbs';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/view/SubHeader';
 
 export interface IFavouritesPageProps {
   params: {

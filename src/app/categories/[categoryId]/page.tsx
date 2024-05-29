@@ -1,7 +1,7 @@
 import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
-import { Catalog } from '@/components/Catalog';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { ProductsList } from '@/components/ProductsList';
+import { Catalog } from '@/components/view/Catalog';
+import { Breadcrumbs } from '@/components/view/Breadcrumbs';
+import { ProductsList } from '@/components/view/ProductsList';
 import { FirestoreCollections, FirestoreDocuments, OrderByKeys, PageLimits, RouterPath } from '@/app/enums';
 import {
   collection,
@@ -18,13 +18,13 @@ import { db } from '@/app/lib/firebase-config';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { notFound, redirect } from 'next/navigation';
 import chunk from 'lodash.chunk';
-import { ContentContainer } from '@/components/ContentContainer';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { ContentContainer } from '@/components/ui/ContentContainer';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { cookies } from 'next/headers';
-import { SubHeader } from '@/components/SubHeader';
+import { SubHeader } from '@/components/view/SubHeader';
 import { getCategoryUrl } from '@/utils/router.util';
 import { ORDER_BY_FIELDS } from '@/app/constants';
-import { FilterBar } from '@/components/FilterBar';
+import { FilterBar } from '@/components/view/FilterBar';
 
 export interface ICategoriesOrProductsProps {
   params: {

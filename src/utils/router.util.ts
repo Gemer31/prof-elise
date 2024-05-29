@@ -1,24 +1,22 @@
-import { RouterPath, UrlQueryParamsNames } from '@/app/enums';
+import { UrlQueryParamsNames } from '@/app/enums';
 import { IOrderByModel } from '@/app/models';
 
-export function getCategoryUrl({
-                                 categoryId,
+export function getPaginateUrl({
+                                 baseUrl,
                                  page,
                                  pageLimit,
                                  orderBy,
                                  minPrice,
                                  maxPrice
                                }: {
-  categoryId: string,
+  baseUrl: string,
   page: number,
   pageLimit: number,
   orderBy?: IOrderByModel
   minPrice?: string,
   maxPrice?: string
 }): string {
-  return RouterPath.CATEGORIES
-    + '/'
-    + categoryId
+  return baseUrl
     + '?' + UrlQueryParamsNames.PAGE + '=' + page
     + '&' + UrlQueryParamsNames.PAGE_LIMIT + '=' + pageLimit
     + (orderBy?.value ? ('&' + orderBy.key + '=' + orderBy?.value) : '')

@@ -1,4 +1,4 @@
-import { ContentContainer } from '@/components/ContentContainer';
+import { ContentContainer } from '@/components/ui/ContentContainer';
 import { FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import Link from 'next/link';
@@ -7,10 +7,10 @@ import { cookies } from 'next/headers';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { ICategory, IConfig, IViewedRecently } from '@/app/models';
-import { SubHeader } from '@/components/SubHeader';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { Catalog } from '@/components/Catalog';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/view/SubHeader';
+import { Breadcrumbs } from '@/components/view/Breadcrumbs';
+import { Catalog } from '@/components/view/Catalog';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import Image from 'next/image';
 
 export default async function NotFound() {

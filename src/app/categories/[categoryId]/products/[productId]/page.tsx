@@ -1,20 +1,20 @@
 import { ICategory, IConfig, IProduct, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
-import { Catalog } from '@/components/Catalog';
-import { ContentContainer } from '@/components/ContentContainer';
-import { ImgGallery } from '@/components/ImgGallery';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Catalog } from '@/components/view/Catalog';
+import { ContentContainer } from '@/components/ui/ContentContainer';
+import { ImgGallery } from '@/components/view/ImgGallery';
+import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
 import { collection, doc, DocumentReference, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
-import { EntityFavouriteButton } from '@/components/EntityFavouriteButton';
-import { ProductDetailsActionsBar } from '@/components/ProductDetailsActionsBar';
+import { EntityFavouriteButton } from '@/components/view/EntityFavouriteButton';
+import { ProductDetailsActionsBar } from '@/components/view/ProductDetailsActionsBar';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { cookies } from 'next/headers';
 import { CLIENT_ID, COLOR_OPTION_VALUES } from '@/app/constants';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import currency from 'currency.js';
-import { SubHeader } from '@/components/SubHeader';
+import { SubHeader } from '@/components/view/SubHeader';
 import { notFound } from 'next/navigation';
 
 export interface IProductDetailsProps {

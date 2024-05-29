@@ -1,5 +1,5 @@
-import { AdminEditor } from '@/components/AdminEditor';
-import { ContentContainer } from '@/components/ContentContainer';
+import { AdminEditor } from '@/components/admin/AdminEditor';
+import { ContentContainer } from '@/components/ui/ContentContainer';
 
 export default function EditorPage() {
   return <>

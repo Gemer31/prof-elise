@@ -1,15 +1,15 @@
 import { ICategory, IConfig, IViewedRecently } from '@/app/models';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { FirestoreCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
-import { CategoriesList } from '@/components/CategoriesList';
+import { CategoriesList } from '@/components/view/CategoriesList';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { ContentContainer } from '@/components/ContentContainer';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { ContentContainer } from '@/components/ui/ContentContainer';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { cookies } from 'next/headers';
-import { SubHeader } from '@/components/SubHeader';
+import { SubHeader } from '@/components/view/SubHeader';
 
 export interface ICategoriesPageProps {
   searchParams: {

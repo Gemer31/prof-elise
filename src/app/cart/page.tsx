@@ -4,13 +4,13 @@ import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
 import { IClientEnriched, IConfig, IViewedRecently } from '@/app/models';
 import { cookies } from 'next/headers';
-import { ContentContainer } from '@/components/ContentContainer';
-import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { ContentContainer } from '@/components/ui/ContentContainer';
+import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { getClient, getClientEnriched, getViewedRecently } from '@/utils/firebase.util';
-import { CartList } from '@/components/cart-list/CartList';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
-import { SubHeader } from '@/components/SubHeader';
+import { CartList } from '@/components/view/cart-list/CartList';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
+import { SubHeader } from '@/components/view/SubHeader';
 
 export const metadata: Metadata = {
   title: 'Корзина покупок',

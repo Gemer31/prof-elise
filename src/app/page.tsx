@@ -1,17 +1,17 @@
-import { AboutUs } from '@/components/AboutUs';
-import { ContentContainer } from '@/components/ContentContainer';
+import { AboutUs } from '@/components/view/AboutUs';
+import { ContentContainer } from '@/components/ui/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { CategoriesList } from '@/components/CategoriesList';
+import { CategoriesList } from '@/components/view/CategoriesList';
 import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
 import { ICategory, IConfig, IViewedRecently } from '@/app/models';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, RouterPath } from '@/app/enums';
-import { Button } from '@/components/Button';
-import { Slider } from '@/components/slider/Slider';
-import { ViewedRecently } from '@/components/viewed-recently/ViewedRecently';
+import { Button } from '@/components/ui/Button';
+import { Slider } from '@/components/view/slider/Slider';
+import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { cookies } from 'next/headers';
-import { SubHeader } from '@/components/SubHeader';
+import { SubHeader } from '@/components/view/SubHeader';
 
 export interface IHomePageProps {
   searchParams: {

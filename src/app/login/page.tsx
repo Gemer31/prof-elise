@@ -1,7 +1,7 @@
 'use client';
 
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/ui/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,11 +9,11 @@ import { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { useRouter } from 'next/navigation';
-import { ContentContainer } from '@/components/ContentContainer';
-import { InputFormField } from '@/components/form-fields/InputFormField';
+import { ContentContainer } from '@/components/ui/ContentContainer';
+import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { auth } from '@/app/lib/firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Loader } from '@/components/Loader';
+import { Loader } from '@/components/ui/Loader';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('fieldRequired').email('fieldInvalid'),
