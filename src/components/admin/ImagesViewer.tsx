@@ -6,7 +6,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { StorageReference } from '@firebase/storage';
 import { useEffect, useState } from 'react';
 import { CTRL_CODE } from '@/app/constants';
-import { SearchInput } from '@/components/admin/SearchInput';
+import { SearchInput } from '@/components/ui/SearchInput';
 
 interface ImagesViewerProps {
   editAvailable?: boolean;

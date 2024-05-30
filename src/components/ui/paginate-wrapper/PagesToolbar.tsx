@@ -11,9 +11,10 @@ interface IPagesToolbarProps {
   baseRedirectUrl: string;
   minPrice?: string;
   maxPrice?: string;
+  searchValue?: string;
 }
 
-export function PagesToolbar({current, pages, pageLimit, baseRedirectUrl, orderByParams, maxPrice, minPrice}: IPagesToolbarProps) {
+export function PagesToolbar({current, pages, pageLimit, searchValue, baseRedirectUrl, orderByParams, maxPrice, minPrice}: IPagesToolbarProps) {
   return <div className={'w-full justify-center gap-x-1 ' + (pages < 2 ? 'hidden' : 'flex')}>
     {
       current === 1
@@ -28,6 +29,7 @@ export function PagesToolbar({current, pages, pageLimit, baseRedirectUrl, orderB
             orderBy: orderByParams,
             maxPrice,
             minPrice,
+            searchValue,
           })}
         >←</Button>
     }
@@ -46,6 +48,7 @@ export function PagesToolbar({current, pages, pageLimit, baseRedirectUrl, orderB
             orderBy: orderByParams,
             maxPrice,
             minPrice,
+            searchValue,
           })}
         >{value}</Button>;
       })
@@ -63,6 +66,7 @@ export function PagesToolbar({current, pages, pageLimit, baseRedirectUrl, orderB
             orderBy: orderByParams,
             maxPrice,
             minPrice,
+            searchValue,
           })}
         >→</Button>
     }

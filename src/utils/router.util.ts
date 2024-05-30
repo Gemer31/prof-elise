@@ -7,19 +7,22 @@ export function getPaginateUrl({
                                  pageLimit,
                                  orderBy,
                                  minPrice,
-                                 maxPrice
+                                 maxPrice,
+                                 searchValue
                                }: {
   baseUrl: string,
   page: number,
   pageLimit: number,
   orderBy?: IOrderByModel
   minPrice?: string,
-  maxPrice?: string
+  maxPrice?: string,
+  searchValue?: string
 }): string {
   return baseUrl
     + '?' + UrlQueryParamsNames.PAGE + '=' + page
     + '&' + UrlQueryParamsNames.PAGE_LIMIT + '=' + pageLimit
     + (orderBy?.value ? ('&' + orderBy.key + '=' + orderBy?.value) : '')
     + (minPrice ? ('&' + UrlQueryParamsNames.MIN_PRICE + '=' + minPrice) : '')
-    + (maxPrice ? ('&' + UrlQueryParamsNames.MAX_PRICE + '=' + maxPrice) : '');
+    + (maxPrice ? ('&' + UrlQueryParamsNames.MAX_PRICE + '=' + maxPrice) : '')
+    + (searchValue ? ('&' + UrlQueryParamsNames.SEARCH_VALUE + '=' + searchValue) : '');
 }

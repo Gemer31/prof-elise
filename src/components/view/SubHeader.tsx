@@ -8,6 +8,7 @@ import { transformPhoneUtil } from '@/utils/transform-phone.util';
 import { useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { RequestCallButton } from '@/components/view/RequestCallButton';
+import { ProductsSearch } from '@/components/view/ProductsSearch';
 
 interface ISubHeaderProps {
   config?: IConfig;
@@ -23,24 +24,23 @@ export function SubHeader({config}: ISubHeaderProps) {
   ]), []);
 
   return <ContentContainer styleClass={hostClass}>
-    <div className="hidden md:flex justify-between w-full">
-      <Link className="flex justify-center items-center w-3/12" href={RouterPath.HOME}>
+    <div className="hidden md:flex justify-between items-center w-full gap-x-10">
+      <Link className="flex justify-center items-center" href={RouterPath.HOME}>
         <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>
       </Link>
-      <div className="w-8/12 flex justify-between items-center">
-        <h1 className="uppercase text-center w-20 font-bold">{TRANSLATES[LOCALE].сonsumables}</h1>
-        <div className="text-center font-bold w-3/12">
-          <a
-            href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}>{config?.contactPhone}</a>
-          <div>{config?.workingHours}</div>
-        </div>
-        <RequestCallButton/>
+      <h1 className="uppercase text-center font-bold">{TRANSLATES[LOCALE].сonsumables}</h1>
+      <ProductsSearch config={config}/>
+      <div className="text-center font-bold">
+        <a
+          href={`tel:${transformPhoneUtil(config?.contactPhone || '')}`}>{config?.contactPhone}</a>
+        <div>{config?.workingHours}</div>
       </div>
+      <RequestCallButton/>
     </div>
 
     <div className="w-full hidden 3xs:flex items-center justify-between md:hidden mb-4">
       <div className="uppercase text-center w-3/12 font-bold">{TRANSLATES[LOCALE].сonsumables}</div>
-      {/*<Search/>*/}
+      <ProductsSearch config={config}/>
       <div className="w-6/12 flex flex-col items-center">
         <Link className="flex justify-center items-center mb-2" href={RouterPath.HOME}>
           <Image className="rounded-full" width={150} height={150} src="/images/logo.jpg" alt="Instagram"/>

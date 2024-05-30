@@ -9,8 +9,10 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { OrderByDirection } from '@firebase/firestore';
 import { getPaginateUrl } from '@/utils/router.util';
+import Image from 'next/image';
 
 interface IPaginateWrapperProps extends ICommonProps {
+  items: unknown[];
   orderByParams?: IOrderByModel;
   baseRedirectUrl: string;
   pagesCount: number;
@@ -18,6 +20,7 @@ interface IPaginateWrapperProps extends ICommonProps {
   page: number;
   minPrice?: string;
   maxPrice?: string;
+  searchValue?: string;
 }
 
 export function PaginateWrapper({
@@ -28,7 +31,9 @@ export function PaginateWrapper({
                                   orderByParams,
                                   minPrice,
                                   maxPrice,
-                                  children
+                                  searchValue,
+                                  children,
+                                  items
                                 }: IPaginateWrapperProps) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
@@ -50,7 +55,8 @@ export function PaginateWrapper({
       pageLimit: newLimit,
       orderBy: orderByParams,
       minPrice,
-      maxPrice
+      maxPrice,
+      searchValue
     }));
   };
   const sortByChange = (newType: OrderByKeys, newValue: OrderByDirection) => {
@@ -65,7 +71,8 @@ export function PaginateWrapper({
         value: newValue
       },
       maxPrice,
-      minPrice
+      minPrice,
+      searchValue
     }));
   };
 
@@ -96,15 +103,23 @@ export function PaginateWrapper({
         {TRANSLATES[LOCALE].productsOnThePage}
       </div>
     </div>
-    <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
-      {children}
-    </div>
+    {
+      items.length
+        ? <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+          {children}
+        </div>
+        : <section className="w-full h-full flex justify-center items-center gap-x-6">
+          <Image width={80} height={80} src="/icons/no-items.svg" alt="No items"/>
+          <span className="text-2xl">{TRANSLATES[LOCALE].thereAreNoProductsWithSelectedFilter}</span>
+        </section>
+    }
     <PagesToolbar
       minPrice={minPrice}
       maxPrice={maxPrice}
       baseRedirectUrl={baseRedirectUrl}
       pages={pagesCount}
       pageLimit={pageLimit}
+      searchValue={searchValue}
       current={page}
       orderByParams={{key: sortType, value: sortValue}}
     />

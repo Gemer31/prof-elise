@@ -1,9 +1,10 @@
 import {
+  and,
   collection,
   doc,
   DocumentReference,
   getDoc,
-  getDocs,
+  getDocs, or,
   query,
   QueryDocumentSnapshot,
   where
@@ -161,4 +162,24 @@ export async function getClient(cookies: ReadonlyRequestCookies): Promise<IClien
   }
 
   return client;
+}
+
+export function getFirebaseSearchFilter(searchValue: string) {
+  return or(
+    // query as-is:
+    and(
+      where('title', '>=', searchValue),
+      where('title', '<=', searchValue + '\uf8ff')
+    ),
+    // capitalize first letter:
+    and(
+      where('title', '>=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1)),
+      where('title', '<=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1) + '\uf8ff')
+    ),
+    // lowercase:
+    and(
+      where('title', '>=', searchValue.toLowerCase()),
+      where('title', '<=', searchValue.toLowerCase() + '\uf8ff')
+    )
+  );
 }

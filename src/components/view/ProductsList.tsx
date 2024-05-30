@@ -3,16 +3,16 @@
 import { ProductCard } from '@/components/view/product-card/ProductCard';
 import { IConfig, IOrderByModel, IProduct } from '@/app/models';
 import { useState } from 'react';
-import { RouterPath } from '@/app/enums';
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
 
 export interface IProductsListProps {
   data: IProduct[];
   config: IConfig;
-  categoryId: string;
+  baseRedirectUrl: string;
   pagesCount: number;
   pageLimit: number;
   page: number;
+  searchValue?: string;
   orderByParams?: IOrderByModel;
   minPrice?: string;
   maxPrice?: string;
@@ -24,18 +24,21 @@ export function ProductsList({
                                pageLimit,
                                page,
                                pagesCount,
-                               categoryId,
+                               baseRedirectUrl,
                                orderByParams,
                                maxPrice,
-                               minPrice
+                               minPrice,
+                               searchValue
                              }: IProductsListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   return <PaginateWrapper
-    baseRedirectUrl={RouterPath.CATEGORIES + '/' + categoryId}
+    items={data}
+    baseRedirectUrl={baseRedirectUrl}
     pagesCount={pagesCount}
     pageLimit={pageLimit}
     page={page}
+    searchValue={searchValue}
     maxPrice={maxPrice}
     minPrice={minPrice}
     orderByParams={orderByParams}

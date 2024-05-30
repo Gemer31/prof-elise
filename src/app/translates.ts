@@ -2,6 +2,11 @@ export const LOCALE: string = 'ru';
 
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
+    thereAreNoProductsWithSelectedFilter: 'Товаров по данным параметрам не найдено',
+    searchResultsByRequest: 'Результаты поиска по запросу',
+    searchResults: 'Результаты поиска',
+    allResults: 'Все результаты',
+    nothingFound: 'Ничего не найдено',
     youAreOnThisPageBecause: 'Вы оказались на этой странице по следующим причинам',
     pageDoesNotAvailable: 'Страница временно недоступна',
     pageDoesNotExist: 'Страница не существует',

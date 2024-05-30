@@ -7,18 +7,27 @@ import { ChangeEvent, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { IConfig, IOrderByModel } from '@/app/models';
 import { useRouter } from 'next/navigation';
-import { getCategoryUrl } from '@/utils/router.util';
+import { getPaginateUrl } from '@/utils/router.util';
 
 export interface IFilterBarProps {
-  categoryId: string;
+  baseRedirectUrl: string;
   pageLimit: number;
   orderByParams: IOrderByModel;
   minPrice?: string;
   maxPrice?: string;
+  searchValue?: string;
   config: IConfig;
 }
 
-export function FilterBar({categoryId, pageLimit, orderByParams, minPrice, maxPrice, config}: IFilterBarProps) {
+export function FilterBar({
+                            baseRedirectUrl,
+                            pageLimit,
+                            searchValue,
+                            orderByParams,
+                            minPrice,
+                            maxPrice,
+                            config
+                          }: IFilterBarProps) {
   const hostClass: string = useMemo(() => convertToClass([
     'border-2',
     'rounded-md',
@@ -33,15 +42,16 @@ export function FilterBar({categoryId, pageLimit, orderByParams, minPrice, maxPr
     e.stopPropagation();
     e.preventDefault();
 
-    router.push(getCategoryUrl({
-      categoryId,
+    router.push(getPaginateUrl({
+      baseUrl: baseRedirectUrl,
       page: 1,
       pageLimit,
       orderBy: orderByParams,
       // @ts-ignore
       minPrice: e.target?.[0]?.value,
       // @ts-ignore
-      maxPrice: e.target?.[1]?.value
+      maxPrice: e.target?.[1]?.value,
+      searchValue
     }));
   };
 

@@ -3,7 +3,7 @@ import { IProduct } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { SearchInput } from '@/components/admin/SearchInput';
+import { EditorsSearch } from '@/components/admin/EditorsSearch';
 
 interface CategoriesViewerProps {
   selectedProduct?: IProduct;
@@ -41,7 +41,7 @@ export function ProductsViewer({
 
   return (
     <div className="overflow-auto max-h-48 w-full rounded-md border-pink-500 border-2">
-      <SearchInput onChange={setSearchValue}/>
+      <EditorsSearch onChange={setSearchValue}/>
       <div className="px-2 py-1">
         <div
           onClick={() => selectCategory(undefined)}

@@ -11,12 +11,13 @@ import {
   orderBy,
   OrderByDirection,
   query,
+  QueryCompositeFilterConstraint,
   QueryConstraint,
   where
 } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
-import { notFound, redirect } from 'next/navigation';
+import { docsToData, getClient, getFirebaseSearchFilter, getViewedRecently } from '@/utils/firebase.util';
+import { redirect } from 'next/navigation';
 import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
@@ -25,11 +26,9 @@ import { SubHeader } from '@/components/view/SubHeader';
 import { ORDER_BY_FIELDS } from '@/app/constants';
 import { FilterBar } from '@/components/view/FilterBar';
 import { getPaginateUrl } from '@/utils/router.util';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface ICategoriesOrProductsProps {
-  params: {
-    categoryId: string;
-  };
   searchParams: {
     pageLimit: number;
     page: number;
@@ -38,11 +37,12 @@ export interface ICategoriesOrProductsProps {
     byAlfabet: OrderByDirection;
     minPrice: string;
     maxPrice: string;
+    q: string;
   };
 }
 
-export default async function CategoriesOrProductsPage(
-  {params: {categoryId}, searchParams}: ICategoriesOrProductsProps
+export default async function SearchPage(
+  {searchParams}: ICategoriesOrProductsProps
 ) {
   let orderByKey: OrderByKeys;
   let orderByValue: OrderByDirection;
@@ -75,7 +75,8 @@ export default async function CategoriesOrProductsPage(
 
   if (!Object.values<string>(PageLimits).includes(String(searchParams.pageLimit))) {
     redirect(getPaginateUrl({
-      baseUrl: RouterPath.CATEGORIES + '/' + categoryId,
+      baseUrl: RouterPath.SEARCH,
+      searchValue: searchParams.q,
       page: 1,
       pageLimit: Number(PageLimits.SIX),
       orderBy: {
@@ -96,16 +97,11 @@ export default async function CategoriesOrProductsPage(
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
-  const currentCategory: ICategory = Object.values(categories).find((item) => item.id === categoryId);
-
-  if (!currentCategory) {
-    notFound();
-  }
 
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
-  const productsFilters: QueryConstraint[] = [
-    where('categoryRef', '==', doc(db, FirestoreCollections.CATEGORIES, categoryId))
+  const productsFilters: (QueryConstraint | QueryCompositeFilterConstraint)[] = [
+    getFirebaseSearchFilter(searchParams.q)
     // limit(pageLimit),
   ];
 
@@ -122,14 +118,20 @@ export default async function CategoriesOrProductsPage(
 
   const productsQuerySnapshot = await getDocs(query(
     collection(db, FirestoreCollections.PRODUCTS),
+    // @ts-ignore
     ...productsFilters
   ));
 
   const pagesCount: number = productsQuerySnapshot.docs.length
     ? Math.ceil(productsQuerySnapshot.docs.length / searchParams.pageLimit)
     : 0;
-  if (searchParams.page > pagesCount) {
-    redirect(`${RouterPath.CATEGORIES}/${categoryId}?page=1&pageLimit=${searchParams.pageLimit}`);
+  if (pagesCount !== 0 && searchParams.page > pagesCount) {
+    redirect(getPaginateUrl({
+      baseUrl: RouterPath.SEARCH,
+      page: 1,
+      pageLimit: searchParams.pageLimit,
+      searchValue: searchParams.q
+    }));
   }
 
   const productsChunks = chunk(productsQuerySnapshot.docs, searchParams.pageLimit);
@@ -143,19 +145,20 @@ export default async function CategoriesOrProductsPage(
   return <>
     <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
-      <Breadcrumbs
-        links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
+      <Breadcrumbs links={[{title: TRANSLATES[LOCALE].searchResults}]}/>
+      <div
+        className="text-2xl self-start py-2">{TRANSLATES[LOCALE].searchResultsByRequest}: &quot;{searchParams.q}&quot;</div>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <article className="w-full md:w-4/12 mr-4">
           <div className="sticky top-20">
             <Catalog
               pageLimit={searchParams.pageLimit}
               categories={Object.values(categories)}
-              currentCategoryId={categoryId}
             />
             <FilterBar
               config={config}
-              baseRedirectUrl={RouterPath.CATEGORIES + '/' + categoryId}
+              baseRedirectUrl={RouterPath.SEARCH}
+              searchValue={searchParams.q}
               pageLimit={searchParams.pageLimit}
               orderByParams={{
                 key: orderByKey,
@@ -174,7 +177,8 @@ export default async function CategoriesOrProductsPage(
           minPrice={searchParams.minPrice}
           maxPrice={searchParams.maxPrice}
           pagesCount={pagesCount}
-          baseRedirectUrl={RouterPath.CATEGORIES + '/' + categoryId}
+          searchValue={searchParams.q}
+          baseRedirectUrl={RouterPath.SEARCH}
           pageLimit={searchParams.pageLimit}
           page={Number(searchParams.page)}
           data={products}

@@ -28,7 +28,7 @@ export function Header() {
 
   const hostClass: string = useMemo(() => convertToClass([
     'w-full',
-    'z-10',
+    'z-20',
     'top-0',
     'sticky',
     'flex',

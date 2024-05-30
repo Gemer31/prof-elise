@@ -12,6 +12,7 @@ export enum UrlQueryParamsNames {
   BY_ALFABET = 'byAlfabet',
   MIN_PRICE = 'minPrice',
   MAX_PRICE = 'maxPrice',
+  SEARCH_VALUE = 'q',
 }
 
 export enum ColorOptions {
@@ -29,7 +30,8 @@ export enum RouterPath {
   PRODUCTS = '/products',
   CART = '/cart',
   CHECKOUT = '/checkout',
-  FAVOURITES = '/favourites'
+  FAVOURITES = '/favourites',
+  SEARCH = '/search'
 }
 
 export enum EditGroup {
