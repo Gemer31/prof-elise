@@ -91,6 +91,7 @@ export function ProductsSearch({config}: IProductsSearchProps) {
       onBlur={onBlur}
       onSubmit={() => router.push(searchRedirectUrl)}
       onChange={searchValueChanged}
+      onValueChange={(newSearch) => setSearchValue(newSearch)}
       searchButtonVisible={true}
     />
     {
