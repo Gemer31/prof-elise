@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ICommonProps } from '@/app/models';

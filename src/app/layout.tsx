@@ -6,14 +6,11 @@ import { Metadata } from 'next';
 import { RequestCallPopup } from '@/components/view/RequestCallPopup';
 import { Notification } from '@/components/ui/Notification';
 import { Header } from '@/components/view/Header';
-import { SubHeader } from '@/components/view/SubHeader';
-import { Slider } from '@/components/view/slider/Slider';
-import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { Footer } from '@/components/view/Footer';
-import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
+import { doc, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
-import { IClient, IConfig } from '@/app/models';
+import { IConfig } from '@/app/models';
 
 const openSans = Open_Sans({subsets: ['latin']});
 

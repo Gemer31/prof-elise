@@ -1,5 +1,5 @@
 import { DocumentReference, OrderByDirection } from '@firebase/firestore';
-import { ColorOptions, OrderByKeys, PopupTypes } from '@/app/enums';
+import { ColorOptions, OrderByKeys, PopupTypes, UserRoles } from '@/app/enums';
 
 export interface IProduct {
   id: string;
@@ -76,4 +76,13 @@ export interface IPopupData {
 export interface IOrderByModel {
   key: OrderByKeys;
   value: OrderByDirection;
+}
+
+export interface IUser {
+  email: string;
+  role: UserRoles;
+  phoneNumber?: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
 }

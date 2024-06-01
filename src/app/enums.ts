@@ -24,14 +24,18 @@ export enum RouterPath {
   HOME = '/',
   DELIVERY = '/delivery',
   CONTACTS = '/contacts',
-  LOGIN = '/login',
-  EDITOR = '/editor',
+  SIGN_IN = '/sighIn',
+  REGISTRATION = '/registration',
+  FORGOT_PASSWORD = '/forgot',
   CATEGORIES = '/categories',
   PRODUCTS = '/products',
   CART = '/cart',
   CHECKOUT = '/checkout',
   FAVOURITES = '/favourites',
-  SEARCH = '/search'
+  SEARCH = '/search',
+  PROFILE = '/profile',
+  ORDERS = '/profile/orders',
+  EDITOR = '/profile/editor',
 }
 
 export enum EditGroup {
@@ -47,6 +51,7 @@ export enum FirestoreCollections {
   CATEGORIES = 'categories',
   PRODUCTS = 'products',
   ANONYMOUS_CLIENTS = 'anonymousClients',
+  USERS = 'users',
 }
 
 export enum FirestoreDocuments {
@@ -67,4 +72,9 @@ export enum OrderByKeys {
 export enum PopupTypes {
   REQUEST_CALL,
   BUY_IN_ONE_CLICK,
+}
+
+export enum UserRoles {
+  ADMIN = 'admin',
+  USER = 'user'
 }

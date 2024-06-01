@@ -2,6 +2,15 @@ export const LOCALE: string = 'ru';
 
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
+    userData: 'Данные пользователя',
+    exit: 'Выход',
+    orders: 'Заказы',
+    mainInfo: 'Основная информация',
+    privateAccount: 'Личный кабинет',
+    enterOnSite: 'Вход на сайт',
+    forgotPassword: 'Забыли пароль?',
+    registrationOnSite: 'Регистрация на сайте',
+    registrate: 'Зарегистрироваться',
     thereAreNoProductsWithSelectedFilter: 'Товаров по данным параметрам не найдено',
     searchResultsByRequest: 'Результаты поиска по запросу',
     searchResults: 'Результаты поиска',

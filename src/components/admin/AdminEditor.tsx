@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonTypes, EditGroup, FirestoreCollections, RouterPath } from '@/app/enums';
-import { auth, db, storage } from '@/app/lib/firebase-config';
+import { ButtonTypes, EditGroup, FirestoreCollections } from '@/app/enums';
+import { db, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Loader } from '@/components/ui/Loader';
@@ -13,15 +13,10 @@ import { ICategory, IConfig, IProduct } from '@/app/models';
 import { CategoryEditorForm } from '@/components/admin/CategoryEditorForm';
 import { ProductEditorForm } from '@/components/admin/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/admin/ImagesEditorForm';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter } from 'next/navigation';
 import { collection, getDocs } from '@firebase/firestore';
 import { docsToData } from '@/utils/firebase.util';
 
 export function AdminEditor() {
-  const router = useRouter();
-  const [user, loading] = useAuthState(auth);
-  const [isAuth, setIsAuth] = useState(false);
   const [images, setImages] = useState<StorageReference[]>();
   const [config, setConfig] = useState<IConfig>();
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -33,14 +28,6 @@ export function AdminEditor() {
     setIsDataLoading(true);
     loadData().then(() => setIsDataLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      user
-        ? setIsAuth(true)
-        : router.push(RouterPath.HOME);
-    }
-  }, [loading]);
 
   const loadData = async () => {
     const [
@@ -65,7 +52,7 @@ export function AdminEditor() {
     <main className="w-full">
       <ContentContainer styleClass="flex flex-col items-center">
         <h1 className="text-2xl ">{TRANSLATES[LOCALE].editor}</h1>
-        {isDataLoading || !isAuth
+        {isDataLoading
           ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader className="min-h-[250px] border-pink-500"/></div>
           : <>
             <div className="w-full mt-2 mb-4 flex gap-x-3">
