@@ -58,6 +58,7 @@ export function SignInForm() {
       register={register}
     />
     <InputFormField
+      hideValueAvailable={true}
       placeholder={TRANSLATES[LOCALE].password}
       label={TRANSLATES[LOCALE].password}
       name="password"

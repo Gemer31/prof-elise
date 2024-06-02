@@ -17,6 +17,8 @@ export default async function ProfilePage() {
 
   const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session?.user.email));
   const user: IUser = userDocumentSnapshot.data() as IUser;
+  delete user.orders;
+  delete user.cartAndFavouritesRef;
 
   return <>
     <ProfileBase activeRoute={RouterPath.PROFILE}>

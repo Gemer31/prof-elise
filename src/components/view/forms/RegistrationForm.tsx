@@ -73,9 +73,12 @@ export function RegistrationForm() {
         router.push(RouterPath.PROFILE);
       }
     } catch (e) {
-      dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));
+      console.log(e);
+      // @ts-ignore
+      const translateMessage: string = TRANSLATES[LOCALE][e.message] || TRANSLATES[LOCALE].somethingWentWrong;
+      dispatch(setNotificationMessage(translateMessage));
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   }, []);
 
@@ -84,9 +87,9 @@ export function RegistrationForm() {
     onSubmit={handleSubmit(submitForm)}
   >
     <InputFormField
-      placeholder={TRANSLATES[LOCALE].enterLastName}
-      label={TRANSLATES[LOCALE].lastName}
-      name="lastName"
+      placeholder={TRANSLATES[LOCALE].enterFio}
+      label={TRANSLATES[LOCALE].fio}
+      name="name"
       type="text"
       error={errors.name?.message}
       register={register}
@@ -94,7 +97,7 @@ export function RegistrationForm() {
     <PhoneFormField
       label={TRANSLATES[LOCALE].enterContactPhoneNumber}
       type="text"
-      name="contactPhoneNumber"
+      name="phone"
       error={errors.phone?.message}
       register={register}
     />

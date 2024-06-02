@@ -33,7 +33,7 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
 
   const submitMainInfoForm = async (formData: {
     name?: string;
-    contactPhoneNumber?: string;
+    phone?: string;
     deliveryAddress?: string;
     email?: string;
   }) => {
@@ -81,9 +81,9 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
                 register={register}
               />
               <InputFormField
-                placeholder={TRANSLATES[LOCALE].enterMiddleName}
-                label={TRANSLATES[LOCALE].middleName}
-                name="middleName"
+                placeholder={TRANSLATES[LOCALE].enterFio}
+                label={TRANSLATES[LOCALE].fio}
+                name="name"
                 type="text"
                 error={errors.name?.message}
                 register={register}
@@ -91,7 +91,7 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
               <PhoneFormField
                 label={TRANSLATES[LOCALE].enterContactPhoneNumber}
                 type="text"
-                name="contactPhoneNumber"
+                name="phone"
                 error={errors.phone?.message}
                 register={register}
               />
@@ -106,7 +106,7 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
             </>
             : <>
               <ReadonlyFormField label="Email" value={user.email}/>
-              <ReadonlyFormField label={TRANSLATES[LOCALE].lastName} value={user.name}/>
+              <ReadonlyFormField label={TRANSLATES[LOCALE].fio} value={user.name}/>
               <ReadonlyFormField label={TRANSLATES[LOCALE].contactPhoneNumber} value={user.phone}/>
               <ReadonlyFormField label={TRANSLATES[LOCALE].deliveryAddress} value={user.deliveryAddress}/>
             </>

@@ -2,19 +2,17 @@ export const LOCALE: string = 'ru';
 
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
+    'Firebase: Error (auth/email-already-in-use).': 'Пользователь с таким email уже зарегистрирован',
+
+    enterFio: 'Введите ФИО',
+    fio: 'ФИО',
     passwordIsInvalid: 'Пароль должен содержать минимум 5 символов',
     alreadyRegisteredEnter: 'Уже зарегистрирован. Войти',
     passwordMustMatch: 'Пароль должен совпадать',
     repeatPassword: 'Повторите пароль',
     enterDeliveryAddress: 'Введите адрес доставки',
     enterContactPhoneNumber: 'Введите контактный номер телефона',
-    enterLastName: 'Введите фамилию',
-    enterMiddleName: 'Введите отчество',
-    enterFirstName: 'Введите имя',
     deliveryAddress: 'Адрес доставки',
-    firstName: 'Имя',
-    middleName: 'Отчество',
-    lastName: 'Фамилия',
     contactPhoneNumber: 'Контактный номер телефона',
     changePassword: 'Сменить пароль',
     userData: 'Данные пользователя',

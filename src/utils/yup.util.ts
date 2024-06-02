@@ -9,7 +9,7 @@ export class YupUtil {
   private static password = yup
     .string()
     .required('fieldRequired')
-    .min(5, 'passwordIsInvalid');
+    .min(6, 'passwordIsInvalid');
   private static passwordRepeat = yup
     .string()
     .required('fieldRequired')
