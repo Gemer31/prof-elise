@@ -1,8 +1,8 @@
 import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
-import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
-import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
+import { ICategory, IConfig, IProduct } from '@/app/models';
+import { docsToData, getClient } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { FavouritesList } from '@/components/view/favourites-list/FavouritesList';
 import { ContentContainer } from '@/components/ui/ContentContainer';
@@ -34,7 +34,6 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
   ]);
   const config = settingsDocumentSnapshot.data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
-  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   let data: IProduct[] = [];
   const productsIds: string[] = Object.keys(client.favourites);
@@ -65,9 +64,6 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
         </section>
       </div>
     </ContentContainer>
-    <ViewedRecently
-      viewedRecently={viewedRecently}
-      config={config}
-    />
+    <ViewedRecently/>
   </>;
 }

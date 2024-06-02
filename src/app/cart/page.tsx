@@ -2,12 +2,12 @@ import { Metadata } from 'next';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
-import { IClientEnriched, IConfig, IViewedRecently } from '@/app/models';
+import { IClientEnriched, IConfig } from '@/app/models';
 import { cookies } from 'next/headers';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getClient, getClientEnriched, getViewedRecently } from '@/utils/firebase.util';
+import { getClient, getClientEnriched } from '@/utils/firebase.util';
 import { CartList } from '@/components/view/cart-list/CartList';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/view/SubHeader';
@@ -33,7 +33,6 @@ export default async function CartPage({searchParams: {pageLimit}}: ICartPagePro
     getDocs(collection(db, FirestoreCollections.SETTINGS))
   ]);
   const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
-  const viewedRecently: IViewedRecently[] = client ? await getViewedRecently(client) : [];
   const clientEnriched: IClientEnriched = await getClientEnriched(client);
 
   return <>
@@ -46,9 +45,6 @@ export default async function CartPage({searchParams: {pageLimit}}: ICartPagePro
         <CartList config={config} serverClient={clientEnriched}/>
       </div>
     </ContentContainer>
-    <ViewedRecently
-      viewedRecently={viewedRecently}
-      config={config}
-    />
+    <ViewedRecently/>
   </>;
 }

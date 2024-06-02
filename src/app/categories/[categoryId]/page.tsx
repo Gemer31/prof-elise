@@ -1,4 +1,4 @@
-import { ICategory, IConfig, IProduct, IViewedRecently } from '@/app/models';
+import { ICategory, IConfig, IProduct } from '@/app/models';
 import { Catalog } from '@/components/view/Catalog';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { ProductsList } from '@/components/view/ProductsList';
@@ -15,12 +15,11 @@ import {
   where
 } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
+import { docsToData } from '@/utils/firebase.util';
 import { notFound, redirect } from 'next/navigation';
 import chunk from 'lodash.chunk';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
-import { cookies } from 'next/headers';
 import { SubHeader } from '@/components/view/SubHeader';
 import { ORDER_BY_FIELDS } from '@/app/constants';
 import { FilterBar } from '@/components/view/FilterBar';
@@ -86,11 +85,9 @@ export default async function CategoriesOrProductsPage(
   }
 
   const [
-    client,
     settingsDocumentSnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getClient(cookies()),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
@@ -101,8 +98,6 @@ export default async function CategoriesOrProductsPage(
   if (!currentCategory) {
     notFound();
   }
-
-  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   const productsFilters: QueryConstraint[] = [
     where('categoryRef', '==', doc(db, FirestoreCollections.CATEGORIES, categoryId))
@@ -182,10 +177,7 @@ export default async function CategoriesOrProductsPage(
         />
       </div>
     </ContentContainer>
-    <ViewedRecently
-      viewedRecently={viewedRecently}
-      config={config}
-    />
+    <ViewedRecently/>
   </>;
 }
 

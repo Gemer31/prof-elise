@@ -21,7 +21,7 @@ export default async function ProfilePage() {
   delete user.cartAndFavouritesRef;
 
   return <>
-    <ProfileBase activeRoute={RouterPath.PROFILE}>
+    <ProfileBase activeRoute={RouterPath.PROFILE} userRole={user.role}>
       <ProfileMainInfo user={user}/>
     </ProfileBase>
   </>;

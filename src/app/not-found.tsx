@@ -2,11 +2,10 @@ import { ContentContainer } from '@/components/ui/ContentContainer';
 import { FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import Link from 'next/link';
-import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
-import { cookies } from 'next/headers';
+import { docsToData } from '@/utils/firebase.util';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { ICategory, IConfig, IViewedRecently } from '@/app/models';
+import { ICategory, IConfig } from '@/app/models';
 import { SubHeader } from '@/components/view/SubHeader';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { Catalog } from '@/components/view/Catalog';
@@ -15,17 +14,14 @@ import Image from 'next/image';
 
 export default async function NotFound() {
   const [
-    client,
     settingsQuerySnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getClient(cookies()),
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
   const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
-  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>
     <SubHeader config={config}/>
@@ -55,7 +51,7 @@ export default async function NotFound() {
         </section>
       </div>
     </ContentContainer>
-    <ViewedRecently viewedRecently={viewedRecently} config={config}/>
+    <ViewedRecently/>
   </>;
 }
 

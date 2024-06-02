@@ -1,14 +1,13 @@
-import { ICategory, IConfig, IViewedRecently } from '@/app/models';
+import { ICategory, IConfig } from '@/app/models';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { FirestoreCollections } from '@/app/enums';
 import { collection, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { docsToData, getClient, getViewedRecently } from '@/utils/firebase.util';
+import { docsToData } from '@/utils/firebase.util';
 import { CategoriesList } from '@/components/view/CategoriesList';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
-import { cookies } from 'next/headers';
 import { SubHeader } from '@/components/view/SubHeader';
 
 export interface ICategoriesPageProps {
@@ -21,17 +20,14 @@ export default async function CategoriesPage(
   {searchParams: {pageLimit}}: ICategoriesPageProps
 ) {
   const [
-    client,
     settingsQuerySnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getClient(cookies()),
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);
   const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
-  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
   return <>
     <SubHeader config={config}/>
@@ -42,10 +38,7 @@ export default async function CategoriesPage(
         <CategoriesList data={categories} pageLimit={pageLimit}/>
       </article>
     </ContentContainer>
-    <ViewedRecently
-      viewedRecently={viewedRecently}
-      config={config}
-    />
+    <ViewedRecently/>
   </>;
 }
 

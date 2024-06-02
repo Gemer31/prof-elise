@@ -4,7 +4,7 @@ import { ContentContainer } from '@/components/ui/ContentContainer';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
-import { ColorOptions, RouterPath } from '@/app/enums';
+import { ColorOptions, RouterPath, UserRoles } from '@/app/enums';
 
 const PROFILE_TABS = [
   {
@@ -18,14 +18,15 @@ const PROFILE_TABS = [
   {
     title: TRANSLATES[LOCALE].editor,
     href: RouterPath.EDITOR
-  },
-]
+  }
+];
 
-interface IProfileBaseProps extends ICommonProps{
+interface IProfileBaseProps extends ICommonProps {
   activeRoute: RouterPath;
+  userRole: UserRoles;
 }
 
-export function ProfileBase({children, activeRoute}: IProfileBaseProps) {
+export function ProfileBase({children, userRole, activeRoute}: IProfileBaseProps) {
   return <>
     <SubHeader/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
@@ -35,12 +36,14 @@ export function ProfileBase({children, activeRoute}: IProfileBaseProps) {
         <div className="flex gap-x-4">
           {
             PROFILE_TABS.map(item => {
-              return <Button
-                key={item.title}
-                color={activeRoute === item.href ? ColorOptions.PINK : ColorOptions.GRAY}
-                styleClass="flex px-4 py-2"
-                href={item.href}
-              >{item.title}</Button>
+              return item.href !== RouterPath.EDITOR || (item.href === RouterPath.EDITOR && userRole === UserRoles.ADMIN)
+                ? <Button
+                  key={item.title}
+                  color={activeRoute === item.href ? ColorOptions.PINK : ColorOptions.GRAY}
+                  styleClass="flex px-4 py-2"
+                  href={item.href}
+                >{item.title}</Button>
+                : <></>;
             })
           }
         </div>
