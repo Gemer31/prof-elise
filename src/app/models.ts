@@ -78,11 +78,18 @@ export interface IOrderByModel {
   value: OrderByDirection;
 }
 
+export interface IOrder {
+  id: string;
+  number: number;
+  createDate: number;
+}
+
 export interface IUser {
   email: string;
   role: UserRoles;
-  phoneNumber?: string;
-  firstName?: string;
-  middleName?: string;
-  lastName?: string;
+  cartAndFavouritesRef: DocumentReference;
+  orders: Record<string, IOrder>;
+  phone?: string;
+  name?: string;
+  deliveryAddress?: string;
 }

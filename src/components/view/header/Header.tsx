@@ -14,7 +14,7 @@ import { useAppDispatch } from '@/store/store';
 import { CircleButton } from '@/components/ui/CircleButton';
 import { SITE_HEADER_LINKS } from '@/app/constants';
 import { SessionProvider } from 'next-auth/react';
-import { HeaderAuthActions } from '@/components/view/HeaderAuthActions';
+import { HeaderAuthActions } from '@/components/view/header/HeaderAuthActions';
 
 export function Header() {
   const dispatch = useAppDispatch();

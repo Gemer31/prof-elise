@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -15,15 +14,7 @@ import { db } from '@/app/lib/firebase-config';
 import { FormFieldWrapper } from '@/components/ui/form-fields/FormFieldWrapper';
 import 'react-quill/dist/quill.snow.css';
 import { TextEditor } from '@/components/admin/TextEditor';
-
-const validationSchema = yup.object().shape({
-  phone: yup.string().required('fieldRequired'),
-  workingHours: yup.string().required('fieldRequired'),
-  currency: yup.string().required('fieldRequired'),
-  shopDescription: yup.string().required('fieldRequired'),
-  deliveryDescription: yup.string().required('fieldRequired'),
-  shopRegistrationDescription: yup.string().required('fieldRequired'),
-});
+import { YupUtil } from '@/utils/yup.util';
 
 interface GeneralEditorFormProps {
   config: IConfig;
@@ -43,7 +34,7 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(YupUtil.GeneralEditorFormSchema)
   });
 
   useEffect(() => {

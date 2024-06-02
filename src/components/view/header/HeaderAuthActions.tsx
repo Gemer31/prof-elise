@@ -14,7 +14,10 @@ export function HeaderAuthActions() {
           <Image className="p-2" width={45} height={45} src="/icons/user.svg" alt="Profile"/>
         </Link>
       </CircleButton>
-      <CircleButton styleClass="size-14" onClick={() => signOut({callbackUrl: RouterPath.HOME})}>
+      <CircleButton
+        styleClass="size-14 flex justify-center items-center"
+        onClick={() => signOut({callbackUrl: RouterPath.HOME})}
+      >
         <Image className="p-2" width={45} height={45} src="/icons/sign-out.svg" alt="Log out"/>
       </CircleButton>
     </>

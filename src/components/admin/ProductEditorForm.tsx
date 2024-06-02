@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -21,18 +20,7 @@ import { FormFieldWrapper } from '@/components/ui/form-fields/FormFieldWrapper';
 import { TextEditor } from '@/components/admin/TextEditor';
 import { ProductLabelsEditor } from '@/components/admin/ProductLabelsEditor';
 import currency from 'currency.js';
-
-const validationSchema = yup.object().shape({
-  title: yup.string().required('fieldRequired'),
-  price: yup.string()
-    .matches(/^\d*(\.\d{2})?$/, 'invalidPrice')
-    .required('fieldRequired'),
-  description: yup.string().required('fieldRequired'),
-  categoryId: yup.string().required('fieldRequired'),
-  vendorCode: yup.string().required('fieldRequired'),
-  images: yup.array().required('fieldRequired'),
-  labels: yup.array()
-});
+import { YupUtil } from '@/utils/yup.util';
 
 export interface ProductEditorFormProps {
   categories: ICategory[];
@@ -62,7 +50,7 @@ export function ProductEditorForm({
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(YupUtil.ProductEditorFormSchema)
   });
 
   const submitForm = async (formData: {

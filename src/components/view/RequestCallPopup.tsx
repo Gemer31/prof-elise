@@ -3,7 +3,6 @@
 import { Popup } from '@/components/ui/Popup';
 import { Button } from '@/components/ui/Button';
 import { ButtonTypes, PopupTypes } from '@/app/enums';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setNotificationMessage, setPopupData } from '@/store/dataSlice';
@@ -14,12 +13,7 @@ import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/ui/form-fields/PhoneFormField';
 import { IPopupData } from '@/app/models';
 import { TextareaFormField } from '@/components/ui/form-fields/TextareaFormField';
-
-const validationSchema = yup.object().shape({
-  name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
-  phone: yup.string().required('fieldRequired'),
-  comment: yup.string()
-});
+import { YupUtil } from '@/utils/yup.util';
 
 export function RequestCallPopup() {
   const dispatch = useAppDispatch();
@@ -34,7 +28,7 @@ export function RequestCallPopup() {
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(YupUtil.RequestCallSchema)
   });
 
   const submitForm = async (formData: { name?: string; phone?: string; comment?: string }) => {

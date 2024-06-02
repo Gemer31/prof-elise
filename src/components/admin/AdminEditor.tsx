@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonTypes, EditGroup, FirestoreCollections } from '@/app/enums';
+import { ButtonTypes, ColorOptions, EditGroup, FirestoreCollections } from '@/app/enums';
 import { db, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -60,7 +60,8 @@ export function AdminEditor() {
                 Object.values(EditGroup).map((v) => {
                   return <Button
                     key={v}
-                    styleClass={`w-full text-amber-50 px-4 py-2 ${selectedGroup === v ? 'underline' : ''}`}
+                    color={selectedGroup === v ? ColorOptions.PINK : ColorOptions.GRAY}
+                    styleClass="w-full text-amber-50 px-4 py-2"
                     type={ButtonTypes.BUTTON}
                     callback={() => setSelectedGroup(v)}
                   >{TRANSLATES[LOCALE][v]}</Button>;

@@ -5,7 +5,7 @@ import 'animate.css';
 import { Metadata } from 'next';
 import { RequestCallPopup } from '@/components/view/RequestCallPopup';
 import { Notification } from '@/components/ui/Notification';
-import { Header } from '@/components/view/Header';
+import { Header } from '@/components/view/header/Header';
 import { Footer } from '@/components/view/Footer';
 import { doc, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';

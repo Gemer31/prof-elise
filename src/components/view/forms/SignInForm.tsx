@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -6,17 +6,12 @@ import Link from 'next/link';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { Button } from '@/components/ui/Button';
 import { Form } from '@/components/ui/Form';
-import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-
-const validationSchema = yup.object().shape({
-  email: yup.string().required('fieldRequired').email('fieldInvalid'),
-  password: yup.string().required('fieldRequired')
-});
+import { YupUtil } from '@/utils/yup.util';
 
 export function SignInForm() {
   const router = useRouter();
@@ -30,7 +25,7 @@ export function SignInForm() {
     }
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(YupUtil.SignInSchema)
   });
 
   const submitForm = useCallback(async ({email, password}: { email?: string; password?: string }) => {
@@ -39,7 +34,6 @@ export function SignInForm() {
 
     try {
       const res = await signIn('credentials', {email, password, redirect: false});
-      console.log(res)
       if (res && !res.error) {
         router.push(RouterPath.PROFILE);
       }

@@ -1,10 +1,14 @@
-import { ContentContainer } from '@/components/ui/ContentContainer';
+import { SubHeader } from '@/components/view/SubHeader';
+import { ProfileBase } from '@/components/view/ProfileBase';
+import { RouterPath } from '@/app/enums';
 
 export default async function OrdersPage() {
 
   return <>
-    <ContentContainer styleClass="flex flex-col items-center px-2 mb-4">
-      orders
-    </ContentContainer>
+    <ProfileBase activeRoute={RouterPath.ORDERS}>
+      <div>
+        orders
+      </div>
+    </ProfileBase>
   </>;
 }

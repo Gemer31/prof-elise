@@ -1,10 +1,5 @@
-import * as yup from 'yup';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { SubHeader } from '@/components/view/SubHeader';
-
-const validationSchema = yup.object().shape({
-  email: yup.string().required('fieldRequired').email('fieldInvalid'),
-});
 
 export default function ForgotPage() {
   return <>

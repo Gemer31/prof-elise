@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -8,7 +7,7 @@ import { useState } from 'react';
 import { ImagesViewer } from '@/components/admin/ImagesViewer';
 import { StorageReference } from '@firebase/storage';
 import { getStorageImageSrc } from '@/utils/firebase.util';
-import { deleteDoc, doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
+import { deleteDoc, doc, setDoc } from '@firebase/firestore';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { uuidv4 } from '@firebase/util';
 import { useAppDispatch } from '@/store/store';
@@ -16,12 +15,7 @@ import { ICategory } from '@/app/models';
 import { CategoriesViewer } from '@/components/admin/CategoriesViewer';
 import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { db } from '@/app/lib/firebase-config';
-
-const validationSchema = yup.object().shape({
-  imageUrl: yup.string().required('fieldRequired'),
-  title: yup.string().required('fieldRequired'),
-  subcategories: yup.array()
-});
+import { YupUtil } from '@/utils/yup.util';
 
 interface CategoryEditorFormProps {
   categories: ICategory[];
@@ -42,7 +36,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(YupUtil.CategoryEditorFormSchema)
   });
 
   const submitForm = async (formData: { title?: string; imageUrl?: string, subcategories?: any[] | unknown }) => {

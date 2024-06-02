@@ -6,7 +6,6 @@ import { IClient, IConfig } from '@/app/models';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/ui/form-fields/PhoneFormField';
 import { TextareaFormField } from '@/components/ui/form-fields/TextareaFormField';
@@ -23,14 +22,7 @@ import { generateOrderNumber } from '@/utils/order-number.util';
 import { doc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { useRouter } from 'next/navigation';
-
-const validationSchema = yup.object().shape({
-  name: yup.string().required('fieldRequired').matches(/^[A-Za-zА-Яа-я ]+$/),
-  phone: yup.string().required('fieldRequired'),
-  email: yup.string().email('fieldInvalid').required('fieldRequired'),
-  address: yup.string().required('fieldRequired'),
-  comment: yup.string()
-});
+import { YupUtil } from '@/utils/yup.util';
 
 interface ICheckoutFormProps {
   config: IConfig;
@@ -49,7 +41,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(YupUtil.CheckoutFormSchema)
   });
 
   useEffect(() => {
@@ -62,7 +54,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
     name?: string;
     phone?: string;
     email?: string;
-    address?: string;
+    deliveryAddress?: string;
     comment?: string;
   }) => {
     const orderNumber = generateOrderNumber();
@@ -160,7 +152,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
                 label={TRANSLATES[LOCALE].address}
                 name="address"
                 type="text"
-                error={errors.address?.message}
+                error={errors.deliveryAddress?.message}
                 register={register}
               />
               <TextareaFormField
