@@ -2,7 +2,7 @@
 
 import { FirestoreCollections, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { IClient, IConfig } from '@/app/models';
+import { IClient, IConfig, IUser } from '@/app/models';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,10 +25,11 @@ import { useRouter } from 'next/navigation';
 import { YupUtil } from '@/utils/yup.util';
 
 interface ICheckoutFormProps {
+  user: IUser;
   config: IConfig;
 }
 
-export function CheckoutForm({config}: ICheckoutFormProps) {
+export function CheckoutForm({config, user}: ICheckoutFormProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -38,6 +39,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
@@ -49,6 +51,15 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
       router.push(RouterPath.CART);
     }
   }, [cartLoading]);
+
+  useEffect(() => {
+    if (user) {
+      setValue('name', user.name || '');
+      setValue('email', user.email || '');
+      setValue('phone', user.phone || '');
+      setValue('deliveryAddress', user.deliveryAddress || '');
+    }
+  }, [user]);
 
   const submitForm = async (formData: {
     name?: string;
@@ -122,8 +133,8 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
             <div className="w-full flex flex-col gap-y-0.5">
               <InputFormField
                 required={true}
-                placeholder={TRANSLATES[LOCALE].enterName}
-                label={TRANSLATES[LOCALE].name}
+                placeholder={TRANSLATES[LOCALE].enterFio}
+                label={TRANSLATES[LOCALE].fio}
                 name="name"
                 type="text"
                 error={errors.name?.message}
@@ -150,7 +161,7 @@ export function CheckoutForm({config}: ICheckoutFormProps) {
                 required={true}
                 placeholder={TRANSLATES[LOCALE].enterAddress}
                 label={TRANSLATES[LOCALE].address}
-                name="address"
+                name="deliveryAddress"
                 type="text"
                 error={errors.deliveryAddress?.message}
                 register={register}
