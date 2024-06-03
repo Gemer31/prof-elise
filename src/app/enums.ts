@@ -52,6 +52,7 @@ export enum FirestoreCollections {
   PRODUCTS = 'products',
   ANONYMOUS_CLIENTS = 'anonymousClients',
   USERS = 'users',
+  ORDERS = 'orders',
 }
 
 export enum FirestoreDocuments {
@@ -77,4 +78,15 @@ export enum PopupTypes {
 export enum UserRoles {
   ADMIN = 'admin',
   USER = 'user'
+}
+
+export enum OrderStatuses {
+  CREATED = 'created',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled'
+}
+
+export enum PaginateItemsPosition {
+  LINE = 'line',
+  GRID = 'grid',
 }

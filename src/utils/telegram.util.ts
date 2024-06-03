@@ -7,7 +7,7 @@ export function getOrderMessage(data: {
   name?: string;
   phone?: string;
   email?: string;
-  address?: string;
+  deliveryAddress?: string;
   comment?: string;
   cart: Record<string, ICartProductModel<IProduct>>;
   config: IConfig;
@@ -20,7 +20,7 @@ export function getOrderMessage(data: {
     + '\n'
     + `E-mail: ${data.email}`
     + '\n'
-    + `Адрес: ${data.address}`
+    + `Адрес: ${data.deliveryAddress}`
     + '\n'
     + (data.comment ? `Комментарий: ${data.comment}\n` : '')
 

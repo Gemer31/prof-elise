@@ -1,8 +1,8 @@
 'use client';
 
-import { FirestoreCollections, RouterPath } from '@/app/enums';
+import { FirestoreCollections, OrderStatuses, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { IClient, IConfig, IUser } from '@/app/models';
+import { IClient, IConfig, IOrderProduct, IUser } from '@/app/models';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,13 +23,17 @@ import { doc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { useRouter } from 'next/navigation';
 import { YupUtil } from '@/utils/yup.util';
+import { uuidv4 } from '@firebase/util';
+import { Session } from 'next-auth';
+import currency from 'currency.js';
 
 interface ICheckoutFormProps {
   user: IUser;
+  session: Session;
   config: IConfig;
 }
 
-export function CheckoutForm({config, user}: ICheckoutFormProps) {
+export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -68,8 +72,42 @@ export function CheckoutForm({config, user}: ICheckoutFormProps) {
     deliveryAddress?: string;
     comment?: string;
   }) => {
+    const orderId: string = uuidv4();
     const orderNumber = generateOrderNumber();
     const enrichedCart = await getEnrichedCart(client.cart);
+
+    if (session?.user) {
+      let totalPrice: string = '0';
+      const products: IOrderProduct[] = [];
+
+      Object.values(enrichedCart).forEach((item) => {
+        const totalProduct = currency(item.productRef.price).multiply(item.count);
+        totalPrice = currency(totalPrice).add(totalProduct).toString();
+        products.push({
+          id: item.productRef.id,
+          title: item.productRef.title,
+          price: currency(item.productRef.price).toString() + ' ' + config.currency,
+          count: item.count,
+          categoryId: item.productRef.categoryId
+        });
+      });
+      const createOrderRes = await setDoc(doc(db, FirestoreCollections.ORDERS, orderId), {
+        id: orderId,
+        status: OrderStatuses.CREATED,
+        number: orderNumber,
+        createDate: +new Date(),
+        comment: formData.comment,
+        totalPrice: totalPrice + ' ' + config.currency,
+        products
+      });
+      const updateUserRes = await setDoc(doc(db, FirestoreCollections.USERS, session.user.email), {
+        ...user,
+        orders: {
+          ...user.orders,
+          [orderId]: doc(db, FirestoreCollections.ORDERS, orderId)
+        }
+      });
+    }
 
     await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
       method: 'POST',
@@ -96,6 +134,7 @@ export function CheckoutForm({config, user}: ICheckoutFormProps) {
     }));
 
     setLoading(false);
+    // TODO: error telegram message on prod
     // try {
     //
     // } catch (e) {

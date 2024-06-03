@@ -2,7 +2,7 @@
 
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { IUser } from '@/app/models';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReadonlyFormField } from '@/components/ui/ReadonlyFormField';
 import { Button } from '@/components/ui/Button';
 import Image from 'next/image';
@@ -25,11 +25,18 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: {errors, isValid}
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(YupUtil.ProfileMainInfoSchema)
   });
+
+  useEffect(() => {
+    setValue('name', user.name);
+    setValue('phone', user.phone);
+    setValue('deliveryAddress', user.name);
+  }, [user]);
 
   const submitMainInfoForm = async (formData: {
     name?: string;
@@ -47,26 +54,26 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
       <fieldset className="w-full relative border-2 rounded-md p-4 flex flex-col gap-y-2">
         <legend className="ml-4">{TRANSLATES[LOCALE].userData}</legend>
         <div className="absolute right-4 top-[-28px]">
-          <Button
-            type={mainInfoEditMode ? ButtonTypes.SUBMIT : ButtonTypes.BUTTON}
-            styleClass="px-2 py-1"
-            color={ColorOptions.PINK}
-            callback={() => setMainInfoEditMode((prevState) => (!prevState))}
-          >
-            <div className="flex gap-x-2">
-              {
-                mainInfoEditMode
-                  ? <>
+          {
+            mainInfoEditMode
+              ? <Button type={ButtonTypes.SUBMIT} styleClass="px-2 py-1" color={ColorOptions.PINK}>
+                <div className="flex gap-x-2">
+                  <>
                     <Image width={20} height={20} src="/icons/save.svg" alt="Save main info"/>
                     <span>{TRANSLATES[LOCALE].save}</span>
                   </>
-                  : <>
+                </div>
+              </Button>
+              : <Button styleClass="px-2 py-1" color={ColorOptions.PINK}
+                        callback={() => setMainInfoEditMode((prevState) => (!prevState))}>
+                <div className="flex gap-x-2">
+                  <>
                     <Image width={20} height={20} src="/icons/edit.svg" alt="Edit main info"/>
                     <span>{TRANSLATES[LOCALE].edit}</span>
                   </>
-              }
-            </div>
-          </Button>
+                </div>
+              </Button>
+          }
         </div>
         {
           mainInfoEditMode
@@ -113,8 +120,8 @@ export function ProfileMainInfo({user}: IProfileMainInfoProps) {
         }
       </fieldset>
     </form>
-    <fieldset className="w-full border-2 rounded-md p-4">
-      <legend className="ml-4">{TRANSLATES[LOCALE].changePassword}</legend>
-    </fieldset>
+    {/*<fieldset className="w-full border-2 rounded-md p-4">*/}
+    {/*  <legend className="ml-4">{TRANSLATES[LOCALE].changePassword}</legend>*/}
+    {/*</fieldset>*/}
   </>;
 }

@@ -4,6 +4,7 @@ import { ProductCard } from '@/components/view/product-card/ProductCard';
 import { IConfig, IOrderByModel, IProduct } from '@/app/models';
 import { useState } from 'react';
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
+import { PaginateItemsPosition } from '@/app/enums';
 
 export interface IProductsListProps {
   data: IProduct[];
@@ -33,6 +34,7 @@ export function ProductsList({
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   return <PaginateWrapper
+    itemsPosition={PaginateItemsPosition.GRID}
     items={data}
     baseRedirectUrl={baseRedirectUrl}
     pagesCount={pagesCount}

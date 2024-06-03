@@ -4,7 +4,8 @@ import { ContentContainer } from '@/components/ui/ContentContainer';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
-import { ColorOptions, RouterPath, UserRoles } from '@/app/enums';
+import { ColorOptions, PageLimits, RouterPath, UserRoles } from '@/app/enums';
+import { getPaginateUrl } from '@/utils/router.util';
 
 const PROFILE_TABS = [
   {
@@ -13,7 +14,11 @@ const PROFILE_TABS = [
   },
   {
     title: TRANSLATES[LOCALE].orders,
-    href: RouterPath.ORDERS
+    href: getPaginateUrl({
+      baseUrl: RouterPath.ORDERS,
+      page: 1,
+      pageLimit: Number(PageLimits.SIX),
+    })
   },
   {
     title: TRANSLATES[LOCALE].editor,

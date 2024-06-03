@@ -1,5 +1,5 @@
 import { DocumentReference, OrderByDirection } from '@firebase/firestore';
-import { ColorOptions, OrderByKeys, PopupTypes, UserRoles } from '@/app/enums';
+import { ColorOptions, OrderByKeys, OrderStatuses, PopupTypes, UserRoles } from '@/app/enums';
 
 export interface IProduct {
   id: string;
@@ -80,8 +80,20 @@ export interface IOrderByModel {
 
 export interface IOrder {
   id: string;
+  status: OrderStatuses;
   number: number;
   createDate: number;
+  totalPrice: number;
+  products: Record<string, IOrderProduct>;
+  comment?: string;
+}
+
+export interface IOrderProduct {
+  id: string;
+  count: number;
+  price: string;
+  title: string;
+  categoryId: string;
 }
 
 export interface IUser {

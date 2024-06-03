@@ -54,7 +54,6 @@ export class YupUtil {
     return yup.object().shape({
       name: YupUtil.userName,
       phone: yup.string(),
-      comment: yup.string(),
       deliveryAddress: yup.string(),
       email: YupUtil.email,
     });

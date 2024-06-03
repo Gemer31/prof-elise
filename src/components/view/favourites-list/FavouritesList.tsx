@@ -4,7 +4,7 @@ import { IClient, IConfig, IProduct } from '@/app/models';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { FavouriteProductCard } from '@/components/view/favourite-product-card/FavouriteProductCard';
+import { FavouriteProductCard } from '@/components/view/favourites-list/favourite-product-card/FavouriteProductCard';
 import './favourites-list.css';
 import { Button } from '@/components/ui/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';

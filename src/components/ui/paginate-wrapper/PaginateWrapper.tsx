@@ -1,6 +1,6 @@
 'use client';
 
-import { OrderByKeys, PageLimits } from '@/app/enums';
+import { OrderByKeys, PageLimits, PaginateItemsPosition } from '@/app/enums';
 import { SortByButton } from '@/components/ui/SortByButton';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { PagesToolbar } from '@/components/ui/paginate-wrapper/PagesToolbar';
@@ -11,7 +11,13 @@ import { OrderByDirection } from '@firebase/firestore';
 import { getPaginateUrl } from '@/utils/router.util';
 import Image from 'next/image';
 
+const PaginateItemsPositionClasses: Map<string, string> = new Map([
+  [PaginateItemsPosition.LINE, 'w-full flex flex-col'],
+  [PaginateItemsPosition.GRID, 'w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4'],
+])
+
 interface IPaginateWrapperProps extends ICommonProps {
+  itemsPosition: PaginateItemsPosition;
   items: unknown[];
   orderByParams?: IOrderByModel;
   baseRedirectUrl: string;
@@ -33,7 +39,8 @@ export function PaginateWrapper({
                                   maxPrice,
                                   searchValue,
                                   children,
-                                  items
+                                  items,
+                                  itemsPosition,
                                 }: IPaginateWrapperProps) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
@@ -42,8 +49,8 @@ export function PaginateWrapper({
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   useEffect(() => {
-    setSortType(orderByParams.key);
-    setSortValue(orderByParams.value);
+    setSortType(orderByParams?.key);
+    setSortValue(orderByParams?.value);
   }, [orderByParams]);
 
   const pageLimitChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -105,7 +112,7 @@ export function PaginateWrapper({
     </div>
     {
       items.length
-        ? <div className="w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+        ? <div className={PaginateItemsPositionClasses.get(itemsPosition)}>
           {children}
         </div>
         : <section className="w-full h-full flex justify-center items-center gap-x-6">

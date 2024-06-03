@@ -21,8 +21,8 @@ export default async function CheckoutPage() {
 
   const [userDocumentsSnapshot, settingsDocumentSnapshot] = await Promise.all([
     session?.user?.email ? getDoc(doc(db, FirestoreCollections.USERS, session.user.email)) : Promise.resolve(),
-    getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
-  ])
+    getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG))
+  ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const user: IUser = session?.user?.email ? (userDocumentsSnapshot as DocumentSnapshot).data() as IUser : null;
 
@@ -36,7 +36,7 @@ export default async function CheckoutPage() {
         {title: TRANSLATES[LOCALE].orderCreation}
       ]}/>
       <article className="w-full">
-        <CheckoutForm config={config} user={user}/>
+        <CheckoutForm config={config} session={session} user={user}/>
       </article>
     </ContentContainer>
     <ViewedRecently/>
