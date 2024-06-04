@@ -1,28 +1,27 @@
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
-import { IOrder } from '@/app/models';
+import { IOrder, IOrderByModel, IUser } from '@/app/models';
 import { OrderCard } from '@/components/view/orders-list/OrderCard';
-import { getPaginateUrl } from '@/utils/router.util';
 import { PaginateItemsPosition, RouterPath } from '@/app/enums';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 interface IOrdersListProps {
-  data: IOrder[];
+  data: IOrder<IUser>[];
+  orderByParams?: IOrderByModel;
   pagesCount: number;
   pageLimit: number;
   page: number;
 }
 
-export function OrdersList({data, page, pageLimit, pagesCount}: IOrdersListProps) {
+export function OrdersList({data, page, pageLimit, pagesCount, orderByParams}: IOrdersListProps) {
   return <PaginateWrapper
     itemsPosition={PaginateItemsPosition.LINE}
     items={data}
+    emptyListText={TRANSLATES[LOCALE].ordersListIsEmpty}
     page={page}
     pageLimit={pageLimit}
     pagesCount={pagesCount}
-    baseRedirectUrl={getPaginateUrl({
-      baseUrl: RouterPath.ORDERS,
-      pageLimit,
-      page
-    })}
+    baseRedirectUrl={RouterPath.ORDERS}
+    orderByParams={orderByParams}
   >
     {data?.map((item) => {
       return <OrderCard key={item.id} data={item}/>;

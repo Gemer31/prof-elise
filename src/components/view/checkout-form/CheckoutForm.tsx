@@ -93,6 +93,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
       });
       const createOrderRes = await setDoc(doc(db, FirestoreCollections.ORDERS, orderId), {
         id: orderId,
+        userRef: doc(db, FirestoreCollections.USERS, user.email),
         status: OrderStatuses.CREATED,
         number: orderNumber,
         createDate: +new Date(),

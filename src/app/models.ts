@@ -78,8 +78,9 @@ export interface IOrderByModel {
   value: OrderByDirection;
 }
 
-export interface IOrder {
+export interface IOrder<T = DocumentReference> {
   id: string;
+  userRef: T;
   status: OrderStatuses;
   number: number;
   createDate: number;

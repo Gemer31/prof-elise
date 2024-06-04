@@ -5,6 +5,7 @@ import { IConfig, IOrderByModel, IProduct } from '@/app/models';
 import { useState } from 'react';
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
 import { PaginateItemsPosition } from '@/app/enums';
+import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface IProductsListProps {
   data: IProduct[];
@@ -36,6 +37,7 @@ export function ProductsList({
   return <PaginateWrapper
     itemsPosition={PaginateItemsPosition.GRID}
     items={data}
+    emptyListText={TRANSLATES[LOCALE].thereAreNoProductsWithSelectedFilter}
     baseRedirectUrl={baseRedirectUrl}
     pagesCount={pagesCount}
     pageLimit={pageLimit}

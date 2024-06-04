@@ -42,34 +42,11 @@ export default async function OrdersPage(
     redirect(RouterPath.HOME);
   }
 
-  let orderByKey: OrderByKeys;
-  let orderByValue: OrderByDirection;
-  Object.keys(searchParams)?.every(key => {
-    switch (key) {
-      case OrderByKeys.BY_PRICE: {
-        orderByKey = OrderByKeys.BY_PRICE;
-        orderByValue = searchParams[OrderByKeys.BY_PRICE];
-        break;
-      }
-      case OrderByKeys.BY_DATE: {
-        orderByKey = OrderByKeys.BY_DATE;
-        orderByValue = searchParams[OrderByKeys.BY_DATE];
-        break;
-      }
-      case OrderByKeys.BY_ALFABET: {
-        orderByKey = OrderByKeys.BY_ALFABET;
-        orderByValue = searchParams[OrderByKeys.BY_ALFABET];
-        break;
-      }
-    }
-    if (orderByValue) {
-      if (orderByValue !== 'desc' && orderByValue !== 'asc') {
-        orderByValue = 'desc';
-      }
-      return false;
-    }
-    return true;
-  });
+  let orderByKey: OrderByKeys = OrderByKeys.BY_DATE;
+  let orderByValue: OrderByDirection = searchParams[OrderByKeys.BY_DATE];
+  if (orderByValue !== 'desc' && orderByValue !== 'asc') {
+    orderByValue = 'desc';
+  }
 
   if (!Object.values<string>(PageLimits).includes(String(searchParams.pageLimit))) {
     redirect(getPaginateUrl({
@@ -86,7 +63,7 @@ export default async function OrdersPage(
   const userQuerySnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
   const user = (userQuerySnapshot.data() as IUser);
 
-  const ordersFilters: QueryConstraint[] = [where('id', 'in', Object.keys(user.orders))];
+  const ordersFilters: QueryConstraint[] = [where('userRef', '==', doc(db, FirestoreCollections.USERS, user.email))];
   const orderByField: string = ORDER_BY_FIELDS.get(orderByKey);
   if (orderByField) {
     ordersFilters.push(orderBy(orderByField, orderByValue));
@@ -98,14 +75,23 @@ export default async function OrdersPage(
     : 0;
 
   const ordersChunks = chunk(ordersQuerySnapshot.docs, searchParams.pageLimit);
-  const orders: IOrder[] = docsToData<IOrder>(ordersChunks[searchParams.page - 1]);
+  delete user.orders;
+  const orders: IOrder<IUser>[] = docsToData<IOrder>(ordersChunks[searchParams.page - 1])
+    .map(item => {
+      delete item.userRef;
+      return {...item, userRef: user};
+    });
 
   return <>
     <ProfileBase activeRoute={RouterPath.PROFILE} userRole={user.role}>
       <OrdersList
-        page={searchParams.page}
+        page={Number(searchParams.page)}
         pageLimit={searchParams.pageLimit}
-        pagesCount={searchParams.pageCount}
+        pagesCount={pagesCount}
+        orderByParams={{
+          key: orderByKey,
+          value: orderByValue
+        }}
         data={orders}
       />
     </ProfileBase>

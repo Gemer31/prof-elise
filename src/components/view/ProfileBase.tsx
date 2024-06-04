@@ -4,7 +4,7 @@ import { ContentContainer } from '@/components/ui/ContentContainer';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
-import { ColorOptions, PageLimits, RouterPath, UserRoles } from '@/app/enums';
+import { ColorOptions, OrderByKeys, PageLimits, RouterPath, UserRoles } from '@/app/enums';
 import { getPaginateUrl } from '@/utils/router.util';
 
 const PROFILE_TABS = [
@@ -18,6 +18,10 @@ const PROFILE_TABS = [
       baseUrl: RouterPath.ORDERS,
       page: 1,
       pageLimit: Number(PageLimits.SIX),
+      orderBy: {
+        key: OrderByKeys.BY_DATE,
+        value: 'desc'
+      }
     })
   },
   {

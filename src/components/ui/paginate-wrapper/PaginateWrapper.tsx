@@ -19,6 +19,7 @@ const PaginateItemsPositionClasses: Map<string, string> = new Map([
 interface IPaginateWrapperProps extends ICommonProps {
   itemsPosition: PaginateItemsPosition;
   items: unknown[];
+  emptyListText: string;
   orderByParams?: IOrderByModel;
   baseRedirectUrl: string;
   pagesCount: number;
@@ -41,6 +42,7 @@ export function PaginateWrapper({
                                   children,
                                   items,
                                   itemsPosition,
+                                  emptyListText,
                                 }: IPaginateWrapperProps) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
@@ -117,7 +119,7 @@ export function PaginateWrapper({
         </div>
         : <section className="w-full h-full flex justify-center items-center gap-x-6">
           <Image width={80} height={80} src="/icons/no-items.svg" alt="No items"/>
-          <span className="text-2xl">{TRANSLATES[LOCALE].thereAreNoProductsWithSelectedFilter}</span>
+          <span className="text-2xl">{emptyListText}</span>
         </section>
     }
     <PagesToolbar

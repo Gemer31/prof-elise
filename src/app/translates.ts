@@ -28,6 +28,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     registrationOnSite: 'Регистрация на сайте',
     registrate: 'Зарегистрироваться',
     thereAreNoProductsWithSelectedFilter: 'Товаров по данным параметрам не найдено',
+    ordersListIsEmpty: 'Список заказов пуст',
     searchResultsByRequest: 'Результаты поиска по запросу',
     searchResults: 'Результаты поиска',
     allResults: 'Все результаты',
