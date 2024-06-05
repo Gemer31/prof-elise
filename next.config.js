@@ -7,7 +7,16 @@ const nextConfig = {
     // reactStrictMode: false,
     headers: () => [
         {
-            source: '/:path*',
+            source: '/profile/orders',
+            headers: [
+                {
+                    key: 'Cache-Control',
+                    value: 'no-store',
+                },
+            ],
+        },
+        {
+            source: '/favourites',
             headers: [
                 {
                     key: 'Cache-Control',

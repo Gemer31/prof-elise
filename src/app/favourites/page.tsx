@@ -12,6 +12,8 @@ import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/view/SubHeader';
 
+export const fetchCache = 'force-no-store';
+
 export interface IFavouritesPageProps {
   params: {
     categoryId: string;

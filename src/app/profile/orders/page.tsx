@@ -3,24 +3,15 @@ import { FirestoreCollections, OrderByKeys, PageLimits, RouterPath } from '@/app
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/configs/auth.config';
 import { redirect } from 'next/navigation';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  orderBy,
-  OrderByDirection,
-  query,
-  QueryConstraint,
-  where
-} from '@firebase/firestore';
+import { doc, getDoc, orderBy, OrderByDirection, QueryConstraint, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { IOrder, IProduct, IUser } from '@/app/models';
+import { IOrder, IUser } from '@/app/models';
 import { OrdersList } from '@/components/view/orders-list/OrdersList';
 import { getPaginateUrl } from '@/utils/router.util';
-import { docsToData } from '@/utils/firebase.util';
 import { ORDER_BY_FIELDS } from '@/app/constants';
 import chunk from 'lodash.chunk';
+
+export const fetchCache = 'force-no-store';
 
 interface IOrdersPageProps {
   searchParams: {
@@ -68,15 +59,23 @@ export default async function OrdersPage(
   if (orderByField) {
     ordersFilters.push(orderBy(orderByField, orderByValue));
   }
-  const ordersQuerySnapshot = await getDocs(query(collection(db, FirestoreCollections.ORDERS), ...ordersFilters));
+  const ordersQuery = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/v1/orders?orderByKey=${orderByKey}&orderByValue=${orderByValue}&email=${user.email}`,
+    {
+      cache: 'reload',
+      next: { revalidate: 100 }
+      // "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload"
+    }
+  );
+  let orders: IOrder[] = await ordersQuery.json();
 
-  const pagesCount: number = ordersQuerySnapshot.docs.length
-    ? Math.ceil(ordersQuerySnapshot.docs.length / searchParams.pageLimit)
+  const pagesCount: number = orders.length
+    ? Math.ceil(orders.length / searchParams.pageLimit)
     : 0;
 
-  const ordersChunks = chunk(ordersQuerySnapshot.docs, searchParams.pageLimit);
+  const ordersChunks = chunk(orders, searchParams.pageLimit);
   delete user.orders;
-  const orders: IOrder<IUser>[] = docsToData<IOrder>(ordersChunks[searchParams.page - 1])
+  const ordersSerialized: IOrder<IUser>[] = ordersChunks[searchParams.page - 1]
     .map(item => {
       delete item.userRef;
       return {...item, userRef: user};
@@ -92,7 +91,7 @@ export default async function OrdersPage(
           key: orderByKey,
           value: orderByValue
         }}
-        data={orders}
+        data={ordersSerialized}
       />
     </ProfileBase>
   </>;

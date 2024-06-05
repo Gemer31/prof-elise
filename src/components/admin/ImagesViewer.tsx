@@ -7,6 +7,7 @@ import { StorageReference } from '@firebase/storage';
 import { useEffect, useState } from 'react';
 import { CTRL_CODE } from '@/app/constants';
 import { SearchInput } from '@/components/ui/SearchInput';
+import { EditorsSearch } from '@/components/admin/EditorsSearch';
 
 interface ImagesViewerProps {
   editAvailable?: boolean;
@@ -83,7 +84,7 @@ export function ImagesViewer({
         storageData?.length
           ? <>
             <div className="overflow-auto max-h-52 w-6/12 rounded-md border-pink-500 border-2">
-              <SearchInput onChange={setSearchValue}/>
+              <EditorsSearch onChange={setSearchValue}/>
               <div className="px-2 py-1">
                 {
                   (

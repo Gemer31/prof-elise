@@ -52,7 +52,6 @@ export function AdminEditor() {
   return (
     <main className="w-full">
       <ContentContainer styleClass="flex flex-col items-center">
-        <h1 className="text-2xl ">{TRANSLATES[LOCALE].editor}</h1>
         {isDataLoading
           ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader className="min-h-[250px] border-pink-500"/></div>
           : <>

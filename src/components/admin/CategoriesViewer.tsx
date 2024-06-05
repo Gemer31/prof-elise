@@ -4,6 +4,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { SearchInput } from '@/components/ui/SearchInput';
+import { EditorsSearch } from '@/components/admin/EditorsSearch';
 
 interface CategoriesViewerProps {
   selectedCategory?: ICategory;
@@ -49,7 +50,7 @@ export function CategoriesViewer({
             className="w-full text-center rounded-md border-pink-500 border-2 px-2 py-1">{TRANSLATES[LOCALE].noCategories}</div>
           : (
             <div className="overflow-auto max-h-48 w-full rounded-md border-pink-500 border-2">
-              <SearchInput onChange={setSearchValue}/>
+              <EditorsSearch onChange={setSearchValue}/>
               <div className="px-2 py-1">
                 {
                   editAvailable
