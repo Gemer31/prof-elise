@@ -55,7 +55,6 @@ export class YupUtil {
       name: YupUtil.userName,
       phone: yup.string(),
       deliveryAddress: yup.string(),
-      email: YupUtil.email,
     });
   }
 

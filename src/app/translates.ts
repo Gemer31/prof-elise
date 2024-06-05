@@ -4,6 +4,7 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
     'Firebase: Error (auth/email-already-in-use).': 'Пользователь с таким email уже зарегистрирован',
 
+    email: 'Электронная почта',
     orderUpdateSuccessfully: 'Заказ обновлен успешно',
     enterOrderNumber: 'Введите номер заказа',
     created: 'Сформирована',

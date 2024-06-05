@@ -16,6 +16,15 @@ const nextConfig = {
             ],
         },
         {
+            source: '/profile',
+            headers: [
+                {
+                    key: 'Cache-Control',
+                    value: 'no-store',
+                },
+            ],
+        },
+        {
             source: '/favourites',
             headers: [
                 {

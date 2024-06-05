@@ -22,7 +22,7 @@ export default async function ProfilePage() {
 
   return <>
     <ProfileBase activeRoute={RouterPath.PROFILE} userRole={user.role}>
-      <ProfileMainInfo user={user}/>
+      <ProfileMainInfo userServer={user}/>
     </ProfileBase>
   </>;
 }
