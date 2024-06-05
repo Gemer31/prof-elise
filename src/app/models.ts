@@ -97,12 +97,14 @@ export interface IOrderProduct {
   categoryId: string;
 }
 
-export interface IUser {
+export interface IUser<T = DocumentReference, E = Record<string, DocumentReference>> {
   email: string;
   role: UserRoles;
-  cartAndFavouritesRef: DocumentReference;
-  orders: Record<string, IOrder>;
+  cartAndFavouritesRef: T;
+  orders: E;
   phone?: string;
   name?: string;
   deliveryAddress?: string;
 }
+
+export type IUserSerialized = IUser<string, string[]>;

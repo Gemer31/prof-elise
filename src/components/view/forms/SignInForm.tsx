@@ -12,11 +12,13 @@ import { useCallback, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { YupUtil } from '@/utils/yup.util';
+import { setNotificationMessage } from '@/store/dataSlice';
+import { useAppDispatch } from '@/store/store';
 
 export function SignInForm() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoginError, setIsLoginError] = useState(false);
   const {
     register,
     handleSubmit,
@@ -29,20 +31,15 @@ export function SignInForm() {
   });
 
   const submitForm = useCallback(async ({email, password}: { email?: string; password?: string }) => {
-    setIsLoginError(false);
     setIsLoading(true);
-
-    try {
-      const res = await signIn('credentials', {email, password, redirect: false});
-      if (res && !res.error) {
-        router.push(RouterPath.PROFILE);
-      }
-    } catch (err) {
-      console.error('Login failed: ', err);
-      setIsLoginError(true);
-    } finally {
-      setIsLoading(false);
+    const res = await signIn('credentials', {email, password, redirect: false});
+    if (res?.ok) {
+      router.push(RouterPath.PROFILE);
+    } else {
+      console.error('Login failed: ', res?.error);
+      dispatch(setNotificationMessage(TRANSLATES[LOCALE].invalidLoginOrPassword));
     }
+    setIsLoading(false);
   }, []);
 
   return <Form
@@ -50,6 +47,7 @@ export function SignInForm() {
     onSubmit={handleSubmit(submitForm)}
   >
     <InputFormField
+      required={true}
       placeholder="E-mail"
       label="E-mail"
       name="email"
@@ -58,6 +56,7 @@ export function SignInForm() {
       register={register}
     />
     <InputFormField
+      required={true}
       hideValueAvailable={true}
       placeholder={TRANSLATES[LOCALE].password}
       label={TRANSLATES[LOCALE].password}
@@ -66,9 +65,6 @@ export function SignInForm() {
       error={errors.password?.message}
       register={register}
     />
-    <div className={isLoginError ? 'text-red-500 text-xs text-center mb-2' : 'invisible'}>
-      {TRANSLATES[LOCALE].invalidLoginOrPassword}
-    </div>
     <div className="w-full flex justify-around py-2 underline">
       <Link className="text-gray-400"
             href={RouterPath.FORGOT_PASSWORD}>{TRANSLATES[LOCALE].forgotPassword}</Link>
@@ -81,5 +77,5 @@ export function SignInForm() {
       loading={isLoading}
       type={ButtonTypes.SUBMIT}
     >{TRANSLATES[LOCALE].enter}</Button>
-  </Form>
+  </Form>;
 }

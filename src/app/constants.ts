@@ -34,5 +34,5 @@ export const SITE_HEADER_LINKS: string[][] = [
 export const ORDER_STATUS_CLASSES = new Map([
   [OrderStatuses.CREATED, 'p-2 px-4 rounded-md bg-yellow-300'],
   [OrderStatuses.COMPLETED, 'p-2 px-4 rounded-md bg-emerald-600 text-white'],
-  [OrderStatuses.CANCELLED, 'p-2 px-4 rounded-md bg-gray-400'],
+  [OrderStatuses.CANCELLED, 'p-2 px-4 rounded-md bg-gray-400 text-white'],
 ])

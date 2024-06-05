@@ -5,11 +5,13 @@ import { authConfig } from '@/configs/auth.config';
 import { redirect } from 'next/navigation';
 import { doc, getDoc, orderBy, OrderByDirection, QueryConstraint, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { IOrder, IUser } from '@/app/models';
+import { IOrder, IUser, IUserSerialized } from '@/app/models';
 import { OrdersList } from '@/components/view/orders-list/OrdersList';
 import { getPaginateUrl } from '@/utils/router.util';
 import { ORDER_BY_FIELDS } from '@/app/constants';
 import chunk from 'lodash.chunk';
+import { getPagesCount } from '@/utils/paginate.util';
+import { getSerializedUser } from '@/utils/serialize.util';
 
 export const fetchCache = 'force-no-store';
 
@@ -51,16 +53,16 @@ export default async function OrdersPage(
     }));
   }
 
-  const userQuerySnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
-  const user = (userQuerySnapshot.data() as IUser);
+  const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
+  const userSerialized: IUser<string, string[]> = getSerializedUser(userDocumentSnapshot.data() as IUser);
 
-  const ordersFilters: QueryConstraint[] = [where('userRef', '==', doc(db, FirestoreCollections.USERS, user.email))];
+  const ordersFilters: QueryConstraint[] = [where('userRef', '==', doc(db, FirestoreCollections.USERS, userSerialized.email))];
   const orderByField: string = ORDER_BY_FIELDS.get(orderByKey);
   if (orderByField) {
     ordersFilters.push(orderBy(orderByField, orderByValue));
   }
   const ordersQuery = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/v1/orders?orderByKey=${orderByKey}&orderByValue=${orderByValue}&email=${user.email}`,
+    `${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/v1/orders?orderByKey=${orderByKey}&orderByValue=${orderByValue}&email=${userSerialized.email}`,
     {
       cache: 'reload',
       next: { revalidate: 100 }
@@ -69,20 +71,18 @@ export default async function OrdersPage(
   );
   let orders: IOrder[] = await ordersQuery.json();
 
-  const pagesCount: number = orders.length
-    ? Math.ceil(orders.length / searchParams.pageLimit)
-    : 0;
+  const pagesCount: number = getPagesCount(orders.length, searchParams.pageLimit);
 
   const ordersChunks = chunk(orders, searchParams.pageLimit);
-  delete user.orders;
-  const ordersSerialized: IOrder<IUser>[] = ordersChunks[searchParams.page - 1]
+  delete userSerialized.orders;
+  const ordersSerialized: IOrder<IUserSerialized>[] = ordersChunks[searchParams.page - 1]
     .map(item => {
       delete item.userRef;
-      return {...item, userRef: user};
+      return {...item, userRef: userSerialized};
     });
 
   return <>
-    <ProfileBase activeRoute={RouterPath.ORDERS} userRole={user.role}>
+    <ProfileBase activeRoute={RouterPath.ORDERS} userRole={userSerialized.role}>
       <OrdersList
         page={Number(searchParams.page)}
         pageLimit={searchParams.pageLimit}

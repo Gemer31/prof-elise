@@ -1,11 +1,11 @@
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
-import { IOrder, IOrderByModel, IUser } from '@/app/models';
+import { IOrder, IOrderByModel, IUserSerialized } from '@/app/models';
 import { OrderCard } from '@/components/view/orders-list/OrderCard';
 import { OrderByKeys, PaginateItemsPosition, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
 interface IOrdersListProps {
-  data: IOrder<IUser>[];
+  data: IOrder<IUserSerialized>[];
   orderByParams?: IOrderByModel;
   pagesCount: number;
   pageLimit: number;

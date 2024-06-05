@@ -14,16 +14,16 @@ import { PhoneFormField } from '@/components/ui/form-fields/PhoneFormField';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { useAppDispatch } from '@/store/store';
 import { YupUtil } from '@/utils/yup.util';
-import { doc, setDoc } from '@firebase/firestore';
+import { doc, DocumentReference, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 
 interface IProfileMainInfoProps {
-  userServer: IUser;
+  userServer: IUser<string, string[]>;
 }
 
 export function ProfileMainInfo({userServer}: IProfileMainInfoProps) {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<IUser<string, string[]>>();
   const [mainInfoEditMode, setMainInfoEditMode] = useState(false);
   const [mainInfoIsLoading, setMainInfoIsLoading] = useState(false);
   // const [emailEditMode, setEmailEditMode] = useState(false);
@@ -50,10 +50,22 @@ export function ProfileMainInfo({userServer}: IProfileMainInfoProps) {
     deliveryAddress?: string;
   }) => {
     setMainInfoIsLoading(true);
-    const newUserData: IUser = {...user, ...formData};
+
+    const preparedOrders: Record<string, DocumentReference> = {};
+    user.orders.forEach(item => {
+      preparedOrders[item] = doc(db, FirestoreCollections.ORDERS, item);
+    });
+    const newUserData: IUser<string, string[]> = {
+      ...user,
+      ...formData,
+    };
 
     try {
-      const res = setDoc(doc(db, FirestoreCollections.USERS, userServer.email), newUserData);
+      const res = setDoc(doc(db, FirestoreCollections.USERS, userServer.email), {
+        ...newUserData,
+        orders: preparedOrders,
+        cartAndFavouritesRef: doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, user.cartAndFavouritesRef)
+      });
       setUser(newUserData);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       setMainInfoEditMode(false);

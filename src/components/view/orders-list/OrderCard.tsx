@@ -1,5 +1,5 @@
-import { IOrder, IUser } from '@/app/models';
-import { OrderStatuses, RouterPath } from '@/app/enums';
+import { IOrder, IUserSerialized } from '@/app/models';
+import { RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import './order-card.css';
@@ -8,7 +8,7 @@ import { convertToClass } from '@/utils/convert-to-class.util';
 import { ORDER_STATUS_CLASSES } from '@/app/constants';
 
 interface IOrderCardProps {
-  data: IOrder<IUser>;
+  data: IOrder<IUserSerialized>;
 }
 
 export function OrderCard({data}: IOrderCardProps) {

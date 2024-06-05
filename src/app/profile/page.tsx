@@ -7,6 +7,7 @@ import { db } from '@/app/lib/firebase-config';
 import { IUser } from '@/app/models';
 import { ProfileBase } from '@/components/view/ProfileBase';
 import { ProfileMainInfo } from '@/components/view/ProfileMainInfo';
+import { getSerializedUser } from '@/utils/serialize.util';
 
 export default async function ProfilePage() {
   const session = await getServerSession(authConfig);
@@ -16,13 +17,11 @@ export default async function ProfilePage() {
   }
 
   const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session?.user.email));
-  const user: IUser = userDocumentSnapshot.data() as IUser;
-  delete user.orders;
-  delete user.cartAndFavouritesRef;
+  const userSerialized: IUser<string, string[]> = getSerializedUser(userDocumentSnapshot.data() as IUser);
 
   return <>
-    <ProfileBase activeRoute={RouterPath.PROFILE} userRole={user.role}>
-      <ProfileMainInfo userServer={user}/>
+    <ProfileBase activeRoute={RouterPath.PROFILE} userRole={userSerialized.role}>
+      <ProfileMainInfo userServer={userSerialized}/>
     </ProfileBase>
   </>;
 }
