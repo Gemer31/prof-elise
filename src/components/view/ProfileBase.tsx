@@ -51,6 +51,7 @@ export function ProfileBase({children, userRole, activeRoute}: IProfileBaseProps
               return item.href !== RouterPath.EDITOR || (item.href === RouterPath.EDITOR && userRole === UserRoles.ADMIN)
                 ? <Button
                   key={item.title}
+                  setLoadingOnClick={true}
                   color={activeRoute === item.id ? ColorOptions.PINK : ColorOptions.GRAY}
                   styleClass="flex px-4 py-2"
                   href={item.href}
