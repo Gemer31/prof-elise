@@ -5,12 +5,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import './order-card.css';
 import { useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-
-const OrderStatusClasses = new Map([
-  [OrderStatuses.CREATED, 'bg-yellow-300'],
-  [OrderStatuses.COMPLETED, 'bg-emerald-600'],
-  [OrderStatuses.CANCELLED, 'bg-gray-400'],
-])
+import { ORDER_STATUS_CLASSES } from '@/app/constants';
 
 interface IOrderCardProps {
   data: IOrder<IUser>;
@@ -30,11 +25,10 @@ export function OrderCard({data}: IOrderCardProps) {
 
   return <div className={hostClass}>
     <div className="grid grid-cols-5">
-      <div className="flex items-center font-medium text-lg">№ {data.number}</div>
+      <div className="flex items-center font-medium text-lg z-10">№ {data.number}</div>
       <div className="flex items-center">{new Date(data.createDate).toISOString().split('T')[0]}</div>
       <div className="flex items-center">
-        <span
-          className={'p-2 px-4 rounded-md ' + OrderStatusClasses.get(data.status)}>{TRANSLATES[LOCALE][data.status]}</span>
+        <span className={ORDER_STATUS_CLASSES.get(data.status)}>{TRANSLATES[LOCALE][data.status]}</span>
       </div>
       <div className="flex items-center">{data.comment || '—'}</div>
       <div className="flex justify-end items-center font-medium text-lg">{data.totalPrice}</div>

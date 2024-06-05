@@ -74,7 +74,7 @@ export interface IPopupData {
 }
 
 export interface IOrderByModel {
-  key: OrderByKeys;
+  key: OrderByKeys | string;
   value: OrderByDirection;
 }
 

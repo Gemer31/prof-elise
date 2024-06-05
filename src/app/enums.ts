@@ -43,6 +43,7 @@ export enum EditGroup {
   CATEGORIES = 'categories',
   PRODUCTS = 'products',
   IMAGES = 'images',
+  ORDERS = 'orders'
 }
 
 export enum FirestoreCollections {

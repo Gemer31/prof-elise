@@ -1,4 +1,4 @@
-import { ColorOptions, OrderByKeys, RouterPath } from '@/app/enums';
+import { ColorOptions, OrderByKeys, OrderStatuses, RouterPath } from '@/app/enums';
 
 export const FADE_IN_RIGHT_CLASS = 'animate__animated animate__fadeInRight';
 export const FADE_IN_LEFT_CLASS = 'animate__animated animate__fadeInLeft';
@@ -30,3 +30,9 @@ export const SITE_HEADER_LINKS: string[][] = [
   [RouterPath.DELIVERY, 'delivery'],
   [RouterPath.CONTACTS, 'contacts']
 ];
+
+export const ORDER_STATUS_CLASSES = new Map([
+  [OrderStatuses.CREATED, 'p-2 px-4 rounded-md bg-yellow-300'],
+  [OrderStatuses.COMPLETED, 'p-2 px-4 rounded-md bg-emerald-600 text-white'],
+  [OrderStatuses.CANCELLED, 'p-2 px-4 rounded-md bg-gray-400'],
+])

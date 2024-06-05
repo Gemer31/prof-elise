@@ -9,10 +9,12 @@ import { getPaginateUrl } from '@/utils/router.util';
 
 const PROFILE_TABS = [
   {
+    id: RouterPath.PROFILE,
     title: TRANSLATES[LOCALE].mainInfo,
     href: RouterPath.PROFILE
   },
   {
+    id: RouterPath.ORDERS,
     title: TRANSLATES[LOCALE].orders,
     href: getPaginateUrl({
       baseUrl: RouterPath.ORDERS,
@@ -25,6 +27,7 @@ const PROFILE_TABS = [
     })
   },
   {
+    id: RouterPath.EDITOR,
     title: TRANSLATES[LOCALE].editor,
     href: RouterPath.EDITOR
   }
@@ -48,7 +51,7 @@ export function ProfileBase({children, userRole, activeRoute}: IProfileBaseProps
               return item.href !== RouterPath.EDITOR || (item.href === RouterPath.EDITOR && userRole === UserRoles.ADMIN)
                 ? <Button
                   key={item.title}
-                  color={activeRoute === item.href ? ColorOptions.PINK : ColorOptions.GRAY}
+                  color={activeRoute === item.id ? ColorOptions.PINK : ColorOptions.GRAY}
                   styleClass="flex px-4 py-2"
                   href={item.href}
                 >{item.title}</Button>

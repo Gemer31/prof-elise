@@ -83,7 +83,7 @@ export default async function OrdersPage(
     });
 
   return <>
-    <ProfileBase activeRoute={RouterPath.PROFILE} userRole={user.role}>
+    <ProfileBase activeRoute={RouterPath.ORDERS} userRole={user.role}>
       <OrdersList
         page={Number(searchParams.page)}
         pageLimit={searchParams.pageLimit}

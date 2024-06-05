@@ -4,7 +4,7 @@ import { ProductCard } from '@/components/view/product-card/ProductCard';
 import { IConfig, IOrderByModel, IProduct } from '@/app/models';
 import { useState } from 'react';
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
-import { PaginateItemsPosition } from '@/app/enums';
+import { OrderByKeys, PaginateItemsPosition } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface IProductsListProps {
@@ -35,6 +35,11 @@ export function ProductsList({
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   return <PaginateWrapper
+    orderByAvailableParams={{
+      [OrderByKeys.BY_DATE]: true,
+      [OrderByKeys.BY_PRICE]: true,
+      [OrderByKeys.BY_ALFABET]: true
+    }}
     itemsPosition={PaginateItemsPosition.GRID}
     items={data}
     emptyListText={TRANSLATES[LOCALE].thereAreNoProductsWithSelectedFilter}

@@ -1,7 +1,7 @@
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
 import { IOrder, IOrderByModel, IUser } from '@/app/models';
 import { OrderCard } from '@/components/view/orders-list/OrderCard';
-import { PaginateItemsPosition, RouterPath } from '@/app/enums';
+import { OrderByKeys, PaginateItemsPosition, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
 interface IOrdersListProps {
@@ -14,6 +14,9 @@ interface IOrdersListProps {
 
 export function OrdersList({data, page, pageLimit, pagesCount, orderByParams}: IOrdersListProps) {
   return <PaginateWrapper
+    orderByAvailableParams={{
+      [OrderByKeys.BY_DATE]: true
+    }}
     itemsPosition={PaginateItemsPosition.LINE}
     items={data}
     emptyListText={TRANSLATES[LOCALE].ordersListIsEmpty}
@@ -26,5 +29,5 @@ export function OrdersList({data, page, pageLimit, pagesCount, orderByParams}: I
     {data?.map((item) => {
       return <OrderCard key={item.id} data={item}/>;
     })}
-  </PaginateWrapper>
+  </PaginateWrapper>;
 }

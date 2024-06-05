@@ -9,7 +9,7 @@ export interface ISearchInputProps {
   searchButtonVisible?: boolean;
   pattern?: string;
   required?: boolean;
-
+  placeholder?: string;
   onChange: (searchValue: string) => void;
   onValueChange?: (searchValue: string) => void;
   onBlur?: () => void;
@@ -17,7 +17,7 @@ export interface ISearchInputProps {
   onSubmit?: (searchValue: string) => void;
 }
 
-export function SearchInput({onChange, onValueChange, onSubmit, onBlur, onFocus, required, pattern, searchButtonVisible}: ISearchInputProps) {
+export function SearchInput({onChange, onValueChange, onSubmit, onBlur, onFocus, required, placeholder, pattern, searchButtonVisible}: ISearchInputProps) {
   const hostClass: string = useMemo(() => convertToClass([
     searchButtonVisible ? 'border-l-2 border border-t-2 border-b-2' : 'border-2',
     searchButtonVisible ? 'rounded-l-md' : 'rounded-md',
@@ -78,7 +78,7 @@ export function SearchInput({onChange, onValueChange, onSubmit, onBlur, onFocus,
     }
     <input
       required
-      placeholder={TRANSLATES[LOCALE].search}
+      placeholder={placeholder || TRANSLATES[LOCALE].search}
       value={value}
       pattern={pattern}
       className={hostClass}

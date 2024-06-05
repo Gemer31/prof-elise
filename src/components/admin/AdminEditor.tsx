@@ -15,6 +15,7 @@ import { ProductEditorForm } from '@/components/admin/ProductEditorForm';
 import { ImagesEditorForm } from '@/components/admin/ImagesEditorForm';
 import { collection, getDocs } from '@firebase/firestore';
 import { docsToData } from '@/utils/firebase.util';
+import { OrderEditorForm } from '@/components/admin/OrderEditorForm';
 
 export function AdminEditor() {
   const [images, setImages] = useState<StorageReference[]>();
@@ -82,6 +83,11 @@ export function AdminEditor() {
               {
                 selectedGroup === EditGroup.PRODUCTS
                   ? <ProductEditorForm categories={categories} products={products} images={images} refreshCallback={loadData}/>
+                  : <></>
+              }
+              {
+                selectedGroup === EditGroup.ORDERS
+                  ? <OrderEditorForm/>
                   : <></>
               }
               {

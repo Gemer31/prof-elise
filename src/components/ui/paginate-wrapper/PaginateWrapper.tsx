@@ -17,6 +17,11 @@ const PaginateItemsPositionClasses: Map<string, string> = new Map([
 ])
 
 interface IPaginateWrapperProps extends ICommonProps {
+  orderByAvailableParams?: {
+    [OrderByKeys.BY_DATE]?: boolean;
+    [OrderByKeys.BY_ALFABET]?: boolean;
+    [OrderByKeys.BY_PRICE]?: boolean;
+  }
   itemsPosition: PaginateItemsPosition;
   items: unknown[];
   emptyListText: string;
@@ -43,10 +48,11 @@ export function PaginateWrapper({
                                   items,
                                   itemsPosition,
                                   emptyListText,
+                                  orderByAvailableParams,
                                 }: IPaginateWrapperProps) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
-  const [sortType, setSortType] = useState<OrderByKeys>();
+  const [sortType, setSortType] = useState<OrderByKeys | string>();
   const [sortValue, setSortValue] = useState<OrderByDirection>();
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
@@ -68,7 +74,7 @@ export function PaginateWrapper({
       searchValue
     }));
   };
-  const sortByChange = (newType: OrderByKeys, newValue: OrderByDirection) => {
+  const sortByChange = (newType: string, newValue: OrderByDirection) => {
     setSortType(newType);
     setSortValue(newValue);
     router.push(getPaginateUrl({
@@ -89,13 +95,16 @@ export function PaginateWrapper({
     <div className="flex justify-between mb-4">
       <div className="flex gap-x-3">
         {
-          Object.values(OrderByKeys).map(item => (
-            <SortByButton
-              key={item}
-              value={sortType === item ? sortValue : null}
-              onClick={(newValue) => sortByChange(item, newValue)}
-            >{TRANSLATES[LOCALE][item]}</SortByButton>
-          ))
+          Object.keys(orderByAvailableParams)
+            // @ts-ignore
+            .filter(item => orderByAvailableParams[item])
+            .map(item => (
+              <SortByButton
+                key={item}
+                value={sortType === item ? sortValue : null}
+                onClick={(newValue) => sortByChange(item, newValue)}
+              >{TRANSLATES[LOCALE][item]}</SortByButton>
+            ))
         }
       </div>
       <div className="flex items-center">
