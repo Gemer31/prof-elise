@@ -17,10 +17,10 @@ const PROFILE_TABS = [
     id: RouterPath.ORDERS,
     title: TRANSLATES[LOCALE].orders,
     href: getPaginateUrl({
-      baseUrl: RouterPath.ORDERS,
+      baseRedirectUrl: RouterPath.ORDERS,
       page: 1,
       pageLimit: Number(PageLimits.SIX),
-      orderBy: {
+      orderByParams: {
         key: OrderByKeys.BY_DATE,
         value: 'desc'
       }
@@ -53,7 +53,7 @@ export function ProfileBase({children, userRole, activeRoute}: IProfileBaseProps
                   key={item.title}
                   setLoadingOnClick={true}
                   color={activeRoute === item.id ? ColorOptions.PINK : ColorOptions.GRAY}
-                  styleClass="flex px-4 py-2"
+                  styleClass={'flex px-4 py-2 ' + (activeRoute === item.id ? 'pointer-events-none' : '')}
                   href={item.href}
                 >{item.title}</Button>
                 : <></>;

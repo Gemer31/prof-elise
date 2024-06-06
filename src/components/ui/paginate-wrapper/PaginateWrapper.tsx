@@ -4,7 +4,7 @@ import { OrderByKeys, PageLimits, PaginateItemsPosition } from '@/app/enums';
 import { SortByButton } from '@/components/ui/SortByButton';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { PagesToolbar } from '@/components/ui/paginate-wrapper/PagesToolbar';
-import { ICommonProps, IOrderByModel } from '@/app/models';
+import { ICommonProps, IPaginateProps } from '@/app/models';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { OrderByDirection } from '@firebase/firestore';
@@ -13,8 +13,8 @@ import Image from 'next/image';
 
 const PaginateItemsPositionClasses: Map<string, string> = new Map([
   [PaginateItemsPosition.LINE, 'w-full flex flex-col'],
-  [PaginateItemsPosition.GRID, 'w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4'],
-])
+  [PaginateItemsPosition.GRID, 'w-full grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-2 mb-4']
+]);
 
 interface IPaginateWrapperProps extends ICommonProps {
   orderByAvailableParams?: {
@@ -25,36 +25,32 @@ interface IPaginateWrapperProps extends ICommonProps {
   itemsPosition: PaginateItemsPosition;
   items: unknown[];
   emptyListText: string;
-  orderByParams?: IOrderByModel;
-  baseRedirectUrl: string;
-  pagesCount: number;
-  pageLimit: number;
-  page: number;
-  minPrice?: string;
-  maxPrice?: string;
-  searchValue?: string;
+  paginateProps: IPaginateProps,
 }
 
-export function PaginateWrapper({
-                                  page,
-                                  baseRedirectUrl,
-                                  pageLimit,
-                                  pagesCount,
-                                  orderByParams,
-                                  minPrice,
-                                  maxPrice,
-                                  searchValue,
-                                  children,
-                                  items,
-                                  itemsPosition,
-                                  emptyListText,
-                                  orderByAvailableParams,
-                                }: IPaginateWrapperProps) {
+export function PaginateWrapper(
+  {
+    children,
+    items,
+    itemsPosition,
+    emptyListText,
+    orderByAvailableParams,
+    paginateProps: {
+      baseRedirectUrl,
+      orderByParams,
+      minPrice,
+      maxPrice,
+      searchValue,
+      page,
+      pagesCount,
+      pageLimit
+    }
+  }: IPaginateWrapperProps
+) {
   const router = useRouter();
   const [pageLimitValue, setPageLimitValue] = useState(pageLimit);
   const [sortType, setSortType] = useState<OrderByKeys | string>();
   const [sortValue, setSortValue] = useState<OrderByDirection>();
-  const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   useEffect(() => {
     setSortType(orderByParams?.key);
@@ -65,10 +61,10 @@ export function PaginateWrapper({
     const newLimit: number = Number(event.target.value);
     setPageLimitValue(newLimit);
     router.push(getPaginateUrl({
-      baseUrl: baseRedirectUrl,
+      baseRedirectUrl,
       page: 1,
       pageLimit: newLimit,
-      orderBy: orderByParams,
+      orderByParams,
       minPrice,
       maxPrice,
       searchValue
@@ -78,10 +74,10 @@ export function PaginateWrapper({
     setSortType(newType);
     setSortValue(newValue);
     router.push(getPaginateUrl({
-      baseUrl: baseRedirectUrl,
+      baseRedirectUrl,
       page,
       pageLimit,
-      orderBy: {
+      orderByParams: {
         key: newType,
         value: newValue
       },
@@ -118,7 +114,6 @@ export function PaginateWrapper({
             Object.values(PageLimits).map(item => (<option key={item} value={item}>{item}</option>))
           }
         </select>
-        {TRANSLATES[LOCALE].productsOnThePage}
       </div>
     </div>
     {
@@ -132,14 +127,16 @@ export function PaginateWrapper({
         </section>
     }
     <PagesToolbar
-      minPrice={minPrice}
-      maxPrice={maxPrice}
-      baseRedirectUrl={baseRedirectUrl}
-      pages={pagesCount}
-      pageLimit={pageLimit}
-      searchValue={searchValue}
-      current={page}
-      orderByParams={{key: sortType, value: sortValue}}
+      paginateProps={{
+        baseRedirectUrl,
+        orderByParams,
+        minPrice,
+        maxPrice,
+        searchValue,
+        page,
+        pagesCount,
+        pageLimit
+      }}
     />
   </article>;
 }

@@ -1,4 +1,4 @@
-import { ICartProductModel, IConfig, IProduct } from '@/app/models';
+import { ICartProductModel, IConfig, IProductSerialized } from '@/app/models';
 import currency from 'currency.js';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
 
@@ -9,7 +9,7 @@ export function getOrderMessage(data: {
   email?: string;
   deliveryAddress?: string;
   comment?: string;
-  cart: Record<string, ICartProductModel<IProduct>>;
+  cart: Record<string, ICartProductModel<IProductSerialized>>;
   config: IConfig;
 }): string {
   let message: string = `Заказ №${data.orderNumber}`

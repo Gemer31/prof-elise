@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
-import { ICategory, IConfig, IProduct } from '@/app/models';
+import { ICategory, IConfig, IProduct, IProductSerialized } from '@/app/models';
 import { docsToData, getClient } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { FavouritesList } from '@/components/view/favourites-list/FavouritesList';
@@ -11,6 +11,7 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/view/SubHeader';
+import { getProductsSerialized } from '@/utils/serialize.util';
 
 export const fetchCache = 'force-no-store';
 
@@ -37,18 +38,13 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
   const config = settingsDocumentSnapshot.data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
-  let data: IProduct[] = [];
+  let data: IProductSerialized[] = [];
   const productsIds: string[] = Object.keys(client.favourites);
   if (productsIds.length) {
     const products = await getDocs(
       query(collection(db, FirestoreCollections.PRODUCTS), where('id', 'in', productsIds))
     );
-    data = docsToData<IProduct>(products.docs)
-      .map((item) => {
-        item.categoryId = item.categoryRef.path.split('/').pop();
-        delete item.categoryRef;
-        return item;
-      });
+    data = getProductsSerialized(docsToData<IProduct>(products.docs))
   }
 
   return <>

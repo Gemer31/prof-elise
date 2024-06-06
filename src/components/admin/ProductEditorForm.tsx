@@ -104,7 +104,7 @@ export function ProductEditorForm({
       reset();
       refreshCallback?.();
     } catch (e) {
-      console.log('Update product error: ', e);
+      console.error('Update product error: ', e);
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +122,7 @@ export function ProductEditorForm({
       reset();
       refreshCallback?.();
     } catch (e) {
-      console.log('Delete product error: ', e);
+      console.error('Delete product error: ', e);
     } finally {
       setIsLoading(false);
     }

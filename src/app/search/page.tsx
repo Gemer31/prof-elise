@@ -1,15 +1,14 @@
-import { ICategory, IConfig, IProduct } from '@/app/models';
+import { ICategory, IConfig, IPaginateProps, IProduct, IProductSerialized, ISearchParams } from '@/app/models';
 import { Catalog } from '@/components/view/Catalog';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { ProductsList } from '@/components/view/ProductsList';
-import { FirestoreCollections, FirestoreDocuments, OrderByKeys, PageLimits, RouterPath } from '@/app/enums';
+import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
 import {
   collection,
   doc,
   getDoc,
   getDocs,
   orderBy,
-  OrderByDirection,
   query,
   QueryCompositeFilterConstraint,
   QueryConstraint,
@@ -26,65 +25,16 @@ import { ORDER_BY_FIELDS } from '@/app/constants';
 import { FilterBar } from '@/components/view/FilterBar';
 import { getPaginateUrl } from '@/utils/router.util';
 import { LOCALE, TRANSLATES } from '@/app/translates';
+import { getProductsSerialized } from '@/utils/serialize.util';
+import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
 
 export interface ICategoriesOrProductsProps {
-  searchParams: {
-    pageLimit: number;
-    page: number;
-    byPrice: OrderByDirection;
-    byDate: OrderByDirection;
-    byAlfabet: OrderByDirection;
-    minPrice: string;
-    maxPrice: string;
-    q: string;
-  };
+  searchParams: ISearchParams;
 }
 
 export default async function SearchPage(
   {searchParams}: ICategoriesOrProductsProps
 ) {
-  let orderByKey: OrderByKeys;
-  let orderByValue: OrderByDirection;
-  Object.keys(searchParams)?.every(key => {
-    switch (key) {
-      case OrderByKeys.BY_PRICE: {
-        orderByKey = OrderByKeys.BY_PRICE;
-        orderByValue = searchParams[OrderByKeys.BY_PRICE];
-        break;
-      }
-      case OrderByKeys.BY_DATE: {
-        orderByKey = OrderByKeys.BY_DATE;
-        orderByValue = searchParams[OrderByKeys.BY_DATE];
-        break;
-      }
-      case OrderByKeys.BY_ALFABET: {
-        orderByKey = OrderByKeys.BY_ALFABET;
-        orderByValue = searchParams[OrderByKeys.BY_ALFABET];
-        break;
-      }
-    }
-    if (orderByValue) {
-      if (orderByValue !== 'desc' && orderByValue !== 'asc') {
-        orderByValue = 'desc';
-      }
-      return false;
-    }
-    return true;
-  });
-
-  if (!Object.values<string>(PageLimits).includes(String(searchParams.pageLimit))) {
-    redirect(getPaginateUrl({
-      baseUrl: RouterPath.SEARCH,
-      searchValue: searchParams.q,
-      page: 1,
-      pageLimit: Number(PageLimits.SIX),
-      orderBy: {
-        key: orderByKey,
-        value: orderByValue
-      }
-    }));
-  }
-
   const [
     settingsDocumentSnapshot,
     categoriesQuerySnapshot
@@ -94,21 +44,20 @@ export default async function SearchPage(
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
-
+  const paginateProps: IPaginateProps = getPaginateProps(searchParams);
   const productsFilters: (QueryConstraint | QueryCompositeFilterConstraint)[] = [
-    getFirebaseSearchFilter(searchParams.q)
-    // limit(pageLimit),
+    getFirebaseSearchFilter(paginateProps.searchValue)
   ];
+  const orderByField: string = ORDER_BY_FIELDS.get(paginateProps.orderByParams.key);
 
-  const orderByField: string = ORDER_BY_FIELDS.get(orderByKey);
   if (orderByField) {
-    productsFilters.push(orderBy(orderByField, orderByValue));
+    productsFilters.push(orderBy(orderByField, paginateProps.orderByParams.value));
   }
-  if (searchParams.minPrice?.length) {
-    productsFilters.push(where('price', '>=', Number(searchParams.minPrice)));
+  if (paginateProps.minPrice) {
+    productsFilters.push(where('price', '>=', paginateProps.minPrice));
   }
-  if (searchParams.maxPrice?.length) {
-    productsFilters.push(where('price', '<=', Number(searchParams.maxPrice)));
+  if (paginateProps.maxPrice) {
+    productsFilters.push(where('price', '<=', paginateProps.maxPrice));
   }
 
   const productsQuerySnapshot = await getDocs(query(
@@ -117,12 +66,10 @@ export default async function SearchPage(
     ...productsFilters
   ));
 
-  const pagesCount: number = productsQuerySnapshot.docs.length
-    ? Math.ceil(productsQuerySnapshot.docs.length / searchParams.pageLimit)
-    : 0;
-  if (pagesCount !== 0 && searchParams.page > pagesCount) {
+  paginateProps.pagesCount = getPagesCount(productsQuerySnapshot.docs.length, searchParams.pageLimit);
+  if (paginateProps.pagesCount !== 0 && searchParams.page > paginateProps.pagesCount) {
     redirect(getPaginateUrl({
-      baseUrl: RouterPath.SEARCH,
+      baseRedirectUrl: RouterPath.SEARCH,
       page: 1,
       pageLimit: searchParams.pageLimit,
       searchValue: searchParams.q
@@ -130,12 +77,9 @@ export default async function SearchPage(
   }
 
   const productsChunks = chunk(productsQuerySnapshot.docs, searchParams.pageLimit);
-  const products: IProduct[] = docsToData<IProduct>(productsChunks[searchParams.page - 1])
-    .map((item) => {
-      item.categoryId = item.categoryRef.path.split('/').pop();
-      delete item.categoryRef;
-      return item;
-    });
+  const products: IProductSerialized[] = getProductsSerialized(docsToData<IProduct>(productsChunks[searchParams.page - 1]));
+
+  paginateProps.baseRedirectUrl = RouterPath.SEARCH;
 
   return <>
     <SubHeader config={config}/>
@@ -146,36 +90,12 @@ export default async function SearchPage(
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <article className="w-full md:w-4/12 mr-4">
           <div className="sticky top-20">
-            <Catalog
-              pageLimit={searchParams.pageLimit}
-              categories={Object.values(categories)}
-            />
-            <FilterBar
-              config={config}
-              baseRedirectUrl={RouterPath.SEARCH}
-              searchValue={searchParams.q}
-              pageLimit={searchParams.pageLimit}
-              orderByParams={{
-                key: orderByKey,
-                value: orderByValue
-              }}
-              minPrice={searchParams.minPrice}
-              maxPrice={searchParams.maxPrice}
-            />
+            <Catalog pageLimit={searchParams.pageLimit} categories={Object.values(categories)}/>
+            <FilterBar config={config} paginateProps={paginateProps}/>
           </div>
         </article>
         <ProductsList
-          orderByParams={{
-            key: orderByKey,
-            value: orderByValue
-          }}
-          minPrice={searchParams.minPrice}
-          maxPrice={searchParams.maxPrice}
-          pagesCount={pagesCount}
-          searchValue={searchParams.q}
-          baseRedirectUrl={RouterPath.SEARCH}
-          pageLimit={searchParams.pageLimit}
-          page={Number(searchParams.page)}
+          paginateProps={paginateProps}
           data={products}
           config={config}
         />

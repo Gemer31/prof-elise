@@ -1,6 +1,6 @@
 'use client';
 
-import { IClient, IConfig, IProduct } from '@/app/models';
+import { IClient, IConfig, IProduct, IProductSerialized } from '@/app/models';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -14,13 +14,13 @@ import { getClientId } from '@/utils/cookies.util';
 
 interface IFavouritesListProps {
   config: IConfig;
-  serverProducts: IProduct[];
+  serverProducts: IProductSerialized[];
 }
 
 export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
   const [intoCatalogRedirectInProgress, setIntoCatalogRedirectInProgress] = useState(false);
-  const [data, setData] = useState<IProduct[]>([]);
+  const [data, setData] = useState<IProductSerialized[]>([]);
   const dispatch = useAppDispatch();
   const client: IClient = useAppSelector(state => state.dataReducer.client);
 

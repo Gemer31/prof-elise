@@ -18,7 +18,7 @@ export function CartCard({data, config, onDelete}: ICartCardProps) {
   return <div className="cart-card pb-2 bg-slate-100 p-2 rounded-md mb-2">
     <Link
       className="flex"
-      href={`${RouterPath.CATEGORIES}/${data.productRef.categoryId}${RouterPath.PRODUCTS}/${data?.productRef.id}`}
+      href={`${RouterPath.CATEGORIES}/${data.productRef.categoryRef}${RouterPath.PRODUCTS}/${data?.productRef.id}`}
     >
       <Image
         className="rounded-md"

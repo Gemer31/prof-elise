@@ -26,10 +26,10 @@ export function ProductsSearch({config}: IProductsSearchProps) {
   const [searchValue, setSearchValue] = useState('');
   const [resultsVisible, setResultsVisible] = useState(false);
   const searchRedirectUrl = useMemo(() => getPaginateUrl({
-      baseUrl: RouterPath.SEARCH,
+      baseRedirectUrl: RouterPath.SEARCH,
       page: 1,
       pageLimit: Number(PageLimits.SIX),
-      searchValue: searchValue
+      searchValue
     }
   ), [searchValue]);
 

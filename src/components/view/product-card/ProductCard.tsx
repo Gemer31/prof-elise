@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { Counter } from '@/components/view/Counter';
 import { Button } from '@/components/ui/Button';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { IConfig, IProduct } from '@/app/models';
+import { IConfig, IProductSerialized } from '@/app/models';
 import { Loader } from '@/components/ui/Loader';
 import './product-card.css';
 import { EntityFavouriteButton } from '@/components/view/EntityFavouriteButton';
@@ -17,7 +17,7 @@ import currency from 'currency.js';
 
 export interface IProductCardProps {
   config: IConfig;
-  data: IProduct;
+  data: IProductSerialized;
   isLoading?: boolean,
   onClick?: () => void,
 }
@@ -49,7 +49,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
   return (
     <Link
       className={hostClass}
-      href={`${RouterPath.CATEGORIES}/${data?.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
+      href={`${RouterPath.CATEGORIES}/${data?.categoryRef}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
       <div className="absolute flex flex-col gap-y-2 left-4 top-4">

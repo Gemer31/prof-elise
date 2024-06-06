@@ -72,7 +72,6 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     byPrice: 'По цене',
     byDate: 'По дате',
     byAlfabet: 'По алфавиту',
-    productsOnThePage: 'товаров на странице',
     showBy: 'Показывать по',
     requestCallSended: 'Наши операторы свяжутся с вами',
     ourAdvantages: 'Наши преимущества',

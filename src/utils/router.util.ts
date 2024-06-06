@@ -1,27 +1,21 @@
 import { UrlQueryParamsNames } from '@/app/enums';
-import { IOrderByModel } from '@/app/models';
+import { IPaginateProps } from '@/app/models';
 
-export function getPaginateUrl({
-                                 baseUrl,
-                                 page,
-                                 pageLimit,
-                                 orderBy,
-                                 minPrice,
-                                 maxPrice,
-                                 searchValue
-                               }: {
-  baseUrl: string,
-  page: number,
-  pageLimit: number,
-  orderBy?: IOrderByModel
-  minPrice?: string,
-  maxPrice?: string,
-  searchValue?: string
-}): string {
-  return baseUrl
+export function getPaginateUrl(
+  {
+    baseRedirectUrl,
+    pageLimit,
+    page,
+    orderByParams,
+    minPrice,
+    maxPrice,
+    searchValue
+  }: IPaginateProps
+): string {
+  return baseRedirectUrl
     + '?' + UrlQueryParamsNames.PAGE + '=' + page
     + '&' + UrlQueryParamsNames.PAGE_LIMIT + '=' + pageLimit
-    + (orderBy?.value ? ('&' + orderBy.key + '=' + orderBy?.value) : '')
+    + (orderByParams?.value ? ('&' + orderByParams.key + '=' + orderByParams?.value) : '')
     + (minPrice ? ('&' + UrlQueryParamsNames.MIN_PRICE + '=' + minPrice) : '')
     + (maxPrice ? ('&' + UrlQueryParamsNames.MAX_PRICE + '=' + maxPrice) : '')
     + (searchValue ? ('&' + UrlQueryParamsNames.SEARCH_VALUE + '=' + searchValue) : '');

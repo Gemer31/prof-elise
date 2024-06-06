@@ -1,18 +1,21 @@
 import { DocumentReference, OrderByDirection } from '@firebase/firestore';
 import { ColorOptions, OrderByKeys, OrderStatuses, PopupTypes, UserRoles } from '@/app/enums';
 
-export interface IProduct {
+export interface IProduct<T = DocumentReference> {
   id: string;
   vendorCode: string;
   title: string;
   price: number;
   description: string;
-  categoryRef: DocumentReference;
-  categoryId?: string;
+  categoryRef: T;
   labels: ILabel[];
   imageUrls?: string[];
   createDate: number;
 }
+
+export type IProductSerialized = IProduct<string>;
+
+export type IProductEnriched = IProduct<ICategory>;
 
 export interface ILabel {
   text: string;
@@ -43,7 +46,7 @@ export interface ICategory {
 
 export interface IViewedRecently {
   time: number;
-  product: IProduct;
+  product: IProductSerialized;
 }
 
 export interface ICartProductModel<T = DocumentReference> {
@@ -63,14 +66,14 @@ export interface IClient {
 }
 
 export interface IClientEnriched {
-  cart?: Record<string, ICartProductModel<IProduct>>;
+  cart?: Record<string, ICartProductModel<IProductSerialized>>;
   favourites?: Record<string, IProduct>;
   viewedRecently?: Record<string, IViewedRecentlyModel<IProduct>>;
 }
 
 export interface IPopupData {
   formType: PopupTypes;
-  product?: IProduct;
+  product?: IProductSerialized;
 }
 
 export interface IOrderByModel {
@@ -88,6 +91,8 @@ export interface IOrder<T = DocumentReference> {
   products: Record<string, IOrderProduct>;
   comment?: string;
 }
+
+export type IOrderSerialized = IOrder<string>;
 
 export interface IOrderProduct {
   id: string;
@@ -108,3 +113,28 @@ export interface IUser<T = DocumentReference, E = Record<string, DocumentReferen
 }
 
 export type IUserSerialized = IUser<string, string[]>;
+
+export interface IPaginateProps extends IPaginateOptions {
+  baseRedirectUrl?: string;
+  page?: number;
+  pagesCount?: number;
+  pageLimit?: number;
+}
+
+export interface IPaginateOptions {
+  orderByParams?: IOrderByModel;
+  minPrice?: number;
+  maxPrice?: number;
+  searchValue?: string;
+}
+
+export interface ISearchParams {
+  pageLimit?: number;
+  page?: number;
+  byPrice?: OrderByDirection;
+  byDate?: OrderByDirection;
+  byAlfabet?: OrderByDirection;
+  minPrice?: string;
+  maxPrice?: string;
+  q?: string;
+}

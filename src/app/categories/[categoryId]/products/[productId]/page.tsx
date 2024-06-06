@@ -1,4 +1,4 @@
-import { ICategory, IConfig, IProduct } from '@/app/models';
+import { ICategory, IConfig, IProduct, IProductSerialized } from '@/app/models';
 import { Catalog } from '@/components/view/Catalog';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { ImgGallery } from '@/components/view/ImgGallery';
@@ -15,6 +15,7 @@ import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently
 import currency from 'currency.js';
 import { SubHeader } from '@/components/view/SubHeader';
 import { notFound } from 'next/navigation';
+import { getProductSerialized } from '@/utils/serialize.util';
 
 export interface IProductDetailsProps {
   params: {
@@ -40,17 +41,15 @@ export default async function ProductDetailsPage(
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
-  const product: IProduct = productDocumentSnapshot.data() as IProduct;
+  const product: IProductSerialized = getProductSerialized(productDocumentSnapshot.data() as IProduct);
   if (!product) {
     notFound();
   }
 
-  const productCategory: ICategory = categories.find((item) => product.categoryRef.path.includes(item.id));
+  const productCategory: ICategory = categories.find((item) => product.categoryRef.includes(item.id));
   if (!productCategory) {
     notFound();
   }
-
-  delete product.categoryRef;
 
   return <>
     <SubHeader config={config}/>
@@ -62,7 +61,7 @@ export default async function ProductDetailsPage(
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">
         <div className="w-full md:w-4/12 mr-4">
           <div className="sticky top-20">
-            <Catalog pageLimit={pageLimit} currentCategoryId={product.categoryId} categories={categories}/>
+            <Catalog pageLimit={pageLimit} currentCategoryId={product.categoryRef} categories={categories}/>
           </div>
         </div>
         <article className="w-full flex justify-between">

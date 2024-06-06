@@ -73,7 +73,7 @@ export function RegistrationForm() {
         router.push(RouterPath.PROFILE);
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       // @ts-ignore
       const translateMessage: string = TRANSLATES[LOCALE][e.message] || TRANSLATES[LOCALE].somethingWentWrong;
       dispatch(setNotificationMessage(translateMessage));
@@ -141,6 +141,6 @@ export function RegistrationForm() {
       disabled={isLoading}
       loading={isLoading}
       type={ButtonTypes.SUBMIT}
-    >{TRANSLATES[LOCALE].enter}</Button>
+    >{TRANSLATES[LOCALE].registrate}</Button>
   </Form>;
 }

@@ -5,29 +5,28 @@ import { Button } from '@/components/ui/Button';
 import { ButtonTypes } from '@/app/enums';
 import { ChangeEvent, useMemo } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { IConfig, IOrderByModel } from '@/app/models';
+import { IConfig, IPaginateProps } from '@/app/models';
 import { useRouter } from 'next/navigation';
 import { getPaginateUrl } from '@/utils/router.util';
 
 export interface IFilterBarProps {
-  baseRedirectUrl: string;
-  pageLimit: number;
-  orderByParams: IOrderByModel;
-  minPrice?: string;
-  maxPrice?: string;
-  searchValue?: string;
   config: IConfig;
+  paginateProps: IPaginateProps;
 }
 
-export function FilterBar({
-                            baseRedirectUrl,
-                            pageLimit,
-                            searchValue,
-                            orderByParams,
-                            minPrice,
-                            maxPrice,
-                            config
-                          }: IFilterBarProps) {
+export function FilterBar(
+  {
+    config,
+    paginateProps: {
+      baseRedirectUrl,
+      pageLimit,
+      searchValue,
+      orderByParams,
+      minPrice,
+      maxPrice
+    }
+  }: IFilterBarProps
+) {
   const hostClass: string = useMemo(() => convertToClass([
     'border-2',
     'rounded-md',
@@ -43,10 +42,10 @@ export function FilterBar({
     e.preventDefault();
 
     router.push(getPaginateUrl({
-      baseUrl: baseRedirectUrl,
+      baseRedirectUrl,
       page: 1,
       pageLimit,
-      orderBy: orderByParams,
+      orderByParams,
       // @ts-ignore
       minPrice: e.target?.[0]?.value,
       // @ts-ignore

@@ -6,10 +6,10 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setPopupData } from '@/store/dataSlice';
-import { IProduct } from '@/app/models';
+import { IProductSerialized } from '@/app/models';
 
 interface IProductDetailsActionsBarProps {
-  product: IProduct;
+  product: IProductSerialized;
 }
 
 export function ProductDetailsActionsBar({product}: IProductDetailsActionsBarProps) {

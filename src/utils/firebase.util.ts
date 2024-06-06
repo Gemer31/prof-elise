@@ -10,11 +10,19 @@ import {
   where
 } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import { ICartProductModel, IClient, IClientEnriched, IProduct, IViewedRecently } from '@/app/models';
+import {
+  ICartProductModel,
+  IClient,
+  IClientEnriched,
+  IProduct,
+  IProductSerialized,
+  IViewedRecently
+} from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
 import { CLIENT_ID } from '@/app/constants';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import { getProductSerialized } from '@/utils/serialize.util';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
   return docs?.map(item => item.data()) as T[] || [];
@@ -43,12 +51,9 @@ export async function getViewedRecently(client: IClient): Promise<IViewedRecentl
     ));
     const viewedRecentlyProducts = docsToData<IProduct>(viewedRecentlyQuerySnapshot.docs);
     viewedRecently = viewedRecentlyProducts.map(product => {
-      const serializedProduct = {...product};
-      serializedProduct.categoryId = product.categoryRef.id;
-      delete serializedProduct['categoryRef'];
       return {
         time: client.viewedRecently[product.id].time,
-        product: serializedProduct
+        product: getProductSerialized(product)
       };
     });
   }
@@ -120,9 +125,9 @@ export function getNonEnrichedClient(enrichedClient: IClientEnriched): IClient {
 }
 
 export async function getEnrichedCart(
-  cart: Record<string, ICartProductModel<DocumentReference>>
-): Promise<Record<string, ICartProductModel<IProduct>>> {
-  const enrichedCart: Record<string, ICartProductModel<IProduct>> = {};
+  cart: Record<string, ICartProductModel>
+): Promise<Record<string, ICartProductModel<IProductSerialized>>> {
+  const enrichedCart: Record<string, ICartProductModel<IProductSerialized>> = {};
   const cartProductsIds: string[] = cart ? Object.keys(cart) : [];
 
   if (cartProductsIds?.length) {
@@ -131,9 +136,7 @@ export async function getEnrichedCart(
       where('id', 'in', cartProductsIds)
     ));
     products.forEach(item => {
-      const data: IProduct = item.data() as IProduct;
-      data.categoryId = data.categoryRef.id;
-      delete data.categoryRef;
+      const data: IProductSerialized = getProductSerialized(item.data() as IProduct);
       enrichedCart[data.id] = {
         ...cart[data.id],
         productRef: data

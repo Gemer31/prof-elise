@@ -2,7 +2,7 @@
 
 import { FirestoreCollections, OrderStatuses, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { IClient, IConfig, IOrderProduct, IUser } from '@/app/models';
+import { IClient, IConfig, IOrderProduct, IUserSerialized } from '@/app/models';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -28,7 +28,7 @@ import { Session } from 'next-auth';
 import currency from 'currency.js';
 
 interface ICheckoutFormProps {
-  user: IUser;
+  user: IUserSerialized;
   session: Session;
   config: IConfig;
 }
@@ -88,7 +88,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
           title: item.productRef.title,
           price: currency(item.productRef.price).toString() + ' ' + config.currency,
           count: item.count,
-          categoryId: item.productRef.categoryId
+          categoryId: item.productRef.categoryRef
         });
       });
       const createOrderRes = await setDoc(doc(db, FirestoreCollections.ORDERS, orderId), {

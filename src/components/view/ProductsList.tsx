@@ -1,37 +1,19 @@
 'use client';
 
 import { ProductCard } from '@/components/view/product-card/ProductCard';
-import { IConfig, IOrderByModel, IProduct } from '@/app/models';
+import { IConfig, IPaginateProps, IProductSerialized } from '@/app/models';
 import { useState } from 'react';
 import { PaginateWrapper } from '@/components/ui/paginate-wrapper/PaginateWrapper';
 import { OrderByKeys, PaginateItemsPosition } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 
 export interface IProductsListProps {
-  data: IProduct[];
+  data: IProductSerialized[];
   config: IConfig;
-  baseRedirectUrl: string;
-  pagesCount: number;
-  pageLimit: number;
-  page: number;
-  searchValue?: string;
-  orderByParams?: IOrderByModel;
-  minPrice?: string;
-  maxPrice?: string;
+  paginateProps: IPaginateProps;
 }
 
-export function ProductsList({
-                               data,
-                               config,
-                               pageLimit,
-                               page,
-                               pagesCount,
-                               baseRedirectUrl,
-                               orderByParams,
-                               maxPrice,
-                               minPrice,
-                               searchValue
-                             }: IProductsListProps) {
+export function ProductsList({data, config, paginateProps}: IProductsListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   return <PaginateWrapper
@@ -43,14 +25,7 @@ export function ProductsList({
     itemsPosition={PaginateItemsPosition.GRID}
     items={data}
     emptyListText={TRANSLATES[LOCALE].thereAreNoProductsWithSelectedFilter}
-    baseRedirectUrl={baseRedirectUrl}
-    pagesCount={pagesCount}
-    pageLimit={pageLimit}
-    page={page}
-    searchValue={searchValue}
-    maxPrice={maxPrice}
-    minPrice={minPrice}
-    orderByParams={orderByParams}
+    paginateProps={paginateProps}
   >
     {data?.map((product) => {
       return <ProductCard

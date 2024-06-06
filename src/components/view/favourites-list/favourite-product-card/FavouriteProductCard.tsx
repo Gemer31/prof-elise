@@ -1,4 +1,4 @@
-import { IConfig, IProduct } from '@/app/models';
+import { IConfig, IProduct, IProductSerialized } from '@/app/models';
 import Image from 'next/image';
 import { RouterPath } from '@/app/enums';
 import { Counter } from '@/components/view/Counter';
@@ -8,7 +8,7 @@ import currency from 'currency.js';
 
 export interface IFavouriteProductCardProps {
   config: IConfig;
-  data: IProduct;
+  data: IProductSerialized;
   isLoading?: boolean,
   onClick?: () => void,
 }
@@ -17,7 +17,7 @@ export function FavouriteProductCard({data, isLoading, config, onClick}: IFavour
   return <div className="favourite-product-card p-2 bg-slate-100 rounded-md  mb-2">
     <Link
       className={'flex items-center gap-x-2 ' + (isLoading ? ' pointer-events-none' : '')}
-      href={`${RouterPath.CATEGORIES}/${data.categoryId}${RouterPath.PRODUCTS}/${data?.id}`}
+      href={`${RouterPath.CATEGORIES}/${data.categoryRef}${RouterPath.PRODUCTS}/${data?.id}`}
       onClick={onClick}
     >
       <Image className="rounded-md" width={150} height={150} src={data.imageUrls[0]} alt={data.title}/>

@@ -18,7 +18,7 @@ export const COLOR_OPTION_VALUES = new Map<ColorOptions, string>([
   [ColorOptions.GRAY, 'bg-slate-100 hover:bg-slate-400 active:bg-slate-600 text-black']
 ]);
 
-export const ORDER_BY_FIELDS = new Map<OrderByKeys, string>([
+export const ORDER_BY_FIELDS = new Map<string, string>([
   [OrderByKeys.BY_PRICE, 'price'],
   [OrderByKeys.BY_ALFABET, 'title'],
   [OrderByKeys.BY_DATE, 'createDate']

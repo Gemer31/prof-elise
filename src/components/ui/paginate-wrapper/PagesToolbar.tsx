@@ -1,72 +1,78 @@
 import { Button } from '@/components/ui/Button';
 import { ColorOptions } from '@/app/enums';
 import { getPaginateUrl } from '@/utils/router.util';
-import { IOrderByModel } from '@/app/models';
+import { IPaginateProps } from '@/app/models';
 
 interface IPagesToolbarProps {
-  current: number;
-  pages: number;
-  pageLimit: number;
-  orderByParams: IOrderByModel;
-  baseRedirectUrl: string;
-  minPrice?: string;
-  maxPrice?: string;
-  searchValue?: string;
+  paginateProps: IPaginateProps,
 }
 
-export function PagesToolbar({current, pages, pageLimit, searchValue, baseRedirectUrl, orderByParams, maxPrice, minPrice}: IPagesToolbarProps) {
-  return <div className={'w-full justify-center gap-x-1 ' + (pages < 2 ? 'hidden' : 'flex')}>
+export function PagesToolbar(
+  {
+    paginateProps: {
+      orderByParams,
+      minPrice,
+      maxPrice,
+      searchValue,
+      baseRedirectUrl,
+      page,
+      pagesCount,
+      pageLimit
+    }
+  }: IPagesToolbarProps
+) {
+  return <div className={'w-full justify-center gap-x-1 ' + (pagesCount < 2 ? 'hidden' : 'flex')}>
     {
-      current === 1
+      page === 1
         ? <></>
         : <Button
           color={ColorOptions.GRAY}
           styleClass="flex px-4 py-2"
           href={getPaginateUrl({
-            baseUrl: baseRedirectUrl,
-            page: current - 1,
+            baseRedirectUrl,
+            page: page - 1,
             pageLimit,
-            orderBy: orderByParams,
+            orderByParams,
             maxPrice,
             minPrice,
-            searchValue,
+            searchValue
           })}
         >←</Button>
     }
     {
-      Array(pages).fill(null).map((item, index) => {
+      Array(pagesCount).fill(null).map((item, index) => {
         const value: number = index + 1;
         return <Button
-          color={value === current ? ColorOptions.PINK : ColorOptions.GRAY}
-          disabled={value === current}
-          key={`${value}${current}`}
+          color={value === page ? ColorOptions.PINK : ColorOptions.GRAY}
+          disabled={value === page}
+          key={`${value}${page}`}
           styleClass="flex px-4 py-2"
           href={getPaginateUrl({
-            baseUrl: baseRedirectUrl,
+            baseRedirectUrl,
             page: value,
             pageLimit,
-            orderBy: orderByParams,
+            orderByParams,
             maxPrice,
             minPrice,
-            searchValue,
+            searchValue
           })}
         >{value}</Button>;
       })
     }
     {
-      current === pages
+      page === pagesCount
         ? <></>
         : <Button
           color={ColorOptions.GRAY}
           styleClass="flex px-4 py-2"
           href={getPaginateUrl({
-            baseUrl: baseRedirectUrl,
-            page: current + 1,
+            baseRedirectUrl,
+            page: page + 1,
             pageLimit,
-            orderBy: orderByParams,
+            orderByParams,
             maxPrice,
             minPrice,
-            searchValue,
+            searchValue
           })}
         >→</Button>
     }

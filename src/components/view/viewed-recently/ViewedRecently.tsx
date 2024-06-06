@@ -1,6 +1,6 @@
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
-import { IConfig, IProduct, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
+import { IConfig, IProductSerialized, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
 import Image from 'next/image';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ import { db } from '@/app/lib/firebase-config';
 import { CLIENT_ID } from '@/app/constants';
 
 interface IViewedRecentlyProps {
-  product?: IProduct;
+  product?: IProductSerialized;
 }
 
 export async function ViewedRecently({product}: IViewedRecentlyProps) {
@@ -29,7 +29,6 @@ export async function ViewedRecently({product}: IViewedRecentlyProps) {
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
 
-  console.log(product);
   if (clientId && product && !client?.viewedRecently[product?.id]) {
     const newViewRecently = [...viewedRecently];
     if (newViewRecently.length > 4) {
@@ -65,7 +64,7 @@ export async function ViewedRecently({product}: IViewedRecentlyProps) {
               .sort((a, b) => b.time - a.time)
               .map(item => {
                 return <Link
-                  href={`${RouterPath.CATEGORIES}/${item.product?.categoryId}${RouterPath.PRODUCTS}/${item.product?.id}`}
+                  href={`${RouterPath.CATEGORIES}/${item.product?.categoryRef}${RouterPath.PRODUCTS}/${item.product?.id}`}
                   key={item.product?.id}
                   className="flex items-center p-4 rounded-md bg-white hover:bg-pink-200 duration-500 transition-colors"
                 >

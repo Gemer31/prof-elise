@@ -1,4 +1,4 @@
-import { IOrder, IUserSerialized } from '@/app/models';
+import { IOrderSerialized } from '@/app/models';
 import { RouterPath } from '@/app/enums';
 import Link from 'next/link';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -8,7 +8,7 @@ import { convertToClass } from '@/utils/convert-to-class.util';
 import { ORDER_STATUS_CLASSES } from '@/app/constants';
 
 interface IOrderCardProps {
-  data: IOrder<IUserSerialized>;
+  data: IOrderSerialized;
 }
 
 export function OrderCard({data}: IOrderCardProps) {
@@ -20,7 +20,7 @@ export function OrderCard({data}: IOrderCardProps) {
     'mb-2',
     'duration-200',
     'bg-slate-100 hover:bg-slate-200',
-    'rounded-md',
+    'rounded-md'
   ]), []);
 
   return <div className={hostClass}>
@@ -44,10 +44,10 @@ export function OrderCard({data}: IOrderCardProps) {
             </Link>
             <div className="flex justify-center items-center">{item.count} шт.</div>
             <div className="flex justify-end items-center text-lg">{item.price}/шт.</div>
-          </div>
+          </div>;
         })
       }
     </div>
-  </div>
+  </div>;
 
 }
