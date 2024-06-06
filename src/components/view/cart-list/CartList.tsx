@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { CartListTotalBar } from '@/components/view/cart-list/CartListTotalBar';
 import { useEffect, useState } from 'react';
-import { ICartProductModel, IClient, IClientEnriched, IConfig, IProduct } from '@/app/models';
+import { ICartProductModel, IClient, IClientEnriched, IConfig, IProductSerialized } from '@/app/models';
 import { getClientId } from '@/utils/cookies.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { CartCard } from '@/components/view/cart-list/CartCard';
@@ -19,7 +19,7 @@ export interface ICartListProps {
 }
 
 export function CartList({serverClient, config}: ICartListProps) {
-  const [data, setData] = useState<ICartProductModel<IProduct>[]>([]);
+  const [data, setData] = useState<ICartProductModel<IProductSerialized>[]>([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const client: IClient = useAppSelector(state => state.dataReducer.client);
@@ -73,8 +73,8 @@ export function CartList({serverClient, config}: ICartListProps) {
           callback={cleanCart}
         >{TRANSLATES[LOCALE].cleanCart}</Button>
       </section>
-      <section className="w-full flex gap-x-4">
-        <div>
+      <section className="w-full flex gap-x-2">
+        <div className="w-9/12">
           {
             data.map((item, index) => {
               return <CartCard

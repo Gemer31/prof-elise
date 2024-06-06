@@ -75,7 +75,6 @@ export class YupUtil {
       title: yup.string().required('fieldRequired'),
       description: yup.string().required('fieldRequired'),
       categoryId: yup.string().required('fieldRequired'),
-      vendorCode: yup.string().required('fieldRequired'),
       images: yup.array().required('fieldRequired'),
       labels: yup.array()
     });

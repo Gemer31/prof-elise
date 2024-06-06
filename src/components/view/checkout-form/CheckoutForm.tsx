@@ -18,7 +18,7 @@ import { getClientId } from '@/utils/cookies.util';
 import { getEnrichedCart } from '@/utils/firebase.util';
 import { CheckoutTotalBar } from '@/components/view/checkout-form/CheckoutTotalBar';
 import { Button } from '@/components/ui/Button';
-import { generateOrderNumber } from '@/utils/order-number.util';
+import { generateRandomNumber } from '@/utils/order-number.util';
 import { doc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { useRouter } from 'next/navigation';
@@ -73,7 +73,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
     comment?: string;
   }) => {
     const orderId: string = uuidv4();
-    const orderNumber = generateOrderNumber();
+    const orderNumber = generateRandomNumber(6);
     const enrichedCart = await getEnrichedCart(client.cart);
 
     if (session?.user) {

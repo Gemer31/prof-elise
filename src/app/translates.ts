@@ -117,7 +117,6 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     enterLabel: "Введите Лейбл",
     label: "Лейбл",
     vendorCode: 'Артикул',
-    enterVendorCode: 'Введите артикул',
     enterPrice: 'Введите цену',
     noCategories: 'Категорий нет',
     productDeleted: 'Продукт удален',

@@ -1,4 +1,4 @@
-import { ICartProductModel, IConfig, IProduct } from '@/app/models';
+import { ICartProductModel, IConfig, IProductSerialized } from '@/app/models';
 import './cart-card.css';
 import Image from 'next/image';
 import { Counter } from '@/components/view/Counter';
@@ -9,7 +9,7 @@ import { ButtonTypes, RouterPath } from '@/app/enums';
 import { Button } from '@/components/ui/Button';
 
 export interface ICartCardProps {
-  data: ICartProductModel<IProduct>;
+  data: ICartProductModel<IProductSerialized>;
   config: IConfig;
   onDelete: () => void;
 }
@@ -28,7 +28,7 @@ export function CartCard({data, config, onDelete}: ICartCardProps) {
         alt={data.productRef.title}
       />
       <div className="flex flex-col justify-between p-2">
-        <div className="text-lg">{data.productRef.title}</div>
+        <div className="text-lg entity-card-title">{data.productRef.title}</div>
         <div className="flex items-center gap-x-2">
           <EntityFavouriteButton className="w-fit" productId={data.productRef.id}/>
           <Button

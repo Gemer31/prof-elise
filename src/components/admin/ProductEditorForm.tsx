@@ -21,6 +21,7 @@ import { TextEditor } from '@/components/admin/TextEditor';
 import { ProductLabelsEditor } from '@/components/admin/ProductLabelsEditor';
 import currency from 'currency.js';
 import { YupUtil } from '@/utils/yup.util';
+import { generateRandomNumber } from '@/utils/order-number.util';
 
 export interface ProductEditorFormProps {
   categories: ICategory[];
@@ -60,7 +61,6 @@ export function ProductEditorForm({
     categoryId?: string,
     images?: StorageReference[],
     labels?: ILabel[],
-    vendorCode?: string,
   }) => {
     setIsLoading(true);
 
@@ -73,7 +73,7 @@ export function ProductEditorForm({
       categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
       imageUrls: imageUrls,
       labels: formData.labels,
-      vendorCode: formData.vendorCode,
+      vendorCode: selectedProduct?.vendorCode || String(generateRandomNumber(9)),
       createDate: selectedProduct?.createDate || +new Date(),
     };
     const categoryData: ICategory = selectedProduct
@@ -139,7 +139,6 @@ export function ProductEditorForm({
 
       setValue('title', newProduct.title);
       setValue('price', String(newProduct.price));
-      setValue('vendorCode', newProduct.vendorCode);
       setValue('description', newProduct.description);
       setValue('categoryId', newProduct.categoryRef.id);
       setValue('images', productImages);
@@ -152,7 +151,6 @@ export function ProductEditorForm({
     } else {
       setValue('title', '');
       setValue('price', '');
-      setValue('vendorCode', '');
       setValue('description', '');
       setValue('categoryId', '');
       setValue('images', []);
@@ -201,15 +199,6 @@ export function ProductEditorForm({
         placeholder={TRANSLATES[LOCALE].enterTitle}
         label={TRANSLATES[LOCALE].title}
         name="title"
-        type="text"
-        error={errors.title?.message}
-        register={register}
-      />
-      <InputFormField
-        required={true}
-        placeholder={TRANSLATES[LOCALE].enterVendorCode}
-        label={TRANSLATES[LOCALE].vendorCode}
-        name="vendorCode"
         type="text"
         error={errors.title?.message}
         register={register}
