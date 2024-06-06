@@ -12,6 +12,7 @@ import {
   query,
   QueryCompositeFilterConstraint,
   QueryConstraint,
+  QueryFieldFilterConstraint,
   where
 } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
@@ -44,22 +45,25 @@ export default async function SearchPage(
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const additionalFilters: QueryFieldFilterConstraint[] = [];
   const paginateProps: IPaginateProps = getPaginateProps(searchParams);
-  const productsFilters: (QueryConstraint | QueryCompositeFilterConstraint)[] = [
-    getFirebaseSearchFilter(paginateProps.searchValue)
-  ];
-  const orderByField: string = ORDER_BY_FIELDS.get(paginateProps.orderByParams.key);
+  paginateProps.baseRedirectUrl = RouterPath.SEARCH;
 
+  if (paginateProps.minPrice) {
+    additionalFilters.push(where('price', '>=', paginateProps.minPrice));
+  }
+  if (paginateProps.maxPrice) {
+    additionalFilters.push(where('price', '<=', paginateProps.maxPrice));
+  }
+
+  const productsFilters: (QueryConstraint | QueryCompositeFilterConstraint)[] = [
+    getFirebaseSearchFilter(paginateProps.searchValue, additionalFilters)
+  ];
+
+  const orderByField: string = ORDER_BY_FIELDS.get(paginateProps.orderByParams.key);
   if (orderByField) {
     productsFilters.push(orderBy(orderByField, paginateProps.orderByParams.value));
   }
-  if (paginateProps.minPrice) {
-    productsFilters.push(where('price', '>=', paginateProps.minPrice));
-  }
-  if (paginateProps.maxPrice) {
-    productsFilters.push(where('price', '<=', paginateProps.maxPrice));
-  }
-
   const productsQuerySnapshot = await getDocs(query(
     collection(db, FirestoreCollections.PRODUCTS),
     // @ts-ignore
@@ -78,8 +82,6 @@ export default async function SearchPage(
 
   const productsChunks = chunk(productsQuerySnapshot.docs, searchParams.pageLimit);
   const products: IProductSerialized[] = getProductsSerialized(docsToData<IProduct>(productsChunks[searchParams.page - 1]));
-
-  paginateProps.baseRedirectUrl = RouterPath.SEARCH;
 
   return <>
     <SubHeader config={config}/>

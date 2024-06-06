@@ -3,7 +3,6 @@ import { ICategory } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
-import { SearchInput } from '@/components/ui/SearchInput';
 import { EditorsSearch } from '@/components/admin/EditorsSearch';
 
 interface CategoriesViewerProps {

@@ -6,7 +6,7 @@ import {
   getDoc,
   getDocs, or,
   query,
-  QueryDocumentSnapshot,
+  QueryDocumentSnapshot, QueryFieldFilterConstraint,
   where
 } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
@@ -167,22 +167,25 @@ export async function getClient(cookies: ReadonlyRequestCookies): Promise<IClien
   return client;
 }
 
-export function getFirebaseSearchFilter(searchValue: string) {
+export function getFirebaseSearchFilter(searchValue: string, additionalFilters: QueryFieldFilterConstraint[] = []) {
   return or(
     // query as-is:
     and(
       where('title', '>=', searchValue),
-      where('title', '<=', searchValue + '\uf8ff')
+      where('title', '<=', searchValue + '\uf8ff'),
+      ...additionalFilters
     ),
     // capitalize first letter:
     and(
       where('title', '>=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1)),
-      where('title', '<=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1) + '\uf8ff')
+      where('title', '<=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1) + '\uf8ff'),
+      ...additionalFilters
     ),
     // lowercase:
     and(
       where('title', '>=', searchValue.toLowerCase()),
-      where('title', '<=', searchValue.toLowerCase() + '\uf8ff')
+      where('title', '<=', searchValue.toLowerCase() + '\uf8ff'),
+      ...additionalFilters
     )
   );
 }

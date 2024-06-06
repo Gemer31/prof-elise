@@ -17,7 +17,19 @@ export interface ISearchInputProps {
   onSubmit?: (searchValue: string) => void;
 }
 
-export function SearchInput({onChange, onValueChange, onSubmit, onBlur, onFocus, required, placeholder, pattern, searchButtonVisible}: ISearchInputProps) {
+export function SearchInput(
+  {
+    onChange,
+    onValueChange,
+    onSubmit,
+    onBlur,
+    onFocus,
+    required,
+    placeholder,
+    pattern,
+    searchButtonVisible
+  }: ISearchInputProps
+) {
   const hostClass: string = useMemo(() => convertToClass([
     searchButtonVisible ? 'border-l-2 border border-t-2 border-b-2' : 'border-2',
     searchButtonVisible ? 'rounded-l-md' : 'rounded-md',
@@ -36,10 +48,12 @@ export function SearchInput({onChange, onValueChange, onSubmit, onBlur, onFocus,
   const [value, setValue] = useState('');
   let timer = useRef(null);
 
-  const valueChanged = (e: ChangeEvent<HTMLInputElement>, forced?: boolean): void => {
-    const newValue = e?.target?.value !== undefined
-      ? e.target.value
-      : value;
+  const valueChanged = (e: ChangeEvent<HTMLInputElement>, forced?: boolean, close?: boolean): void => {
+    const newValue = close
+      ? ''
+      : e?.target?.value !== undefined
+        ? e?.target?.value
+        : value;
 
     setValue(newValue);
     onValueChange?.(newValue);
@@ -73,7 +87,7 @@ export function SearchInput({onChange, onValueChange, onSubmit, onBlur, onFocus,
   >
     {
       value?.length
-        ? <button type="button" className={clearButtonClass} onClick={() => valueChanged(null, true)}>✖</button>
+        ? <button type="button" className={clearButtonClass} onClick={() => valueChanged(null, true, true)}>✖</button>
         : <></>
     }
     <input
