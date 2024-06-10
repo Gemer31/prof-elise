@@ -51,7 +51,7 @@ export enum FirestoreCollections {
   SETTINGS = 'settings',
   CATEGORIES = 'categories',
   PRODUCTS = 'products',
-  ANONYMOUS_CLIENTS = 'anonymousClients',
+  CART_AND_FAVOURITES = 'cartAndFavourites',
   USERS = 'users',
   ORDERS = 'orders',
 }

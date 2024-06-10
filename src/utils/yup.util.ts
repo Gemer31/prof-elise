@@ -58,6 +58,12 @@ export class YupUtil {
     });
   }
 
+  static get ChangeEmailSchema() {
+    return yup.object().shape({
+      email: YupUtil.email,
+    });
+  }
+
   static get GeneralEditorFormSchema() {
     return yup.object().shape({
       phone: yup.string().required('fieldRequired'),

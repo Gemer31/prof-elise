@@ -152,7 +152,7 @@ export async function getClient(cookies: ReadonlyRequestCookies): Promise<IClien
   let client: IClient;
 
   if (clientId?.length) {
-    const clientDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId));
+    const clientDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.CART_AND_FAVOURITES, clientId));
     client = clientDocumentSnapshot.data();
   }
 

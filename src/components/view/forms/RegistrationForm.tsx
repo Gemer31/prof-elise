@@ -61,7 +61,7 @@ export function RegistrationForm() {
           phone,
           email,
           role: UserRoles.USER,
-          cartAndFavouritesRef: doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, getClientId()),
+          cartAndFavouritesRef: doc(db, FirestoreCollections.CART_AND_FAVOURITES, getClientId()),
           orders: {}
         } as AddPrefixToKeys<string, any>
       );

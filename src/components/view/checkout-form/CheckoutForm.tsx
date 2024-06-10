@@ -122,7 +122,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
       })
     });
     setCreatedOrderNumber(orderNumber);
-    await setDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, getClientId()), {
+    await setDoc(doc(db, FirestoreCollections.CART_AND_FAVOURITES, getClientId()), {
       ...client,
       cart: {}
     });

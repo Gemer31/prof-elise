@@ -22,7 +22,7 @@ export const getClient = createAsyncThunk( // todo think if no such clientId
     if (!clientId?.length) {
       await createClient();
     } else {
-      const response = await getDoc(doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId));
+      const response = await getDoc(doc(db, FirestoreCollections.CART_AND_FAVOURITES, clientId));
       client = response.data();
 
       if (!client) {
@@ -47,7 +47,7 @@ export async function setClient(clientId: string, data?: IClient): Promise<IClie
     viewedRecently: {}
   };
   await setDoc(
-    doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId),
+    doc(db, FirestoreCollections.CART_AND_FAVOURITES, clientId),
     setData as AddPrefixToKeys<string, any>
   );
   return setData;

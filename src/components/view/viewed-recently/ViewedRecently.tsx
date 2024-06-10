@@ -46,7 +46,7 @@ export async function ViewedRecently({product}: IViewedRecentlyProps) {
       };
     });
     await setDoc(
-      doc(db, FirestoreCollections.ANONYMOUS_CLIENTS, clientId),
+      doc(db, FirestoreCollections.CART_AND_FAVOURITES, clientId),
       {
         ...client,
         viewedRecently: newViewedRecentlyObj
