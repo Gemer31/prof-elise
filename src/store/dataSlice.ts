@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getClient, updateClient } from '@/store/asyncThunk';
-import { ICartProductModel, IClient, IPopupData } from '@/app/models';
+import { initStore, updateCart, updateFavourites, updateViewedRecently } from '@/store/asyncThunk';
+import { ICartProductModel, IClient, IInitStore, IPopupData, IViewedRecentlyModel } from '@/app/models';
 
 interface IDataSlice {
   popupData: IPopupData;
@@ -8,6 +8,9 @@ interface IDataSlice {
   cartLoading: boolean;
   cartTotal: number;
   client: IClient;
+  cart?: Record<string, ICartProductModel<string>>;
+  favourites?: Record<string, string>;
+  viewedRecently?: Record<string, IViewedRecentlyModel<string>>;
 }
 
 export const dataSlice = createSlice({
@@ -17,30 +20,37 @@ export const dataSlice = createSlice({
     notificationMessage: null,
     cartLoading: true,
     cartTotal: 0,
-    client: null
+    client: null,
+    cart: {} as Record<string, ICartProductModel<string>>,
+    favourites: {} as Record<string, string>,
+    viewedRecently: {} as Record<string, IViewedRecentlyModel<string>>
   },
   extraReducers: (builder) => {
-    builder.addMatcher(getClient.settled, (state: IDataSlice, action) => {
-      const newClient = action.payload as IClient;
+    builder.addMatcher(initStore.settled, (state: IDataSlice, action) => {
+      const {cart, viewedRecently, favourites} = action.payload as IInitStore;
 
       state.cartTotal = 0;
-      newClient?.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
+      cart && Object.values(cart).forEach((item) => {
         state.cartTotal += item.count;
       });
-
-      state.client = newClient;
+      state.cart = cart;
+      state.favourites = favourites;
+      state.viewedRecently = viewedRecently;
       state.cartLoading = false;
     });
-    builder.addMatcher(updateClient.settled, (state: IDataSlice, action) => {
-      const newClient = action.payload as IClient;
-
+    builder.addMatcher(updateCart.settled, (state: IDataSlice, action) => {
+      const newCart = action.payload as Record<string, ICartProductModel<string>>;
       state.cartTotal = 0;
-      newClient?.cart && Object.values(newClient.cart).forEach((item: ICartProductModel) => {
+      newCart && Object.values(newCart).forEach((item) => {
         state.cartTotal += item.count;
       });
-
-      state.client = newClient;
-      state.cartLoading = false;
+      state.cart = newCart;
+    });
+    builder.addMatcher(updateFavourites.settled, (state: IDataSlice, action) => {
+      state.favourites = action.payload as Record<string, string>;
+    });
+    builder.addMatcher(updateViewedRecently.settled, (state: IDataSlice, action) => {
+      state.viewedRecently = action.payload as Record<string, IViewedRecentlyModel<string>>;
     });
   },
   reducers: {

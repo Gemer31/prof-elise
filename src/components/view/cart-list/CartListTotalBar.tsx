@@ -1,6 +1,6 @@
 'use client';
 
-import { IClient, IConfig } from '@/app/models';
+import { IConfig } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
@@ -17,17 +17,17 @@ interface ICartListTotalBarProps {
 export function CartListTotalBar({config}: ICartListTotalBarProps) {
   const [total, setTotal] = useState<string>('0');
   const [redirectLoading, setRedirectLoading] = useState(false);
-  const client: IClient = useAppSelector(state => state.dataReducer.client);
+  const cart = useAppSelector(state => state.dataReducer.cart);
 
   useEffect(() => {
-    getEnrichedCart(client?.cart).then(enrichedCart => {
+    getEnrichedCart(cart).then(enrichedCart => {
       let newTotal: string = '0';
       Object.values(enrichedCart).forEach(item => {
         newTotal = currency(newTotal).add((+item.productRef.price * item.count)).toString();
       });
       setTotal(newTotal);
     });
-  }, [client]);
+  }, [cart]);
 
   return <section className="w-3/12 mb-2 sticky top-20 h-fit bg-slate-100 rounded-md">
     <div className="w-full p-4 separator">

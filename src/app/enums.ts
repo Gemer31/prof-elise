@@ -47,7 +47,9 @@ export enum EditGroup {
 }
 
 export enum FirestoreCollections {
-  STATE = 'state',
+  FAVOURITES = 'favourites',
+  CART = 'cart',
+  VIEWED_RECENTLY = 'viewedRecently',
   SETTINGS = 'settings',
   CATEGORIES = 'categories',
   PRODUCTS = 'products',

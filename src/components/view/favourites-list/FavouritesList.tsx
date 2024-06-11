@@ -1,6 +1,6 @@
 'use client';
 
-import { IClient, IConfig, IProduct, IProductSerialized } from '@/app/models';
+import { IConfig, IProductSerialized } from '@/app/models';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -8,8 +8,8 @@ import { FavouriteProductCard } from '@/components/view/favourites-list/favourit
 import './favourites-list.css';
 import { Button } from '@/components/ui/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
-import { updateClient } from '@/store/asyncThunk';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { updateFavourites } from '@/store/asyncThunk';
+import { useAppDispatch } from '@/store/store';
 import { getClientId } from '@/utils/cookies.util';
 
 interface IFavouritesListProps {
@@ -22,7 +22,6 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [intoCatalogRedirectInProgress, setIntoCatalogRedirectInProgress] = useState(false);
   const [data, setData] = useState<IProductSerialized[]>([]);
   const dispatch = useAppDispatch();
-  const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
     setData(serverProducts);
@@ -30,13 +29,7 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
 
   const cleanFavourites = () => {
     setData([]);
-    dispatch(updateClient({
-      clientId: getClientId(),
-      data: {
-        ...client,
-        favourites: {}
-      }
-    }));
+    dispatch(updateFavourites({clientId: getClientId(), data: {}}));
   };
 
   return data?.length

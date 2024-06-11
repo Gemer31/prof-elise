@@ -5,65 +5,49 @@ import { Button } from '@/components/ui/Button';
 import { ButtonTypes, RouterPath } from '@/app/enums';
 import { CartListTotalBar } from '@/components/view/cart-list/CartListTotalBar';
 import { useEffect, useState } from 'react';
-import { ICartProductModel, IClient, IClientEnriched, IConfig, IProductSerialized } from '@/app/models';
+import { ICartProductModel, IConfig, IProductSerialized } from '@/app/models';
 import { getClientId } from '@/utils/cookies.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { CartCard } from '@/components/view/cart-list/CartCard';
 import { getEnrichedCart } from '@/utils/firebase.util';
-import { updateClient } from '@/store/asyncThunk';
+import { updateCart } from '@/store/asyncThunk';
 import Image from 'next/image';
+import { SerializationUtil } from '@/utils/serialization.util';
 
 export interface ICartListProps {
-  serverClient: IClientEnriched;
+  serverCart: Record<string, ICartProductModel<IProductSerialized>>;
   config: IConfig;
 }
 
-export function CartList({serverClient, config}: ICartListProps) {
+export function CartList({serverCart, config}: ICartListProps) {
   const [data, setData] = useState<ICartProductModel<IProductSerialized>[]>([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const client: IClient = useAppSelector(state => state.dataReducer.client);
+  const cart = useAppSelector(state => state.dataReducer.cart);
 
   useEffect(() => {
-    if (serverClient) {
-      setData(Object.values(serverClient.cart));
-    }
+    serverCart && setData(Object.values(serverCart));
   }, []);
 
   useEffect(() => {
-    if (client?.cart) {
-      getEnrichedCart(client?.cart).then(enrichedCart => {
-        setData(Object.values(enrichedCart));
-      });
+    if (cart) {
+      getEnrichedCart(cart)
+        .then(enrichedCart => setData(Object.values(enrichedCart)));
     }
-  }, [client]);
+  }, [cart]);
 
   const cleanCart = async () => {
-    dispatch(updateClient({
-      clientId: getClientId(),
-      data: {
-        ...client,
-        cart: {}
-      }
-    }));
+    dispatch(updateCart({clientId: getClientId(), data: {}}));
   };
 
   const deleteProduct = (productId: string) => {
-    const newCart = {
-      ...client.cart
-    };
+    const newCart = SerializationUtil.getNonSerializedCart(cart);
     delete newCart[productId];
 
-    dispatch(updateClient({
-      clientId: getClientId(),
-      data: {
-        ...client,
-        cart: newCart
-      }
-    }));
+    dispatch(updateCart({clientId: getClientId(), data: newCart}));
   };
 
-  return serverClient !== undefined ? data?.length
+  return serverCart !== undefined ? data?.length
     ? <article className="w-full">
       <section className="w-full flex justify-between items-center mb-4">
         <h1 className="text-center text-2xl uppercase">{TRANSLATES[LOCALE].purchaseCart}</h1>

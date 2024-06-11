@@ -2,7 +2,7 @@
 
 import { FirestoreCollections, OrderStatuses, RouterPath } from '@/app/enums';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { IClient, IConfig, IOrderProduct, IUserSerialized } from '@/app/models';
+import { IConfig, IOrderProduct, IUserSerialized } from '@/app/models';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { getOrderMessage } from '@/utils/telegram.util';
 import Image from 'next/image';
 import Link from 'next/link';
-import { updateClient } from '@/store/asyncThunk';
+import { updateCart } from '@/store/asyncThunk';
 import { getClientId } from '@/utils/cookies.util';
 import { getEnrichedCart } from '@/utils/firebase.util';
 import { CheckoutTotalBar } from '@/components/view/checkout-form/CheckoutTotalBar';
@@ -36,7 +36,7 @@ interface ICheckoutFormProps {
 export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const client: IClient = useAppSelector(state => state.dataReducer.client);
+  const cart = useAppSelector(state => state.dataReducer.cart);
   const cartLoading: boolean = useAppSelector(state => state.dataReducer.cartLoading);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<number>();
   const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
   });
 
   useEffect(() => {
-    if (!cartLoading && !Object.keys(client.cart)?.length) {
+    if (!cartLoading && !Object.keys(cart)?.length) {
       router.push(RouterPath.CART);
     }
   }, [cartLoading]);
@@ -74,7 +74,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
   }) => {
     const orderId: string = uuidv4();
     const orderNumber = generateRandomNumber(6);
-    const enrichedCart = await getEnrichedCart(client.cart);
+    const enrichedCart = await getEnrichedCart(cart);
 
     if (session?.user) {
       let totalPrice: string = '0';
@@ -122,17 +122,7 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
       })
     });
     setCreatedOrderNumber(orderNumber);
-    await setDoc(doc(db, FirestoreCollections.CART_AND_FAVOURITES, getClientId()), {
-      ...client,
-      cart: {}
-    });
-    dispatch(updateClient({
-      clientId: getClientId(),
-      data: {
-        ...client,
-        cart: {}
-      }
-    }));
+    dispatch(updateCart({clientId: getClientId(), data: {}}));
 
     setLoading(false);
     // TODO: error telegram message on prod

@@ -4,14 +4,15 @@ import { ButtonTypes, FirestoreCollections } from '@/app/enums';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useCounter } from '@uidotdev/usehooks';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { doc, DocumentReference } from '@firebase/firestore';
+import { doc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { updateClient } from '@/store/asyncThunk';
+import { updateCart } from '@/store/asyncThunk';
 import { Loader } from '@/components/ui/Loader';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
 import { getClientId } from '@/utils/cookies.util';
-import { ICartProductModel, IClient } from '@/app/models';
+import { ICartProductModel } from '@/app/models';
+import { SerializationUtil } from '@/utils/serialization.util';
 
 interface ICounterProps {
   productId: string;
@@ -22,9 +23,9 @@ export function Counter({productId, min}: ICounterProps) {
   const [initialized, setInitialized] = useState(false);
   const [count, {increment, decrement, set}] = useCounter();
   const dispatch = useAppDispatch();
-  const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[productId]?.count);
+  const cart = useAppSelector(state => state.dataReducer.cart);
+  const cartCount = useAppSelector(state => state.dataReducer.cart?.[productId]?.count);
   const cartLoading = useAppSelector(state => state.dataReducer.cartLoading);
-  const client: IClient = useAppSelector(state => state.dataReducer.client);
 
   useEffect(() => {
     if (!cartLoading) {
@@ -36,33 +37,21 @@ export function Counter({productId, min}: ICounterProps) {
   useEffect(() => {
     if (initialized) {
       const clientId: string = getClientId();
+      const data: Record<string, ICartProductModel> = SerializationUtil.getNonSerializedCart(cart);
+
       if (count) {
-        const newCart: Record<string, ICartProductModel<DocumentReference>> = {};
-        Object.keys(client.cart).forEach((item) => {
-          newCart[item] = {...client.cart[item]};
-        });
-        if (newCart[productId]) {
-          newCart[productId].count = count;
+        if (data[productId]) {
+          data[productId].count = count;
         } else {
-          newCart[productId] = {
+          data[productId] = {
             count,
             productRef: doc(db, FirestoreCollections.PRODUCTS, productId)
           };
         }
-        dispatch(updateClient({
-          clientId,
-          data: {...client, cart: newCart}
-        }));
+        dispatch(updateCart({clientId, data}));
       } else {
-        const newCart: Record<string, ICartProductModel<DocumentReference>> = {};
-        Object.keys(client.cart).forEach((item) => {
-          newCart[item] = {...client.cart[item]};
-        });
-        delete newCart[productId];
-        dispatch(updateClient({
-          clientId,
-          data: {...client, cart: newCart}
-        }));
+        delete data[productId];
+        dispatch(updateCart({clientId, data}));
       }
     }
   }, [count]);

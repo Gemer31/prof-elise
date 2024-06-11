@@ -6,11 +6,12 @@ import { ContentContainer } from '@/components/ui/ContentContainer';
 import Link from 'next/link';
 import './viewed-recently.css';
 import currency from 'currency.js';
-import { getClient, getViewedRecently } from '@/utils/firebase.util';
+import { getClientData, getEnrichedViewedRecently } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
-import { doc, DocumentReference, getDoc, setDoc } from '@firebase/firestore';
+import { doc, DocumentReference, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { CLIENT_ID } from '@/app/constants';
+import { setViewedRecently } from '@/store/asyncThunk';
 
 interface IViewedRecentlyProps {
   product?: IProductSerialized;
@@ -20,16 +21,16 @@ export async function ViewedRecently({product}: IViewedRecentlyProps) {
   const clientId: string = cookies().get(CLIENT_ID)?.value;
 
   const [
-    client,
+    viewedRecentlyRes,
     settingsDocumentSnapshot
   ] = await Promise.all([
-    getClient(cookies()),
+    getClientData<Record<string, IViewedRecentlyModel>>(FirestoreCollections.VIEWED_RECENTLY, cookies()),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG))
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
-  const viewedRecently: IViewedRecently[] = await getViewedRecently(client);
+  const viewedRecently: IViewedRecently[] = await getEnrichedViewedRecently(viewedRecentlyRes);
 
-  if (clientId && product && !client?.viewedRecently[product?.id]) {
+  if (clientId && product && !viewedRecentlyRes[product?.id]) {
     const newViewRecently = [...viewedRecently];
     if (newViewRecently.length > 4) {
       newViewRecently.pop();
@@ -45,13 +46,7 @@ export async function ViewedRecently({product}: IViewedRecentlyProps) {
         productRef: doc(db, FirestoreCollections.PRODUCTS, item.product.id)
       };
     });
-    await setDoc(
-      doc(db, FirestoreCollections.CART_AND_FAVOURITES, clientId),
-      {
-        ...client,
-        viewedRecently: newViewedRecentlyObj
-      }
-    );
+    await setViewedRecently(clientId, newViewedRecentlyObj)
   }
 
   return viewedRecently?.length

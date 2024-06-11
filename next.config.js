@@ -4,7 +4,7 @@ const nextConfig = {
         formats: ['image/avif', 'image/webp'],
         domains: ['firebasestorage.googleapis.com']
     },
-    // reactStrictMode: false,
+    reactStrictMode: process.env.NODE_ENV === 'production',
     headers: () => [
         {
             source: '/profile/orders',

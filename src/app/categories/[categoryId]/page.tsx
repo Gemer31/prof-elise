@@ -15,6 +15,7 @@ import { ORDER_BY_FIELDS } from '@/app/constants';
 import { FilterBar } from '@/components/view/FilterBar';
 import { getProductsSerialized } from '@/utils/serialize.util';
 import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
+import { getPaginateUrl } from '@/utils/router.util';
 
 export interface ICategoriesOrProductsProps {
   params: { categoryId: string; };
@@ -72,7 +73,9 @@ export default async function CategoriesOrProductsPage(
     <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center px-2">
       <Breadcrumbs
-        links={[{title: String(currentCategory?.title), href: `${RouterPath.CATEGORIES}/${currentCategory?.id}`}]}/>
+        links={[{
+          title: String(currentCategory?.title),
+          href: getPaginateUrl(paginateProps)}]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
         <article className="w-full md:w-4/12 mr-4">
           <div className="sticky top-20">

@@ -54,15 +54,21 @@ export interface ICartProductModel<T = DocumentReference> {
   productRef: T;
 }
 
-export interface IViewedRecentlyModel<T> {
+export interface IViewedRecentlyModel<T = DocumentReference> {
   time: number;
   productRef: T;
 }
 
 export interface IClient {
-  cart?: Record<string, ICartProductModel<DocumentReference>>;
+  cart?: Record<string, ICartProductModel>;
   favourites?: Record<string, DocumentReference>;
-  viewedRecently?: Record<string, IViewedRecentlyModel<DocumentReference>>;
+  viewedRecently?: Record<string, IViewedRecentlyModel>;
+}
+
+export interface IInitStore {
+  cart?: Record<string, ICartProductModel<string>>;
+  favourites?: Record<string, string>;
+  viewedRecently?: Record<string, IViewedRecentlyModel<string>>;
 }
 
 export interface IClientEnriched {
