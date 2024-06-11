@@ -10,7 +10,7 @@ import { CheckoutForm } from '@/components/view/checkout-form/CheckoutForm';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/view/SubHeader';
 import { getServerSession } from 'next-auth/next';
-import { getSerializedUser } from '@/utils/serialize.util';
+import { SerializationUtil } from '@/utils/serialization.util';
 
 export const metadata: Metadata = {
   title: 'Оформление заказа',
@@ -25,7 +25,9 @@ export default async function CheckoutPage() {
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG))
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
-  const user: IUserSerialized = session?.user?.email ? getSerializedUser((userDocumentsSnapshot as DocumentSnapshot).data() as IUser) : null;
+  const user: IUserSerialized = session?.user?.email
+    ? SerializationUtil.getSerializedUser((userDocumentsSnapshot as DocumentSnapshot).data() as IUser)
+    : null;
 
   return <>
     <SubHeader config={config}/>

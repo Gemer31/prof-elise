@@ -1,10 +1,10 @@
 'use client';
 
-import { IUser } from '@/app/models';
+import { IUserSerialized } from '@/app/models';
 import { ChangeGeneralUserInfo } from '@/components/view/forms/ChangeGeneralUserInfo';
 
 interface IProfileMainInfoProps {
-  userServer: IUser<string, string[]>;
+  userServer: IUserSerialized;
 }
 
 export function ProfileMainInfo({userServer}: IProfileMainInfoProps) {

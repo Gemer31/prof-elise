@@ -1,4 +1,4 @@
-import { IUser } from '@/app/models';
+import { IUser, IUserSerialized } from '@/app/models';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
 import { ButtonTypes, ColorOptions, FirestoreCollections } from '@/app/enums';
@@ -14,14 +14,15 @@ import { YupUtil } from '@/utils/yup.util';
 import { doc, DocumentReference, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { setNotificationMessage } from '@/store/dataSlice';
+import { getClientId } from '@/utils/cookies.util';
 
 interface IChangeGeneralUserInfoProps {
-  userServer: IUser<string, string[]>;
+  userServer: IUserSerialized;
 }
 
 export function ChangeGeneralUserInfo({userServer}: IChangeGeneralUserInfoProps) {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState<IUser<string, string[]>>();
+  const [user, setUser] = useState<IUserSerialized>();
   const [mainInfoEditMode, setMainInfoEditMode] = useState(false);
   const [mainInfoIsLoading, setMainInfoIsLoading] = useState(false);
   const {
@@ -54,16 +55,16 @@ export function ChangeGeneralUserInfo({userServer}: IChangeGeneralUserInfoProps)
     user.orders.forEach(item => {
       preparedOrders[item] = doc(db, FirestoreCollections.ORDERS, item);
     });
-    const newUserData: IUser<string, string[]> = {
+    const newUserData: IUserSerialized = {
       ...user,
-      ...formData,
+      ...formData
     };
 
     try {
       const res = setDoc(doc(db, FirestoreCollections.USERS, userServer.email), {
         ...newUserData,
         orders: preparedOrders,
-        cartAndFavouritesRef: doc(db, FirestoreCollections.CART_AND_FAVOURITES, user.cartAndFavouritesRef)
+        clientId: getClientId()
       });
       setUser(newUserData);
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
@@ -93,7 +94,7 @@ export function ChangeGeneralUserInfo({userServer}: IChangeGeneralUserInfoProps)
                       callback={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setMainInfoEditMode((prevState) => (!prevState))
+                        setMainInfoEditMode((prevState) => (!prevState));
                       }}>
               <div className="flex gap-x-2">
                 <>
@@ -139,6 +140,6 @@ export function ChangeGeneralUserInfo({userServer}: IChangeGeneralUserInfoProps)
           </>
       }
     </fieldset>
-  </form>
+  </form>;
 
 }

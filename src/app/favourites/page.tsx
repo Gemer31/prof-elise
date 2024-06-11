@@ -11,9 +11,10 @@ import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/view/SubHeader';
-import { getProductsSerialized } from '@/utils/serialize.util';
+import { SerializationUtil } from '@/utils/serialization.util';
 
-export const fetchCache = 'force-no-store';
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export interface IFavouritesPageProps {
   params: {
@@ -44,7 +45,7 @@ export default async function FavouritesPage({searchParams: {pageLimit}}: IFavou
     const products = await getDocs(
       query(collection(db, FirestoreCollections.PRODUCTS), where('id', 'in', productsIds))
     );
-    data = getProductsSerialized(docsToData<IProduct>(products.docs));
+    data = SerializationUtil.getSerializedProducts(docsToData<IProduct>(products.docs));
   }
 
   return <>

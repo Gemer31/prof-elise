@@ -11,19 +11,12 @@ import {
   where
 } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import {
-  ICartProductModel,
-  IClient,
-  IProduct,
-  IProductSerialized,
-  IViewedRecently,
-  IViewedRecentlyModel
-} from '@/app/models';
+import { ICartProductModel, IProduct, IProductSerialized, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
 import { CLIENT_ID } from '@/app/constants';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import { getProductSerialized } from '@/utils/serialize.util';
+import { SerializationUtil } from '@/utils/serialization.util';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
   return docs?.map(item => item.data()) as T[] || [];
@@ -52,7 +45,7 @@ export async function getEnrichedViewedRecently(viewedRecently: Record<string, I
     viewedRecentlyArr = viewedRecentlyProducts.map(product => {
       return {
         time: viewedRecently[product.id].time,
-        product: getProductSerialized(product)
+        product: SerializationUtil.getSerializedProduct(product)
       };
     });
   }
@@ -71,7 +64,7 @@ export async function getEnrichedCart(
       where('id', 'in', cartProductsIds)
     ));
     products.forEach(item => {
-      const data: IProductSerialized = getProductSerialized(item.data() as IProduct);
+      const data: IProductSerialized = SerializationUtil.getSerializedProduct(item.data() as IProduct);
       enrichedCart[data.id] = {
         ...cart[data.id],
         productRef: data

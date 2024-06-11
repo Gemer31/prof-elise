@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initStore, updateCart, updateFavourites, updateViewedRecently } from '@/store/asyncThunk';
-import { ICartProductModel, IClient, IInitStore, IPopupData, IViewedRecentlyModel } from '@/app/models';
+import { initStore, initUser, updateCart, updateFavourites, updateViewedRecently } from '@/store/asyncThunk';
+import { ICartProductModel, IInitStore, IPopupData, IUserSerialized, IViewedRecentlyModel } from '@/app/models';
 
 interface IDataSlice {
   popupData: IPopupData;
   notificationMessage: string;
+  user: IUserSerialized;
   cartLoading: boolean;
   cartTotal: number;
-  client: IClient;
   cart?: Record<string, ICartProductModel<string>>;
   favourites?: Record<string, string>;
   viewedRecently?: Record<string, IViewedRecentlyModel<string>>;
@@ -18,9 +18,9 @@ export const dataSlice = createSlice({
   initialState: {
     popupData: null,
     notificationMessage: null,
+    user: null,
     cartLoading: true,
     cartTotal: 0,
-    client: null,
     cart: {} as Record<string, ICartProductModel<string>>,
     favourites: {} as Record<string, string>,
     viewedRecently: {} as Record<string, IViewedRecentlyModel<string>>
@@ -51,6 +51,9 @@ export const dataSlice = createSlice({
     });
     builder.addMatcher(updateViewedRecently.settled, (state: IDataSlice, action) => {
       state.viewedRecently = action.payload as Record<string, IViewedRecentlyModel<string>>;
+    });
+    builder.addMatcher(initUser.settled, (state: IDataSlice, action) => {
+      state.user = action.payload as IUserSerialized;
     });
   },
   reducers: {

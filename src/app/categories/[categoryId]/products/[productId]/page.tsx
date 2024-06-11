@@ -3,7 +3,7 @@ import { Catalog } from '@/components/view/Catalog';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { ImgGallery } from '@/components/view/ImgGallery';
 import { Breadcrumbs } from '@/components/view/Breadcrumbs';
-import { FirestoreCollections, FirestoreDocuments, RouterPath } from '@/app/enums';
+import { FirestoreCollections, FirestoreDocuments, PageLimits, RouterPath } from '@/app/enums';
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { docsToData } from '@/utils/firebase.util';
@@ -15,7 +15,8 @@ import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently
 import currency from 'currency.js';
 import { SubHeader } from '@/components/view/SubHeader';
 import { notFound } from 'next/navigation';
-import { getProductSerialized } from '@/utils/serialize.util';
+import { SerializationUtil } from '@/utils/serialization.util';
+import { getPaginateUrl } from '@/utils/router.util';
 
 export interface IProductDetailsProps {
   params: {
@@ -41,7 +42,7 @@ export default async function ProductDetailsPage(
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const categories = docsToData<ICategory>(categoriesQuerySnapshot.docs);
 
-  const product: IProductSerialized = getProductSerialized(productDocumentSnapshot.data() as IProduct);
+  const product: IProductSerialized = SerializationUtil.getSerializedProduct(productDocumentSnapshot.data() as IProduct);
   if (!product) {
     notFound();
   }
@@ -55,7 +56,14 @@ export default async function ProductDetailsPage(
     <SubHeader config={config}/>
     <ContentContainer styleClass="flex flex-col items-center">
       <Breadcrumbs links={[
-        {title: productCategory?.title, href: `${RouterPath.CATEGORIES}/${productCategory?.id}`},
+        {
+          title: productCategory?.title,
+          href: getPaginateUrl({
+            baseRedirectUrl: `${RouterPath.CATEGORIES}/${productCategory?.id}`,
+            page: 1,
+            pageLimit: Number(PageLimits.SIX)
+          })
+        },
         {title: product.title}
       ]}/>
       <div className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row ">

@@ -11,7 +11,6 @@ import { doc, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
 import { IConfig } from '@/app/models';
-import { GlobalComponent } from '@/components/GlobalComponent';
 
 const openSans = Open_Sans({subsets: ['latin']});
 
@@ -34,7 +33,6 @@ export default async function RootLayout({children}: {
     <html id="html" lang="en" className="scroll-smooth">
     <body className={'overflow-x-hidden ' + openSans.className}>
     <StoreProvider>
-      <GlobalComponent/>
       <RequestCallPopup/>
       <Notification/>
       <div id="page" className="relative flex flex-col items-center h-full z-10">

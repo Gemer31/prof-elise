@@ -26,8 +26,8 @@ import { ORDER_BY_FIELDS } from '@/app/constants';
 import { FilterBar } from '@/components/view/FilterBar';
 import { getPaginateUrl } from '@/utils/router.util';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { getProductsSerialized } from '@/utils/serialize.util';
 import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
+import { SerializationUtil } from '@/utils/serialization.util';
 
 export interface ICategoriesOrProductsProps {
   searchParams: ISearchParams;
@@ -81,7 +81,7 @@ export default async function SearchPage(
   }
 
   const productsChunks = chunk(productsQuerySnapshot.docs, searchParams.pageLimit);
-  const products: IProductSerialized[] = getProductsSerialized(docsToData<IProduct>(productsChunks[searchParams.page - 1]));
+  const products: IProductSerialized[] = SerializationUtil.getSerializedProducts(docsToData<IProduct>(productsChunks[searchParams.page - 1]));
 
   return <>
     <SubHeader config={config}/>

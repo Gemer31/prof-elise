@@ -13,6 +13,7 @@ import { CircleButton } from '@/components/ui/CircleButton';
 import { SITE_HEADER_LINKS } from '@/app/constants';
 import { SessionProvider } from 'next-auth/react';
 import { HeaderAuthActions } from '@/components/view/header/HeaderAuthActions';
+import { GlobalComponent } from '@/components/GlobalComponent';
 
 export function Header() {
   const pathname = usePathname();
@@ -119,6 +120,7 @@ export function Header() {
           <FavouritesButton/>
           <SessionProvider>
             <HeaderAuthActions/>
+            <GlobalComponent/>
           </SessionProvider>
         </div>
       </nav>

@@ -13,9 +13,12 @@ import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently
 import { SubHeader } from '@/components/view/SubHeader';
 import { ORDER_BY_FIELDS } from '@/app/constants';
 import { FilterBar } from '@/components/view/FilterBar';
-import { getProductsSerialized } from '@/utils/serialize.util';
 import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
 import { getPaginateUrl } from '@/utils/router.util';
+import { SerializationUtil } from '@/utils/serialization.util';
+
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export interface ICategoriesOrProductsProps {
   params: { categoryId: string; };
@@ -66,7 +69,7 @@ export default async function CategoriesOrProductsPage(
   }
 
   const productsChunks = chunk(productsQuerySnapshot.docs, paginateProps.pageLimit);
-  const products: IProductSerialized[] = getProductsSerialized(docsToData<IProduct>(productsChunks[paginateProps.page - 1]));
+  const products: IProductSerialized[] = SerializationUtil.getSerializedProducts(docsToData<IProduct>(productsChunks[paginateProps.page - 1]));
   paginateProps.baseRedirectUrl = RouterPath.CATEGORIES + '/' + categoryId;
 
   return <>

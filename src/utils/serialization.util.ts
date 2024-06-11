@@ -1,9 +1,23 @@
-import { ICartProductModel, IViewedRecentlyModel } from '@/app/models';
+import {
+  ICartProductModel,
+  IOrder,
+  IOrderSerialized,
+  IProduct,
+  IProductSerialized, IUser, IUserSerialized,
+  IViewedRecentlyModel
+} from '@/app/models';
 import { doc, DocumentReference } from '@firebase/firestore';
 import { FirestoreCollections } from '@/app/enums';
 import { db } from '@/app/lib/firebase-config';
 
 export class SerializationUtil {
+  static getSerializedUser(user: IUser): IUserSerialized {
+    return {
+      ...user,
+      orders: user.orders ? Object.keys(user.orders) : [],
+    };
+  }
+
   static getSerializedCart(cart: Record<string, ICartProductModel>): Record<string, ICartProductModel<string>> {
     const serialized: Record<string, ICartProductModel<string>> = {};
     Object.keys(cart).forEach(key => {
@@ -47,5 +61,21 @@ export class SerializationUtil {
       };
     });
     return serialized;
+  }
+
+  static getSerializedProduct(product: IProduct): IProductSerialized {
+    return product ? {
+      ...product,
+      categoryRef: product.categoryRef.id
+    } : null;
+  }
+  static getSerializedProducts(products: IProduct[]): IProductSerialized[] {
+    return products?.map((item) => SerializationUtil.getSerializedProduct(item)) || [];
+  }
+
+  static getSerializedOrders(orders: IOrder[]): IOrderSerialized[] {
+    return orders?.map(item => {
+      return {...item, userRef: item.userRef.id};
+    }) || [];
   }
 }

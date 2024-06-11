@@ -1,27 +1,26 @@
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
-import { ButtonTypes, ColorOptions, FirestoreCollections } from '@/app/enums';
+import { ButtonTypes, ColorOptions } from '@/app/enums';
 import Image from 'next/image';
 import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { ReadonlyFormField } from '@/components/ui/ReadonlyFormField';
 import { useAppDispatch } from '@/store/store';
 import { useEffect, useState } from 'react';
-import { IUser } from '@/app/models';
+import { IUserSerialized } from '@/app/models';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { YupUtil } from '@/utils/yup.util';
 import { setNotificationMessage } from '@/store/dataSlice';
 import { updateEmail } from '@firebase/auth';
-import { auth, db } from '@/app/lib/firebase-config';
-import { setDoc } from '@firebase/firestore';
+import { auth } from '@/app/lib/firebase-config';
 
 interface IChangeEmailFormProps {
-  userServer: IUser<string, string[]>;
+  userServer: IUserSerialized;
 }
 
 export function ChangeEmailForm({userServer}: IChangeEmailFormProps) {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState<IUser<string, string[]>>();
+  const [user, setUser] = useState<IUserSerialized>();
   const [editMode, setEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -65,7 +64,7 @@ export function ChangeEmailForm({userServer}: IChangeEmailFormProps) {
                       callback={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setEditMode((prevState) => (!prevState))
+                        setEditMode((prevState) => (!prevState));
                       }}>
               <div className="flex gap-x-2">
                 <>
@@ -94,5 +93,5 @@ export function ChangeEmailForm({userServer}: IChangeEmailFormProps) {
           </>
       }
     </fieldset>
-  </form>
+  </form>;
 }

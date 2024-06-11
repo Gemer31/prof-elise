@@ -9,7 +9,7 @@ import { IOrder, IOrderSerialized, ISearchParams, IUser } from '@/app/models';
 import { OrdersList } from '@/components/view/orders-list/OrdersList';
 import chunk from 'lodash.chunk';
 import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
-import { getOrdersSerialized, getSerializedUser } from '@/utils/serialize.util';
+import { SerializationUtil } from '@/utils/serialization.util';
 
 export const fetchCache = 'force-no-store';
 
@@ -34,19 +34,19 @@ export default async function OrdersPage(
   paginateProps.baseRedirectUrl = RouterPath.ORDERS;
 
   const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
-  const userSerialized: IUser<string, string[]> = getSerializedUser(userDocumentSnapshot.data() as IUser);
+  const userSerialized: IUser<string[]> = SerializationUtil.getSerializedUser(userDocumentSnapshot.data() as IUser);
   const ordersQuery = await fetch(
     `${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/v1/orders?orderByKey=${paginateProps.orderByParams.key}&orderByValue=${paginateProps.orderByParams.value}&email=${userSerialized.email}`,
     {
-      cache: 'reload',
-      next: {revalidate: 100}
+      cache: 'no-store',
+      next: {revalidate: 0}
       // "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload"
     }
   );
   const orders: IOrder[] = await ordersQuery.json();
   paginateProps.pagesCount = getPagesCount(orders.length, searchParams.pageLimit);
   const ordersChunks = chunk(orders, searchParams.pageLimit);
-  const ordersSerialized: IOrderSerialized[] = getOrdersSerialized(ordersChunks[searchParams.page - 1]);
+  const ordersSerialized: IOrderSerialized[] = SerializationUtil.getSerializedOrders(ordersChunks[searchParams.page - 1]);
 
   return <>
     <ProfileBase activeRoute={RouterPath.ORDERS} userRole={userSerialized.role}>

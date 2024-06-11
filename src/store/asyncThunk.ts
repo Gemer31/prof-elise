@@ -2,11 +2,19 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { doc, DocumentReference, getDoc, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
-import { ICartProductModel, IInitStore, IViewedRecentlyModel } from '@/app/models';
+import { ICartProductModel, IInitStore, IUser, IUserSerialized, IViewedRecentlyModel } from '@/app/models';
 import { uuidv4 } from '@firebase/util';
 import { CLIENT_ID } from '@/app/constants';
 import { getClientId } from '@/utils/cookies.util';
 import { SerializationUtil } from '@/utils/serialization.util';
+
+export const initUser = createAsyncThunk(
+  'user/init',
+  async (email: string): Promise<IUserSerialized> => {
+    const res = await getDoc(doc(db, FirestoreCollections.USERS, email));
+    return SerializationUtil.getSerializedUser(res.data() as IUser);
+  }
+)
 
 export const initStore = createAsyncThunk( // todo think if no such clientId
   'store/init',

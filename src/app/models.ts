@@ -108,17 +108,17 @@ export interface IOrderProduct {
   categoryId: string;
 }
 
-export interface IUser<T = DocumentReference, E = Record<string, DocumentReference>> {
+export interface IUser<E = Record<string, DocumentReference>> {
   email: string;
   role: UserRoles;
-  cartAndFavouritesRef: T;
+  clientId: string;
   orders: E;
   phone?: string;
   name?: string;
   deliveryAddress?: string;
 }
 
-export type IUserSerialized = IUser<string, string[]>;
+export type IUserSerialized = IUser<string[]>;
 
 export interface IPaginateProps extends IPaginateOptions {
   baseRedirectUrl?: string;
