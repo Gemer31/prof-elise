@@ -44,11 +44,6 @@ export interface ICategory {
   productsTotal: number;
 }
 
-export interface IViewedRecently {
-  time: number;
-  product: IProductSerialized;
-}
-
 export interface ICartProductModel<T = DocumentReference> {
   count: number;
   productRef: T;
@@ -57,12 +52,6 @@ export interface ICartProductModel<T = DocumentReference> {
 export interface IViewedRecentlyModel<T = DocumentReference> {
   time: number;
   productRef: T;
-}
-
-export interface IClient {
-  cart?: Record<string, ICartProductModel>;
-  favourites?: Record<string, DocumentReference>;
-  viewedRecently?: Record<string, IViewedRecentlyModel>;
 }
 
 export interface IInitStore {

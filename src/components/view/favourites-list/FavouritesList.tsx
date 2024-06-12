@@ -11,6 +11,8 @@ import { ButtonTypes, RouterPath } from '@/app/enums';
 import { updateFavourites } from '@/store/asyncThunk';
 import { useAppDispatch } from '@/store/store';
 import { getClientId } from '@/utils/cookies.util';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidateFavourites } from '@/app/actions';
 
 interface IFavouritesListProps {
   config: IConfig;
@@ -20,19 +22,22 @@ interface IFavouritesListProps {
 export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
   const [intoCatalogRedirectInProgress, setIntoCatalogRedirectInProgress] = useState(false);
+  const [init, setInit] = useState(false);
   const [data, setData] = useState<IProductSerialized[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     setData(serverProducts);
+    setInit(true);
   }, [serverProducts]);
 
-  const cleanFavourites = () => {
+  const cleanFavourites = async () => {
     setData([]);
     dispatch(updateFavourites({clientId: getClientId(), data: {}}));
+    await revalidateFavourites();
   };
 
-  return data?.length
+  return (init ? data?.length : serverProducts?.length)
     ? <div className="w-full">
       {
         <div className="flex justify-between items-center mb-4">
@@ -43,7 +48,7 @@ export function FavouritesList({serverProducts, config}: IFavouritesListProps) {
         </div>
       }
       {
-        data.map((favourite, index) => <FavouriteProductCard
+        (init ? data : serverProducts).map((favourite, index) => <FavouriteProductCard
           key={favourite.id}
           config={config}
           data={favourite}

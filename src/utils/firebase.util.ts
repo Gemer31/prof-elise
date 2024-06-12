@@ -2,21 +2,23 @@ import {
   and,
   collection,
   doc,
+  DocumentReference,
   getDoc,
   getDocs,
-  or,
-  query,
+  or, orderBy, OrderByDirection,
+  query, QueryConstraint,
   QueryDocumentSnapshot,
   QueryFieldFilterConstraint,
   where
 } from '@firebase/firestore';
 import { StorageReference } from '@firebase/storage';
-import { ICartProductModel, IProduct, IProductSerialized, IViewedRecently, IViewedRecentlyModel } from '@/app/models';
+import { ICartProductModel, IOrder, IProduct, IProductSerialized, IViewedRecentlyModel } from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
-import { FirestoreCollections } from '@/app/enums';
-import { CLIENT_ID } from '@/app/constants';
+import { FirestoreCollections, OrderByKeys } from '@/app/enums';
+import { CLIENT_ID, ORDER_BY_FIELDS } from '@/app/constants';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { SerializationUtil } from '@/utils/serialization.util';
+import { unstable_cache } from 'next/cache';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
   return docs?.map(item => item.data()) as T[] || [];
@@ -32,8 +34,8 @@ export function converImageUrlsToGallery(imgs: string[]): { original: string }[]
   }));
 }
 
-export async function getEnrichedViewedRecently(viewedRecently: Record<string, IViewedRecentlyModel>): Promise<IViewedRecently[]> {
-  let viewedRecentlyArr: IViewedRecently[] = [];
+export async function getEnrichedViewedRecently(viewedRecently: Record<string, IViewedRecentlyModel>): Promise<IViewedRecentlyModel<IProductSerialized>[]> {
+  let viewedRecentlyArr: IViewedRecentlyModel<IProductSerialized>[] = [];
   const viewedRecentlyProductsIds: string[] = viewedRecently ? Object.keys(viewedRecently) : [];
   if (viewedRecentlyProductsIds.length) {
     const viewedRecentlyQuerySnapshot = await getDocs(query(
@@ -45,7 +47,7 @@ export async function getEnrichedViewedRecently(viewedRecently: Record<string, I
     viewedRecentlyArr = viewedRecentlyProducts.map(product => {
       return {
         time: viewedRecently[product.id].time,
-        product: SerializationUtil.getSerializedProduct(product)
+        productRef: SerializationUtil.getSerializedProduct(product)
       };
     });
   }
@@ -74,6 +76,68 @@ export async function getEnrichedCart(
 
   return enrichedCart;
 }
+
+export const getFavourites = unstable_cache(
+  async (clientId: string) => {
+    let data: Record<string, DocumentReference>;
+
+    if (clientId?.length) {
+      const viewedRecentlyDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.FAVOURITES, clientId));
+      data = viewedRecentlyDocumentSnapshot.data() as Record<string, DocumentReference>;
+    }
+
+    if (!data) {
+      data = {} as Record<string, DocumentReference>;
+    }
+
+    return data;
+  },
+  ['favourites'],
+  {
+    tags: ['favourites']
+  }
+)
+
+export const getViewedRecently = unstable_cache(
+  async (clientId: string) => {
+    let data: Record<string, IViewedRecentlyModel>;
+
+    if (clientId?.length) {
+      const viewedRecentlyDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId));
+      data = viewedRecentlyDocumentSnapshot.data() as Record<string, IViewedRecentlyModel>;
+    }
+
+    if (!data) {
+      data = {} as Record<string, IViewedRecentlyModel>;
+    }
+
+    return data;
+  },
+  ['viewedRecently'],
+  {
+    tags: ['viewedRecently']
+  }
+)
+
+export const getOrders = unstable_cache(
+  async ({orderByKey, orderByValue, email}: {orderByKey: string, orderByValue: string, email: string}) => {
+    const ordersFilters: QueryConstraint[] = [
+      where('userRef', '==', doc(db, FirestoreCollections.USERS, email))
+    ];
+    const orderByField: string = ORDER_BY_FIELDS.get(orderByKey);
+    if (orderByField) {
+      ordersFilters.push(orderBy(orderByField, orderByValue as OrderByDirection));
+    }
+    const ordersQuerySnapshot = await getDocs(query(collection(db, FirestoreCollections.ORDERS), ...ordersFilters));
+    const orders: IOrder[] = docsToData<IOrder>(ordersQuerySnapshot.docs);
+    console.log("orders: ", orders);
+    return orders;
+  },
+  ['orders'],
+  {
+    tags: ['orders']
+  }
+)
 
 export async function getClientData<T>(
   collection: FirestoreCollections.FAVOURITES | FirestoreCollections.CART | FirestoreCollections.VIEWED_RECENTLY,

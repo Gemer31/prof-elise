@@ -1,8 +1,8 @@
-import { collection, doc, DocumentReference, getDoc, getDocs, query, where } from '@firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections, FirestoreDocuments } from '@/app/enums';
 import { ICategory, IConfig, IProduct, IProductSerialized } from '@/app/models';
-import { docsToData, getClientData } from '@/utils/firebase.util';
+import { docsToData, getFavourites } from '@/utils/firebase.util';
 import { cookies } from 'next/headers';
 import { FavouritesList } from '@/components/view/favourites-list/FavouritesList';
 import { ContentContainer } from '@/components/ui/ContentContainer';
@@ -12,6 +12,7 @@ import { Breadcrumbs } from '@/components/view/Breadcrumbs';
 import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently';
 import { SubHeader } from '@/components/view/SubHeader';
 import { SerializationUtil } from '@/utils/serialization.util';
+import { CLIENT_ID } from '@/app/constants';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
@@ -27,12 +28,14 @@ export interface IFavouritesPageProps {
 }
 
 export default async function FavouritesPage({searchParams: {pageLimit}}: IFavouritesPageProps) {
+  let clientId: string = cookies().get(CLIENT_ID)?.value;
+
   const [
     favourites,
     settingsDocumentSnapshot,
     categoriesQuerySnapshot
   ] = await Promise.all([
-    getClientData<Record<string, DocumentReference>>(FirestoreCollections.FAVOURITES, cookies()),
+    getFavourites(clientId),
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
     getDocs(collection(db, FirestoreCollections.CATEGORIES))
   ]);

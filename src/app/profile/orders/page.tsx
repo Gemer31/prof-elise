@@ -10,8 +10,7 @@ import { OrdersList } from '@/components/view/orders-list/OrdersList';
 import chunk from 'lodash.chunk';
 import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
 import { SerializationUtil } from '@/utils/serialization.util';
-
-export const fetchCache = 'force-no-store';
+import { getOrders } from '@/utils/firebase.util';
 
 interface IOrdersPageProps {
   searchParams: ISearchParams;
@@ -35,15 +34,11 @@ export default async function OrdersPage(
 
   const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
   const userSerialized: IUser<string[]> = SerializationUtil.getSerializedUser(userDocumentSnapshot.data() as IUser);
-  const ordersQuery = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/v1/orders?orderByKey=${paginateProps.orderByParams.key}&orderByValue=${paginateProps.orderByParams.value}&email=${userSerialized.email}`,
-    {
-      cache: 'no-store',
-      next: {revalidate: 0}
-      // "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload"
-    }
-  );
-  const orders: IOrder[] = await ordersQuery.json();
+  const orders: IOrder[] = await getOrders({
+    orderByKey: paginateProps.orderByParams.key,
+    orderByValue: paginateProps.orderByParams.value,
+    email: userSerialized.email
+  });
   paginateProps.pagesCount = getPagesCount(orders.length, searchParams.pageLimit);
   const ordersChunks = chunk(orders, searchParams.pageLimit);
   const ordersSerialized: IOrderSerialized[] = SerializationUtil.getSerializedOrders(ordersChunks[searchParams.page - 1]);

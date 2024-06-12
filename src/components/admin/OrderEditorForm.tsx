@@ -10,6 +10,7 @@ import { docsToData } from '@/utils/firebase.util';
 import { Loader } from '@/components/ui/Loader';
 import { ORDER_STATUS_CLASSES } from '@/app/constants';
 import { setNotificationMessage } from '@/store/dataSlice';
+import { revalidateOrders } from '@/app/actions';
 
 interface IOrderEditorFormProps {
   refreshCallback?: () => void;
@@ -31,6 +32,7 @@ export function OrderEditorForm({refreshCallback}: IOrderEditorFormProps) {
         {...order, status: newStatus}
       );
       setOrder(prev => ({...order, status: newStatus}));
+      await revalidateOrders();
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].orderUpdateSuccessfully));
     } catch {
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].somethingWentWrong));

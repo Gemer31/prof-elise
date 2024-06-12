@@ -11,6 +11,7 @@ import { Loader } from '@/components/ui/Loader';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { getClientId } from '@/utils/cookies.util';
 import { SerializationUtil } from '@/utils/serialization.util';
+import { revalidateFavourites } from '@/app/actions';
 
 interface IEntityFavouriteButtonProps {
   productId: string;
@@ -52,6 +53,8 @@ export function EntityFavouriteButton({productId, className}: IEntityFavouriteBu
 
     dispatch(updateFavourites({clientId: getClientId(), data}));
     setIsLoading(true);
+
+    await revalidateFavourites();
   };
 
   return <div className={hostClass} onClick={favouriteClick}>

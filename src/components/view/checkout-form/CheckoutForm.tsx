@@ -26,6 +26,7 @@ import { YupUtil } from '@/utils/yup.util';
 import { uuidv4 } from '@firebase/util';
 import { Session } from 'next-auth';
 import currency from 'currency.js';
+import { revalidateOrders } from '@/app/actions';
 
 interface ICheckoutFormProps {
   user: IUserSerialized;
@@ -121,6 +122,8 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
         }))
       })
     });
+
+    await revalidateOrders();
     setCreatedOrderNumber(orderNumber);
     dispatch(updateCart({clientId: getClientId(), data: {}}));
 
