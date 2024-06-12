@@ -20,7 +20,7 @@ export const authConfig: AuthOptions = {
           const userCred: UserCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
           const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, credentials.email));
           const userData: IUser = userDocumentSnapshot.data() as IUser;
-          cookies().set(CLIENT_ID, userData.cartAndFavouritesRef.id)
+          cookies().set(CLIENT_ID, userData.clientId);
           return userData as unknown as User;
         } catch (e) {
           return null;
