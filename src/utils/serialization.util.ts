@@ -3,7 +3,9 @@ import {
   IOrder,
   IOrderSerialized,
   IProduct,
-  IProductSerialized, IUser, IUserSerialized,
+  IProductSerialized,
+  IUser,
+  IUserSerialized,
   IViewedRecentlyModel
 } from '@/app/models';
 import { doc, DocumentReference } from '@firebase/firestore';
@@ -12,10 +14,11 @@ import { db } from '@/app/lib/firebase-config';
 
 export class SerializationUtil {
   static getSerializedUser(user: IUser): IUserSerialized {
-    return {
-      ...user,
-      orders: user.orders ? Object.keys(user.orders) : [],
-    };
+    const orders: Record<string, string> = {};
+    user.orders && Object.values(user.orders).forEach(item => {
+      orders[item.id] = item.id;
+    })
+    return {...user, orders};
   }
 
   static getSerializedCart(cart: Record<string, ICartProductModel>): Record<string, ICartProductModel<string>> {

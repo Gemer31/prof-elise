@@ -19,7 +19,7 @@ import { getEnrichedCart } from '@/utils/firebase.util';
 import { CheckoutTotalBar } from '@/components/view/checkout-form/CheckoutTotalBar';
 import { Button } from '@/components/ui/Button';
 import { generateRandomNumber } from '@/utils/order-number.util';
-import { doc, setDoc } from '@firebase/firestore';
+import { doc, DocumentReference, setDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
 import { useRouter } from 'next/navigation';
 import { YupUtil } from '@/utils/yup.util';
@@ -102,10 +102,15 @@ export function CheckoutForm({config, session, user}: ICheckoutFormProps) {
         totalPrice: totalPrice + ' ' + config.currency,
         products
       });
+      const newUserOrders: Record<string, DocumentReference> = {};
+      Object.values(user.orders).forEach(item => {
+        newUserOrders[item] = doc(db, FirestoreCollections.ORDERS, item);
+      });
+
       const updateUserRes = await setDoc(doc(db, FirestoreCollections.USERS, session.user.email), {
         ...user,
         orders: {
-          ...user.orders,
+          ...newUserOrders,
           [orderId]: doc(db, FirestoreCollections.ORDERS, orderId)
         }
       });

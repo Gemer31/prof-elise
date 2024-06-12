@@ -107,7 +107,7 @@ export interface IUser<E = Record<string, DocumentReference>> {
   deliveryAddress?: string;
 }
 
-export type IUserSerialized = IUser<string[]>;
+export type IUserSerialized = IUser<Record<string, string>>;
 
 export interface IPaginateProps extends IPaginateOptions {
   baseRedirectUrl?: string;
