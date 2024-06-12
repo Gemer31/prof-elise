@@ -5,7 +5,7 @@ import { authConfig } from '@/configs/auth.config';
 import { redirect } from 'next/navigation';
 import { doc, getDoc } from '@firebase/firestore';
 import { db } from '@/app/lib/firebase-config';
-import { IOrder, IOrderSerialized, ISearchParams, IUser } from '@/app/models';
+import { IOrder, IOrderSerialized, ISearchParams, IUser, IUserSerialized } from '@/app/models';
 import { OrdersList } from '@/components/view/orders-list/OrdersList';
 import chunk from 'lodash.chunk';
 import { getPagesCount, getPaginateProps } from '@/utils/paginate.util';
@@ -33,7 +33,7 @@ export default async function OrdersPage(
   paginateProps.baseRedirectUrl = RouterPath.ORDERS;
 
   const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
-  const userSerialized: IUser<string[]> = SerializationUtil.getSerializedUser(userDocumentSnapshot.data() as IUser);
+  const userSerialized: IUserSerialized = SerializationUtil.getSerializedUser(userDocumentSnapshot.data() as IUser);
   const orders: IOrder[] = await getOrders({
     orderByKey: paginateProps.orderByParams.key,
     orderByValue: paginateProps.orderByParams.value,
