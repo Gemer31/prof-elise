@@ -13,7 +13,7 @@ interface IProductDetailsActionsBarProps {
 }
 
 export function ProductDetailsActionsBar({product}: IProductDetailsActionsBarProps) {
-  const cartCount = useAppSelector(state => state.dataReducer.client?.cart?.[product?.id]?.count);
+  const cartCount = useAppSelector(state => state.dataReducer.cart?.[product?.id]?.count);
   const dispatch = useAppDispatch();
 
   return <div className="flex gap-x-2 items-center">
