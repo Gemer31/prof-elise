@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -8,7 +8,9 @@ import { setNotificationMessage } from '@/store/dataSlice';
 
 export function Notification() {
   const dispatch = useAppDispatch();
-  const message = useAppSelector(state => state.dataReducer.notificationMessage);
+  const message = useAppSelector(
+    (state) => state.dataReducer.notificationMessage
+  );
   const [animationClass, setAnimationClass] = useState<string>();
 
   useEffect(() => {
@@ -23,21 +25,31 @@ export function Notification() {
     }
   }, [message]);
 
-  const styleClasses: string = useMemo(() => convertToClass([
-    'fixed',
-    'px-3',
-    'py-1',
-    'border-2',
-    'border-amber-50',
-    'rounded-lg',
-    'top-3',
-    'right-4',
-    'bg-pink-500',
-    'text-amber-50',
-    'z-20'
-  ]), []);
+  const styleClasses: string = useMemo(
+    () =>
+      convertToClass([
+        'fixed',
+        'px-3',
+        'py-1',
+        'border-2',
+        'border-amber-50',
+        'rounded-lg',
+        'top-3',
+        'right-4',
+        'bg-pink-500',
+        'text-amber-50',
+        'z-20',
+      ]),
+    []
+  );
 
   return (
-    <div className={styleClasses + (animationClass ? ` ${animationClass}` : ' invisible')}>{message}</div>
+    <div
+      className={
+        styleClasses + (animationClass ? ` ${animationClass}` : ' invisible')
+      }
+    >
+      {message}
+    </div>
   );
 }

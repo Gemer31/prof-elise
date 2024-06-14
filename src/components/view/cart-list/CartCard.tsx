@@ -14,13 +14,7 @@ export interface ICartCardProps {
   onDelete: () => void;
 }
 
-export function CartCard(
-  {
-    data,
-    config,
-    onDelete,
-  }: ICartCardProps,
-) {
+export function CartCard({ data, config, onDelete }: ICartCardProps) {
   return (
     <div className="cart-card pb-2 bg-slate-100 p-2 rounded-md mb-2">
       <Link
@@ -35,9 +29,14 @@ export function CartCard(
           alt={data.productRef.title}
         />
         <div className="flex flex-col justify-between p-2">
-          <div className="text-lg entity-card-title">{data.productRef.title}</div>
+          <div className="text-lg entity-card-title">
+            {data.productRef.title}
+          </div>
           <div className="flex items-center gap-x-2">
-            <EntityFavouriteButton className="w-fit" productId={data.productRef.id}/>
+            <EntityFavouriteButton
+              className="w-fit"
+              productId={data.productRef.id}
+            />
             <Button
               styleClass="px-2 py-1"
               type={ButtonTypes.BUTTON}
@@ -55,18 +54,17 @@ export function CartCard(
       <div className="flex justify-center items-center">
         <div className="text-center">
           <div className="font-bold separator">
-            {currency(data.productRef.price)
-              .multiply(data.count)
-              .toString()} {config.currency}
+            {currency(data.productRef.price).multiply(data.count).toString()}{' '}
+            {config.currency}
           </div>
-          <div className="text-sm">{currency(data.productRef.price)
-            .toString()} {config.currency}/шт.
+          <div className="text-sm">
+            {currency(data.productRef.price).toString()} {config.currency}/шт.
           </div>
         </div>
       </div>
       <div className="flex justify-end items-center">
         <div className="h-fit">
-          <Counter productId={data.productRef.id} min={1}/>
+          <Counter productId={data.productRef.id} min={1} />
         </div>
       </div>
     </div>

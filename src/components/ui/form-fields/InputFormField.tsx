@@ -18,29 +18,31 @@ interface IInputFormFieldProps {
   register: unknown;
 }
 
-export function InputFormField(
-  {
-    label,
-    name,
-    register,
-    type,
-    error,
-    required,
-    placeholder,
-    hideValueAvailable,
-    onBlur
-  }: IInputFormFieldProps
-) {
+export function InputFormField({
+  label,
+  name,
+  register,
+  type,
+  error,
+  required,
+  placeholder,
+  hideValueAvailable,
+  onBlur,
+}: IInputFormFieldProps) {
   const [hideValue, setHideValue] = useState(true);
 
-  const hostClass: string = useMemo(() => convertToClass([
-    'border-2',
-    'rounded-md',
-    'mt-1',
-    'w-full',
-    'px-2.5',
-    'py-1'
-  ]), []);
+  const hostClass: string = useMemo(
+    () =>
+      convertToClass([
+        'border-2',
+        'rounded-md',
+        'mt-1',
+        'w-full',
+        'px-2.5',
+        'py-1',
+      ]),
+    []
+  );
 
   return (
     <FormFieldWrapper label={label} error={error} required={required}>
@@ -52,21 +54,21 @@ export function InputFormField(
         {...(register as UseFormRegister<Record<string, unknown>>)(name)}
       />
 
-      {
-        hideValueAvailable
-        ? <Image
-            className="cursor-pointer p-1 absolute right-4 bottom-5"
-            onClick={(e) => {
-              e.stopPropagation();
-              setHideValue((prevState) => !prevState)
-            }}
-            width={25}
-            height={25}
-            src={!hideValue ? '/icons/eye.svg' : '/icons/eye-closed.svg'}
-            alt="Hide input value"
-          />
-          : <></>
-      }
+      {hideValueAvailable ? (
+        <Image
+          className="cursor-pointer p-1 absolute right-4 bottom-5"
+          onClick={(e) => {
+            e.stopPropagation();
+            setHideValue((prevState) => !prevState);
+          }}
+          width={25}
+          height={25}
+          src={!hideValue ? '/icons/eye.svg' : '/icons/eye-closed.svg'}
+          alt="Hide input value"
+        />
+      ) : (
+        <></>
+      )}
     </FormFieldWrapper>
   );
 }

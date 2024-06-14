@@ -23,7 +23,11 @@ interface CategoryEditorFormProps {
   refreshCallback?: () => void;
 }
 
-export function CategoryEditorForm({categories, images, refreshCallback}: CategoryEditorFormProps) {
+export function CategoryEditorForm({
+  categories,
+  images,
+  refreshCallback,
+}: CategoryEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ICategory>();
@@ -33,13 +37,17 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     setValue,
     reset,
     handleSubmit,
-    formState: {errors, isValid}
+    formState: { errors, isValid },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(YupUtil.CategoryEditorFormSchema)
+    resolver: yupResolver(YupUtil.CategoryEditorFormSchema),
   });
 
-  const submitForm = async (formData: { title?: string; imageUrl?: string, subcategories?: any[] | unknown }) => {
+  const submitForm = async (formData: {
+    title?: string;
+    imageUrl?: string;
+    subcategories?: any[] | unknown;
+  }) => {
     setIsLoading(true);
 
     let data: ICategory = {
@@ -68,7 +76,9 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
     setIsLoading(true);
 
     try {
-      await deleteDoc(doc(db, FirestoreCollections.CATEGORIES, deleteCategory.id));
+      await deleteDoc(
+        doc(db, FirestoreCollections.CATEGORIES, deleteCategory.id)
+      );
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].categoryDeleted));
       setSelectedImage(null);
       setSelectedCategory(undefined);
@@ -84,7 +94,9 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
 
   const changeCategory = (newCategory: ICategory) => {
     if (newCategory) {
-      const existingImage: StorageReference = images?.find((img) => newCategory?.imageUrl?.includes(img.fullPath));
+      const existingImage: StorageReference = images?.find((img) =>
+        newCategory?.imageUrl?.includes(img.fullPath)
+      );
       setSelectedImage(existingImage);
       setValue('title', newCategory.title);
       setValue('imageUrl', newCategory.imageUrl);
@@ -103,10 +115,7 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
   };
 
   return (
-    <form
-      className="flex flex-col"
-      onSubmit={handleSubmit(submitForm)}
-    >
+    <form className="flex flex-col" onSubmit={handleSubmit(submitForm)}>
       <CategoriesViewer
         editAvailable={true}
         selectedCategory={selectedCategory}
@@ -130,33 +139,39 @@ export function CategoryEditorForm({categories, images, refreshCallback}: Catego
         error={errors.title?.message}
         register={register as unknown}
       />
-      {
-        categories?.length
-          ? <>
-            <span className="my-2">{TRANSLATES[LOCALE].subcategories}</span>
-            {
-              categories?.map((category, index) => {
-                return category.id !== selectedCategory?.id
-                  ? <label className="flex items-center" key={category.id}>
-                    <input
-                      type="checkbox"
-                      onChange={() => setValue(`subcategories.${index}`, category.id)}
-                    />
-                    <span>{category.title}</span>
-                  </label>
-                  : <></>;
-              })
-            }
-          </>
-          : <></>
-      }
+      {categories?.length ? (
+        <>
+          <span className="my-2">{TRANSLATES[LOCALE].subcategories}</span>
+          {categories?.map((category, index) => {
+            return category.id !== selectedCategory?.id ? (
+              <label className="flex items-center" key={category.id}>
+                <input
+                  type="checkbox"
+                  onChange={() =>
+                    setValue(`subcategories.${index}`, category.id)
+                  }
+                />
+                <span>{category.title}</span>
+              </label>
+            ) : (
+              <></>
+            );
+          })}
+        </>
+      ) : (
+        <></>
+      )}
       <div className="w-full mt-2">
         <Button
           styleClass="text-amber-50 w-full py-2"
           disabled={isLoading}
           loading={isLoading}
           type={ButtonTypes.SUBMIT}
-        >{selectedCategory ? TRANSLATES[LOCALE].update : TRANSLATES[LOCALE].add}</Button>
+        >
+          {selectedCategory
+            ? TRANSLATES[LOCALE].update
+            : TRANSLATES[LOCALE].add}
+        </Button>
       </div>
     </form>
   );

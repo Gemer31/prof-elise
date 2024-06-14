@@ -1,24 +1,23 @@
 .order-card-checkbox {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 .order-card-details {
-    display: none;
+  display: none;
 }
 
 .order-card-details > div:not(:last-child) {
-    border-bottom: solid 1px lightgray;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
+  border-bottom: solid 1px lightgray;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .order-card-checkbox:checked + .order-card-details {
-    display: block;
+  display: block;
 }
-

@@ -2,8 +2,12 @@ import * as yup from 'yup';
 
 export class YupUtil {
   private static userName = yup.string().matches(/^[A-Za-zА-Яа-я ]+$/);
-  private static email = yup.string().required('fieldRequired').email('fieldInvalid');
-  private static price = yup.string()
+  private static email = yup
+    .string()
+    .required('fieldRequired')
+    .email('fieldInvalid');
+  private static price = yup
+    .string()
     .matches(/^\d*(\.\d{2})?$/, 'invalidPrice')
     .required('fieldRequired');
   private static password = yup

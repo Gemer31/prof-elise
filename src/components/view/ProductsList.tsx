@@ -13,7 +13,11 @@ export interface IProductsListProps {
   paginateProps: IPaginateProps;
 }
 
-export function ProductsList({ data, config, paginateProps }: IProductsListProps) {
+export function ProductsList({
+  data,
+  config,
+  paginateProps,
+}: IProductsListProps) {
   const [redirectIdInProgress, setRedirectIdInProgress] = useState('');
 
   return (
@@ -28,7 +32,7 @@ export function ProductsList({ data, config, paginateProps }: IProductsListProps
       emptyListText={TRANSLATES[LOCALE].thereAreNoProductsWithSelectedFilter}
       paginateProps={paginateProps}
     >
-      { data?.map((product) => (
+      {data?.map((product) => (
         <ProductCard
           key={product.id}
           data={product}
@@ -36,7 +40,7 @@ export function ProductsList({ data, config, paginateProps }: IProductsListProps
           isLoading={redirectIdInProgress === product.id}
           onClick={() => setRedirectIdInProgress(product.id)}
         />
-      )) }
+      ))}
     </PaginateWrapper>
   );
 }

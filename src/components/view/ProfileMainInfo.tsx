@@ -7,11 +7,10 @@ interface IProfileMainInfoProps {
   userServer: IUserSerialized;
 }
 
-export function ProfileMainInfo({userServer}: IProfileMainInfoProps) {
-
+export function ProfileMainInfo({ userServer }: IProfileMainInfoProps) {
   return (
     <>
-      <ChangeGeneralUserInfo userServer={userServer}/>
+      <ChangeGeneralUserInfo userServer={userServer} />
       {/* <ChangeEmailForm userServer={userServer}/> */}
     </>
   );

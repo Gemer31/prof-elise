@@ -17,8 +17,14 @@ export const authConfig: AuthOptions = {
       },
       async authorize(credentials) {
         try {
-          await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
-          const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, credentials.email));
+          await signInWithEmailAndPassword(
+            auth,
+            credentials.email,
+            credentials.password
+          );
+          const userDocumentSnapshot = await getDoc(
+            doc(db, FirestoreCollections.USERS, credentials.email)
+          );
           const userData: IUser = userDocumentSnapshot.data() as IUser;
           cookies().set(CLIENT_ID, userData.clientId);
           return userData as unknown as User;

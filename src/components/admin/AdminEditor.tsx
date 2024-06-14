@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { listAll, ref, StorageReference } from '@firebase/storage';
-import { ButtonTypes, ColorOptions, EditGroup, FirestoreCollections } from '@/app/enums';
+import {
+  ButtonTypes,
+  ColorOptions,
+  EditGroup,
+  FirestoreCollections,
+} from '@/app/enums';
 import { db, storage } from '@/app/lib/firebase-config';
 import { ContentContainer } from '@/components/ui/ContentContainer';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -22,7 +27,9 @@ export function AdminEditor() {
   const [config, setConfig] = useState<IConfig>();
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState<EditGroup | string>(EditGroup.GENERAL);
+  const [selectedGroup, setSelectedGroup] = useState<EditGroup | string>(
+    EditGroup.GENERAL
+  );
   const [isDataLoading, setIsDataLoading] = useState(true);
 
   useEffect(() => {
@@ -52,51 +59,65 @@ export function AdminEditor() {
   return (
     <main className="w-full">
       <ContentContainer styleClass="flex flex-col items-center">
-        {isDataLoading
-          ? <div className="w-full flex justify-center mt-4 overflow-hidden"><Loader className="min-h-[250px] border-pink-500"/></div>
-          : <>
+        {isDataLoading ? (
+          <div className="w-full flex justify-center mt-4 overflow-hidden">
+            <Loader className="min-h-[250px] border-pink-500" />
+          </div>
+        ) : (
+          <>
             <div className="w-full mt-2 mb-4 flex gap-x-3">
-              {
-                Object.values(EditGroup).map((v) => {
-                  return <Button
+              {Object.values(EditGroup).map((v) => {
+                return (
+                  <Button
                     key={v}
-                    color={selectedGroup === v ? ColorOptions.PINK : ColorOptions.GRAY}
+                    color={
+                      selectedGroup === v
+                        ? ColorOptions.PINK
+                        : ColorOptions.GRAY
+                    }
                     styleClass="w-full text-amber-50 px-4 py-2"
                     type={ButtonTypes.BUTTON}
                     callback={() => setSelectedGroup(v)}
-                  >{TRANSLATES[LOCALE][v]}</Button>;
-                })
-              }
+                  >
+                    {TRANSLATES[LOCALE][v]}
+                  </Button>
+                );
+              })}
             </div>
             <div className="w-full">
-              {
-                selectedGroup === EditGroup.GENERAL
-                  ? <GeneralEditorForm config={config} refreshCallback={loadData}/>
-                  : <></>
-              }
-              {
-                selectedGroup === EditGroup.CATEGORIES
-                  ? <CategoryEditorForm images={images} categories={categories} refreshCallback={loadData}/>
-                  : <></>
-              }
-              {
-                selectedGroup === EditGroup.PRODUCTS
-                  ? <ProductEditorForm categories={categories} products={products} images={images} refreshCallback={loadData}/>
-                  : <></>
-              }
-              {
-                selectedGroup === EditGroup.ORDERS
-                  ? <OrderEditorForm/>
-                  : <></>
-              }
-              {
-                selectedGroup === EditGroup.IMAGES
-                  ? <ImagesEditorForm images={images} refreshCallback={loadData}/>
-                  : <></>
-              }
+              {selectedGroup === EditGroup.GENERAL ? (
+                <GeneralEditorForm config={config} refreshCallback={loadData} />
+              ) : (
+                <></>
+              )}
+              {selectedGroup === EditGroup.CATEGORIES ? (
+                <CategoryEditorForm
+                  images={images}
+                  categories={categories}
+                  refreshCallback={loadData}
+                />
+              ) : (
+                <></>
+              )}
+              {selectedGroup === EditGroup.PRODUCTS ? (
+                <ProductEditorForm
+                  categories={categories}
+                  products={products}
+                  images={images}
+                  refreshCallback={loadData}
+                />
+              ) : (
+                <></>
+              )}
+              {selectedGroup === EditGroup.ORDERS ? <OrderEditorForm /> : <></>}
+              {selectedGroup === EditGroup.IMAGES ? (
+                <ImagesEditorForm images={images} refreshCallback={loadData} />
+              ) : (
+                <></>
+              )}
             </div>
           </>
-        }
+        )}
       </ContentContainer>
     </main>
   );

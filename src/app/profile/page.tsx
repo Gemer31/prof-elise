@@ -16,12 +16,21 @@ export default async function ProfilePage() {
     redirect(RouterPath.HOME);
   }
 
-  const userDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session?.user.email));
-  const userSerialized: IUserSerialized = SerializationUtil.getSerializedUser(userDocumentSnapshot.data() as IUser);
+  const userDocumentSnapshot = await getDoc(
+    doc(db, FirestoreCollections.USERS, session?.user.email)
+  );
+  const userSerialized: IUserSerialized = SerializationUtil.getSerializedUser(
+    userDocumentSnapshot.data() as IUser
+  );
 
-  return <>
-    <ProfileBase activeRoute={RouterPath.PROFILE} userRole={userSerialized.role}>
-      <ProfileMainInfo userServer={userSerialized}/>
-    </ProfileBase>
-  </>;
+  return (
+    <>
+      <ProfileBase
+        activeRoute={RouterPath.PROFILE}
+        userRole={userSerialized.role}
+      >
+        <ProfileMainInfo userServer={userSerialized} />
+      </ProfileBase>
+    </>
+  );
 }

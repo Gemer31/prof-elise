@@ -9,18 +9,22 @@ import { ViewedRecently } from '@/components/view/viewed-recently/ViewedRecently
 import { SubHeader } from '@/components/view/SubHeader';
 
 export default async function DeliveryPage() {
-  const settingsDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG));
+  const settingsDocumentSnapshot = await getDoc(
+    doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)
+  );
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
 
-  return <>
-    <SubHeader config={config}/>
-    <ContentContainer styleClass="flex flex-col items-center px-2">
-      <Breadcrumbs links={[{title: TRANSLATES[LOCALE].delivery}]}/>
-      <article
-        className="whitespace-pre-line"
-        dangerouslySetInnerHTML={{__html: config.deliveryDescription}}
-      />
-    </ContentContainer>
-    <ViewedRecently/>
-  </>;
+  return (
+    <>
+      <SubHeader config={config} />
+      <ContentContainer styleClass="flex flex-col items-center px-2">
+        <Breadcrumbs links={[{ title: TRANSLATES[LOCALE].delivery }]} />
+        <article
+          className="whitespace-pre-line"
+          dangerouslySetInnerHTML={{ __html: config.deliveryDescription }}
+        />
+      </ContentContainer>
+      <ViewedRecently />
+    </>
+  );
 }

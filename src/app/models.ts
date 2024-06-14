@@ -1,5 +1,11 @@
 import { DocumentReference, OrderByDirection } from '@firebase/firestore';
-import { ColorOptions, OrderByKeys, OrderStatuses, PopupTypes, UserRoles } from '@/app/enums';
+import {
+  ColorOptions,
+  OrderByKeys,
+  OrderStatuses,
+  PopupTypes,
+  UserRoles,
+} from '@/app/enums';
 
 export interface IProduct<T = DocumentReference> {
   id: string;
@@ -23,7 +29,7 @@ export interface ILabel {
 }
 
 export interface ICommonProps {
-  children: React.ReactNode,
+  children: React.ReactNode;
   styleClass?: string;
 }
 

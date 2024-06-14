@@ -17,38 +17,50 @@ export interface ISearchInputProps {
   onSubmit?: (searchValue: string) => void;
 }
 
-export function SearchInput(
-  {
-    onChange,
-    onValueChange,
-    onSubmit,
-    onBlur,
-    onFocus,
-    required,
-    placeholder,
-    pattern,
-    searchButtonVisible
-  }: ISearchInputProps
-) {
-  const hostClass: string = useMemo(() => convertToClass([
-    searchButtonVisible ? 'border-l-2 border border-t-2 border-b-2' : 'border-2',
-    searchButtonVisible ? 'rounded-l-md' : 'rounded-md',
-    'w-full',
-    'px-2.5',
-    'py-1'
-  ]), []);
-  const clearButtonClass: string = useMemo(() => convertToClass([
-    searchButtonVisible ? 'right-12' : 'right-4',
-    'absolute',
-    'top-1.5',
-    'hover:scale-105',
-    'duration-200'
-  ]), []);
+export function SearchInput({
+  onChange,
+  onValueChange,
+  onSubmit,
+  onBlur,
+  onFocus,
+  required,
+  placeholder,
+  pattern,
+  searchButtonVisible,
+}: ISearchInputProps) {
+  const hostClass: string = useMemo(
+    () =>
+      convertToClass([
+        searchButtonVisible
+          ? 'border-l-2 border border-t-2 border-b-2'
+          : 'border-2',
+        searchButtonVisible ? 'rounded-l-md' : 'rounded-md',
+        'w-full',
+        'px-2.5',
+        'py-1',
+      ]),
+    []
+  );
+  const clearButtonClass: string = useMemo(
+    () =>
+      convertToClass([
+        searchButtonVisible ? 'right-12' : 'right-4',
+        'absolute',
+        'top-1.5',
+        'hover:scale-105',
+        'duration-200',
+      ]),
+    []
+  );
 
   const [value, setValue] = useState('');
   let timer = useRef(null);
 
-  const valueChanged = (e: ChangeEvent<HTMLInputElement>, forced?: boolean, close?: boolean): void => {
+  const valueChanged = (
+    e: ChangeEvent<HTMLInputElement>,
+    forced?: boolean,
+    close?: boolean
+  ): void => {
     const newValue = close
       ? ''
       : e?.target?.value !== undefined
@@ -79,31 +91,49 @@ export function SearchInput(
     }
   };
 
-  return <form
-    className="relative flex duration-200"
-    onSubmit={onSubmitClick}
-    onBlur={() => onBlur?.()}
-    onFocus={() => onFocus?.()}
-  >
-    {
-      value?.length
-        ? <button type="button" className={clearButtonClass} onClick={() => valueChanged(null, true, true)}>✖</button>
-        : <></>
-    }
-    <input
-      required
-      placeholder={placeholder || TRANSLATES[LOCALE].search}
-      value={value}
-      pattern={pattern}
-      className={hostClass}
-      onChange={valueChanged}
-    />
-    {
-      searchButtonVisible
-        ? <button type="submit" className="bg-pink-500 rounded-r-md p-2" onClick={() => valueChanged(null, true)}>
-          <Image className="hover:scale-105 duration-200" width={25} height={25} src="/icons/magnifer.svg" alt="Search"/>
+  return (
+    <form
+      className="relative flex duration-200"
+      onSubmit={onSubmitClick}
+      onBlur={() => onBlur?.()}
+      onFocus={() => onFocus?.()}
+    >
+      {value?.length ? (
+        <button
+          type="button"
+          className={clearButtonClass}
+          onClick={() => valueChanged(null, true, true)}
+        >
+          ✖
         </button>
-        : <></>
-    }
-  </form>;
+      ) : (
+        <></>
+      )}
+      <input
+        required
+        placeholder={placeholder || TRANSLATES[LOCALE].search}
+        value={value}
+        pattern={pattern}
+        className={hostClass}
+        onChange={valueChanged}
+      />
+      {searchButtonVisible ? (
+        <button
+          type="submit"
+          className="bg-pink-500 rounded-r-md p-2"
+          onClick={() => valueChanged(null, true)}
+        >
+          <Image
+            className="hover:scale-105 duration-200"
+            width={25}
+            height={25}
+            src="/icons/magnifer.svg"
+            alt="Search"
+          />
+        </button>
+      ) : (
+        <></>
+      )}
+    </form>
+  );
 }

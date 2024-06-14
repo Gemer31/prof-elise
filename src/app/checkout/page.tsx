@@ -14,31 +14,35 @@ import { SerializationUtil } from '@/utils/serialization.util';
 
 export const metadata: Metadata = {
   title: 'Оформление заказа',
-  description: 'Расходные материалы в Могилеве'
+  description: 'Расходные материалы в Могилеве',
 };
 
 export default async function CheckoutPage() {
   const session = await getServerSession();
 
   const [userDocumentsSnapshot, settingsDocumentSnapshot] = await Promise.all([
-    session?.user?.email ? getDoc(doc(db, FirestoreCollections.USERS, session.user.email)) : Promise.resolve(),
-    getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG))
+    session?.user?.email
+      ? getDoc(doc(db, FirestoreCollections.USERS, session.user.email))
+      : Promise.resolve(),
+    getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
   const user: IUserSerialized = session?.user?.email
-    ? SerializationUtil.getSerializedUser((userDocumentsSnapshot as DocumentSnapshot).data() as IUser)
+    ? SerializationUtil.getSerializedUser(
+        (userDocumentsSnapshot as DocumentSnapshot).data() as IUser
+      )
     : null;
 
-  return <>
-    <SubHeader config={config}/>
-    <ContentContainer styleClass="flex flex-col items-center px-2">
-      <Breadcrumbs links={[
-        {title: TRANSLATES[LOCALE].orderCreation}
-      ]}/>
-      <article className="w-full">
-        <CheckoutForm config={config} session={session} user={user}/>
-      </article>
-    </ContentContainer>
-    <ViewedRecently/>
-  </>;
+  return (
+    <>
+      <SubHeader config={config} />
+      <ContentContainer styleClass="flex flex-col items-center px-2">
+        <Breadcrumbs links={[{ title: TRANSLATES[LOCALE].orderCreation }]} />
+        <article className="w-full">
+          <CheckoutForm config={config} session={session} user={user} />
+        </article>
+      </ContentContainer>
+      <ViewedRecently />
+    </>
+  );
 }

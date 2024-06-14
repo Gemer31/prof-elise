@@ -15,16 +15,20 @@ export default async function EditorPage() {
     redirect(RouterPath.HOME);
   }
 
-  const userQuerySnapshot = await getDoc(doc(db, FirestoreCollections.USERS, session.user.email));
-  const user = (userQuerySnapshot.data() as IUser);
+  const userQuerySnapshot = await getDoc(
+    doc(db, FirestoreCollections.USERS, session.user.email)
+  );
+  const user = userQuerySnapshot.data() as IUser;
 
   if (user.role !== UserRoles.ADMIN) {
     redirect(RouterPath.HOME);
   }
 
-  return <>
-    <ProfileBase activeRoute={RouterPath.EDITOR} userRole={user.role}>
-      <AdminEditor/>
-    </ProfileBase>
-  </>
+  return (
+    <>
+      <ProfileBase activeRoute={RouterPath.EDITOR} userRole={user.role}>
+        <AdminEditor />
+      </ProfileBase>
+    </>
+  );
 }

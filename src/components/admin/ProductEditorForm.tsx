@@ -31,11 +31,11 @@ export interface ProductEditorFormProps {
 }
 
 export function ProductEditorForm({
-                                    categories,
-                                    products,
-                                    images,
-                                    refreshCallback
-                                  }: ProductEditorFormProps) {
+  categories,
+  products,
+  images,
+  refreshCallback,
+}: ProductEditorFormProps) {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [description, setDescription] = useState('');
@@ -48,54 +48,69 @@ export function ProductEditorForm({
     setValue,
     reset,
     handleSubmit,
-    formState: {errors, isValid}
+    formState: { errors, isValid },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(YupUtil.ProductEditorFormSchema)
+    resolver: yupResolver(YupUtil.ProductEditorFormSchema),
   });
 
   const submitForm = async (formData: {
-    title?: string,
-    price?: string,
-    description?: string,
-    categoryId?: string,
-    images?: StorageReference[],
-    labels?: ILabel[],
+    title?: string;
+    price?: string;
+    description?: string;
+    categoryId?: string;
+    images?: StorageReference[];
+    labels?: ILabel[];
   }) => {
     setIsLoading(true);
 
-    const imageUrls: string[] = formData.images.map((img) => (getStorageImageSrc(img)));
+    const imageUrls: string[] = formData.images.map((img) =>
+      getStorageImageSrc(img)
+    );
     const productData: IProduct = {
       id: selectedProduct ? selectedProduct.id : uuidv4(),
       title: formData.title,
       price: Number(currency(formData.price).toString()),
       description: formData.description,
-      categoryRef: doc(db, FirestoreCollections.CATEGORIES, formData.categoryId),
+      categoryRef: doc(
+        db,
+        FirestoreCollections.CATEGORIES,
+        formData.categoryId
+      ),
       imageUrls: imageUrls,
       labels: formData.labels,
-      vendorCode: selectedProduct?.vendorCode || String(generateRandomNumber(9)),
+      vendorCode:
+        selectedProduct?.vendorCode || String(generateRandomNumber(9)),
       createDate: selectedProduct?.createDate || +new Date(),
     };
     const categoryData: ICategory = selectedProduct
       ? null
       : {
-        ...selectedCategory,
-        productsTotal: selectedCategory.productsTotal + 1
-      };
+          ...selectedCategory,
+          productsTotal: selectedCategory.productsTotal + 1,
+        };
 
     try {
       await Promise.all([
-        setDoc(doc(db, FirestoreCollections.PRODUCTS, productData.id), productData),
+        setDoc(
+          doc(db, FirestoreCollections.PRODUCTS, productData.id),
+          productData
+        ),
         selectedProduct
           ? Promise.resolve()
-          : setDoc(doc(db, FirestoreCollections.CATEGORIES, categoryData.id), categoryData)
+          : setDoc(
+              doc(db, FirestoreCollections.CATEGORIES, categoryData.id),
+              categoryData
+            ),
       ]);
 
-      dispatch(setNotificationMessage(
-        selectedProduct
-          ? TRANSLATES[LOCALE].infoUpdated
-          : TRANSLATES[LOCALE].productAdded
-      ));
+      dispatch(
+        setNotificationMessage(
+          selectedProduct
+            ? TRANSLATES[LOCALE].infoUpdated
+            : TRANSLATES[LOCALE].productAdded
+        )
+      );
       setSelectedImages(null);
       setSelectedCategory(null);
       setSelectedProduct(null);
@@ -116,7 +131,9 @@ export function ProductEditorForm({
     setIsLoading(true);
 
     try {
-      await deleteDoc(doc(db, FirestoreCollections.PRODUCTS, deletedProduct.id));
+      await deleteDoc(
+        doc(db, FirestoreCollections.PRODUCTS, deletedProduct.id)
+      );
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].productDeleted));
       changeProduct(undefined);
       reset();
@@ -132,10 +149,15 @@ export function ProductEditorForm({
 
   const changeProduct = (newProduct: IProduct) => {
     if (newProduct) {
-      const productCategory = categories.find((category) => category.id === newProduct.categoryRef.id);
-      const productImages: StorageReference[] = images?.filter((img) => {
-        return newProduct.imageUrls?.find((productImg) => productImg.includes(img.name));
-      }) || [];
+      const productCategory = categories.find(
+        (category) => category.id === newProduct.categoryRef.id
+      );
+      const productImages: StorageReference[] =
+        images?.filter((img) => {
+          return newProduct.imageUrls?.find((productImg) =>
+            productImg.includes(img.name)
+          );
+        }) || [];
 
       setValue('title', newProduct.title);
       setValue('price', String(newProduct.price));
@@ -182,10 +204,7 @@ export function ProductEditorForm({
   };
 
   return (
-    <form
-      className="flex flex-col"
-      onSubmit={handleSubmit(submitForm)}
-    >
+    <form className="flex flex-col" onSubmit={handleSubmit(submitForm)}>
       <div className="pb-4">
         <ProductsViewer
           selectedProduct={selectedProduct}
@@ -227,10 +246,7 @@ export function ProductEditorForm({
         label={TRANSLATES[LOCALE].label}
         error={errors.categoryId?.message}
       >
-        <ProductLabelsEditor
-          value={labels}
-          onChange={changeLabels}
-        />
+        <ProductLabelsEditor value={labels} onChange={changeLabels} />
       </FormFieldWrapper>
       <FormFieldWrapper
         required={true}
@@ -261,7 +277,9 @@ export function ProductEditorForm({
           disabled={isLoading}
           loading={isLoading}
           type={ButtonTypes.SUBMIT}
-        >{TRANSLATES[LOCALE].save}</Button>
+        >
+          {TRANSLATES[LOCALE].save}
+        </Button>
       </div>
     </form>
   );

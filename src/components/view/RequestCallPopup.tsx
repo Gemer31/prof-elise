@@ -19,7 +19,9 @@ export function RequestCallPopup() {
   const dispatch = useAppDispatch();
   const timer = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-  const popupData: IPopupData = useAppSelector((state) => state.dataReducer.popupData);
+  const popupData: IPopupData = useAppSelector(
+    (state) => state.dataReducer.popupData
+  );
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -31,7 +33,11 @@ export function RequestCallPopup() {
     resolver: yupResolver(YupUtil.RequestCallSchema),
   });
 
-  const submitForm = async (formData: { name?: string; phone?: string; comment?: string }) => {
+  const submitForm = async (formData: {
+    name?: string;
+    phone?: string;
+    comment?: string;
+  }) => {
     setIsLoading(true);
 
     let message: string;
@@ -40,7 +46,7 @@ export function RequestCallPopup() {
     } else {
       message = `Купить в один клик\n\nИмя: ${formData.name};\nТелефон: ${formData.phone}`;
       if (formData.comment?.length) {
-        message += (`;\nКомментарий: ${formData.comment}`);
+        message += `;\nКомментарий: ${formData.comment}`;
       }
       message += `\n\n- ${popupData.product.title}`;
     }
@@ -79,7 +85,11 @@ export function RequestCallPopup() {
   return (
     <Popup
       styleClass={`slow-appearance ${hostClass}`}
-      title={popupData?.formType === PopupTypes.REQUEST_CALL ? TRANSLATES[LOCALE].requestCall : TRANSLATES[LOCALE].buyInOneClick}
+      title={
+        popupData?.formType === PopupTypes.REQUEST_CALL
+          ? TRANSLATES[LOCALE].requestCall
+          : TRANSLATES[LOCALE].buyInOneClick
+      }
       closeCallback={() => setIsVisible(false)}
     >
       <form
@@ -103,19 +113,17 @@ export function RequestCallPopup() {
           error={errors.phone?.message}
           register={register}
         />
-        {
-          popupData?.formType === PopupTypes.BUY_IN_ONE_CLICK
-            ? (
-              <TextareaFormField
-                placeholder={TRANSLATES[LOCALE].comment}
-                label={TRANSLATES[LOCALE].comment}
-                name="comment"
-                error={errors.comment?.message}
-                register={register}
-              />
-            )
-            : (<></>)
-        }
+        {popupData?.formType === PopupTypes.BUY_IN_ONE_CLICK ? (
+          <TextareaFormField
+            placeholder={TRANSLATES[LOCALE].comment}
+            label={TRANSLATES[LOCALE].comment}
+            name="comment"
+            error={errors.comment?.message}
+            register={register}
+          />
+        ) : (
+          <></>
+        )}
         <div className="w-full mt-4">
           <Button
             styleClass="text-amber-50 w-full py-2"

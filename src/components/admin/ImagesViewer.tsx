@@ -19,15 +19,18 @@ interface ImagesViewerProps {
 }
 
 export function ImagesViewer({
-                               editAvailable,
-                               storageData,
-                               deleteImageClick,
-                               selectImageClick,
-                               multiple,
-                               selectedImages
-                             }: ImagesViewerProps) {
-  const [chosenImages, setChosenImages] = useState<Record<string, StorageReference>>({});
-  const [lastSelectedImage, setLastSelectedImage] = useState<StorageReference>(undefined);
+  editAvailable,
+  storageData,
+  deleteImageClick,
+  selectImageClick,
+  multiple,
+  selectedImages,
+}: ImagesViewerProps) {
+  const [chosenImages, setChosenImages] = useState<
+    Record<string, StorageReference>
+  >({});
+  const [lastSelectedImage, setLastSelectedImage] =
+    useState<StorageReference>(undefined);
   const [tabPressed, setTabPressed] = useState<boolean>();
   const [searchValue, setSearchValue] = useState('');
 
@@ -42,17 +45,15 @@ export function ImagesViewer({
 
   useEffect(() => {
     document.body.addEventListener('keydown', (event) => {
-        if (event.keyCode === CTRL_CODE) {
-          setTabPressed(true);
-        }
+      if (event.keyCode === CTRL_CODE) {
+        setTabPressed(true);
       }
-    );
+    });
     document.body.addEventListener('keyup', (event) => {
-        if (event.keyCode === CTRL_CODE) {
-          setTabPressed(false);
-        }
+      if (event.keyCode === CTRL_CODE) {
+        setTabPressed(false);
       }
-    );
+    });
   }, []);
 
   const selectImage = (image: StorageReference) => {
@@ -60,7 +61,7 @@ export function ImagesViewer({
       let newImages;
 
       if (multiple && tabPressed) {
-        newImages = {...prev};
+        newImages = { ...prev };
         if (newImages[image.name]) {
           delete newImages[image.name];
         } else {
@@ -68,7 +69,7 @@ export function ImagesViewer({
         }
       } else {
         newImages = {
-          [image.name]: image
+          [image.name]: image,
         };
       }
 
@@ -80,47 +81,58 @@ export function ImagesViewer({
 
   return (
     <div className="flex justify-between gap-2">
-      {
-        storageData?.length
-          ? <>
-            <div className="overflow-auto max-h-52 w-6/12 rounded-md border-pink-500 border-2">
-              <EditorsSearch onChange={setSearchValue}/>
-              <div className="px-2 py-1">
-                {
-                  (
-                    searchValue
-                      ? storageData.filter((item) => item.fullPath.toLowerCase().includes(searchValue.toLowerCase()))
-                      : storageData
-                  )?.map((item) => (
-                    <div
-                      onClick={() => selectImage(item)}
-                      key={item.fullPath}
-                      className={`cursor-pointer flex justify-between items-center px-2 py-1 ${chosenImages[item.name] ? 'rounded-md bg-pink-300' : ''}`}
-                    >
-                      <span>{item.fullPath}</span>
-                      {
-                        editAvailable
-                          ?
-                          <Image onClick={() => deleteImageClick?.(item)} width={30} height={30} src="/icons/cross.svg"
-                                 alt="Close"/>
-                          : <></>
-                      }
-                    </div>
-                  ))
-                }
-              </div>
+      {storageData?.length ? (
+        <>
+          <div className="overflow-auto max-h-52 w-6/12 rounded-md border-pink-500 border-2">
+            <EditorsSearch onChange={setSearchValue} />
+            <div className="px-2 py-1">
+              {(searchValue
+                ? storageData.filter((item) =>
+                    item.fullPath
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase())
+                  )
+                : storageData
+              )?.map((item) => (
+                <div
+                  onClick={() => selectImage(item)}
+                  key={item.fullPath}
+                  className={`cursor-pointer flex justify-between items-center px-2 py-1 ${chosenImages[item.name] ? 'rounded-md bg-pink-300' : ''}`}
+                >
+                  <span>{item.fullPath}</span>
+                  {editAvailable ? (
+                    <Image
+                      onClick={() => deleteImageClick?.(item)}
+                      width={30}
+                      height={30}
+                      src="/icons/cross.svg"
+                      alt="Close"
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              ))}
             </div>
-            <div className="w-6/12 flex items-center justify-center text-center rounded-md border-pink-500 border-2">
-              {lastSelectedImage
-                ?
-                <Image width={200} height={200} src={getStorageImageSrc(lastSelectedImage)} alt={lastSelectedImage.name}/>
-                : <>{TRANSLATES[LOCALE].selectImage}</>
-              }
-            </div>
-          </>
-          : <div
-            className="w-full text-center rounded-md border-pink-500 border-2 px-2 py-1">{TRANSLATES[LOCALE].noImages}</div>
-      }
+          </div>
+          <div className="w-6/12 flex items-center justify-center text-center rounded-md border-pink-500 border-2">
+            {lastSelectedImage ? (
+              <Image
+                width={200}
+                height={200}
+                src={getStorageImageSrc(lastSelectedImage)}
+                alt={lastSelectedImage.name}
+              />
+            ) : (
+              <>{TRANSLATES[LOCALE].selectImage}</>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="w-full text-center rounded-md border-pink-500 border-2 px-2 py-1">
+          {TRANSLATES[LOCALE].noImages}
+        </div>
+      )}
     </div>
   );
 }

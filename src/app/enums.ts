@@ -1,6 +1,6 @@
 export enum ButtonTypes {
   BUTTON = 'button',
-  SUBMIT = 'submit'
+  SUBMIT = 'submit',
 }
 
 export enum UrlQueryParamsNames {
@@ -43,7 +43,7 @@ export enum EditGroup {
   CATEGORIES = 'categories',
   PRODUCTS = 'products',
   IMAGES = 'images',
-  ORDERS = 'orders'
+  ORDERS = 'orders',
 }
 
 export enum FirestoreCollections {
@@ -59,7 +59,7 @@ export enum FirestoreCollections {
 }
 
 export enum FirestoreDocuments {
-  CONFIG = 'config'
+  CONFIG = 'config',
 }
 
 export enum PageLimits {
@@ -80,13 +80,13 @@ export enum PopupTypes {
 
 export enum UserRoles {
   ADMIN = 'admin',
-  USER = 'user'
+  USER = 'user',
 }
 
 export enum OrderStatuses {
   CREATED = 'created',
   COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 export enum PaginateItemsPosition {

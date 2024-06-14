@@ -12,17 +12,18 @@ export function getOrderMessage(data: {
   cart: Record<string, ICartProductModel<IProductSerialized>>;
   config: IConfig;
 }): string {
-  let message: string = `Заказ №${data.orderNumber}`
-    + '\n\n'
-    + `Имя: ${data.name}`
-    + '\n'
-    + `Телефон: +${transformPhoneUtil(data.phone)}`
-    + '\n'
-    + `E-mail: ${data.email}`
-    + '\n'
-    + `Адрес: ${data.deliveryAddress}`
-    + '\n'
-    + (data.comment ? `Комментарий: ${data.comment}\n` : '');
+  let message: string =
+    `Заказ №${data.orderNumber}` +
+    '\n\n' +
+    `Имя: ${data.name}` +
+    '\n' +
+    `Телефон: +${transformPhoneUtil(data.phone)}` +
+    '\n' +
+    `E-mail: ${data.email}` +
+    '\n' +
+    `Адрес: ${data.deliveryAddress}` +
+    '\n' +
+    (data.comment ? `Комментарий: ${data.comment}\n` : '');
 
   let total: string = '0';
   Object.values(data.cart).forEach((item) => {

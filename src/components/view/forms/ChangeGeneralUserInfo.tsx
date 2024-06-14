@@ -20,7 +20,9 @@ interface IChangeGeneralUserInfoProps {
   userServer: IUserSerialized;
 }
 
-export function ChangeGeneralUserInfo({ userServer }: IChangeGeneralUserInfoProps) {
+export function ChangeGeneralUserInfo({
+  userServer,
+}: IChangeGeneralUserInfoProps) {
   const dispatch = useAppDispatch();
   const [user, setUser] = useState<IUserSerialized>();
   const [mainInfoEditMode, setMainInfoEditMode] = useState(false);
@@ -29,9 +31,7 @@ export function ChangeGeneralUserInfo({ userServer }: IChangeGeneralUserInfoProp
     register,
     handleSubmit,
     setValue,
-    formState: {
-      errors,
-    },
+    formState: { errors },
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(YupUtil.ProfileMainInfoSchema),
@@ -80,82 +80,97 @@ export function ChangeGeneralUserInfo({ userServer }: IChangeGeneralUserInfoProp
 
   return (
     <form onSubmit={handleSubmit(submitMainInfoForm)}>
-      <fieldset className="w-full relative border-2 rounded-md p-4 flex flex-col gap-y-2" disabled={mainInfoIsLoading}>
+      <fieldset
+        className="w-full relative border-2 rounded-md p-4 flex flex-col gap-y-2"
+        disabled={mainInfoIsLoading}
+      >
         <legend className="ml-4">{TRANSLATES[LOCALE].userData}</legend>
         <div className="absolute right-4 top-[-28px]">
-          {
-            mainInfoEditMode
-              ? (
-                <Button type={ButtonTypes.SUBMIT} styleClass="px-2 py-1" color={ColorOptions.PINK}>
-                  <div className="flex gap-x-2">
-                    <>
-                      <Image width={20} height={20} src="/icons/save.svg" alt="Save main info"/>
-                      <span>{TRANSLATES[LOCALE].save}</span>
-                    </>
-                  </div>
-                </Button>
-              )
-              : (
-                <Button
-                  type={ButtonTypes.BUTTON}
-                  styleClass="px-2 py-1"
-                  color={ColorOptions.PINK}
-                  callback={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setMainInfoEditMode((prevState) => (!prevState));
-                  }}
-                >
-                  <div className="flex gap-x-2">
-                    <>
-                      <Image width={20} height={20} src="/icons/edit.svg" alt="Edit main info"/>
-                      <span>{TRANSLATES[LOCALE].edit}</span>
-                    </>
-                  </div>
-                </Button>
-              )
-          }
+          {mainInfoEditMode ? (
+            <Button
+              type={ButtonTypes.SUBMIT}
+              styleClass="px-2 py-1"
+              color={ColorOptions.PINK}
+            >
+              <div className="flex gap-x-2">
+                <>
+                  <Image
+                    width={20}
+                    height={20}
+                    src="/icons/save.svg"
+                    alt="Save main info"
+                  />
+                  <span>{TRANSLATES[LOCALE].save}</span>
+                </>
+              </div>
+            </Button>
+          ) : (
+            <Button
+              type={ButtonTypes.BUTTON}
+              styleClass="px-2 py-1"
+              color={ColorOptions.PINK}
+              callback={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMainInfoEditMode((prevState) => !prevState);
+              }}
+            >
+              <div className="flex gap-x-2">
+                <>
+                  <Image
+                    width={20}
+                    height={20}
+                    src="/icons/edit.svg"
+                    alt="Edit main info"
+                  />
+                  <span>{TRANSLATES[LOCALE].edit}</span>
+                </>
+              </div>
+            </Button>
+          )}
         </div>
-        {
-          mainInfoEditMode
-            ? (
-              <>
-                <InputFormField
-                  placeholder={TRANSLATES[LOCALE].enterFio}
-                  label={TRANSLATES[LOCALE].fio}
-                  name="name"
-                  type="text"
-                  error={errors.name?.message}
-                  register={register}
-                />
-                <PhoneFormField
-                  label={TRANSLATES[LOCALE].enterContactPhoneNumber}
-                  type="text"
-                  name="phone"
-                  error={errors.phone?.message}
-                  register={register}
-                />
-                <InputFormField
-                  placeholder={TRANSLATES[LOCALE].enterDeliveryAddress}
-                  label={TRANSLATES[LOCALE].deliveryAddress}
-                  name="deliveryAddress"
-                  type="text"
-                  error={errors.deliveryAddress?.message}
-                  register={register}
-                />
-              </>
-            )
-            : (
-              <>
-                <ReadonlyFormField label={TRANSLATES[LOCALE].fio} value={user?.name || userServer.name}/>
-                <ReadonlyFormField label={TRANSLATES[LOCALE].contactPhoneNumber} value={user?.phone || userServer.phone}/>
-                <ReadonlyFormField
-                  label={TRANSLATES[LOCALE].deliveryAddress}
-                  value={user?.deliveryAddress || userServer.deliveryAddress}
-                />
-              </>
-            )
-        }
+        {mainInfoEditMode ? (
+          <>
+            <InputFormField
+              placeholder={TRANSLATES[LOCALE].enterFio}
+              label={TRANSLATES[LOCALE].fio}
+              name="name"
+              type="text"
+              error={errors.name?.message}
+              register={register}
+            />
+            <PhoneFormField
+              label={TRANSLATES[LOCALE].enterContactPhoneNumber}
+              type="text"
+              name="phone"
+              error={errors.phone?.message}
+              register={register}
+            />
+            <InputFormField
+              placeholder={TRANSLATES[LOCALE].enterDeliveryAddress}
+              label={TRANSLATES[LOCALE].deliveryAddress}
+              name="deliveryAddress"
+              type="text"
+              error={errors.deliveryAddress?.message}
+              register={register}
+            />
+          </>
+        ) : (
+          <>
+            <ReadonlyFormField
+              label={TRANSLATES[LOCALE].fio}
+              value={user?.name || userServer.name}
+            />
+            <ReadonlyFormField
+              label={TRANSLATES[LOCALE].contactPhoneNumber}
+              value={user?.phone || userServer.phone}
+            />
+            <ReadonlyFormField
+              label={TRANSLATES[LOCALE].deliveryAddress}
+              value={user?.deliveryAddress || userServer.deliveryAddress}
+            />
+          </>
+        )}
       </fieldset>
     </form>
   );

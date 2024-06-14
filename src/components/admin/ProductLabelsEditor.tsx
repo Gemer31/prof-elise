@@ -12,7 +12,10 @@ export interface IProductLabelsEditorProps {
   onChange: (newLabels: ILabel[]) => void;
 }
 
-export function ProductLabelsEditor({onChange, value}: IProductLabelsEditorProps) {
+export function ProductLabelsEditor({
+  onChange,
+  value,
+}: IProductLabelsEditorProps) {
   const [labels, setLabels] = useState<ILabel[]>([]);
 
   useEffect(() => {
@@ -20,68 +23,80 @@ export function ProductLabelsEditor({onChange, value}: IProductLabelsEditorProps
   }, [labels]);
 
   useEffect(() => {
-    let updateRequired: boolean = JSON.stringify(value) !== JSON.stringify(labels);
+    let updateRequired: boolean =
+      JSON.stringify(value) !== JSON.stringify(labels);
     if (updateRequired) {
       setLabels(value || []);
     }
   }, [value]);
 
-  const labelsChange = (labelIndex: number, text?: string, color?: ColorOptions) => {
-    setLabels(prev => {
+  const labelsChange = (
+    labelIndex: number,
+    text?: string,
+    color?: ColorOptions
+  ) => {
+    setLabels((prev) => {
       return prev?.map((item, index) => {
         return index === labelIndex
           ? {
-            text: text === undefined ? item.text : text,
-            color: color === undefined ? item.color : color
-          }
+              text: text === undefined ? item.text : text,
+              color: color === undefined ? item.color : color,
+            }
           : item;
       });
     });
   };
   const deleteLabel = (deleteIndex: number) => {
-    setLabels(prev => {
-        const newLabels = prev.filter((item, index) => index !== deleteIndex);
-        return newLabels;
-      }
-    );
+    setLabels((prev) => {
+      const newLabels = prev.filter((item, index) => index !== deleteIndex);
+      return newLabels;
+    });
   };
   const addLabel = () => {
-    setLabels(prev => {
+    setLabels((prev) => {
       const newLabels = [...prev];
       newLabels.push({
         text: '',
-        color: ColorOptions.PINK
+        color: ColorOptions.PINK,
       });
       return newLabels;
     });
   };
 
-  return <div className="flex flex-col gap-y-2">
-    {
-      labels?.map((item, index) => {
-        return <div key={index} className="flex gap-x-2">
-          <input
-            className="w-full border-2 rounded-md px-2.5 py-1"
-            placeholder={TRANSLATES[LOCALE].enterLabel}
-            type="text"
-            value={item.text}
-            onChange={(e) => labelsChange(index, e.target.value)}
-          />
-          <ColorPicker
-            value={item.color}
-            onChange={(newColor) => labelsChange(index, undefined, newColor)}
-          />
-          <Button
-            styleClass="h-full px-2 py-1"
-            type={ButtonTypes.BUTTON} callback={() => deleteLabel(index)}>✖</Button>
-        </div>;
-      })
-    }
-    <Button
-      styleClass="w-full text-xl py-2"
-      color={ColorOptions.GRAY}
-      type={ButtonTypes.BUTTON}
-      callback={addLabel}
-    >+</Button>
-  </div>;
+  return (
+    <div className="flex flex-col gap-y-2">
+      {labels?.map((item, index) => {
+        return (
+          <div key={index} className="flex gap-x-2">
+            <input
+              className="w-full border-2 rounded-md px-2.5 py-1"
+              placeholder={TRANSLATES[LOCALE].enterLabel}
+              type="text"
+              value={item.text}
+              onChange={(e) => labelsChange(index, e.target.value)}
+            />
+            <ColorPicker
+              value={item.color}
+              onChange={(newColor) => labelsChange(index, undefined, newColor)}
+            />
+            <Button
+              styleClass="h-full px-2 py-1"
+              type={ButtonTypes.BUTTON}
+              callback={() => deleteLabel(index)}
+            >
+              ✖
+            </Button>
+          </div>
+        );
+      })}
+      <Button
+        styleClass="w-full text-xl py-2"
+        color={ColorOptions.GRAY}
+        type={ButtonTypes.BUTTON}
+        callback={addLabel}
+      >
+        +
+      </Button>
+    </div>
+  );
 }

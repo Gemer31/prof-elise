@@ -18,22 +18,31 @@ interface IEntityFavouriteButtonProps {
   className?: string;
 }
 
-export function EntityFavouriteButton({ productId, className }: IEntityFavouriteButtonProps) {
+export function EntityFavouriteButton({
+  productId,
+  className,
+}: IEntityFavouriteButtonProps) {
   const [isLoading, setIsLoading] = useState(true);
   const cartLoading = useAppSelector((state) => state.dataReducer.cartLoading);
   const dispatch = useAppDispatch();
-  const isFavourite = useAppSelector((state) => state.dataReducer.favourites?.[productId]);
+  const isFavourite = useAppSelector(
+    (state) => state.dataReducer.favourites?.[productId]
+  );
   const favourites = useAppSelector((state) => state.dataReducer.favourites);
 
-  const hostClass: string = useMemo(() => convertToClass([
-    'entity-favourite-button',
-    'cursor-pointer',
-    'transition-transform',
-    'hover:scale-110',
-    'duration-200',
-    isLoading ? 'pointer-events-none' : '',
-    className || '',
-  ]), [className, isLoading]);
+  const hostClass: string = useMemo(
+    () =>
+      convertToClass([
+        'entity-favourite-button',
+        'cursor-pointer',
+        'transition-transform',
+        'hover:scale-110',
+        'duration-200',
+        isLoading ? 'pointer-events-none' : '',
+        className || '',
+      ]),
+    [className, isLoading]
+  );
 
   useEffect(() => {
     !cartLoading && setIsLoading(false);
@@ -59,13 +68,24 @@ export function EntityFavouriteButton({ productId, className }: IEntityFavourite
 
   return (
     <div className={hostClass} onClick={favouriteClick}>
-      {
-        isLoading
-          ? <Loader className="h-[25px] border-pink-500"/>
-          : isFavourite
-            ? <Image width={25} height={25} src="/icons/heart-filled.svg" alt="favourite"/>
-            : <Image className="" width={25} height={25} src="/icons/heart.svg" alt="favourite"/>
-      }
+      {isLoading ? (
+        <Loader className="h-[25px] border-pink-500" />
+      ) : isFavourite ? (
+        <Image
+          width={25}
+          height={25}
+          src="/icons/heart-filled.svg"
+          alt="favourite"
+        />
+      ) : (
+        <Image
+          className=""
+          width={25}
+          height={25}
+          src="/icons/heart.svg"
+          alt="favourite"
+        />
+      )}
     </div>
   );
 }

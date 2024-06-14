@@ -9,12 +9,7 @@ interface IOrdersListProps {
   paginateProps: IPaginateProps;
 }
 
-export function OrdersList(
-  {
-    data,
-    paginateProps,
-  }: IOrdersListProps,
-) {
+export function OrdersList({ data, paginateProps }: IOrdersListProps) {
   return (
     <PaginateWrapper
       orderByAvailableParams={{
@@ -25,7 +20,7 @@ export function OrdersList(
       items={data}
       emptyListText={TRANSLATES[LOCALE].ordersListIsEmpty}
     >
-      {data?.map((item) => <OrderCard key={item.id} data={item}/>)}
+      {data?.map((item) => <OrderCard key={item.id} data={item} />)}
     </PaginateWrapper>
   );
 }

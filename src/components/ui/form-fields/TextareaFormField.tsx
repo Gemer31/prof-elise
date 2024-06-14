@@ -15,16 +15,28 @@ interface ITextareaFormFieldProps {
   register: unknown;
 }
 
-export function TextareaFormField({label, name, register, required, error, placeholder, rows}: ITextareaFormFieldProps) {
-  const textareaClass: string = useMemo(() => convertToClass([
-    'border-2',
-    'rounded-md',
-    'mt-1',
-    'w-full',
-    'px-2.5',
-    'py-1',
-    'resize-none',
-  ]), []);
+export function TextareaFormField({
+  label,
+  name,
+  register,
+  required,
+  error,
+  placeholder,
+  rows,
+}: ITextareaFormFieldProps) {
+  const textareaClass: string = useMemo(
+    () =>
+      convertToClass([
+        'border-2',
+        'rounded-md',
+        'mt-1',
+        'w-full',
+        'px-2.5',
+        'py-1',
+        'resize-none',
+      ]),
+    []
+  );
 
   return (
     <FormFieldWrapper label={label} error={error} required={required}>

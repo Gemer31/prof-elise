@@ -2,7 +2,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { Button } from '@/components/ui/Button';
-import { ButtonTypes, FirestoreCollections, FirestoreDocuments } from '@/app/enums';
+import {
+  ButtonTypes,
+  FirestoreCollections,
+  FirestoreDocuments,
+} from '@/app/enums';
 import { useEffect, useState } from 'react';
 import { doc, DocumentData, setDoc, WithFieldValue } from '@firebase/firestore';
 import { setNotificationMessage } from '@/store/dataSlice';
@@ -21,20 +25,24 @@ interface GeneralEditorFormProps {
   refreshCallback?: () => void;
 }
 
-export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormProps) {
+export function GeneralEditorForm({
+  config,
+  refreshCallback,
+}: GeneralEditorFormProps) {
   const dispatch = useAppDispatch();
   const [shopDescription, setShopDescription] = useState('');
   const [deliveryDescription, setDeliveryDescription] = useState('');
-  const [shopRegistrationDescription, setShopRegistrationDescription] = useState('');
+  const [shopRegistrationDescription, setShopRegistrationDescription] =
+    useState('');
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     setValue,
     handleSubmit,
-    formState: {errors, isValid}
+    formState: { errors, isValid },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(YupUtil.GeneralEditorFormSchema)
+    resolver: yupResolver(YupUtil.GeneralEditorFormSchema),
   });
 
   useEffect(() => {
@@ -51,12 +59,12 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
   }, [config]);
 
   const submitForm = async (formData: {
-    phone?: string,
-    workingHours?: string,
-    currency?: string,
-    shopDescription?: string,
-    deliveryDescription?: string,
-    shopRegistrationDescription?: string,
+    phone?: string;
+    workingHours?: string;
+    currency?: string;
+    shopDescription?: string;
+    deliveryDescription?: string;
+    shopRegistrationDescription?: string;
   }) => {
     setIsLoading(true);
     const data: WithFieldValue<DocumentData> = {
@@ -68,7 +76,10 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
       shopRegistrationDescription: formData.shopRegistrationDescription,
     };
     try {
-      await setDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG), data);
+      await setDoc(
+        doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG),
+        data
+      );
       dispatch(setNotificationMessage(TRANSLATES[LOCALE].infoSaved));
       refreshCallback?.();
     } catch {
@@ -81,21 +92,18 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
   const deliveryDescriptionChange = (newValue: string) => {
     setValue('deliveryDescription', newValue);
     setDeliveryDescription(newValue);
-  }
+  };
   const shopRegistrationDescriptionChange = (newValue: string) => {
     setValue('shopRegistrationDescription', newValue);
     setShopRegistrationDescription(newValue);
-  }
+  };
   const shopDescriptionChange = (newValue: string) => {
     setValue('shopDescription', newValue);
     setShopDescription(newValue);
-  }
+  };
 
   return (
-    <form
-      className="flex flex-col"
-      onSubmit={handleSubmit(submitForm)}
-    >
+    <form className="flex flex-col" onSubmit={handleSubmit(submitForm)}>
       <PhoneFormField
         label={TRANSLATES[LOCALE].phone}
         name="phone"
@@ -157,7 +165,9 @@ export function GeneralEditorForm({config, refreshCallback}: GeneralEditorFormPr
         disabled={isLoading}
         loading={isLoading}
         type={ButtonTypes.SUBMIT}
-      >{TRANSLATES[LOCALE].save}</Button>
+      >
+        {TRANSLATES[LOCALE].save}
+      </Button>
     </form>
   );
 }

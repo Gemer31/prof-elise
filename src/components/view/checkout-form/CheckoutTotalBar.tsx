@@ -16,28 +16,24 @@ interface ICheckoutTotalBarProps {
   onSubmit: () => void;
 }
 
-export function CheckoutTotalBar(
-  {
-    config,
-    isLoading,
-    onSubmit,
-  }: ICheckoutTotalBarProps,
-) {
+export function CheckoutTotalBar({
+  config,
+  isLoading,
+  onSubmit,
+}: ICheckoutTotalBarProps) {
   const [total, setTotal] = useState<string>('0');
   const cart = useAppSelector((state) => state.dataReducer.cart);
 
   useEffect(() => {
-    getEnrichedCart(cart)
-      .then((enrichedCart) => {
-        let newTotal: string = '0';
-        Object.values(enrichedCart)
-          .forEach((item) => {
-            newTotal = currency(newTotal)
-              .add((+item.productRef.price * item.count))
-              .toString();
-          });
-        setTotal(newTotal);
+    getEnrichedCart(cart).then((enrichedCart) => {
+      let newTotal: string = '0';
+      Object.values(enrichedCart).forEach((item) => {
+        newTotal = currency(newTotal)
+          .add(+item.productRef.price * item.count)
+          .toString();
       });
+      setTotal(newTotal);
+    });
   }, [cart]);
 
   return (
@@ -55,11 +51,13 @@ export function CheckoutTotalBar(
       </div>
       <div className="flex justify-between items-center p-4 text-lg">
         <span>{TRANSLATES[LOCALE].result}:</span>
-        {
-          !total
-            ? <Loader className="size-6 border-pink-500" />
-            : <span className="font-bold">{total} {config.currency}</span>
-        }
+        {!total ? (
+          <Loader className="size-6 border-pink-500" />
+        ) : (
+          <span className="font-bold">
+            {total} {config.currency}
+          </span>
+        )}
       </div>
     </section>
   );

@@ -26,7 +26,8 @@ export function getPaginateProps(searchParams: ISearchParams): IPaginateProps {
         orderByValue = searchParams[OrderByKeys.BY_ALFABET];
         break;
       }
-      default: break;
+      default:
+        break;
     }
     if (orderByValue) {
       if (orderByValue !== 'desc' && orderByValue !== 'asc') {
@@ -39,9 +40,15 @@ export function getPaginateProps(searchParams: ISearchParams): IPaginateProps {
 
   return {
     page: Number(searchParams.page),
-    pageLimit: searchParams.pageLimit ? Number(searchParams.pageLimit) : Number(PageLimits.SIX),
-    minPrice: searchParams.minPrice?.length ? Number(searchParams.minPrice) : null,
-    maxPrice: searchParams.maxPrice?.length ? Number(searchParams.maxPrice) : null,
+    pageLimit: searchParams.pageLimit
+      ? Number(searchParams.pageLimit)
+      : Number(PageLimits.SIX),
+    minPrice: searchParams.minPrice?.length
+      ? Number(searchParams.minPrice)
+      : null,
+    maxPrice: searchParams.maxPrice?.length
+      ? Number(searchParams.maxPrice)
+      : null,
     searchValue: searchParams.q,
     orderByParams: {
       key: orderByKey,

@@ -15,16 +15,17 @@ import { IConfig } from '@/app/models';
 const openSans = Open_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Одноразовая продукция и расходные материалы для салонов и медицинских учреждений в Могилеве',
+  title:
+    'Одноразовая продукция и расходные материалы для салонов и медицинских учреждений в Могилеве',
   description: 'Расходные материалы в Могилеве',
 };
 
-export default async function RootLayout({ children }: {
+export default async function RootLayout({
+  children,
+}: {
   children: React.ReactNode;
 }) {
-  const [
-    settingsDocumentSnapshot,
-  ] = await Promise.all([
+  const [settingsDocumentSnapshot] = await Promise.all([
     getDoc(doc(db, FirestoreCollections.SETTINGS, FirestoreDocuments.CONFIG)),
   ]);
   const config: IConfig = settingsDocumentSnapshot.data() as IConfig;
@@ -33,14 +34,17 @@ export default async function RootLayout({ children }: {
     <html id="html" lang="en" className="scroll-smooth">
       <body className={'overflow-x-hidden ' + openSans.className}>
         <StoreProvider>
-          <RequestCallPopup/>
-          <Notification/>
-          <div id="page" className="relative flex flex-col items-center h-full z-10">
-            <Header/>
+          <RequestCallPopup />
+          <Notification />
+          <div
+            id="page"
+            className="relative flex flex-col items-center h-full z-10"
+          >
+            <Header />
             <main className="w-full flex flex-col items-center">
               {children}
             </main>
-            <Footer config={config}/>
+            <Footer config={config} />
           </div>
         </StoreProvider>
       </body>

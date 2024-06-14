@@ -15,7 +15,6 @@ export function GlobalComponent() {
 
   useEffect(() => {
     if (session?.data?.user) {
-
     }
   }, [session]);
 

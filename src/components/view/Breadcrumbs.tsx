@@ -16,26 +16,33 @@ export function Breadcrumbs({ links }: IBreadcrumbsProps) {
       <Link className="block" href={RouterPath.HOME}>
         {TRANSLATES[LOCALE].main}
       </Link>
-      {
-        links?.map((link, index) => (
-          <div
-            className={'max-w-96 flex items-center text-base overflow-ellipsis ' + (index === links.length - 1 ? 'text-pink-500' : '')}
-            // eslint-disable-next-line react/no-array-index-key
-            key={link.title + index}
-          >
-            <div className="w-[20px] min-w-[20px]">
-              <Image className="rotate-90" width={20} height={20} src="/icons/arrow.svg" alt="Arrow"/>
-            </div>
-            <div className="overflow-ellipsis text-nowrap overflow-hidden">
-              {
-                link.href
-                  ? <Link href={link.href}>{link.title}</Link>
-                  : <span title={link.title}>{link.title}</span>
-              }
-            </div>
+      {links?.map((link, index) => (
+        <div
+          className={
+            'max-w-96 flex items-center text-base overflow-ellipsis ' +
+            (index === links.length - 1 ? 'text-pink-500' : '')
+          }
+          // eslint-disable-next-line react/no-array-index-key
+          key={link.title + index}
+        >
+          <div className="w-[20px] min-w-[20px]">
+            <Image
+              className="rotate-90"
+              width={20}
+              height={20}
+              src="/icons/arrow.svg"
+              alt="Arrow"
+            />
           </div>
-        ))
-      }
+          <div className="overflow-ellipsis text-nowrap overflow-hidden">
+            {link.href ? (
+              <Link href={link.href}>{link.title}</Link>
+            ) : (
+              <span title={link.title}>{link.title}</span>
+            )}
+          </div>
+        </div>
+      ))}
     </section>
   );
 }

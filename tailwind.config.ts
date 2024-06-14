@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -14,16 +14,16 @@ const config: Config = {
         'black-1/4': 'rgba(0, 0, 0, 0.25)',
       },
       screens: {
-        'xs': '320px',
+        xs: '320px',
         '2xs': '400px',
         '3xs': '480px',
-//      sm	640px
+        //      sm	640px
         '2sm': '704px',
-//      md	768px
+        //      md	768px
         '2md': '896px',
-//      lg	1024px
-//      xl	1280px
-//      2xl	1536px
+        //      lg	1024px
+        //      xl	1280px
+        //      2xl	1536px
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -33,5 +33,5 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;

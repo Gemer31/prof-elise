@@ -19,33 +19,35 @@ export interface IButtonProps extends ICommonProps {
   callback?: (event: MouseEvent) => void;
 }
 
-export function Button(
-  {
-    children,
-    href,
-    callback,
-    type,
-    disabled,
-    loading,
-    setLoadingOnClick,
-    color,
-    styleClass
-  }: IButtonProps
-) {
+export function Button({
+  children,
+  href,
+  callback,
+  type,
+  disabled,
+  loading,
+  setLoadingOnClick,
+  color,
+  styleClass,
+}: IButtonProps) {
   const [innerLoading, setInnerLoading] = useState(false);
 
-  const buttonClass: string = useMemo(() => convertToClass([
-    'flex',
-    'relative',
-    'justify-center',
-    'items-center',
-    'rounded-md',
-    'h-fit',
-    'duration-200',
-    'active:scale-100',
-    'hover:scale-105',
-    (disabled || innerLoading) ? 'pointer-events-none opacity-75' : ''
-  ]), [disabled, innerLoading]);
+  const buttonClass: string = useMemo(
+    () =>
+      convertToClass([
+        'flex',
+        'relative',
+        'justify-center',
+        'items-center',
+        'rounded-md',
+        'h-fit',
+        'duration-200',
+        'active:scale-100',
+        'hover:scale-105',
+        disabled || innerLoading ? 'pointer-events-none opacity-75' : '',
+      ]),
+    [disabled, innerLoading]
+  );
 
   const clicked = (event: MouseEvent) => {
     if (setLoadingOnClick) {
@@ -54,27 +56,55 @@ export function Button(
     callback?.(event);
   };
 
-  return href
-    ? <Link
-      className={buttonClass + ' ' + COLOR_OPTION_VALUES.get(color || ColorOptions.PINK) + ' ' + styleClass}
+  return href ? (
+    <Link
+      className={
+        buttonClass +
+        ' ' +
+        COLOR_OPTION_VALUES.get(color || ColorOptions.PINK) +
+        ' ' +
+        styleClass
+      }
       onClick={clicked}
       href={href}
     >
-      <div className={loading || innerLoading ? 'invisible' : ''}>{children}</div>
+      <div className={loading || innerLoading ? 'invisible' : ''}>
+        {children}
+      </div>
       <div
-        className={`${loading || innerLoading ? 'w-full h-full flex justify-center text-center absolute top-0' : 'important-hidden'} ${styleClass}`}>
-        <Loader className={'h-full ' + (color === ColorOptions.GRAY ? 'border-pink-500' : '')}/>
+        className={`${loading || innerLoading ? 'w-full h-full flex justify-center text-center absolute top-0' : 'important-hidden'} ${styleClass}`}
+      >
+        <Loader
+          className={
+            'h-full ' + (color === ColorOptions.GRAY ? 'border-pink-500' : '')
+          }
+        />
       </div>
     </Link>
-    : <button
+  ) : (
+    <button
       type={type || ButtonTypes.BUTTON}
-      className={buttonClass + ' ' + COLOR_OPTION_VALUES.get(color || ColorOptions.PINK) + ' ' + styleClass}
+      className={
+        buttonClass +
+        ' ' +
+        COLOR_OPTION_VALUES.get(color || ColorOptions.PINK) +
+        ' ' +
+        styleClass
+      }
       onClick={clicked}
     >
-      <div className={loading || innerLoading ? 'invisible' : ''}>{children}</div>
-      <div className={`${loading || innerLoading ? 'w-full h-full absolute top-0' : 'important-hidden'} ${styleClass}`}>
-        <Loader className={'h-full ' + (color === ColorOptions.GRAY ? 'border-pink-500' : '')}/>
+      <div className={loading || innerLoading ? 'invisible' : ''}>
+        {children}
       </div>
-    </button>;
-
+      <div
+        className={`${loading || innerLoading ? 'w-full h-full absolute top-0' : 'important-hidden'} ${styleClass}`}
+      >
+        <Loader
+          className={
+            'h-full ' + (color === ColorOptions.GRAY ? 'border-pink-500' : '')
+          }
+        />
+      </div>
+    </button>
+  );
 }

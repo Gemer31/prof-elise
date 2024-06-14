@@ -3,11 +3,12 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import { dataSlice } from '@/store/dataSlice';
 
-export const makeStore = () => configureStore({
-  reducer: {
-    dataReducer: dataSlice.reducer,
-  },
-});
+export const makeStore = () =>
+  configureStore({
+    reducer: {
+      dataReducer: dataSlice.reducer,
+    },
+  });
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore['getState']>;

@@ -14,9 +14,10 @@ interface IHeaderCouterProps {
   value: number;
 }
 
-export function HeaderCounter({value}: IHeaderCouterProps) {
+export function HeaderCounter({ value }: IHeaderCouterProps) {
   const [hostAnimationClass, setHostAnimationClass] = useState<string>('');
-  const [numbersAnimationClass, setNumbersAnimationClass] = useState<string>('');
+  const [numbersAnimationClass, setNumbersAnimationClass] =
+    useState<string>('');
   const [prevValue, setPrevValue] = useState<number>();
   const [currentValue, setCurrentValue] = useState<number>();
   const [nextValue, setNextValue] = useState<number>();
@@ -51,11 +52,13 @@ export function HeaderCounter({value}: IHeaderCouterProps) {
     }
   }, [value]);
 
-  return <div className={'header-counter ' + hostAnimationClass}>
-    <div className={'header-counter-numbers ' + numbersAnimationClass}>
-      {nextValue ? <div>{nextValue}</div> : <></>}
-      <div>{currentValue}</div>
-      {prevValue ? <div>{prevValue}</div> : <></>}
+  return (
+    <div className={'header-counter ' + hostAnimationClass}>
+      <div className={'header-counter-numbers ' + numbersAnimationClass}>
+        {nextValue ? <div>{nextValue}</div> : <></>}
+        <div>{currentValue}</div>
+        {prevValue ? <div>{prevValue}</div> : <></>}
+      </div>
     </div>
-  </div>;
+  );
 }

@@ -9,26 +9,33 @@ import './favourite-product-card.css';
 export interface IFavouriteProductCardProps {
   config: IConfig;
   data: IProductSerialized;
-  isLoading?: boolean,
-  onClick?: () => void,
+  isLoading?: boolean;
+  onClick?: () => void;
 }
 
-export function FavouriteProductCard(
-  {
-    data,
-    isLoading,
-    config,
-    onClick,
-  }: IFavouriteProductCardProps,
-) {
+export function FavouriteProductCard({
+  data,
+  isLoading,
+  config,
+  onClick,
+}: IFavouriteProductCardProps) {
   return (
     <div className="favourite-product-card p-2 bg-slate-100 rounded-md  mb-2">
       <Link
-        className={'flex items-center gap-x-2 ' + (isLoading ? ' pointer-events-none' : '')}
+        className={
+          'flex items-center gap-x-2 ' +
+          (isLoading ? ' pointer-events-none' : '')
+        }
         href={`${RouterPath.CATEGORIES}/${data.categoryRef}${RouterPath.PRODUCTS}/${data?.id}`}
         onClick={onClick}
       >
-        <Image className="rounded-md" width={150} height={150} src={data.imageUrls[0]} alt={data.title}/>
+        <Image
+          className="rounded-md"
+          width={150}
+          height={150}
+          src={data.imageUrls[0]}
+          alt={data.title}
+        />
         <span className="favourite-product-card__title ml-2">{data.title}</span>
       </Link>
       <span className="flex justify-center items-center text-pink-500 text-center font-medium text-xl">
@@ -36,7 +43,7 @@ export function FavouriteProductCard(
       </span>
       <div className="flex items-center justify-end">
         <div className="h-fit flex">
-          <Counter productId={data.id}/>
+          <Counter productId={data.id} />
         </div>
       </div>
     </div>

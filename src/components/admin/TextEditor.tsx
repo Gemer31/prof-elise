@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import dynamic from 'next/dynamic';
-const ReactQuill = dynamic(() => import("react-quill"), {ssr: false});
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface ITextEditorFormFieldProps {
   placeholder: string;
@@ -11,15 +11,23 @@ interface ITextEditorFormFieldProps {
   onChange: (value: string) => void;
 }
 
-export function TextEditor({value, placeholder, onChange}: ITextEditorFormFieldProps) {
-  const editorClass: string = useMemo(() => convertToClass([
-    'field-editor',
-    'border-2',
-    'bg-white',
-    'rounded-md',
-    'mt-1',
-    'w-full'
-  ]), []);
+export function TextEditor({
+  value,
+  placeholder,
+  onChange,
+}: ITextEditorFormFieldProps) {
+  const editorClass: string = useMemo(
+    () =>
+      convertToClass([
+        'field-editor',
+        'border-2',
+        'bg-white',
+        'rounded-md',
+        'mt-1',
+        'w-full',
+      ]),
+    []
+  );
 
   const [innerValue, setInnerValue] = useState<string>('');
 

@@ -2,7 +2,8 @@ export const LOCALE: string = 'ru';
 
 export const TRANSLATES: Record<string, Record<string, string>> = {
   ru: {
-    'Firebase: Error (auth/email-already-in-use).': 'Пользователь с таким email уже зарегистрирован',
+    'Firebase: Error (auth/email-already-in-use).':
+      'Пользователь с таким email уже зарегистрирован',
 
     email: 'Электронная почта',
     orderUpdateSuccessfully: 'Заказ обновлен успешно',
@@ -30,13 +31,15 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     forgotPassword: 'Забыли пароль?',
     registrationOnSite: 'Регистрация на сайте',
     registrate: 'Зарегистрироваться',
-    thereAreNoProductsWithSelectedFilter: 'Товаров по данным параметрам не найдено',
+    thereAreNoProductsWithSelectedFilter:
+      'Товаров по данным параметрам не найдено',
     ordersListIsEmpty: 'Список заказов пуст',
     searchResultsByRequest: 'Результаты поиска по запросу',
     searchResults: 'Результаты поиска',
     allResults: 'Все результаты',
     nothingFound: 'Ничего не найдено',
-    youAreOnThisPageBecause: 'Вы оказались на этой странице по следующим причинам',
+    youAreOnThisPageBecause:
+      'Вы оказались на этой странице по следующим причинам',
     pageDoesNotAvailable: 'Страница временно недоступна',
     pageDoesNotExist: 'Страница не существует',
     wrongURLAddress: 'Неправильный URL адрес',
@@ -47,7 +50,8 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     сonsumablesWholesaleRetail: 'Расходные материалы оптом и в розницу',
     gotoCreateOrder: 'Перейти к оформлению',
     favouriteProducts: 'Избранные товары',
-    createOrderHint: 'Доступные способы доставки и оплаты можно выбрать при оформлении заказа',
+    createOrderHint:
+      'Доступные способы доставки и оплаты можно выбрать при оформлении заказа',
     allCategories: 'Весь каталог',
     youViewed: 'Вы просматривали',
     main: 'Главная',
@@ -114,8 +118,8 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     update: 'Обновить',
     price: 'Цена',
     priceWithExamples: 'Цена(пример: 10; 12.20; 13.34)',
-    enterLabel: "Введите Лейбл",
-    label: "Лейбл",
+    enterLabel: 'Введите Лейбл',
+    label: 'Лейбл',
     vendorCode: 'Артикул',
     enterPrice: 'Введите цену',
     noCategories: 'Категорий нет',
@@ -153,15 +157,16 @@ export const TRANSLATES: Record<string, Record<string, string>> = {
     enterAddress: 'Введите адрес',
     comment: 'Комментарий',
     clickCtrlForMultipleSelect: 'Нажмите ctrl для выбора нескольких',
-    orderCreatedSuccessfully: 'Ваш заказ принят. Наши операторы свяжутся с вами',
+    orderCreatedSuccessfully:
+      'Ваш заказ принят. Наши операторы свяжутся с вами',
     infoUpdated: 'Информация обновлена',
     deliveryDescription: 'Описание по доставке',
     addDeliveryDescription: 'Введите описание по доставке',
     addShopRegistrationDescription: 'Введите регистрационные данные',
     shopRegistrationDescription: 'Регистрационные данные',
-    returnToCatalog: "Вернуться к каталогу товаров",
+    returnToCatalog: 'Вернуться к каталогу товаров',
     from: 'От',
     to: 'До',
-    accept: 'Применить'
-  }
-}
+    accept: 'Применить',
+  },
+};

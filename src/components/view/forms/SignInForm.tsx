@@ -22,34 +22,32 @@ export function SignInForm() {
   const {
     register,
     handleSubmit,
-    formState: {
-      errors,
-    },
+    formState: { errors },
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(YupUtil.SignInSchema),
   });
 
-  const submitForm = useCallback(async (
-    {
-      email,
-      password,
-    }: { email?: string; password?: string },
-  ) => {
-    setIsLoading(true);
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
-    if (res?.ok) {
-      router.push(RouterPath.PROFILE);
-    } else {
-      console.error('Login failed: ', res?.error);
-      dispatch(setNotificationMessage(TRANSLATES[LOCALE].invalidLoginOrPassword));
-    }
-    setIsLoading(false);
-  }, []);
+  const submitForm = useCallback(
+    async ({ email, password }: { email?: string; password?: string }) => {
+      setIsLoading(true);
+      const res = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+      if (res?.ok) {
+        router.push(RouterPath.PROFILE);
+      } else {
+        console.error('Login failed: ', res?.error);
+        dispatch(
+          setNotificationMessage(TRANSLATES[LOCALE].invalidLoginOrPassword)
+        );
+      }
+      setIsLoading(false);
+    },
+    []
+  );
 
   return (
     <Form
@@ -76,16 +74,10 @@ export function SignInForm() {
         register={register}
       />
       <div className="w-full flex justify-around py-2 underline">
-        <Link
-          className="text-gray-400"
-          href={RouterPath.FORGOT_PASSWORD}
-        >
+        <Link className="text-gray-400" href={RouterPath.FORGOT_PASSWORD}>
           {TRANSLATES[LOCALE].forgotPassword}
         </Link>
-        <Link
-          className="text-pink-500"
-          href={RouterPath.REGISTRATION}
-        >
+        <Link className="text-pink-500" href={RouterPath.REGISTRATION}>
           {TRANSLATES[LOCALE].registrationOnSite}
         </Link>
       </div>

@@ -18,7 +18,11 @@ import { StorageReference } from '@firebase/storage';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { unstable_cache } from 'next/cache';
 import {
-  ICartProductModel, IOrder, IProduct, IProductSerialized, IViewedRecentlyModel,
+  ICartProductModel,
+  IOrder,
+  IProduct,
+  IProductSerialized,
+  IViewedRecentlyModel,
 } from '@/app/models';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
@@ -26,31 +30,41 @@ import { CLIENT_ID, ORDER_BY_FIELDS } from '@/app/constants';
 import { SerializationUtil } from '@/utils/serialization.util';
 
 export function docsToData<T>(docs: Array<QueryDocumentSnapshot>): T[] {
-  return docs?.map((item) => item.data()) as T[] || [];
+  return (docs?.map((item) => item.data()) as T[]) || [];
 }
 
 export function getStorageImageSrc(image: StorageReference): string {
-  return image ? `https://firebasestorage.googleapis.com/v0/b/${image.bucket}/o/${image.fullPath}?alt=media` : '';
+  return image
+    ? `https://firebasestorage.googleapis.com/v0/b/${image.bucket}/o/${image.fullPath}?alt=media`
+    : '';
 }
 
-export function converImageUrlsToGallery(imgs: string[]): { original: string }[] {
+export function converImageUrlsToGallery(
+  imgs: string[]
+): { original: string }[] {
   return imgs.map((imgUrl) => ({
     original: imgUrl,
   }));
 }
 
 export async function getEnrichedViewedRecently(
-  viewedRecently: Record<string, IViewedRecentlyModel>,
+  viewedRecently: Record<string, IViewedRecentlyModel>
 ): Promise<IViewedRecentlyModel<IProductSerialized>[]> {
   let viewedRecentlyArr: IViewedRecentlyModel<IProductSerialized>[] = [];
-  const viewedRecentlyProductsIds: string[] = viewedRecently ? Object.keys(viewedRecently) : [];
+  const viewedRecentlyProductsIds: string[] = viewedRecently
+    ? Object.keys(viewedRecently)
+    : [];
   if (viewedRecentlyProductsIds.length) {
-    const viewedRecentlyQuerySnapshot = await getDocs(query(
-      collection(db, FirestoreCollections.PRODUCTS),
-      where('id', 'in', viewedRecentlyProductsIds),
-      // orderBy('time', 'desc') ??
-    ));
-    const viewedRecentlyProducts = docsToData<IProduct>(viewedRecentlyQuerySnapshot.docs);
+    const viewedRecentlyQuerySnapshot = await getDocs(
+      query(
+        collection(db, FirestoreCollections.PRODUCTS),
+        where('id', 'in', viewedRecentlyProductsIds)
+        // orderBy('time', 'desc') ??
+      )
+    );
+    const viewedRecentlyProducts = docsToData<IProduct>(
+      viewedRecentlyQuerySnapshot.docs
+    );
     viewedRecentlyArr = viewedRecentlyProducts.map((product) => ({
       time: viewedRecently[product.id].time,
       productRef: SerializationUtil.getSerializedProduct(product),
@@ -60,18 +74,25 @@ export async function getEnrichedViewedRecently(
 }
 
 export async function getEnrichedCart(
-  cart: Record<string, ICartProductModel<string>>,
+  cart: Record<string, ICartProductModel<string>>
 ): Promise<Record<string, ICartProductModel<IProductSerialized>>> {
-  const enrichedCart: Record<string, ICartProductModel<IProductSerialized>> = {};
+  const enrichedCart: Record<
+    string,
+    ICartProductModel<IProductSerialized>
+  > = {};
   const cartProductsIds: string[] = cart ? Object.keys(cart) : [];
 
   if (cartProductsIds?.length) {
-    const products = await getDocs(query(
-      collection(db, FirestoreCollections.PRODUCTS),
-      where('id', 'in', cartProductsIds),
-    ));
+    const products = await getDocs(
+      query(
+        collection(db, FirestoreCollections.PRODUCTS),
+        where('id', 'in', cartProductsIds)
+      )
+    );
     products.forEach((item) => {
-      const data: IProductSerialized = SerializationUtil.getSerializedProduct(item.data() as IProduct);
+      const data: IProductSerialized = SerializationUtil.getSerializedProduct(
+        item.data() as IProduct
+      );
       enrichedCart[data.id] = {
         ...cart[data.id],
         productRef: data,
@@ -87,8 +108,13 @@ export const getFavourites = unstable_cache(
     let data: Record<string, DocumentReference>;
 
     if (clientId?.length) {
-      const viewedRecentlyDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.FAVOURITES, clientId));
-      data = viewedRecentlyDocumentSnapshot.data() as Record<string, DocumentReference>;
+      const viewedRecentlyDocumentSnapshot = await getDoc(
+        doc(db, FirestoreCollections.FAVOURITES, clientId)
+      );
+      data = viewedRecentlyDocumentSnapshot.data() as Record<
+        string,
+        DocumentReference
+      >;
     }
 
     if (!data) {
@@ -100,7 +126,7 @@ export const getFavourites = unstable_cache(
   ['favourites'],
   {
     tags: ['favourites'],
-  },
+  }
 );
 
 export const getViewedRecently = unstable_cache(
@@ -108,8 +134,13 @@ export const getViewedRecently = unstable_cache(
     let data: Record<string, IViewedRecentlyModel>;
 
     if (clientId?.length) {
-      const viewedRecentlyDocumentSnapshot = await getDoc(doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId));
-      data = viewedRecentlyDocumentSnapshot.data() as Record<string, IViewedRecentlyModel>;
+      const viewedRecentlyDocumentSnapshot = await getDoc(
+        doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId)
+      );
+      data = viewedRecentlyDocumentSnapshot.data() as Record<
+        string,
+        IViewedRecentlyModel
+      >;
     }
 
     if (!data) {
@@ -121,37 +152,54 @@ export const getViewedRecently = unstable_cache(
   ['viewedRecently'],
   {
     tags: ['viewedRecently'],
-  },
+  }
 );
 
 export const getOrders = unstable_cache(
-  async ({ orderByKey, orderByValue, email }: { orderByKey: string, orderByValue: string, email: string }) => {
+  async ({
+    orderByKey,
+    orderByValue,
+    email,
+  }: {
+    orderByKey: string;
+    orderByValue: string;
+    email: string;
+  }) => {
     const ordersFilters: QueryConstraint[] = [
       where('userRef', '==', doc(db, FirestoreCollections.USERS, email)),
     ];
     const orderByField: string = ORDER_BY_FIELDS.get(orderByKey);
     if (orderByField) {
-      ordersFilters.push(orderBy(orderByField, orderByValue as OrderByDirection));
+      ordersFilters.push(
+        orderBy(orderByField, orderByValue as OrderByDirection)
+      );
     }
-    const ordersQuerySnapshot = await getDocs(query(collection(db, FirestoreCollections.ORDERS), ...ordersFilters));
+    const ordersQuerySnapshot = await getDocs(
+      query(collection(db, FirestoreCollections.ORDERS), ...ordersFilters)
+    );
     const orders: IOrder[] = docsToData<IOrder>(ordersQuerySnapshot.docs);
     return orders;
   },
   ['orders'],
   {
     tags: ['orders'],
-  },
+  }
 );
 
 export async function getClientData<T>(
-  dataCollection: FirestoreCollections.FAVOURITES | FirestoreCollections.CART | FirestoreCollections.VIEWED_RECENTLY,
-  cookies: ReadonlyRequestCookies,
+  dataCollection:
+    | FirestoreCollections.FAVOURITES
+    | FirestoreCollections.CART
+    | FirestoreCollections.VIEWED_RECENTLY,
+  cookies: ReadonlyRequestCookies
 ): Promise<T> {
   const clientId: string = cookies.get(CLIENT_ID)?.value;
   let data: T;
 
   if (clientId?.length) {
-    const viewedRecentlyDocumentSnapshot = await getDoc(doc(db, dataCollection, clientId));
+    const viewedRecentlyDocumentSnapshot = await getDoc(
+      doc(db, dataCollection, clientId)
+    );
     data = viewedRecentlyDocumentSnapshot.data() as T;
   }
 
@@ -162,25 +210,36 @@ export async function getClientData<T>(
   return data;
 }
 
-export function getFirebaseSearchFilter(searchValue: string, additionalFilters: QueryFieldFilterConstraint[] = []) {
+export function getFirebaseSearchFilter(
+  searchValue: string,
+  additionalFilters: QueryFieldFilterConstraint[] = []
+) {
   return or(
     // query as-is:
     and(
       where('title', '>=', searchValue),
       where('title', '<=', searchValue + '\uf8ff'),
-      ...additionalFilters,
+      ...additionalFilters
     ),
     // capitalize first letter:
     and(
-      where('title', '>=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1)),
-      where('title', '<=', searchValue.charAt(0).toUpperCase() + searchValue.slice(1) + '\uf8ff'),
-      ...additionalFilters,
+      where(
+        'title',
+        '>=',
+        searchValue.charAt(0).toUpperCase() + searchValue.slice(1)
+      ),
+      where(
+        'title',
+        '<=',
+        searchValue.charAt(0).toUpperCase() + searchValue.slice(1) + '\uf8ff'
+      ),
+      ...additionalFilters
     ),
     // lowercase:
     and(
       where('title', '>=', searchValue.toLowerCase()),
       where('title', '<=', searchValue.toLowerCase() + '\uf8ff'),
-      ...additionalFilters,
-    ),
+      ...additionalFilters
+    )
   );
 }

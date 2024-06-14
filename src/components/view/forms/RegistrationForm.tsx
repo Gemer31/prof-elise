@@ -10,7 +10,12 @@ import { useForm } from 'react-hook-form';
 import { useCallback, useState } from 'react';
 import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { LOCALE, TRANSLATES } from '@/app/translates';
-import { ButtonTypes, FirestoreCollections, RouterPath, UserRoles } from '@/app/enums';
+import {
+  ButtonTypes,
+  FirestoreCollections,
+  RouterPath,
+  UserRoles,
+} from '@/app/enums';
 import { Button } from '@/components/ui/Button';
 import { Form } from '@/components/ui/Form';
 import { PhoneFormField } from '@/components/ui/form-fields/PhoneFormField';
@@ -28,16 +33,14 @@ export function RegistrationForm() {
   const {
     register,
     handleSubmit,
-    formState: {
-      errors,
-    },
+    formState: { errors },
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(YupUtil.RegistrationSchema),
   });
 
-  const submitForm = useCallback(async (
-    {
+  const submitForm = useCallback(
+    async ({
       name,
       phone,
       email,
@@ -47,45 +50,42 @@ export function RegistrationForm() {
       phone?: string;
       email?: string;
       password?: string;
-    },
-  ) => {
-    setIsLoginError(false);
-    setIsLoading(true);
+    }) => {
+      setIsLoginError(false);
+      setIsLoading(true);
 
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      // TODO: think about cart if it was deleted from cookies but registered user exists
-      await setDoc(
-        doc(db, FirestoreCollections.USERS, email),
-        {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        // TODO: think about cart if it was deleted from cookies but registered user exists
+        await setDoc(doc(db, FirestoreCollections.USERS, email), {
           name,
           phone,
           email,
           role: UserRoles.USER,
           clientId: getClientId(),
           orders: {},
-        } as AddPrefixToKeys<string, any>,
-      );
-      const signInRes = await signIn(
-        'credentials',
-        {
+        } as AddPrefixToKeys<string, any>);
+        const signInRes = await signIn('credentials', {
           email,
           password,
           redirect: false,
-        },
-      );
-      if (signInRes && !signInRes.error) {
-        router.push(RouterPath.PROFILE);
+        });
+        if (signInRes && !signInRes.error) {
+          router.push(RouterPath.PROFILE);
+        }
+      } catch (e) {
+        console.error(e);
+        // @ts-ignore
+        const translateMessage: string =
+          TRANSLATES[LOCALE][e.message] ||
+          TRANSLATES[LOCALE].somethingWentWrong;
+        dispatch(setNotificationMessage(translateMessage));
+      } finally {
+        setIsLoading(false);
       }
-    } catch (e) {
-      console.error(e);
-      // @ts-ignore
-      const translateMessage: string = TRANSLATES[LOCALE][e.message] || TRANSLATES[LOCALE].somethingWentWrong;
-      dispatch(setNotificationMessage(translateMessage));
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   return (
     <Form
@@ -136,13 +136,14 @@ export function RegistrationForm() {
         error={errors.passwordRepeat?.message}
         register={register}
       />
-      <div className={isLoginError ? 'text-red-500 text-xs text-center mb-2' : 'invisible'}>
+      <div
+        className={
+          isLoginError ? 'text-red-500 text-xs text-center mb-2' : 'invisible'
+        }
+      >
         {TRANSLATES[LOCALE].invalidLoginOrPassword}
       </div>
-      <Link
-        className="text-pink-500 underline py-2"
-        href={RouterPath.SIGN_IN}
-      >
+      <Link className="text-pink-500 underline py-2" href={RouterPath.SIGN_IN}>
         {TRANSLATES[LOCALE].alreadyRegisteredEnter}
       </Link>
       <Button

@@ -16,29 +16,31 @@ export interface ICategoriesPageProps {
   };
 }
 
-export default async function CategoriesPage(
-  {searchParams: {pageLimit}}: ICategoriesPageProps
-) {
-  const [
-    settingsQuerySnapshot,
-    categoriesQuerySnapshot
-  ] = await Promise.all([
+export default async function CategoriesPage({
+  searchParams: { pageLimit },
+}: ICategoriesPageProps) {
+  const [settingsQuerySnapshot, categoriesQuerySnapshot] = await Promise.all([
     getDocs(collection(db, FirestoreCollections.SETTINGS)),
-    getDocs(collection(db, FirestoreCollections.CATEGORIES))
+    getDocs(collection(db, FirestoreCollections.CATEGORIES)),
   ]);
   const config: IConfig = settingsQuerySnapshot.docs[0].data() as IConfig;
-  const categories: ICategory[] = docsToData<ICategory>(categoriesQuerySnapshot.docs);
+  const categories: ICategory[] = docsToData<ICategory>(
+    categoriesQuerySnapshot.docs
+  );
 
-  return <>
-    <SubHeader config={config}/>
-    <ContentContainer styleClass="flex flex-col items-center px-2">
-      <Breadcrumbs links={[{title: TRANSLATES[LOCALE].catalog}]}/>
-      <h1 className="text-2xl self-start uppercase py-2">{TRANSLATES[LOCALE].productsCatalog}</h1>
-      <article className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
-        <CategoriesList data={categories} pageLimit={pageLimit}/>
-      </article>
-    </ContentContainer>
-    <ViewedRecently/>
-  </>;
+  return (
+    <>
+      <SubHeader config={config} />
+      <ContentContainer styleClass="flex flex-col items-center px-2">
+        <Breadcrumbs links={[{ title: TRANSLATES[LOCALE].catalog }]} />
+        <h1 className="text-2xl self-start uppercase py-2">
+          {TRANSLATES[LOCALE].productsCatalog}
+        </h1>
+        <article className="w-full flex justify-between mb-4 flex-col-reverse md:flex-row">
+          <CategoriesList data={categories} pageLimit={pageLimit} />
+        </article>
+      </ContentContainer>
+      <ViewedRecently />
+    </>
+  );
 }
-

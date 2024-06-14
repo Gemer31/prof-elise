@@ -21,7 +21,9 @@ export class SerializationUtil {
     return { ...user, orders };
   }
 
-  static getSerializedCart(cart: Record<string, ICartProductModel>): Record<string, ICartProductModel<string>> {
+  static getSerializedCart(
+    cart: Record<string, ICartProductModel>
+  ): Record<string, ICartProductModel<string>> {
     const serialized: Record<string, ICartProductModel<string>> = {};
     Object.keys(cart).forEach((key) => {
       serialized[key] = {
@@ -32,18 +34,26 @@ export class SerializationUtil {
     return serialized;
   }
 
-  static getNonSerializedCart(cart: Record<string, ICartProductModel<string>>): Record<string, ICartProductModel> {
+  static getNonSerializedCart(
+    cart: Record<string, ICartProductModel<string>>
+  ): Record<string, ICartProductModel> {
     const nonSerialized: Record<string, ICartProductModel> = {};
     Object.keys(cart).forEach((key) => {
       nonSerialized[key] = {
         count: cart[key].count,
-        productRef: doc(db, FirestoreCollections.PRODUCTS, cart[key].productRef),
+        productRef: doc(
+          db,
+          FirestoreCollections.PRODUCTS,
+          cart[key].productRef
+        ),
       };
     });
     return nonSerialized;
   }
 
-  static getSerializedFavourites(favourites: Record<string, DocumentReference>): Record<string, string> {
+  static getSerializedFavourites(
+    favourites: Record<string, DocumentReference>
+  ): Record<string, string> {
     const serialized: Record<string, string> = {};
     Object.keys(favourites).forEach((key) => {
       serialized[key] = favourites[key].id;
@@ -51,15 +61,23 @@ export class SerializationUtil {
     return serialized;
   }
 
-  static getNonSerializedFavourites(favourites: Record<string, string>): Record<string, DocumentReference> {
+  static getNonSerializedFavourites(
+    favourites: Record<string, string>
+  ): Record<string, DocumentReference> {
     const nonSerialized: Record<string, DocumentReference> = {};
     Object.keys(favourites)?.forEach((key) => {
-      nonSerialized[key] = doc(db, FirestoreCollections.FAVOURITES, favourites[key]);
+      nonSerialized[key] = doc(
+        db,
+        FirestoreCollections.FAVOURITES,
+        favourites[key]
+      );
     });
     return nonSerialized;
   }
 
-  static getSerializedViewedRecently(viewedRecently: Record<string, IViewedRecentlyModel>): Record<string, IViewedRecentlyModel<string>> {
+  static getSerializedViewedRecently(
+    viewedRecently: Record<string, IViewedRecentlyModel>
+  ): Record<string, IViewedRecentlyModel<string>> {
     const serialized: Record<string, IViewedRecentlyModel<string>> = {};
     Object.keys(viewedRecently).forEach((key) => {
       serialized[key] = {
@@ -71,14 +89,19 @@ export class SerializationUtil {
   }
 
   static getSerializedProduct(product: IProduct): IProductSerialized {
-    return product ? {
-      ...product,
-      categoryRef: product.categoryRef.id,
-    } : null;
+    return product
+      ? {
+          ...product,
+          categoryRef: product.categoryRef.id,
+        }
+      : null;
   }
 
   static getSerializedProducts(products: IProduct[]): IProductSerialized[] {
-    return products?.map((item) => SerializationUtil.getSerializedProduct(item)) || [];
+    return (
+      products?.map((item) => SerializationUtil.getSerializedProduct(item)) ||
+      []
+    );
   }
 
   static getSerializedOrders(orders: IOrder[]): IOrderSerialized[] {

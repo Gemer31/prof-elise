@@ -13,11 +13,15 @@ export function RequestCallButton() {
     <Button
       styleClass="uppercase text-amber-50 px-4 py-2"
       type={ButtonTypes.BUTTON}
-      callback={() => dispatch(setPopupData({
-        formType: PopupTypes.REQUEST_CALL,
-      }))}
+      callback={() =>
+        dispatch(
+          setPopupData({
+            formType: PopupTypes.REQUEST_CALL,
+          })
+        )
+      }
     >
-      { TRANSLATES[LOCALE].requestCall }
+      {TRANSLATES[LOCALE].requestCall}
     </Button>
   );
 }

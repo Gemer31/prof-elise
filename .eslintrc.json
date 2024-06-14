@@ -1,7 +1,7 @@
 {
   "parserOptions": {
     "ecmaVersion": 2020,
-    "project": ["tsconfig.json"] ,
+    "project": ["tsconfig.json"],
     "sourceType": "module"
   },
   "extends": [
@@ -10,14 +10,16 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:jsx-a11y/recommended",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:prettier/recommended"
   ],
   "plugins": [
     "react",
     "jsx-a11y",
     "sonarjs",
     "no-loops",
-    "eslint-plugin-import"
+    "eslint-plugin-import",
+    "stylelint-prettier"
   ],
   "rules": {
     "jsx-a11y/no-static-element-interactions": 0,
@@ -43,12 +45,10 @@
     "react/jsx-filename-extension": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "allowTernary": 0,
-    "sonarjs/cognitive-complexity": [
-      "error",
-      30
-    ],
+    "sonarjs/cognitive-complexity": ["error", 30],
     "no-loops/no-loops": 2,
-    "no-use-extend-native/no-use-extend-native": 0
+    "no-use-extend-native/no-use-extend-native": 0,
+    "prettier/prettier": true
   },
   "settings": {
     "import/resolver": "webpack"

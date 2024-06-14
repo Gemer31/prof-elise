@@ -24,7 +24,9 @@ export function Counter({ productId, min }: ICounterProps) {
   const [count, { increment, decrement, set }] = useCounter();
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state) => state.dataReducer.cart);
-  const cartCount = useAppSelector((state) => state.dataReducer.cart?.[productId]?.count);
+  const cartCount = useAppSelector(
+    (state) => state.dataReducer.cart?.[productId]?.count
+  );
   const cartLoading = useAppSelector((state) => state.dataReducer.cartLoading);
 
   useEffect(() => {
@@ -37,7 +39,8 @@ export function Counter({ productId, min }: ICounterProps) {
   useEffect(() => {
     if (initialized) {
       const clientId: string = getClientId();
-      const data: Record<string, ICartProductModel> = SerializationUtil.getNonSerializedCart(cart);
+      const data: Record<string, ICartProductModel> =
+        SerializationUtil.getNonSerializedCart(cart);
 
       if (count) {
         if (data[productId]) {
@@ -60,50 +63,49 @@ export function Counter({ productId, min }: ICounterProps) {
     set(Number(e.target.value));
   };
 
-  return cartLoading && !initialized
-    ? <Loader className="h-[25px] border-pink-500"/>
-    : cartCount
-      ? (
-        <div
-          className="justify-center h-full transition-all flex rounded-md text-amber-50 min-h-10"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        >
-          <button
-            type="button"
-            disabled={min !== undefined && cartCount === min}
-            className="w-[40px] bg-pink-500 rounded-md"
-            onClick={decrement}
-          >
-            <div className="hover:scale-125 duration-150">-</div>
-          </button>
-          <input
-            className="rounded-md text-pink-500 w-[40px] text-center border-pink-500 border-2 mx-0.5"
-            type="number"
-            value={count}
-            onBlur={onInputChange}
-          />
-          <button
-            type="button"
-            className="w-[40px] bg-pink-500 rounded-md"
-            onClick={increment}
-          >
-            <div className="hover:scale-125 duration-150">+</div>
-          </button>
-        </div>
-      )
-      : (
-        <Button
-          styleClass="text-amber-50 w-full px-4 py-2 text-nowrap"
-          type={ButtonTypes.BUTTON}
-          callback={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            set(1);
-          }}
-        >{TRANSLATES[LOCALE].intoCart}
-        </Button>
-      );
+  return cartLoading && !initialized ? (
+    <Loader className="h-[25px] border-pink-500" />
+  ) : cartCount ? (
+    <div
+      className="justify-center h-full transition-all flex rounded-md text-amber-50 min-h-10"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      <button
+        type="button"
+        disabled={min !== undefined && cartCount === min}
+        className="w-[40px] bg-pink-500 rounded-md"
+        onClick={decrement}
+      >
+        <div className="hover:scale-125 duration-150">-</div>
+      </button>
+      <input
+        className="rounded-md text-pink-500 w-[40px] text-center border-pink-500 border-2 mx-0.5"
+        type="number"
+        value={count}
+        onBlur={onInputChange}
+      />
+      <button
+        type="button"
+        className="w-[40px] bg-pink-500 rounded-md"
+        onClick={increment}
+      >
+        <div className="hover:scale-125 duration-150">+</div>
+      </button>
+    </div>
+  ) : (
+    <Button
+      styleClass="text-amber-50 w-full px-4 py-2 text-nowrap"
+      type={ButtonTypes.BUTTON}
+      callback={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        set(1);
+      }}
+    >
+      {TRANSLATES[LOCALE].intoCart}
+    </Button>
+  );
 }
