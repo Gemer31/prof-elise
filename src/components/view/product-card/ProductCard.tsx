@@ -1,10 +1,11 @@
 'use client';
 
 import { useMemo } from 'react';
+import Image from 'next/image';
+import currency from 'currency.js';
+import Link from 'next/link';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { ButtonTypes, RouterPath } from '@/app/enums';
-import Link from 'next/link';
-import Image from 'next/image';
 import { Counter } from '@/components/view/Counter';
 import { Button } from '@/components/ui/Button';
 import { LOCALE, TRANSLATES } from '@/app/translates';
@@ -13,7 +14,6 @@ import { Loader } from '@/components/ui/Loader';
 import './product-card.css';
 import { EntityFavouriteButton } from '@/components/view/EntityFavouriteButton';
 import { COLOR_OPTION_VALUES } from '@/app/constants';
-import currency from 'currency.js';
 
 export interface IProductCardProps {
   config: IConfig;
@@ -22,7 +22,14 @@ export interface IProductCardProps {
   onClick?: () => void,
 }
 
-export function ProductCard({data, config, isLoading, onClick}: IProductCardProps) {
+export function ProductCard(
+  {
+    data,
+    config,
+    isLoading,
+    onClick,
+  }: IProductCardProps,
+) {
   const hostClass = useMemo(() => convertToClass([
     'product-card',
     'h-96',
@@ -30,7 +37,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'rounded-lg',
     'border-2 border-pink-200',
     'hover:bg-pink-100',
-    isLoading ? ' pointer-events-none' : ''
+    isLoading ? ' pointer-events-none' : '',
   ]), [isLoading]);
   const titleClass = useMemo(() => convertToClass([
     'text-base',
@@ -43,7 +50,7 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     'text-sm',
     'md:text-base',
     'mt-2',
-    'entity-card-title'
+    'entity-card-title',
   ]), []);
 
   return (
@@ -54,12 +61,15 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
     >
       <div className="absolute flex flex-col gap-y-2 left-4 top-4">
         {
-          data.labels?.map((item, index) => {
-            return <div
+          data.labels?.map((item, index) => (
+            <div
+              // eslint-disable-next-line react/no-array-index-key
               key={index}
               className={'pointer-events-none w-fit px-2 py-1 rounded-md text-xs ' + COLOR_OPTION_VALUES.get(item.color)}
-            >{item.text}</div>;
-          })
+            >
+              {item.text}
+            </div>
+          ))
         }
       </div>
       <EntityFavouriteButton className="product-card-favourite-button absolute scale-0 top-4 right-4" productId={data.id}/>
@@ -79,13 +89,17 @@ export function ProductCard({data, config, isLoading, onClick}: IProductCardProp
         <Button
           styleClass="text-amber-50 w-1/2 px-4 py-2"
           type={ButtonTypes.BUTTON}
-        >{TRANSLATES[LOCALE].preview}</Button>
+        >
+          {TRANSLATES[LOCALE].preview}
+        </Button>
       </div>
       {
         isLoading
-          ? <div className="w-full h-full absolute top-0 flex justify-center items-center bg-black-1/5">
-            <Loader className="h-[50px] border-pink-500"/>
-          </div>
+          ? (
+            <div className="w-full h-full absolute top-0 flex justify-center items-center bg-black-1/5">
+              <Loader className="h-[50px] border-pink-500"/>
+            </div>
+          )
           : <></>
       }
     </Link>
