@@ -13,7 +13,7 @@ export class YupUtil {
   private static passwordRepeat = yup
     .string()
     .required('fieldRequired')
-    .oneOf([yup.ref('password')], 'passwordMustMatch')
+    .oneOf([yup.ref('password')], 'passwordMustMatch');
 
   static get RegistrationSchema() {
     return yup.object().shape({
@@ -36,7 +36,7 @@ export class YupUtil {
     return yup.object().shape({
       name: YupUtil.userName,
       phone: yup.string().required('fieldRequired'),
-      comment: yup.string()
+      comment: yup.string(),
     });
   }
 
@@ -82,7 +82,7 @@ export class YupUtil {
       description: yup.string().required('fieldRequired'),
       categoryId: yup.string().required('fieldRequired'),
       images: yup.array().required('fieldRequired'),
-      labels: yup.array()
+      labels: yup.array(),
     });
   }
 
@@ -90,7 +90,7 @@ export class YupUtil {
     return yup.object().shape({
       imageUrl: yup.string().required('fieldRequired'),
       title: yup.string().required('fieldRequired'),
-      subcategories: yup.array()
+      subcategories: yup.array(),
     });
   }
 }

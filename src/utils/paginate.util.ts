@@ -1,6 +1,6 @@
+import { OrderByDirection } from '@firebase/firestore';
 import { IPaginateProps, ISearchParams } from '@/app/models';
 import { OrderByKeys, PageLimits } from '@/app/enums';
-import { OrderByDirection } from '@firebase/firestore';
 
 export function getPagesCount(itemsLength: number, limit: number): number {
   return itemsLength ? Math.ceil(itemsLength / limit) : 0;
@@ -9,7 +9,7 @@ export function getPagesCount(itemsLength: number, limit: number): number {
 export function getPaginateProps(searchParams: ISearchParams): IPaginateProps {
   let orderByKey: OrderByKeys;
   let orderByValue: OrderByDirection;
-  Object.keys(searchParams)?.every(key => {
+  Object.keys(searchParams)?.every((key) => {
     switch (key) {
       case OrderByKeys.BY_PRICE: {
         orderByKey = OrderByKeys.BY_PRICE;
@@ -26,6 +26,7 @@ export function getPaginateProps(searchParams: ISearchParams): IPaginateProps {
         orderByValue = searchParams[OrderByKeys.BY_ALFABET];
         break;
       }
+      default: break;
     }
     if (orderByValue) {
       if (orderByValue !== 'desc' && orderByValue !== 'asc') {
@@ -44,7 +45,7 @@ export function getPaginateProps(searchParams: ISearchParams): IPaginateProps {
     searchValue: searchParams.q,
     orderByParams: {
       key: orderByKey,
-      value: orderByValue
-    }
+      value: orderByValue,
+    },
   };
 }

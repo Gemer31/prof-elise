@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
+import { Provider } from 'react-redux';
+import { useRef } from 'react';
 import { AppStore, makeStore } from '@/store/store';
 import { ICommonProps } from '@/app/models';
-import { useRef } from 'react';
-import { Provider } from 'react-redux';
 
 export default function StoreProvider({ children }: ICommonProps) {
   const storeRef = useRef<AppStore>();
@@ -12,5 +12,5 @@ export default function StoreProvider({ children }: ICommonProps) {
     storeRef.current = makeStore();
   }
 
-  return <Provider store={storeRef.current}>{children}</Provider>
+  return <Provider store={storeRef.current}>{children}</Provider>;
 }

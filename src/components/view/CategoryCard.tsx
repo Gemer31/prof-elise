@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { convertToClass } from '@/utils/convert-to-class.util';
 import { PageLimits, RouterPath } from '@/app/enums';
-import Link from 'next/link';
-import Image from 'next/image';
 import { ICategory } from '@/app/models';
 import { Loader } from '@/components/ui/Loader';
 
@@ -13,7 +13,7 @@ export interface ICategoryCardProps {
   onClick?: () => void,
 }
 
-export function CategoryCard({data, isLoading, onClick, pageLimit}: ICategoryCardProps) {
+export function CategoryCard({ data, isLoading, onClick, pageLimit }: ICategoryCardProps) {
   const cardClass = useMemo(() => convertToClass([
     'relative',
     'flex',
@@ -25,7 +25,7 @@ export function CategoryCard({data, isLoading, onClick, pageLimit}: ICategoryCar
     'border-2 border-pink-200',
     'hover:bg-pink-100',
     'duration-500',
-    'transition-colors'
+    'transition-colors',
   ]), []);
   const titleClass = useMemo(() => convertToClass([
     'text-lg',
@@ -38,7 +38,7 @@ export function CategoryCard({data, isLoading, onClick, pageLimit}: ICategoryCar
     'text-sm',
     'md:text-base',
     'mt-2',
-    'entity-card-title'
+    'entity-card-title',
   ]), []);
 
   return (
@@ -57,9 +57,11 @@ export function CategoryCard({data, isLoading, onClick, pageLimit}: ICategoryCar
       <h3 className={titleClass}>{data?.title}</h3>
       {
         isLoading
-          ? <div className="w-full h-full absolute top-0 flex justify-center items-center bg-black-1/5">
-              <Loader className="h-[50px] border-pink-500"
-            /></div>
+          ? (
+            <div className="w-full h-full absolute top-0 flex justify-center items-center bg-black-1/5">
+              <Loader className="h-[50px] border-pink-500"/>
+            </div>
+          )
           : <></>
       }
     </Link>

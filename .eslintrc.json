@@ -1,3 +1,56 @@
 {
-  "extends": "next/core-web-vitals"
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "project": ["tsconfig.json"] ,
+    "sourceType": "module"
+  },
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:jsx-a11y/recommended",
+    "next/core-web-vitals"
+  ],
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "sonarjs",
+    "no-loops",
+    "eslint-plugin-import"
+  ],
+  "rules": {
+    "jsx-a11y/no-static-element-interactions": 0,
+    "react/require-default-props": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "object-curly-newline": 0,
+    "react/jsx-no-useless-fragment": 0,
+    "@typescript-eslint/return-await": 0,
+    "@typescript-eslint/no-unused-expressions": 0,
+    "no-param-reassign": 0,
+    "max-len": ["error", { "code": 160 }],
+    "@typescript-eslint/lines-between-class-members": 0,
+    "react/jsx-tag-spacing": 0,
+    "prefer-destructuring": 1,
+    "prefer-template": 1,
+    "no-nested-ternary": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/prefer-default-export": 0,
+    "no-extend-native": 0,
+    "import/extensions": 0,
+    "linebreak-style": 0,
+    "import/no-unresolved": 0,
+    "react/jsx-filename-extension": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "allowTernary": 0,
+    "sonarjs/cognitive-complexity": [
+      "error",
+      30
+    ],
+    "no-loops/no-loops": 2,
+    "no-use-extend-native/no-use-extend-native": 0
+  },
+  "settings": {
+    "import/resolver": "webpack"
+  }
 }

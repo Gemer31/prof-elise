@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initStore, initUser, updateCart, updateFavourites, updateViewedRecently } from '@/store/asyncThunk';
-import { ICartProductModel, IInitStore, IPopupData, IUserSerialized, IViewedRecentlyModel } from '@/app/models';
+import {
+  initStore, initUser, updateCart, updateFavourites, updateViewedRecently,
+} from '@/store/asyncThunk';
+import {
+  ICartProductModel, IInitStore, IPopupData, IUserSerialized, IViewedRecentlyModel,
+} from '@/app/models';
 
 interface IDataSlice {
   popupData: IPopupData;
@@ -23,11 +27,15 @@ export const dataSlice = createSlice({
     cartTotal: 0,
     cart: {} as Record<string, ICartProductModel<string>>,
     favourites: {} as Record<string, string>,
-    viewedRecently: {} as Record<string, IViewedRecentlyModel<string>>
+    viewedRecently: {} as Record<string, IViewedRecentlyModel<string>>,
   },
   extraReducers: (builder) => {
     builder.addMatcher(initStore.settled, (state: IDataSlice, action) => {
-      const {cart, viewedRecently, favourites} = action.payload as IInitStore;
+      const {
+        cart,
+        viewedRecently,
+        favourites,
+      } = action.payload as IInitStore;
 
       state.cartTotal = 0;
       cart && Object.values(cart).forEach((item) => {
@@ -62,11 +70,11 @@ export const dataSlice = createSlice({
     },
     setNotificationMessage: (state: IDataSlice, action: PayloadAction<string>) => {
       state.notificationMessage = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
   setPopupData,
-  setNotificationMessage
+  setNotificationMessage,
 } = dataSlice.actions;

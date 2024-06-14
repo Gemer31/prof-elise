@@ -8,7 +8,7 @@ import { useAppSelector } from '@/store/store';
 import { CircleButton } from '@/components/ui/CircleButton';
 
 export function FavouritesButton() {
-  const favourites = useAppSelector(state => state.dataReducer.favourites);
+  const favourites = useAppSelector((state) => state.dataReducer.favourites);
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
@@ -16,8 +16,10 @@ export function FavouritesButton() {
     setCounter(newCount);
   }, [favourites]);
 
-  return <CircleButton styleClass="size-14 relative" href={RouterPath.FAVOURITES}>
-    <Image className="p-2" width={45} height={45} src="/icons/heart.svg" alt="CartButton"/>
-    <HeaderCounter value={counter}/>
-  </CircleButton>;
+  return (
+    <CircleButton styleClass="size-14 relative" href={RouterPath.FAVOURITES}>
+      <Image className="p-2" width={45} height={45} src="/icons/heart.svg" alt="CartButton"/>
+      <HeaderCounter value={counter}/>
+    </CircleButton>
+  );
 }

@@ -1,13 +1,13 @@
 'use client';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
 import { Popup } from '@/components/ui/Popup';
 import { Button } from '@/components/ui/Button';
 import { ButtonTypes, PopupTypes } from '@/app/enums';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setNotificationMessage, setPopupData } from '@/store/dataSlice';
-import { useForm } from 'react-hook-form';
-import { useEffect, useRef, useState } from 'react';
 import { LOCALE, TRANSLATES } from '@/app/translates';
 import { InputFormField } from '@/components/ui/form-fields/InputFormField';
 import { PhoneFormField } from '@/components/ui/form-fields/PhoneFormField';
@@ -19,16 +19,16 @@ export function RequestCallPopup() {
   const dispatch = useAppDispatch();
   const timer = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-  const popupData: IPopupData = useAppSelector(state => state.dataReducer.popupData);
+  const popupData: IPopupData = useAppSelector((state) => state.dataReducer.popupData);
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
-    formState: {errors, isValid}
+    formState: { errors },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(YupUtil.RequestCallSchema)
+    resolver: yupResolver(YupUtil.RequestCallSchema),
   });
 
   const submitForm = async (formData: { name?: string; phone?: string; comment?: string }) => {
@@ -40,14 +40,14 @@ export function RequestCallPopup() {
     } else {
       message = `Купить в один клик\n\nИмя: ${formData.name};\nТелефон: ${formData.phone}`;
       if (formData.comment?.length) {
-        message += (';\nКомментарий: ' + formData.comment);
+        message += (`;\nКомментарий: ${formData.comment}`);
       }
       message += `\n\n- ${popupData.product.title}`;
     }
 
     await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_ENDPOINT}/api/bot`, {
       method: 'POST',
-      body: JSON.stringify({message: encodeURI(message)})
+      body: JSON.stringify({ message: encodeURI(message) }),
     });
 
     setIsLoading(false);
@@ -87,7 +87,7 @@ export function RequestCallPopup() {
         onSubmit={handleSubmit(submitForm)}
       >
         <InputFormField
-          required={true}
+          required
           placeholder={TRANSLATES[LOCALE].enterName}
           label={TRANSLATES[LOCALE].yourName}
           name="name"
@@ -96,7 +96,7 @@ export function RequestCallPopup() {
           register={register}
         />
         <PhoneFormField
-          required={true}
+          required
           label={TRANSLATES[LOCALE].phone}
           name="phone"
           type="text"
@@ -105,14 +105,16 @@ export function RequestCallPopup() {
         />
         {
           popupData?.formType === PopupTypes.BUY_IN_ONE_CLICK
-            ? <TextareaFormField
-              placeholder={TRANSLATES[LOCALE].comment}
-              label={TRANSLATES[LOCALE].comment}
-              name="comment"
-              error={errors.comment?.message}
-              register={register}
-            />
-            : <></>
+            ? (
+              <TextareaFormField
+                placeholder={TRANSLATES[LOCALE].comment}
+                label={TRANSLATES[LOCALE].comment}
+                name="comment"
+                error={errors.comment?.message}
+                register={register}
+              />
+            )
+            : (<></>)
         }
         <div className="w-full mt-4">
           <Button
@@ -120,7 +122,9 @@ export function RequestCallPopup() {
             disabled={isLoading}
             loading={isLoading}
             type={ButtonTypes.SUBMIT}
-          >{TRANSLATES[LOCALE].send}</Button>
+          >
+            {TRANSLATES[LOCALE].send}
+          </Button>
         </div>
       </form>
     </Popup>

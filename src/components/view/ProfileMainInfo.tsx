@@ -9,8 +9,10 @@ interface IProfileMainInfoProps {
 
 export function ProfileMainInfo({userServer}: IProfileMainInfoProps) {
 
-  return <>
-    <ChangeGeneralUserInfo userServer={userServer}/>
-    {/*<ChangeEmailForm userServer={userServer}/>*/}
-  </>;
+  return (
+    <>
+      <ChangeGeneralUserInfo userServer={userServer}/>
+      {/* <ChangeEmailForm userServer={userServer}/> */}
+    </>
+  );
 }

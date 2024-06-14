@@ -1,9 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { doc, DocumentReference, getDoc, setDoc } from '@firebase/firestore';
+import {
+  doc, DocumentReference, getDoc, setDoc,
+} from '@firebase/firestore';
+import { uuidv4 } from '@firebase/util';
 import { db } from '@/app/lib/firebase-config';
 import { FirestoreCollections } from '@/app/enums';
-import { ICartProductModel, IInitStore, IUser, IUserSerialized, IViewedRecentlyModel } from '@/app/models';
-import { uuidv4 } from '@firebase/util';
+import {
+  ICartProductModel, IInitStore, IUser, IUserSerialized, IViewedRecentlyModel,
+} from '@/app/models';
 import { CLIENT_ID } from '@/app/constants';
 import { getClientId } from '@/utils/cookies.util';
 import { SerializationUtil } from '@/utils/serialization.util';
@@ -13,8 +17,30 @@ export const initUser = createAsyncThunk(
   async (email: string): Promise<IUserSerialized> => {
     const res = await getDoc(doc(db, FirestoreCollections.USERS, email));
     return SerializationUtil.getSerializedUser(res.data() as IUser);
-  }
-)
+  },
+);
+
+export async function setCart(
+  clientId: string,
+  data: Record<string, ICartProductModel> = {},
+): Promise<Record<string, ICartProductModel<string>>> {
+  await setDoc(doc(db, FirestoreCollections.CART, clientId), data);
+  return SerializationUtil.getSerializedCart(data);
+}
+export async function setFavourites(
+  clientId: string,
+  data: Record<string, DocumentReference> = {},
+): Promise<Record<string, string>> {
+  await setDoc(doc(db, FirestoreCollections.FAVOURITES, clientId), data);
+  return SerializationUtil.getSerializedFavourites(data);
+}
+export async function setViewedRecently(
+  clientId: string,
+  data: Record<string, IViewedRecentlyModel> = {},
+): Promise<Record<string, IViewedRecentlyModel<string>>> {
+  await setDoc(doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId), data);
+  return SerializationUtil.getSerializedViewedRecently(data);
+}
 
 export const initStore = createAsyncThunk( // todo think if no such clientId
   'store/init',
@@ -31,11 +57,11 @@ export const initStore = createAsyncThunk( // todo think if no such clientId
       const [
         newCart,
         newFavourites,
-        newViewedRecently
+        newViewedRecently,
       ] = await Promise.all([
         setCart(clientId),
         setFavourites(clientId),
-        setViewedRecently(clientId)
+        setViewedRecently(clientId),
       ]);
       cart = newCart;
       favourites = newFavourites;
@@ -49,7 +75,7 @@ export const initStore = createAsyncThunk( // todo think if no such clientId
       if (existingCart) {
         const [existingFavourites, existingViewedRecently] = await Promise.all([
           getDoc(doc(db, FirestoreCollections.FAVOURITES, clientId)),
-          getDoc(doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId))
+          getDoc(doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId)),
         ]);
         cart = SerializationUtil.getSerializedCart(existingCart);
         favourites = SerializationUtil.getSerializedFavourites(existingFavourites.data());
@@ -61,52 +87,28 @@ export const initStore = createAsyncThunk( // todo think if no such clientId
       await createClient();
     }
 
-    return {cart, favourites, viewedRecently};
-  }
+    return { cart, favourites, viewedRecently };
+  },
 );
 
 export const updateCart = createAsyncThunk(
   'cart/update',
-  async ({clientId, data}: {
+  async ({ clientId, data }: {
     clientId?: string;
     data?: Record<string, ICartProductModel>
-  }): Promise<Record<string, ICartProductModel<string>>> => await setCart(clientId, data)
+  }): Promise<Record<string, ICartProductModel<string>>> => await setCart(clientId, data),
 );
 export const updateFavourites = createAsyncThunk(
   'favourites/update',
-  async ({clientId, data}: {
+  async ({ clientId, data }: {
     clientId?: string;
     data?: Record<string, DocumentReference>
-  }): Promise<Record<string, string>> => await setFavourites(clientId, data)
+  }): Promise<Record<string, string>> => await setFavourites(clientId, data),
 );
 export const updateViewedRecently = createAsyncThunk(
   'viewedRecently/update',
-  async ({clientId, data}: {
+  async ({ clientId, data }: {
     clientId?: string;
     data?: Record<string, IViewedRecentlyModel>
-  }): Promise<Record<string, IViewedRecentlyModel<string>>> => await setViewedRecently(clientId, data)
+  }): Promise<Record<string, IViewedRecentlyModel<string>>> => await setViewedRecently(clientId, data),
 );
-
-export async function setCart(
-  clientId: string,
-  data: Record<string, ICartProductModel> = {}
-): Promise<Record<string, ICartProductModel<string>>> {
-  await setDoc(doc(db, FirestoreCollections.CART, clientId), data);
-  return SerializationUtil.getSerializedCart(data);
-}
-
-export async function setFavourites(
-  clientId: string,
-  data: Record<string, DocumentReference> = {}
-): Promise<Record<string, string>> {
-  await setDoc(doc(db, FirestoreCollections.FAVOURITES, clientId), data);
-  return SerializationUtil.getSerializedFavourites(data);
-}
-
-export async function setViewedRecently(
-  clientId: string,
-  data: Record<string, IViewedRecentlyModel> = {}
-): Promise<Record<string, IViewedRecentlyModel<string>>> {
-  await setDoc(doc(db, FirestoreCollections.VIEWED_RECENTLY, clientId), data);
-  return SerializationUtil.getSerializedViewedRecently(data);
-}

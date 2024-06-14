@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import ImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import { useEffect, useState } from 'react';
@@ -8,13 +8,13 @@ interface IImgGalleryProps {
   imageUrls: string[];
 }
 
-export function ImgGallery({imageUrls}: IImgGalleryProps) {
+export function ImgGallery({ imageUrls }: IImgGalleryProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [gallery, setGallery] = useState<ReactImageGalleryItem[]>([]);
 
   useEffect(() => {
     if (imageUrls?.length) {
-      setGallery(converImageUrlsToGallery(imageUrls))
+      setGallery(converImageUrlsToGallery(imageUrls));
     }
   }, [imageUrls]);
 
@@ -25,17 +25,17 @@ export function ImgGallery({imageUrls}: IImgGalleryProps) {
       document.body.style.overflow = 'auto';
     }
     setIsFullscreen(v);
-  }
+  };
 
   return (
     <ImageGallery
+      showThumbnails
+      showBullets
       additionalClass={`${isFullscreen ? 'gallery-fullscreen' : 'gallery-small'}`}
       onScreenChange={changeScreen}
       useBrowserFullscreen={false}
-      showBullets={true}
       showPlayButton={false}
-      showThumbnails={true}
       items={gallery}
     />
-  )
+  );
 }

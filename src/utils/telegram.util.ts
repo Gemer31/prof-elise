@@ -1,5 +1,5 @@
-import { ICartProductModel, IConfig, IProductSerialized } from '@/app/models';
 import currency from 'currency.js';
+import { ICartProductModel, IConfig, IProductSerialized } from '@/app/models';
 import { transformPhoneUtil } from '@/utils/transform-phone.util';
 
 export function getOrderMessage(data: {
@@ -22,11 +22,11 @@ export function getOrderMessage(data: {
     + '\n'
     + `Адрес: ${data.deliveryAddress}`
     + '\n'
-    + (data.comment ? `Комментарий: ${data.comment}\n` : '')
+    + (data.comment ? `Комментарий: ${data.comment}\n` : '');
 
   let total: string = '0';
   Object.values(data.cart).forEach((item) => {
-    message += `\n- ${item.productRef.title} | ${currency(item.productRef.price).toString()} ${data.config.currency}/шт. | ${item.count} шт.`
+    message += `\n- ${item.productRef.title} | ${currency(item.productRef.price).toString()} ${data.config.currency}/шт. | ${item.count} шт.`;
     const totalProduct = currency(item.productRef.price).multiply(item.count);
     total = currency(total).add(totalProduct).toString();
   });

@@ -12,28 +12,36 @@ interface IProductDetailsActionsBarProps {
   product: IProductSerialized;
 }
 
-export function ProductDetailsActionsBar({product}: IProductDetailsActionsBarProps) {
-  const cartCount = useAppSelector(state => state.dataReducer.cart?.[product?.id]?.count);
+export function ProductDetailsActionsBar({ product }: IProductDetailsActionsBarProps) {
+  const cartCount = useAppSelector((state) => state.dataReducer.cart?.[product?.id]?.count);
   const dispatch = useAppDispatch();
 
-  return <div className="flex gap-x-2 items-center">
-    {
-      cartCount
-        ? <Button
-          styleClass="text-white w-full py-2 px-4"
-          type={ButtonTypes.BUTTON}
-          href={RouterPath.CART}
-        >{TRANSLATES[LOCALE].alreadyInCart}</Button>
-        : <></>
-    }
-    <Counter productId={product?.id}/>
-    <Button
-      styleClass="text-white w-full py-2 px-4"
-      type={ButtonTypes.BUTTON}
-      callback={() => dispatch(setPopupData({
-        formType: PopupTypes.BUY_IN_ONE_CLICK,
-        product
-      }))}
-    >{TRANSLATES[LOCALE].buyInOneClick}</Button>
-  </div>;
+  return (
+    <div className="flex gap-x-2 items-center">
+      {
+        cartCount
+          ? (
+            <Button
+              styleClass="text-white w-full py-2 px-4"
+              type={ButtonTypes.BUTTON}
+              href={RouterPath.CART}
+            >
+              {TRANSLATES[LOCALE].alreadyInCart}
+            </Button>
+          )
+          : <></>
+      }
+      <Counter productId={product?.id}/>
+      <Button
+        styleClass="text-white w-full py-2 px-4"
+        type={ButtonTypes.BUTTON}
+        callback={() => dispatch(setPopupData({
+          formType: PopupTypes.BUY_IN_ONE_CLICK,
+          product,
+        }))}
+      >
+        {TRANSLATES[LOCALE].buyInOneClick}
+      </Button>
+    </div>
+  );
 }
