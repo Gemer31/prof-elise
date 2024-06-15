@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-input/mask": "^1.0.20",
     "@reduxjs/toolkit": "^2.0.1",
+    "@typescript-eslint/parser": "^7.13.0",
     "@uidotdev/usehooks": "^2.4.1",
     "babel-eslint": "^10.1.0",
     "currency.js": "^2.0.4",
