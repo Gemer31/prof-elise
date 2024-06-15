@@ -76,9 +76,7 @@ export function RegistrationForm() {
       } catch (e) {
         console.error(e);
         // @ts-ignore
-        const translateMessage: string =
-          TRANSLATES[LOCALE][e.message] ||
-          TRANSLATES[LOCALE].somethingWentWrong;
+        const translateMessage: string = TRANSLATES[LOCALE][e.message] || TRANSLATES[LOCALE].somethingWentWrong;
         dispatch(setNotificationMessage(translateMessage));
       } finally {
         setIsLoading(false);
